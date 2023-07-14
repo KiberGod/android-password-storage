@@ -9,6 +9,7 @@
     tools:context=".MainActivity">
 
     <View
+        android:id="@+id/view2"
         android:layout_width="380dp"
         android:layout_height="3dp"
         android:layout_marginBottom="20dp"
@@ -69,6 +70,7 @@
         android:layout_marginEnd="23dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setOperation"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -90,6 +92,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -111,6 +114,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -133,6 +137,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -155,6 +160,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -200,6 +206,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="clearNumbers"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -222,6 +229,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -243,6 +251,7 @@
         android:layout_marginEnd="23dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setOperation"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -264,6 +273,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -285,6 +295,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -306,6 +317,7 @@
         android:layout_marginEnd="23dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setOperation"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -327,6 +339,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -348,6 +361,7 @@
         android:layout_marginEnd="23dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setOperation"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -381,7 +395,8 @@
         app:layout_constraintBottom_toTopOf="@+id/button_plus5"
         app:layout_constraintEnd_toStartOf="@+id/button_plus6"
         app:layout_constraintStart_toEndOf="@+id/button_plus7"
-        app:layout_constraintTop_toBottomOf="@+id/button_plus14" />
+        app:layout_constraintTop_toBottomOf="@+id/button_plus14"
+        android:onClick="setDigit" />
 
     <Button
         android:id="@+id/button_plus5"
@@ -432,6 +447,7 @@
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="setDigit"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
@@ -445,5 +461,21 @@
         app:layout_constraintEnd_toStartOf="@+id/button_plus5"
         app:layout_constraintStart_toEndOf="@+id/button_plus3"
         app:layout_constraintTop_toBottomOf="@+id/button_plus7" />
+
+    <TextView
+        android:id="@+id/resultPlace"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="23dp"
+        android:gravity="right|center_vertical"
+        android:text="0"
+        android:textColor="#FAF4F4"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
