@@ -56,12 +56,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Натиснення на кнопку видалення усых введених даних
+    public void onClickClearButton(View view) {
+        dataReset();
+        printResult();
+    }
+
     // Видалення введених чисел та операції
-    public void clearNumbers(View view) {
+    private void dataReset() {
         operation = Character.MIN_VALUE;
         number1 = "0";
         number2 = "";
-        printResult();
     }
 
     // Коректне видалення нуля на початку числа
@@ -108,6 +113,15 @@ public class MainActivity extends AppCompatActivity {
         } else {
             preResultPlace.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
             preResultPlace.setText("На нуль ділити не можна!");
+        }
+    }
+
+    // Функція встановлює кінцевий результат
+    public void setResult(View view) {
+        if (!Float.isInfinite(preResult) && number2 != null && !number2.isEmpty()) {
+            dataReset();
+            number1 = String.valueOf(preResult);
+            printResult();
         }
     }
 }
