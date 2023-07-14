@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         String digit = String.valueOf(((Button) view).getText());
         if (operation == Character.MIN_VALUE && number1.length() < MAX_NUMBER_LEN) {
             number1 = checkFirstZero(number1, digit);
-        } else if (number2.length() < MAX_NUMBER_LEN){
+        } else if (operation != Character.MIN_VALUE && number2.length() < MAX_NUMBER_LEN){
             number2 = checkFirstZero(number2, digit);
         }
         printResult();
