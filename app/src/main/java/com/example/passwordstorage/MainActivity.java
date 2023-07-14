@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     // Функція встановлює математичну операцію
     public void setOperation(View view) {
         if (number1 != "0") {
+            if (operation != Character.MIN_VALUE) {
+                setResult(view);
+            }
             operation = ((Button) view).getText().charAt(0);
             printResult();
         }
