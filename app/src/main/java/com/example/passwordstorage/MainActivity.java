@@ -3,6 +3,7 @@ package com.example.passwordstorage;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     private Character operation = Character.MIN_VALUE;
 
     private final int MAX_NUMBER_LEN = 15;
+
+    private float preResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             number1 = checkFirstZero(number1, digit);
         } else if (operation != Character.MIN_VALUE && number2.length() < MAX_NUMBER_LEN){
             number2 = checkFirstZero(number2, digit);
+            calculation();
         }
         printResult();
     }
@@ -74,5 +78,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return number + digit;
+    }
+
+    // Функція калькуляції
+    private void calculation() {
+        switch (operation) {
+            case '+':
+                preResult = Float.parseFloat(number1) + Float.parseFloat(number2);
+                break;
+            case '-':
+                preResult = Float.parseFloat(number1) - Float.parseFloat(number2);
+                break;
+            case '×':
+                preResult = Float.parseFloat(number1) * Float.parseFloat(number2);
+                break;
+            case '÷':
+                preResult = Float.parseFloat(number1) / Float.parseFloat(number2);
+                break;
+        }
+        printPreResult(String.valueOf(preResult));
+    }
+
+    // Функція виводить передчасний результат калькуляції
+    private void printPreResult(String result) {
+        TextView preResultPlace = (TextView)findViewById(R.id.previewResultPlace);
+        if (!Float.isInfinite(preResult)) {
+            preResultPlace.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+            preResultPlace.setText(result);
+        } else {
+            preResultPlace.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+            preResultPlace.setText("На нуль ділити не можна!");
+        }
     }
 }

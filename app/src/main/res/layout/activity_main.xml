@@ -18,7 +18,7 @@
         android:gravity="bottom|right"
         android:text="0"
         android:textColor="#979393"
-        android:textSize="34sp"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
