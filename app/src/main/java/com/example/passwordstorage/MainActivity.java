@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         TextView resultPlace = (TextView)findViewById(R.id.resultPlace);
         if (operation == Character.MIN_VALUE) {
             resultPlace.setText(number1);
+        } else if (number2 == "") {
+            resultPlace.setText(number1 + '\n' + operation);
         } else {
             resultPlace.setText(number1 + '\n' + operation + '\n' + number2);
         }
