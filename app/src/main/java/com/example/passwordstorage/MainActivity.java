@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         if (operation == Character.MIN_VALUE) {
             resultPlace.setText(number1);
         } else {
-            resultPlace.setText(number1 + operation + number2);
+            resultPlace.setText(number1 + '\n' + operation + '\n' + number2);
         }
     }
 
