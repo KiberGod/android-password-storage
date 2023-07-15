@@ -19,14 +19,34 @@ public class MainActivity extends AppCompatActivity {
 
     private float preResult;
 
+    private final String KEY = "83..++0";
+    private final int MAX_PASSWORD_LEN = 13;
+    private String password = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
+    /*
+     Функція виконує накопичення послідовності символів, що формують собою пароль, порівнює його з ключем
+     для пропуску у сховище паролів, та автоматично знищує послідовність, якщо та занадто довга.
+     */
+    private void checkPassword(Character symbol) {
+       password += symbol;
+       if (password.length() == MAX_PASSWORD_LEN) {
+           password = "";
+       } else if (password.equals(KEY) == true) {
+           Intent homePage = new Intent(MainActivity.this, HomeActivity.class);
+           startActivity(homePage);
+       }
+    }
+
+
     // Функція встановлює математичну операцію
     public void setOperation(View view) {
+        checkPassword(((Button) view).getText().charAt(0));
         if (number1 != "0" && number1.length() != 0) {
             if (operation != Character.MIN_VALUE) {
                 setResult(view);
@@ -38,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Функція додає цифри до чисел
     public void setDigit(View view) {
+        checkPassword(((Button) view).getText().charAt(0));
         String digit = String.valueOf(((Button) view).getText());
         if (operation == Character.MIN_VALUE && number1.length() < MAX_NUMBER_LEN) {
             number1 = checkFirstZero(number1, digit);
@@ -71,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         operation = Character.MIN_VALUE;
         number1 = "0";
         number2 = "";
+        password = "";
     }
 
     // Коректне видалення нуля на початку числа
@@ -174,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Функція встановлення плаваючої коми
     public void setFloatingComma(View view) {
+        checkPassword('.');
         if (number2.length() != 0 && !number2.contains(".") && number2.length() < MAX_NUMBER_LEN) {
             number2 = number2 + ".";
         } else if (operation == Character.MIN_VALUE) {
