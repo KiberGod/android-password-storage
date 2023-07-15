@@ -2,6 +2,7 @@ package com.example.passwordstorage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -157,14 +158,18 @@ public class MainActivity extends AppCompatActivity {
 
     // Розрахунок відсотка
     public void calcPercentage(View view) {
-        if (number2.length() != 0) {
-            number2 = String.valueOf(Float.parseFloat(number2) / 100f);
-            calculation();
-        } else if (number1.length() != 0) {
-            number1 = String.valueOf(Float.parseFloat(number1) / 100f);
-            printPreResult(number1);
+        try {
+            if (number2.length() != 0) {
+                number2 = String.valueOf(Float.parseFloat(number2) / 100f);
+                calculation();
+            } else if (number1.length() != 0) {
+                number1 = String.valueOf(Float.parseFloat(number1) / 100f);
+                printPreResult(number1);
+            }
+            printResult();
+        } catch (NumberFormatException e) {
+            printPreResult("Syntax error");
         }
-        printResult();
     }
 
     // Функція встановлення плаваючої коми
