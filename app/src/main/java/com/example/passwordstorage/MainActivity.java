@@ -91,21 +91,25 @@ public class MainActivity extends AppCompatActivity {
 
     // Функція калькуляції
     private void calculation() {
-        switch (operation) {
-            case '+':
-                preResult = Float.parseFloat(number1) + Float.parseFloat(number2);
-                break;
-            case '-':
-                preResult = Float.parseFloat(number1) - Float.parseFloat(number2);
-                break;
-            case '×':
-                preResult = Float.parseFloat(number1) * Float.parseFloat(number2);
-                break;
-            case '÷':
-                preResult = Float.parseFloat(number1) / Float.parseFloat(number2);
-                break;
+        try {
+            switch (operation) {
+                case '+':
+                    preResult = Float.parseFloat(number1) + Float.parseFloat(number2);
+                    break;
+                case '-':
+                    preResult = Float.parseFloat(number1) - Float.parseFloat(number2);
+                    break;
+                case '×':
+                    preResult = Float.parseFloat(number1) * Float.parseFloat(number2);
+                    break;
+                case '÷':
+                    preResult = Float.parseFloat(number1) / Float.parseFloat(number2);
+                    break;
+            }
+            printPreResult(String.valueOf(preResult));
+        } catch (NumberFormatException e) {
+            printPreResult("Syntax error");
         }
-        printPreResult(String.valueOf(preResult));
     }
 
     // Функція виводить передчасний результат калькуляції
