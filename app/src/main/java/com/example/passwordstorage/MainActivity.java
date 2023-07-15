@@ -76,15 +76,16 @@ public class MainActivity extends AppCompatActivity {
     private String checkFirstZero(String number, String digit) {
         if (number == null || number.isEmpty()) {
             return digit;
-        }
-
-        if (number.charAt(0) == '0') {
-            if (digit.charAt(0) == '0') {
-                return number;
-            } else {
-                return digit;
+        } else if (number.length() == 1) {
+            if (number.charAt(0) == '0') {
+                if (digit.charAt(0) == '0') {
+                    return "0";
+                } else {
+                    return digit;
+                }
             }
         }
+
         return number + digit;
     }
 
@@ -152,6 +153,20 @@ public class MainActivity extends AppCompatActivity {
         } else if (number1.length() != 0) {
             number1 = String.valueOf(Float.parseFloat(number1) / 100f);
             printPreResult(number1);
+        }
+        printResult();
+    }
+
+    // Функція встановлення плаваючої коми
+    public void setFloatingComma(View view) {
+        if (number2.length() != 0 && !number2.contains(".") && number2.length() < MAX_NUMBER_LEN) {
+            number2 = number2 + ".";
+        } else if (operation == Character.MIN_VALUE) {
+            if (number1.length() != 0 && !number1.contains(".") && number1.length() < MAX_NUMBER_LEN) {
+                number1 = number1 + ".";
+            } else if (number1.length() == 0) {
+                number1 = "0.";
+            }
         }
         printResult();
     }
