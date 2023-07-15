@@ -52,14 +52,14 @@ public class MainActivity extends AppCompatActivity {
         TextView resultPlace = (TextView)findViewById(R.id.resultPlace);
         if (operation == Character.MIN_VALUE) {
             resultPlace.setText(number1);
-        } else if (number2 == "") {
+        } else if (number2.length() == 0) {
             resultPlace.setText(number1 + '\n' + operation);
         } else {
             resultPlace.setText(number1 + '\n' + operation + '\n' + number2);
         }
     }
 
-    // Натиснення на кнопку видалення усых введених даних
+    // Натиснення на кнопку видалення усіх введених даних
     public void onClickClearButton(View view) {
         dataReset();
         printResult();
@@ -126,5 +126,21 @@ public class MainActivity extends AppCompatActivity {
             number1 = String.valueOf(preResult);
             printResult();
         }
+    }
+
+    // Натиснення на кнопку видалення однієї цифри або операції
+    public void onClickEraseButton(View view) {
+        if (number2.length() > 0) {
+            number2 = number2.substring(0, number2.length() - 1);
+        } else if (operation != Character.MIN_VALUE) {
+            operation = Character.MIN_VALUE;
+        } else if (number1.length() > 0) {
+            number1 = number1.substring(0, number1.length() - 1);
+        }
+
+        if (number1.length() > 0 && number2.length() > 0) {
+            calculation();
+        }
+        printResult();
     }
 }

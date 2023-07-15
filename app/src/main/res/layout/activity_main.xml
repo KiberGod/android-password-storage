@@ -75,6 +75,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#673AB7"
+        android:onClick="onClickEraseButton"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
