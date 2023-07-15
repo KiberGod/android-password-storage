@@ -133,10 +133,16 @@ public class MainActivity extends AppCompatActivity {
     public void onClickEraseButton(View view) {
         if (number2.length() > 0) {
             number2 = number2.substring(0, number2.length() - 1);
+            if (number2.length() == 1 && number2.charAt(0) == '-') {
+                number2 = "";
+            }
         } else if (operation != Character.MIN_VALUE) {
             operation = Character.MIN_VALUE;
         } else if (number1.length() > 0) {
             number1 = number1.substring(0, number1.length() - 1);
+            if (number1.length() == 1 && number1.charAt(0) == '-') {
+                number1 = "";
+            }
         }
 
         if (number1.length() > 0 && number2.length() > 0) {
@@ -167,6 +173,17 @@ public class MainActivity extends AppCompatActivity {
             } else if (number1.length() == 0) {
                 number1 = "0.";
             }
+        }
+        printResult();
+    }
+
+    // Функція зміни знака числа на протилежний
+    public void inversionSignNumber(View view) {
+        if (number2.length() != 0) {
+            number2 = String.valueOf(Float.parseFloat(number2) * (-1));
+            calculation();
+        } else if (operation == Character.MIN_VALUE) {
+            number1 = String.valueOf(Float.parseFloat(number1) * (-1));
         }
         printResult();
     }
