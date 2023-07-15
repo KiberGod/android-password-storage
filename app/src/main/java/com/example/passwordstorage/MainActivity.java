@@ -143,4 +143,16 @@ public class MainActivity extends AppCompatActivity {
         }
         printResult();
     }
+
+    // Розрахунок відсотка
+    public void calcPercentage(View view) {
+        if (number2.length() != 0) {
+            number2 = String.valueOf(Float.parseFloat(number2) / 100f);
+            calculation();
+        } else if (number1.length() != 0) {
+            number1 = String.valueOf(Float.parseFloat(number1) / 100f);
+            printPreResult(number1);
+        }
+        printResult();
+    }
 }
