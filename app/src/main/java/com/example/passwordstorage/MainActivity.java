@@ -211,12 +211,16 @@ public class MainActivity extends AppCompatActivity {
 
     // Функція зміни знака числа на протилежний
     public void inversionSignNumber(View view) {
-        if (number2.length() != 0) {
-            number2 = String.valueOf(Float.parseFloat(number2) * (-1));
-            calculation();
-        } else if (operation == Character.MIN_VALUE && number1.length() > 0) {
-            number1 = String.valueOf(Float.parseFloat(number1) * (-1));
+        try {
+            if (number2.length() != 0) {
+                number2 = String.valueOf(Float.parseFloat(number2) * (-1));
+                calculation();
+            } else if (operation == Character.MIN_VALUE && number1.length() > 0) {
+                number1 = String.valueOf(Float.parseFloat(number1) * (-1));
+            }
+            printResult();
+        } catch (NumberFormatException e) {
+            printPreResult("Syntax error");
         }
-        printResult();
     }
 }
