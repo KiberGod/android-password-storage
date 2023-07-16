@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         if (number2.length() != 0) {
             number2 = String.valueOf(Float.parseFloat(number2) * (-1));
             calculation();
-        } else if (operation == Character.MIN_VALUE) {
+        } else if (operation == Character.MIN_VALUE && number1.length() > 0) {
             number1 = String.valueOf(Float.parseFloat(number1) * (-1));
         }
         printResult();
