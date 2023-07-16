@@ -23,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
     private final int MAX_PASSWORD_LEN = 13;
     private String password = "";
 
+    static {
+        System.loadLibrary("passwordstorage");
+    }
+
+    public native String stringFromJNI();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
        password += symbol;
        if (password.length() == MAX_PASSWORD_LEN) {
            password = "";
-       } else if (password.equals(KEY) == true) {
+       } else if (password.equals(stringFromJNI()) == true) {
            Intent homePage = new Intent(MainActivity.this, HomeActivity.class);
            startActivity(homePage);
        }
