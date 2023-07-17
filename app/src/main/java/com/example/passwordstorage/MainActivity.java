@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("passwordstorage");
     }
 
-    public native String stringFromJNI();
+    public native String getKey();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
        password += symbol;
        if (password.length() == MAX_PASSWORD_LEN) {
            password = "";
-       } else if (password.equals(stringFromJNI()) == true) {
+       } else if (password.equals(getKey()) == true) {
            Intent homePage = new Intent(MainActivity.this, HomeActivity.class);
            startActivity(homePage);
        }
