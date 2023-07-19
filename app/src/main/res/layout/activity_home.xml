@@ -7,16 +7,18 @@
     android:background="#000000"
     tools:context=".HomeActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="251dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="235dp"
-        android:gravity="center"
-        android:text="Вітаю! \nВи потрапили на головну сторінку сховища паролів."
-        android:textColor="#981414"
-        android:textSize="22sp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="77dp"
+        android:background="#673AB7"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Rabbit Hole"
+        app:titleMargin="0dp"
+        app:titleTextColor="#FFFFFF" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
