@@ -17,6 +17,7 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.ui.storage.sections.BookmarksFragment;
 import com.example.passwordstorage.ui.storage.sections.CategoriesFragment;
 import com.example.passwordstorage.ui.storage.sections.RecordsFragment;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 public class StorageFragment extends Fragment {
