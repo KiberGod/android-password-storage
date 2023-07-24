@@ -16,10 +16,12 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Rabbit Hole"
         app:titleMargin="0dp"
+        app:titleMarginStart="85dp"
         app:titleTextColor="#FFFFFF" />
 
     <FrameLayout
@@ -39,12 +41,22 @@
         android:layout_height="wrap_content"
         android:background="@color/gray"
         app:itemActiveIndicatorStyle="@null"
+        app:itemIconSize="37dp"
         app:itemIconTint="@drawable/bottom_nav_menu_button_colors"
         app:itemTextColor="@drawable/bottom_nav_menu_button_colors"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
+    <ImageView
+        android:layout_width="85dp"
+        android:layout_height="60dp"
+        android:src="@drawable/logo_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.411" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
