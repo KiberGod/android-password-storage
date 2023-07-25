@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:background="@color/black"
-
+        android:background="@null"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintBottom_toTopOf="@+id/viewPager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,10 +25,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/home_app_bar_background"
             app:tabGravity="fill"
-            app:tabTextColor="@drawable/home_app_bar_button_colors"
             app:tabIndicatorColor="@color/purple"
             app:tabIndicatorHeight="2dp"
             app:tabMode="fixed"
+            app:tabTextColor="@drawable/home_app_bar_button_colors"
             app:tabUnboundedRipple="false" />
     </com.google.android.material.appbar.AppBarLayout>
 

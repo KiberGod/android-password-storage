@@ -1,7 +1,9 @@
 package com.example.passwordstorage.ui.storage;
 
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,7 +19,6 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.ui.storage.sections.BookmarksFragment;
 import com.example.passwordstorage.ui.storage.sections.CategoriesFragment;
 import com.example.passwordstorage.ui.storage.sections.RecordsFragment;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 public class StorageFragment extends Fragment {
@@ -36,6 +37,7 @@ public class StorageFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_storage, container, false);
         addFragment(view);
+        hideHintForTabLayout();
         return view;
     }
 
@@ -53,6 +55,15 @@ public class StorageFragment extends Fragment {
         adapter.addFragment(new BookmarksFragment(), "Закладки");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    // Функція приховує підказки, що з`являються при довгому натисканні на елементи TabLayout
+    private void hideHintForTabLayout() {
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (tabLayout.getTabAt(i) != null) {
+                TooltipCompat.setTooltipText(tabLayout.getTabAt(i).view, null);
+            }
+        }
     }
 
 }

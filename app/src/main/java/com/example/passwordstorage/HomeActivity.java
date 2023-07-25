@@ -1,15 +1,19 @@
 package com.example.passwordstorage;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -24,6 +28,8 @@ public class HomeActivity extends AppCompatActivity {
 
         setFragment(new StorageFragment());
         setSelectedFromBottomNavBar();
+
+        hideHintForBottomNavMenu();
     }
 
     // Функція встановлює прослуховування натискань на нижнє меню навігації
@@ -44,5 +50,15 @@ public class HomeActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    // Приховання підказки для BottomNavMenu шляхом перевантаження опції довгого натискання
+    private void hideHintForBottomNavMenu() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+            View view = bottomNavigationView.findViewById(menuItem.getItemId());
+            view.setOnLongClickListener(v -> true);
+        }
     }
 }
