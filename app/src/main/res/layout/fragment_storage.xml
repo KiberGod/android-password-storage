@@ -23,12 +23,12 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/home_app_bar_background"
+            android:background="@drawable/background_home_app_bar"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/purple"
             app:tabIndicatorHeight="2dp"
             app:tabMode="fixed"
-            app:tabTextColor="@drawable/home_app_bar_button_colors"
+            app:tabTextColor="@drawable/colors_home_app_bar_button"
             app:tabUnboundedRipple="false" />
     </com.google.android.material.appbar.AppBarLayout>
 
