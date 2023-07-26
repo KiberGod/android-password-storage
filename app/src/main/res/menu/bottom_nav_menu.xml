@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Сховище"
-        android:icon="@drawable/baseline_lock_24"
+        android:icon="@drawable/vector__lock_24"
         android:id="@+id/storage" />
     <item android:title="Додати"
-        android:icon="@drawable/baseline_add_circle_24"
+        android:icon="@drawable/vector__add_circle_24"
         android:id="@+id/create" />
 </menu>

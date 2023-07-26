@@ -27,7 +27,9 @@
         <item name="android:background">@color/purple</item>
     </style>
 
-    <style name="NavMenu">
+    <style name="NavMenu"> </style>
 
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@null</item>
     </style>
 </resources>

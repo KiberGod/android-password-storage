@@ -52,7 +52,7 @@
     <ImageView
         android:layout_width="85dp"
         android:layout_height="60dp"
-        android:src="@drawable/logo_icon"
+        android:src="@drawable/vector_logo_icon"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar"

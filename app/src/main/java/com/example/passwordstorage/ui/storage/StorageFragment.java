@@ -3,7 +3,6 @@ package com.example.passwordstorage.ui.storage;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
