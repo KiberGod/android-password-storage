@@ -3,6 +3,7 @@ package com.example.passwordstorage;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public native String getKey();
+    public native void initSecurityCore(Context context);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Блокування переключення на темну тему
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+
+        initSecurityCore(this);
     }
 
     /*
