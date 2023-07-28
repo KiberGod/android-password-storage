@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private String password = "";
 
     static {
-        System.loadLibrary("passwordstorage");
+        System.loadLibrary("security_core");
     }
 
     public native String getKey();
