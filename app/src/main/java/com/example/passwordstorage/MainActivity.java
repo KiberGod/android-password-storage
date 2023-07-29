@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         // Блокування переключення на темну тему
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-
-
+        // Підключення основного С++ ядра
         initSecurityCore(this);
     }
 
