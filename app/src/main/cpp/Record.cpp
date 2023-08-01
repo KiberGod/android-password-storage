@@ -32,3 +32,15 @@ void Record::printLog() {
                         "Title: %.20s | Text: %.100s | Category: %.20s",
                         title, text, category);
 }
+
+const char* Record::getTitle() const {
+    return title;
+}
+
+const char* Record::getText() const {
+    return text;
+}
+
+const char* Record::getCategory() const {
+    return category;
+}

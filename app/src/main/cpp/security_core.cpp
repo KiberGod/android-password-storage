@@ -5,10 +5,13 @@
 #include "Record.h"
 #include "crypto_core.h"
 #include "migrations.h"
+#include <vector>
 
 // Шлях до внутрішнього файлового сховища програми
 std::string FILES_PATH;
 
+// Вектор, який постійно зберігає в собі множину записів
+std::vector<Record> RECORDS;
 
 // Функція зберігає значення дефолтного ключа для входу у сховище
 extern "C" JNIEXPORT jstring JNICALL
@@ -35,8 +38,8 @@ void setFilesPath(JNIEnv* env, jobject context) {
 }
 
 
-// Тестове зчитування записів з бінарного файла (усіх)
-void testReadToBinFile(){
+// Завантаження записів з бінарного файла (усіх)
+void loadRecordsFromBinFile() {
     std::ifstream file;
     file.open(FILES_PATH + "/example2.bin");
 
@@ -47,9 +50,10 @@ void testReadToBinFile(){
 
         Record record;
         while (file.read((char*)&record, sizeof(Record))){
-            record.printLog();
+            //record.printLog();
             decryptData(reinterpret_cast<char*>(&record), sizeof(Record));
-            record.printLog();
+            //record.printLog();
+            RECORDS.push_back(record);
         }
     };
 }
@@ -65,5 +69,44 @@ Java_com_example_passwordstorage_NativeController_initSecurityCore(
 
     // testing work with bin-file
     //runMigrations(FILES_PATH);
-    testReadToBinFile();
+    loadRecordsFromBinFile();
+}
+
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass) {
+    // Создаем класс ArrayList в Java
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+
+
+    // Проходимся по вектору и добавляем каждый объект Record в ArrayList
+    for (const auto& record : RECORDS) {
+        // Получаем класс Record в Java
+        jclass recordClass = env->FindClass("com/example/passwordstorage/Record");
+        jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+
+        // Создаем строки Java из C++ char массивов
+        jstring jTitle = env->NewStringUTF(record.getTitle());
+        jstring jText = env->NewStringUTF(record.getText());
+        jstring jCategory = env->NewStringUTF(record.getCategory());
+
+        // Создаем объект Record в Java
+        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory);
+
+        // Добавляем объект Record в ArrayList
+        env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
+
+        // Освобождаем локальные ссылки на строки Java
+        env->DeleteLocalRef(jTitle);
+        env->DeleteLocalRef(jText);
+        env->DeleteLocalRef(jCategory);
+
+        // Освобождаем локальную ссылку на объект Record в Java
+        env->DeleteLocalRef(recordObject);
+    }
+
+    return arrayList;
 }

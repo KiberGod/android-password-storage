@@ -1,6 +1,7 @@
 package com.example.passwordstorage;
 
 import static com.example.passwordstorage.NativeController.getKey;
+import static com.example.passwordstorage.NativeController.getRecords;
 import static com.example.passwordstorage.NativeController.initSecurityCore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.passwordstorage.ui.HomeActivity;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Підключення основного С++ ядра
         initSecurityCore(this);
+
+        ArrayList<Record> records = getRecords();
+        for (Record record : records) {
+            System.out.println("Title: " + record.getTitle());
+            System.out.println("Text: " + record.getText());
+            System.out.println("Category: " + record.getCategory());
+            System.out.println();
+        }
     }
 
     /*

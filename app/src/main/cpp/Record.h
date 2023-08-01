@@ -23,6 +23,9 @@ public:
     Record();
     Record(const char* title, const char* text, const char* category);
     void printLog();
+    const char* getTitle() const;
+    const char* getText() const;
+    const char* getCategory() const;
 };
 
 
