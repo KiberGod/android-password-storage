@@ -12,7 +12,7 @@ std::string FILES_PATH;
 
 // Функція зберігає значення дефолтного ключа для входу у сховище
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_passwordstorage_MainActivity_getKey(
+Java_com_example_passwordstorage_NativeController_getKey(
         JNIEnv* env,
         jobject /* this */) {
     std::string hello = "7-.93";
@@ -57,7 +57,7 @@ void testReadToBinFile(){
 
 // Ініт-функція, що містить всі стартові виклики
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_MainActivity_initSecurityCore(
+Java_com_example_passwordstorage_NativeController_initSecurityCore(
         JNIEnv* env,
         jobject /* this */, jobject context) {
 

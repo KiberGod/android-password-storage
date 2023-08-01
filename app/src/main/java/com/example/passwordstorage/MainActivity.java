@@ -1,9 +1,11 @@
 package com.example.passwordstorage;
 
+import static com.example.passwordstorage.NativeController.getKey;
+import static com.example.passwordstorage.NativeController.initSecurityCore;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -24,13 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private final String KEY = "83..++0";
     private final int MAX_PASSWORD_LEN = 13;
     private String password = "";
-
-    static {
-        System.loadLibrary("security_core");
-    }
-
-    public native String getKey();
-    public native void initSecurityCore(Context context);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
