@@ -1,5 +1,8 @@
 package com.example.passwordstorage;
 
+/*
+    Даний клас є основною структурною одиницею сховища - записом
+ */
 public class Record {
 
     private String title;
