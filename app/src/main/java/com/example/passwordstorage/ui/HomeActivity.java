@@ -1,4 +1,4 @@
-package com.example.passwordstorage;
+package com.example.passwordstorage.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.passwordstorage.R;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
