@@ -14,7 +14,7 @@ std::string FILES_PATH;
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_passwordstorage_NativeController_getKey(
         JNIEnv* env,
-        jobject /* this */) {
+        jclass clazz) {
     std::string hello = "7-.93";
     return env->NewStringUTF(hello.c_str());
 }
@@ -59,7 +59,7 @@ void testReadToBinFile(){
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_initSecurityCore(
         JNIEnv* env,
-        jobject /* this */, jobject context) {
+        jclass clazz, jobject context) {
 
     setFilesPath(env, context);
 
