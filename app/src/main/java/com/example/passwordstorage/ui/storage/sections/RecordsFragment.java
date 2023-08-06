@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,14 +18,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.ui.storage.StorageViewModel;
 
 public class RecordsFragment extends Fragment {
+
+    private StorageViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_records, container, false);
+
+        viewModel = new ViewModelProvider(this).get(StorageViewModel.class);
+
+        viewModel.printLogRecords();
 
         for (int i=0; i<30; i++) {
             drawRecordButton(view);

@@ -1,10 +1,9 @@
 package com.example.passwordstorage.ui;
 
-import static com.example.passwordstorage.NativeController.getRecords;
+
 import static com.example.passwordstorage.NativeController.initSecurityCore;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.Record;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
@@ -28,15 +26,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 
-    private HomeViewModel viewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         setFragment(new StorageFragment());
         setSelectedFromBottomNavBar();
@@ -45,8 +39,6 @@ public class HomeActivity extends AppCompatActivity {
 
         // Підключення основного С++ ядра
         initSecurityCore(this);
-
-        viewModel.printLogRecords();
     }
 
     // Функція встановлює прослуховування натискань на нижнє меню навігації
