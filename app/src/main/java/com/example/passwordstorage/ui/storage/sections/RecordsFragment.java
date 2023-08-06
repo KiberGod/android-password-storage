@@ -32,18 +32,24 @@ public class RecordsFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(StorageViewModel.class);
 
+        viewModel.setRecords();
         viewModel.printLogRecords();
+        drawButtonList(view);
 
-        for (int i=0; i<30; i++) {
-            drawRecordButton(view);
-        }
         return view;
     }
 
+    // Функція виводить весь список записів
+    private void drawButtonList(View view) {
+        for (int i=0; i<viewModel.getRecordsCount(); i++) {
+            drawRecordButton(view, viewModel.getRecordTitleById(i));
+        }
+    }
+
     // Функція додає кнопку запису
-    private void drawRecordButton(View view) {
+    private void drawRecordButton(View view, String title) {
         Button button = new Button(requireContext());
-        button.setText("Назва запису");
+        button.setText(title);
         button.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text));
 
         GradientDrawable roundedRectangle = new GradientDrawable();
