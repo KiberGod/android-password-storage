@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.ui.HomeActivity;
 import com.example.passwordstorage.ui.storage.StorageViewModel;
 
 public class RecordsFragment extends Fragment {
@@ -80,5 +81,12 @@ public class RecordsFragment extends Fragment {
 
         LinearLayout rootLayout = view.findViewById(R.id.scrollArea);
         rootLayout.addView(button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) requireActivity()).setShowRecordFragment(title);
+            }
+        });
     }
 }

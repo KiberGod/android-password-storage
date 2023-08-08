@@ -70,4 +70,13 @@ public class HomeActivity extends AppCompatActivity {
             view.setOnLongClickListener(v -> true);
         }
     }
+
+    // Перехід на сторінку перегляду запису
+    public void setShowRecordFragment(String title) {
+        ShowRecordFragment showRecordFragment = ShowRecordFragment.newInstance(title);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, showRecordFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 }
