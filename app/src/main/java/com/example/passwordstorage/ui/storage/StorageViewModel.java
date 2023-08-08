@@ -8,6 +8,13 @@ import com.example.passwordstorage.Record;
 
 import java.util.ArrayList;
 
+/*
+    Дана модель є спільною для всіх компонентів пакету storage.
+
+    Для підключення моделі слід використовувати    viewModel = new ViewModelProvider(requireActivity()).get(StorageViewModel.class);
+                                        замість    viewModel = new ViewModelProvider(this).get(StorageViewModel.class);
+    щоб уникнути конфліктів використання різними модулями.
+ */
 public class StorageViewModel extends ViewModel {
 
     private ArrayList<Record> records;
@@ -18,9 +25,10 @@ public class StorageViewModel extends ViewModel {
     }
 
     // Повертає назву запису за ідентифікатором
-    public String getRecordTitleById(int index) {
-        return records.get(index).getTitle();
-    }
+    public String getRecordTitleById(int index) { return records.get(index).getTitle(); }
+
+    // Повертає текст запису за ідентифікатором
+    public String getRecordTextById(int index) { return records.get(index).getText(); }
 
     // Повертає загальну кількість записів
     public int getRecordsCount() {

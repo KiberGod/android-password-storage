@@ -1,8 +1,9 @@
-package com.example.passwordstorage.ui;
+package com.example.passwordstorage.ui.storage.sections;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,21 +11,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.ui.storage.StorageViewModel;
 
 public class ShowRecordFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
+    private StorageViewModel viewModel;
 
-    private String mParam1;
+    private static final String RECORD_ID = "record_id";
+
+    private int record_id;
 
     public ShowRecordFragment() {
         // Required empty public constructor
     }
 
-    public static ShowRecordFragment newInstance(String param1) {
+    public static ShowRecordFragment newInstance(int record_id) {
         ShowRecordFragment fragment = new ShowRecordFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(RECORD_ID, record_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,7 +37,7 @@ public class ShowRecordFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            record_id = getArguments().getInt(RECORD_ID);
         }
     }
 
@@ -42,8 +46,10 @@ public class ShowRecordFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_record, container, false);
 
-        TextView textView = view.findViewById(R.id.textView2);
-        textView.setText(mParam1);
+        viewModel = new ViewModelProvider(requireActivity()).get(StorageViewModel.class);
+
+        TextView textView = view.findViewById(R.id.mainRecordText);
+        textView.setText(viewModel.getRecordTextById(record_id));
 
         return view;
     }

@@ -31,7 +31,7 @@ public class RecordsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_records, container, false);
 
-        viewModel = new ViewModelProvider(this).get(StorageViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(StorageViewModel.class);
 
         viewModel.setRecords();
         viewModel.printLogRecords();
@@ -43,12 +43,12 @@ public class RecordsFragment extends Fragment {
     // Функція виводить весь список записів
     private void drawButtonList(View view) {
         for (int i=0; i<viewModel.getRecordsCount(); i++) {
-            drawRecordButton(view, viewModel.getRecordTitleById(i));
+            drawRecordButton(view, viewModel.getRecordTitleById(i), i);
         }
     }
 
     // Функція додає кнопку запису
-    private void drawRecordButton(View view, String title) {
+    private void drawRecordButton(View view, String title, int record_id) {
         Button button = new Button(requireContext());
         button.setText(title);
         button.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text));
@@ -85,7 +85,7 @@ public class RecordsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setShowRecordFragment(title);
+                ((HomeActivity) requireActivity()).setShowRecordFragment(record_id);
             }
         });
     }

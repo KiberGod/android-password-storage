@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,9 +16,8 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
+import com.example.passwordstorage.ui.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -72,8 +70,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Перехід на сторінку перегляду запису
-    public void setShowRecordFragment(String title) {
-        ShowRecordFragment showRecordFragment = ShowRecordFragment.newInstance(title);
+    public void setShowRecordFragment(int record_id) {
+        ShowRecordFragment showRecordFragment = ShowRecordFragment.newInstance(record_id);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_layout, showRecordFragment)
                 .addToBackStack(null)
