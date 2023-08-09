@@ -23,6 +23,7 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              security_core.cpp
+        model/Category.cpp
         model/Record.cpp
         crypto_core.cpp
         migrations.cpp
