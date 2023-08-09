@@ -47,5 +47,15 @@ void runMigrations(std::string files_path) {
     testWriteToBinFile("MAIN PASS", "MY MAIN PASS: 1111", "google");
     testWriteToBinFile("site", "loooooooooooooooooooooooooooooong teeeeeeeeeeeeext", "sites");
 
+    testWriteToBinFile("privat", "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", "baaaaaaaaank");
+    testWriteToBinFile("uiyuy", "rgehyrfjuylkoiu;io'piluykiulouipwfx4e5g64hf56h   ;io", "5645654");
+    testWriteToBinFile("olx", "pppp qqqqq wwwww eeeee rrrrr ttttt yyyyy", "th rrgheff fefe");
+    testWriteToBinFile("mail", "--", "");
+    testWriteToBinFile("www", "LINK LINK LINK", "site");
+    testWriteToBinFile("mono", "code 123142453456", "bank");
+    testWriteToBinFile("протон", "пароль, логін і т.д.", "пошта");
+    testWriteToBinFile("стім", "код підтвердження: 1111999222", "грульки");
+    testWriteToBinFile("insta", "ololo", "");
+
     // testWriteToBinFile("", "", "");
 }
