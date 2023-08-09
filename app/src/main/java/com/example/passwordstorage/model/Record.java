@@ -1,4 +1,4 @@
-package com.example.passwordstorage;
+package com.example.passwordstorage.model;
 
 /*
     Даний клас є основною структурною одиницею сховища - записом

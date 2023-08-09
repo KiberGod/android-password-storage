@@ -91,7 +91,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
 
     // Упакування Record у ArrayList
     for (const auto& record : RECORDS) {
-        jclass recordClass = env->FindClass("com/example/passwordstorage/Record");
+        jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
         jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
         jstring jTitle = env->NewStringUTF(record.getTitle());

@@ -2,6 +2,8 @@ package com.example.passwordstorage;
 
 import android.content.Context;
 
+import com.example.passwordstorage.model.Record;
+
 import java.util.ArrayList;
 
 /*

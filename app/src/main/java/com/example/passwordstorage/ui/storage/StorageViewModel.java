@@ -4,7 +4,7 @@ import static com.example.passwordstorage.NativeController.getRecords;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.passwordstorage.Record;
+import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
 
