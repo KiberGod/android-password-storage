@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <android/log.h>
-#include "Record.h"
+#include "model/Record.h"
 #include "crypto_core.h"
 #include "migrations.h"
 #include <vector>
