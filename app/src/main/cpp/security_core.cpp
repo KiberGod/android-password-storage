@@ -68,7 +68,7 @@ Java_com_example_passwordstorage_NativeController_initSecurityCore(
 
     // testing work with bin-file
     //
-    runMigrations(FILES_PATH);
+    refreshMigrations(FILES_PATH);
     loadRecordsFromBinFile();
 }
 

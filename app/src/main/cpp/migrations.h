@@ -9,6 +9,12 @@
 void testWriteToBinFile(char* title, char* text, char* category);
 
 // Запуск міграцій
-void runMigrations(std::string files_path);
+void runMigrations();
+
+// Видалення міграцій
+void dropMigrations();
+
+// Перезавантаження міграцій
+void refreshMigrations(std::string files_path);
 
 #endif //PASSWORD_STORAGE_MIGRATIONS_H

@@ -8,7 +8,10 @@
 #include "crypto_core.h"
 
 // Шлях до bin-файла
-std::string binFile;
+std::string pathToBinFile;
+
+//Назва bin-файла
+const std::string BIN_FILE = "/example2.bin";
 
 // Тестовий запис даних до бінарного файла (дописування об`єкта класу Запису)
 void testWriteToBinFile(char* title, char* text, char* category) {
@@ -16,7 +19,7 @@ void testWriteToBinFile(char* title, char* text, char* category) {
     Record record(title, text, category);
 
     std::ofstream file;
-    file.open(binFile,std::ofstream::app);
+    file.open(pathToBinFile,std::ofstream::app);
 
     if(!file.is_open()) {
         __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR WRITE2 BIN-FILE");
@@ -36,9 +39,7 @@ void testWriteToBinFile(char* title, char* text, char* category) {
 }
 
 // Запуск міграцій
-void runMigrations(std::string files_path) {
-    binFile = files_path + "/example2.bin";
-
+void runMigrations() {
     testWriteToBinFile("My pass note1", "main text YHINUYH78yjhi7", "google");
     testWriteToBinFile("My pass note2", "F9fg9dfe76u", "google");
     testWriteToBinFile("Якась назва", "якийсь пароль", "категорія");
@@ -58,4 +59,21 @@ void runMigrations(std::string files_path) {
     testWriteToBinFile("insta", "ololo", "");
 
     // testWriteToBinFile("", "", "");
+}
+
+// Видалення міграцій
+void dropMigrations() {
+    std::ifstream file(pathToBinFile);
+    if (file.good()) {
+        file.close();
+        remove(pathToBinFile.c_str());
+    }
+}
+
+// Перезавантаження міграцій
+void refreshMigrations(std::string files_path) {
+    pathToBinFile = files_path + BIN_FILE;
+
+    dropMigrations();
+    runMigrations();
 }
