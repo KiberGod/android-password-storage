@@ -4,8 +4,8 @@
 #include <fstream>
 #include <android/log.h>
 #include "migrations.h"
-#include "model/Record.h"
-#include "crypto_core.h"
+#include "../model/Record.h"
+#include "../crypto_core.h"
 
 // Шлях до bin-файла
 std::string pathToBinFile;

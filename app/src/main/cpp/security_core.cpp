@@ -4,7 +4,7 @@
 #include <android/log.h>
 #include "model/Record.h"
 #include "crypto_core.h"
-#include "migrations.h"
+#include "migrations/migrations.h"
 #include <vector>
 
 // Шлях до внутрішнього файлового сховища програми

@@ -26,7 +26,7 @@ add_library( # Sets the name of the library.
         model/Category.cpp
         model/Record.cpp
         crypto_core.cpp
-        migrations.cpp
+        migrations/migrations.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
