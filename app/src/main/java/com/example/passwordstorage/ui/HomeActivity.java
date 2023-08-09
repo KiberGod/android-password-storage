@@ -15,6 +15,7 @@ import android.view.View;
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateFragment;
+import com.example.passwordstorage.ui.create.CreateRecordFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
 import com.example.passwordstorage.ui.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -69,12 +70,28 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    // Перехід на сторінку перегляду запису
-    public void setShowRecordFragment(int record_id) {
-        ShowRecordFragment showRecordFragment = ShowRecordFragment.newInstance(record_id);
+    // Загальна функція переходу на інший фрагмент (сторінку)
+    private void navigateToFragment(Fragment fragment, Bundle args) {
+        if (args != null) {
+            fragment.setArguments(args);
+        }
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout, showRecordFragment)
+                .replace(R.id.frame_layout, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    // Перехід на сторінку перегляду запису
+    public void setShowRecordFragment(int record_id) {
+        ShowRecordFragment showRecordFragment = new ShowRecordFragment();
+        Bundle args = new Bundle();
+        args.putInt("record_id", record_id);
+        navigateToFragment(showRecordFragment, args);
+    }
+
+    // Перехід на сторінку створення запису
+    public void setCreateRecordFragment() {
+        CreateRecordFragment createRecordFragment = new CreateRecordFragment();
+        navigateToFragment(createRecordFragment, null);
     }
 }
