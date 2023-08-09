@@ -30,6 +30,9 @@ public class StorageViewModel extends ViewModel {
     // Повертає текст запису за ідентифікатором
     public String getRecordTextById(int index) { return records.get(index).getText(); }
 
+    // Повертає категорію запису за ідентифікатором
+    public String getRecordCategoryById(int index) { return records.get(index).getCategory(); }
+
     // Повертає загальну кількість записів
     public int getRecordsCount() {
         return records.size();

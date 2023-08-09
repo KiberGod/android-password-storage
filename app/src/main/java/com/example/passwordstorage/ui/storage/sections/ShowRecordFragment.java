@@ -2,6 +2,7 @@ package com.example.passwordstorage.ui.storage.sections;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -48,9 +49,21 @@ public class ShowRecordFragment extends Fragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(StorageViewModel.class);
 
-        TextView textView = view.findViewById(R.id.mainRecordText);
-        textView.setText(viewModel.getRecordTextById(record_id));
+        printRecordData(view);
 
         return view;
+    }
+
+    // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
+    private void printRecordData(View view) {
+        setTextViewText(view, R.id.recordTitle, viewModel.getRecordTitleById(record_id));
+        setTextViewText(view, R.id.recordCategory, viewModel.getRecordCategoryById(record_id));
+        setTextViewText(view, R.id.mainRecordText, viewModel.getRecordTextById(record_id));
+    }
+
+    // Функція встановлення тексту до UI-компонентів
+    private void setTextViewText(@NonNull View view, int textViewId, String text) {
+        TextView textView = view.findViewById(textViewId);
+        textView.setText(text);
     }
 }
