@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <android/log.h>
+#include "model/Category.h"
 #include "model/Record.h"
 #include "crypto_core.h"
 #include "migrations/migrations.h"
@@ -44,9 +45,9 @@ void loadRecordsFromBinFile() {
     file.open(FILES_PATH + "/example2.bin");
 
     if(!file.is_open()){
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READ2 BIN-FILE");
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READ TEST RECORDS BIN-FILE");
     } else {
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL READ2 BIN-FILE");
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL READ TEST RECORDS BIN-FILE");
 
         Record record;
         while (file.read((char*)&record, sizeof(Record))){
@@ -54,6 +55,26 @@ void loadRecordsFromBinFile() {
             decryptData(reinterpret_cast<char*>(&record), sizeof(Record));
             //record.printLog();
             RECORDS.push_back(record);
+        }
+    };
+}
+
+// Завантаження категорій з бінарного файла
+void loadCategoriesFromBinFile() {
+    std::ifstream file;
+    file.open(FILES_PATH + "/categories.bin");
+
+    if(!file.is_open()){
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READ CATEGORIES BIN-FILE");
+    } else {
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL READ CATEGORIES BIN-FILE");
+
+        Category category;
+        while (file.read((char*)&category, sizeof(Category))){
+            category.printLog();
+            decryptData(reinterpret_cast<char*>(&category), sizeof(Category));
+            category.printLog();
+
         }
     };
 }
@@ -69,6 +90,7 @@ Java_com_example_passwordstorage_NativeController_initSecurityCore(
     // testing work with bin-file
     //
     refreshMigrations(FILES_PATH);
+    loadCategoriesFromBinFile();
     loadRecordsFromBinFile();
 }
 

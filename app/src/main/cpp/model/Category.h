@@ -18,6 +18,7 @@ private:
 public:
     Category();
     Category(const char* name);
+    void printLog();
     const char* getName() const;
 };
 
