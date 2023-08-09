@@ -26,6 +26,8 @@ add_library( # Sets the name of the library.
         model/Category.cpp
         model/Record.cpp
         crypto_core.cpp
+        migrations/utils/MigrationUtils.cpp
+        migrations/create_test_records.cpp
         migrations/migrations.cpp
         )
 

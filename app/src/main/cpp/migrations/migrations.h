@@ -5,14 +5,9 @@
 #ifndef PASSWORD_STORAGE_MIGRATIONS_H
 #define PASSWORD_STORAGE_MIGRATIONS_H
 
-// Тестовий запис даних до бінарного файла (дописування об`єкта класу Запису)
-void testWriteToBinFile(char* title, char* text, char* category);
-
-// Запуск міграцій
-void runMigrations();
-
-// Видалення міграцій
-void dropMigrations();
+/*
+ * У даному файлі необхідно реєструвати класи міграцій
+ */
 
 // Перезавантаження міграцій
 void refreshMigrations(std::string files_path);
