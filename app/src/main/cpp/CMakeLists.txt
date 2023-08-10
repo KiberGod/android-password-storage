@@ -22,7 +22,7 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             security_core.cpp
+
         model/Category.cpp
         model/Record.cpp
         crypto_core.cpp
@@ -30,6 +30,8 @@ add_library( # Sets the name of the library.
         migrations/create_categories.cpp
         migrations/create_test_records.cpp
         migrations/migrations.cpp
+        file_utils/BinFileIO.cpp
+        security_core.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

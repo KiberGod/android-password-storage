@@ -4,12 +4,13 @@ import static com.example.passwordstorage.NativeController.getRecords;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.passwordstorage.model.Category;
 import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
 
 /*
-    Дана Вью-модель є спільною для всіх компонентів пакету storage.
+    Дана Вью-модель є спільною для всіх компонентів. Зберігає в собі основні дані та функції роботи з ними
 
     Для підключення моделі слід використовувати    viewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
                                         замість    viewModel = new ViewModelProvider(this).get(SharedDataViewModel.class);
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 public class SharedDataViewModel extends ViewModel {
 
     private ArrayList<Record> records;
+
+    private ArrayList<Category> categories;
 
     // Ініціалізація списку записів
     public void setRecords() {
