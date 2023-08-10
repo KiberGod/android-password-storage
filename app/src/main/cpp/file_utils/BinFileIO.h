@@ -14,12 +14,21 @@
 // Шлях до внутрішнього файлового сховища програми
 static std::string FILES_PATH;
 
+// Тестовий файл записів
+static const std::string TEST_RECORDS_FILE = "/example2.bin";
+
+// Файл категорій
+static const std::string CATEGORIES_FILE = "/categories.bin";
 
 // Функція встановлює шлях до файлів програми
 void setFilesPath(JNIEnv* env, jobject context);
 
 // Повертає шлях до файлів програми
 std::string getFilesPath();
+
+// Дана поліморфна функція завантажує дані з файлів, працючи з такими типами даних, як Record та Category
+template <typename T>
+void loadDataFromBinFile(const std::string& filename, std::vector<T>& data);
 
 // Завантаження записів з бінарного файла (усіх)
 void loadRecordsFromBinFile();

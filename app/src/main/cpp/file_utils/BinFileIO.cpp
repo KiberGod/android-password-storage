@@ -34,42 +34,43 @@ std::string getFilesPath() {
     return FILES_PATH;
 }
 
-void loadRecordsFromBinFile() {
+/*
+ * Дана поліморфна функція завантажує дані з файлів, працючи з такими типами даних, як Record та Category.
+ *
+ * Слід зазначити, що вона актуальна лише доти, доки файли матимуть спільний алгоритм кодування.
+ * У іншому випадку слід модифікувати рядок з декодуванням:
+ *                                                          decryptData(buffer, sizeof(buffer));
+ */
+template <typename T>
+void loadDataFromBinFile(const std::string& filename, std::vector<T>& data) {
     std::ifstream file;
-    file.open(getFilesPath() + "/example2.bin");
+    file.open(filename, std::ios::binary);
 
-    if(!file.is_open()){
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READ TEST RECORDS BIN-FILE");
+    if (!file.is_open()) {
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READING BIN-FILE: %s", filename.c_str());
     } else {
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL READ TEST RECORDS BIN-FILE");
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFULLY READ BIN-FILE: %s", filename.c_str());
 
-        Record record;
-        while (file.read((char*)&record, sizeof(Record))){
-            //record.printLog();
-            decryptData(reinterpret_cast<char*>(&record), sizeof(Record));
-            //record.printLog();
-            RECORDS.push_back(record);
+        char buffer[sizeof(T)];
+        while (file.read(buffer, sizeof(buffer))) {
+            decryptData(buffer, sizeof(buffer));
+            data.push_back(*reinterpret_cast<T*>(buffer));
         }
-    };
+    }
+}
+
+void loadRecordsFromBinFile() {
+    loadDataFromBinFile(getFilesPath() + TEST_RECORDS_FILE, RECORDS);
 }
 
 void loadCategoriesFromBinFile() {
-    std::ifstream file;
-    file.open(getFilesPath() + "/categories.bin");
+    std::vector<Category> categoryData;
+    loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, categoryData);
 
-    if(!file.is_open()){
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READ CATEGORIES BIN-FILE");
-    } else {
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL READ CATEGORIES BIN-FILE");
-
-        Category category;
-        while (file.read((char*)&category, sizeof(Category))){
-            category.printLog();
-            decryptData(reinterpret_cast<char*>(&category), sizeof(Category));
-            category.printLog();
-
-        }
-    };
+    // Тимчасове логування
+    for (auto& category : categoryData) {
+        category.printLog();
+    }
 }
 
 /*
