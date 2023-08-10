@@ -18,12 +18,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.data.SharedDataViewModel;
 import com.example.passwordstorage.ui.HomeActivity;
-import com.example.passwordstorage.ui.storage.StorageViewModel;
 
 public class RecordsFragment extends Fragment {
 
-    private StorageViewModel viewModel;
+    private SharedDataViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,7 +31,7 @@ public class RecordsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_records, container, false);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(StorageViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
 
         viewModel.setRecords();
         viewModel.printLogRecords();

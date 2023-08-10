@@ -1,7 +1,6 @@
 package com.example.passwordstorage.ui.storage;
 
 import androidx.appcompat.widget.TooltipCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.data.SharedDataViewModel;
 import com.example.passwordstorage.ui.storage.sections.BookmarksFragment;
 import com.example.passwordstorage.ui.storage.sections.CategoriesFragment;
 import com.example.passwordstorage.ui.storage.sections.RecordsFragment;
@@ -25,7 +25,7 @@ public class StorageFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    private StorageViewModel mViewModel;
+    private SharedDataViewModel mViewModel;
 
     public static StorageFragment newInstance() {
         return new StorageFragment();

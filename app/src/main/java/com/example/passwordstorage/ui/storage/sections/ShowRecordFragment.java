@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.ui.storage.StorageViewModel;
+import com.example.passwordstorage.data.SharedDataViewModel;
 
 public class ShowRecordFragment extends Fragment {
 
-    private StorageViewModel viewModel;
+    private SharedDataViewModel viewModel;
 
     private static final String RECORD_ID = "record_id";
 
@@ -47,7 +47,7 @@ public class ShowRecordFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_record, container, false);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(StorageViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
 
         printRecordData(view);
 
