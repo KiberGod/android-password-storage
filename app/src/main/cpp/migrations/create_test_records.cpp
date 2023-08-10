@@ -6,12 +6,12 @@
 #include "create_test_records.h"
 #include "utils/MigrationUtils.h"
 #include "../model/Record.h"
-
+#include "../file_utils/BinFileIO.h"
 
 void create_test_records::insert(char* title, char* text, char* category) {
 
     Record record(title, text, category);
-    writeToBinFile(pathToTestBinFile,
+    writeToBinFile(getTestRecordsFilePath(),
                    reinterpret_cast<char*>(&record),
                    sizeof(record),
                    sizeof(Record)
@@ -41,12 +41,10 @@ void create_test_records::runMigrations() {
 }
 
 void create_test_records::dropMigrations() {
-    dropFile(pathToTestBinFile);
+    dropFile(getTestRecordsFilePath());
 }
 
-void create_test_records::refreshMigrations(std::string files_path) {
-    pathToTestBinFile = files_path + TEST_BIN_FILE;
-
+void create_test_records::refreshMigrations() {
     dropMigrations();
     runMigrations();
 }

@@ -3,7 +3,6 @@
 //
 
 #include <string>
-#include <jni.h>
 #include <fstream>
 #include <vector>
 #include <android/log.h>
@@ -15,6 +14,9 @@
 // Вектор, який постійно зберігає в собі множину записів
 std::vector<Record> RECORDS;
 
+std::string getTestRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
+
+std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
 
 void setFilesPath(JNIEnv* env, jobject context) {
     jclass contextClass = env->GetObjectClass(context);

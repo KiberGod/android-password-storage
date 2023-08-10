@@ -10,6 +10,6 @@
  */
 
 // Перезавантаження міграцій
-void refreshMigrations(std::string files_path);
+void refreshMigrations();
 
 #endif //PASSWORD_STORAGE_MIGRATIONS_H

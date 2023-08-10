@@ -22,13 +22,7 @@ private:
 
 public:
     // Оновлення міграцій
-    static void refreshMigrations(std::string files_path);
+    static void refreshMigrations();
 };
-
-// Шлях до тестового bin-файла
-static std::string pathToTestBinFile;
-
-//Назва тестового bin-файла
-static const std::string TEST_BIN_FILE = "/example2.bin";
 
 #endif //PASSWORD_STORAGE_CREATE_TEST_RECORDS_H

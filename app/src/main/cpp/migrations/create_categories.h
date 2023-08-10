@@ -22,13 +22,8 @@ private:
 
 public:
     // Оновлення міграцій
-    static void refreshMigrations(std::string files_path);
+    static void refreshMigrations();
 };
 
-// Шлях до тестового bin-файла
-static std::string pathToCategoriesBinFile;
-
-//Назва тестового bin-файла
-static const std::string CATEGORIES_BIN_FILE = "/categories.bin";
 
 #endif //PASSWORD_STORAGE_CREATE_CATEGORIES_H

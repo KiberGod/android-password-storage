@@ -10,6 +10,7 @@
 #ifndef PASSWORD_STORAGE_BINFILEIO_H
 #define PASSWORD_STORAGE_BINFILEIO_H
 
+#include <jni.h>
 
 // Шлях до внутрішнього файлового сховища програми
 static std::string FILES_PATH;
@@ -19,6 +20,12 @@ static const std::string TEST_RECORDS_FILE = "/example2.bin";
 
 // Файл категорій
 static const std::string CATEGORIES_FILE = "/categories.bin";
+
+// Повертає і`мя файла тестових записів
+std::string getTestRecordsFilePath();
+
+// Повертає і`мя файла категорій
+std::string getCategoriesFilePath();
 
 // Функція встановлює шлях до файлів програми
 void setFilesPath(JNIEnv* env, jobject context);

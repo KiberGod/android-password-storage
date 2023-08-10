@@ -6,12 +6,12 @@
 #include "create_categories.h"
 #include "utils/MigrationUtils.h"
 #include "../model/Category.h"
-
+#include "../file_utils/BinFileIO.h"
 
 void create_categories::insert(char* name) {
 
     Category category(name);
-    writeToBinFile(pathToCategoriesBinFile,
+    writeToBinFile(getCategoriesFilePath(),
                    reinterpret_cast<char*>(&category),
                    sizeof(category),
                    sizeof(Category)
@@ -28,12 +28,10 @@ void create_categories::runMigrations() {
 }
 
 void create_categories::dropMigrations() {
-    dropFile(pathToCategoriesBinFile);
+    dropFile(getCategoriesFilePath());
 }
 
-void create_categories::refreshMigrations(std::string files_path) {
-    pathToCategoriesBinFile = files_path + CATEGORIES_BIN_FILE;
-
+void create_categories::refreshMigrations() {
     dropMigrations();
     runMigrations();
 }

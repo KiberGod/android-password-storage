@@ -21,7 +21,7 @@ Java_com_example_passwordstorage_NativeController_initSecurityCore(
         jclass clazz, jobject context) {
 
     setFilesPath(env, context);
-    refreshMigrations(getFilesPath());
+    refreshMigrations();
     loadCategoriesFromBinFile();
     loadRecordsFromBinFile();
 }
