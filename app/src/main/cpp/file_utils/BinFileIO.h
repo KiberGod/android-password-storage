@@ -43,10 +43,11 @@ void loadRecordsFromBinFile();
 // Завантаження категорій з бінарного файла
 void loadCategoriesFromBinFile();
 
-//Функція передає вектор records-об`єктів з данного С++ модуля у Java-код
+// Функція передає вектор records-об`єктів з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass);
 
+// Функція передає вектор categories-об`єктів з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
 

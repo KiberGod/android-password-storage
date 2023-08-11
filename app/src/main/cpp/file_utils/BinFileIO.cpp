@@ -89,10 +89,11 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
+    jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+
     // Упакування Record у ArrayList
     for (const auto& record : RECORDS) {
-        jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
-        jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
         jstring jTitle = env->NewStringUTF(record.getTitle());
         jstring jText = env->NewStringUTF(record.getText());
@@ -113,8 +114,11 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     return arrayList;
 }
 
-
-
+/*
+ * Функція передає вектор categories-об`єктів з данного С++ модуля у Java-код
+ *
+ * return vector (C++) --> ArrayList (Java)
+ */
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass) {
     // Створення класу ArrayList в Java
@@ -123,10 +127,11 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
+    jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/String;)V");
+
     // Упакування Category у ArrayList
     for (const auto& category : CATEGORIES) {
-        jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
-        jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/String;)V");
 
         jstring jName = env->NewStringUTF(category.getName());
 
@@ -142,4 +147,3 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
 
     return arrayList;
 }
-
