@@ -14,6 +14,9 @@
 // Вектор, який постійно зберігає в собі множину записів
 std::vector<Record> RECORDS;
 
+// Вектор, який постійно зберігає в собі множину категорій
+std::vector<Category> CATEGORIES;
+
 std::string getTestRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
 
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
@@ -66,13 +69,7 @@ void loadRecordsFromBinFile() {
 }
 
 void loadCategoriesFromBinFile() {
-    std::vector<Category> categoryData;
-    loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, categoryData);
-
-    // Тимчасове логування
-    for (auto& category : categoryData) {
-        category.printLog();
-    }
+    loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, CATEGORIES);
 }
 
 /*
@@ -115,3 +112,34 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
 
     return arrayList;
 }
+
+
+
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass) {
+    // Створення класу ArrayList в Java
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    // Упакування Category у ArrayList
+    for (const auto& category : CATEGORIES) {
+        jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
+        jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/String;)V");
+
+        jstring jName = env->NewStringUTF(category.getName());
+
+        // Створення об`єкта Category в Java
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jName);
+
+        // Додавання об`єкта Record в ArrayList
+        env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
+
+        env->DeleteLocalRef(jName);
+        env->DeleteLocalRef(categoryObject);
+    }
+
+    return arrayList;
+}
+

@@ -47,4 +47,7 @@ void loadCategoriesFromBinFile();
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass);
 
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
+
 #endif //PASSWORD_STORAGE_BINFILEIO_H

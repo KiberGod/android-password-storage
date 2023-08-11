@@ -1,5 +1,6 @@
 package com.example.passwordstorage.data;
 
+import static com.example.passwordstorage.NativeController.getCategories;
 import static com.example.passwordstorage.NativeController.getRecords;
 
 import androidx.lifecycle.ViewModel;
@@ -33,7 +34,7 @@ public class SharedDataViewModel extends ViewModel {
     // Повертає текст запису за ідентифікатором
     public String getRecordTextById(int index) { return records.get(index).getText(); }
 
-    // Повертає категорію запису за ідентифікатором
+    // Повертає категорію запису за ідентифікатором (застаріле, у майбутніх версіях буде змінено)
     public String getRecordCategoryById(int index) { return records.get(index).getCategory(); }
 
     // Повертає загальну кількість записів
@@ -41,13 +42,40 @@ public class SharedDataViewModel extends ViewModel {
         return records.size();
     }
 
-    // Тестова функція, що друкує дані (записи) отримані з С++
+    // Логування записів, отриманих з С++
     public void printLogRecords() {
+        System.out.println("----- BEGIN RECORD LOGS -----");
         for (Record record : records) {
             System.out.println("Title: " + record.getTitle());
             System.out.println("Text: " + record.getText());
             System.out.println("Category: " + record.getCategory());
             System.out.println();
         }
+        System.out.println("----- END RECORD LOGS -----");
+    }
+
+
+    
+    // Повертає назву категорії за ідентифікатором
+    public String getCategoryNameById(int index) { return categories.get(index).getName(); }
+
+    // Ініціалізація списку категорій
+    public void setCategories() {
+        categories = getCategories();
+    }
+
+    // Повертає загальну кількість категоірй
+    public int getCategoriesCount() {
+        return categories.size();
+    }
+
+    // Логування категорій, отриманих з С++
+    public void printLogCategories() {
+        System.out.println("----- BEGIN CATEGORY LOGS -----");
+        for (Category category : categories) {
+            System.out.println("Name: " + category.getName());
+            System.out.println();
+        }
+        System.out.println("----- END CATEGORY LOGS -----");
     }
 }

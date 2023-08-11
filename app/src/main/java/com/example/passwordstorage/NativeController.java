@@ -2,6 +2,7 @@ package com.example.passwordstorage;
 
 import android.content.Context;
 
+import com.example.passwordstorage.model.Category;
 import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
@@ -18,4 +19,5 @@ public class NativeController {
     public static native String getKey();
     public static native void initSecurityCore(Context context);
     public static native ArrayList<Record> getRecords();
+    public static native ArrayList<Category> getCategories();
 }
