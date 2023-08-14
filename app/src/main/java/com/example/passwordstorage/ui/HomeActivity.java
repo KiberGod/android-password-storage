@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
+import com.example.passwordstorage.ui.create.CreateCategoryFragment;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.create.CreateRecordFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
@@ -93,5 +94,11 @@ public class HomeActivity extends AppCompatActivity {
     public void setCreateRecordFragment() {
         CreateRecordFragment createRecordFragment = new CreateRecordFragment();
         navigateToFragment(createRecordFragment, null);
+    }
+
+    // Перехід на сторінку створення категорії
+    public void setCreateCategoryFragment() {
+        CreateCategoryFragment createCategoryFragment = new CreateCategoryFragment();
+        navigateToFragment(createCategoryFragment, null);
     }
 }

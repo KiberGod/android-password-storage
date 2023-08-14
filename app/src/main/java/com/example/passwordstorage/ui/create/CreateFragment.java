@@ -29,7 +29,8 @@ public class CreateFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_create, container, false);
 
-        setOnClickToCreateButton(view);
+        setOnClickToCreateButton(view, R.id.createRecordButton);
+        setOnClickToCreateButton(view, R.id.createCategoryButton);
 
         return view;
     }
@@ -39,14 +40,19 @@ public class CreateFragment extends Fragment {
         super.onDestroyView();
     }
 
-    // Функція встановлює подію переходу на сторінку створення запису по натисненню кнопки
-    private void setOnClickToCreateButton(View view) {
-        Button createRecordButton = view.findViewById(R.id.createRecordButton);
-        createRecordButton.setOnClickListener(new View.OnClickListener() {
+    // Функція встановлює подію переходу на сторінку створення запису/категорії по натисненню кнопки
+    private void setOnClickToCreateButton(View view, int button_id) {
+        Button createButton = view.findViewById(button_id);
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setCreateRecordFragment();
+                if (button_id == R.id.createRecordButton) {
+                    ((HomeActivity) requireActivity()).setCreateRecordFragment();
+                } else if (button_id == R.id.createCategoryButton) {
+                    ((HomeActivity) requireActivity()).setCreateCategoryFragment();
+                }
             }
         });
     }
+
 }

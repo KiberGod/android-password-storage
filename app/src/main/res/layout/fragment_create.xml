@@ -38,7 +38,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/createCategoryButton"
             style="@style/MaterialButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
