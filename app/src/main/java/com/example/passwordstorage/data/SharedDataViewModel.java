@@ -55,7 +55,9 @@ public class SharedDataViewModel extends ViewModel {
     }
 
 
-    
+    // Повертає весь список категорій
+    public ArrayList<Category> getAllCategories() { return categories; }
+
     // Повертає назву категорії за ідентифікатором
     public String getCategoryNameById(int index) { return categories.get(index).getName(); }
 
