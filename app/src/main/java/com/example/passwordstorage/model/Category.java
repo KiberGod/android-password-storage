@@ -7,6 +7,8 @@ public class Category {
 
     private String name;
 
+    public static final int MAX_NAME_LENGTH = 20;
+
     public Category(String name) {
         this.name = name;
     }

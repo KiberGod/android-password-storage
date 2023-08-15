@@ -80,4 +80,15 @@ public class SharedDataViewModel extends ViewModel {
         }
         System.out.println("----- END CATEGORY LOGS -----");
     }
+
+    // Перевірка нової категорії на унікальність (за полем імені)
+    public boolean checkNameUnique(String name) {
+        for (Category category : categories) {
+            if (category.getName().equals(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
