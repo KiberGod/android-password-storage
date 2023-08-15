@@ -35,13 +35,7 @@ std::string getFilesPath();
 
 // Дана поліморфна функція завантажує дані з файлів, працючи з такими типами даних, як Record та Category
 template <typename T>
-void loadDataFromBinFile(const std::string& filename, std::vector<T>& data);
-
-// Завантаження записів з бінарного файла (усіх)
-void loadRecordsFromBinFile();
-
-// Завантаження категорій з бінарного файла
-void loadCategoriesFromBinFile();
+std::vector<T> loadDataFromBinFile(const std::string& filename, std::vector<T>& data);
 
 // Функція передає вектор records-об`єктів з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
