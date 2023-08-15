@@ -20,4 +20,5 @@ public class NativeController {
     public static native void initSecurityCore(Context context);
     public static native ArrayList<Record> getRecords();
     public static native ArrayList<Category> getCategories();
+    public static native void saveCategories(ArrayList<Category> categories);
 }

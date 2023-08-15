@@ -8,6 +8,6 @@
 
 // Перезавантаження міграцій
 void refreshMigrations() {
-    create_categories::refreshMigrations();
+    //create_categories::refreshMigrations();
     create_test_records::refreshMigrations();
 }

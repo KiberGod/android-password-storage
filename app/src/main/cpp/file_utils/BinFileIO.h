@@ -45,4 +45,14 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
 
+// Функція запису змін до бінарного файла
+void writeToBinFile2(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
+
+// Видалення бінарного файла
+void dropFile2(std::string file_path);
+
+// Отримання нових даних категорій з java, які необхідно внести у файл
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList);
+
 #endif //PASSWORD_STORAGE_BINFILEIO_H

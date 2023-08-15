@@ -2,6 +2,7 @@ package com.example.passwordstorage.data;
 
 import static com.example.passwordstorage.NativeController.getCategories;
 import static com.example.passwordstorage.NativeController.getRecords;
+import static com.example.passwordstorage.NativeController.saveCategories;
 
 import androidx.lifecycle.ViewModel;
 
@@ -95,6 +96,7 @@ public class SharedDataViewModel extends ViewModel {
     public void addCategory(String name) {
         Category category = new Category(name);
         categories.add(category);
+        saveCategories(categories);
     }
 
 }

@@ -140,3 +140,57 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
 
     return arrayList;
 }
+
+void writeToBinFile2(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
+    std::ofstream file;
+    file.open(file_path, std::ofstream::app);
+
+    if (!file.is_open()) {
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR WRITE2 BIN-FILE");
+    } else {
+        // XOR-шифрування
+        encryptData(data, dataSize);
+
+        file.write(reinterpret_cast<char*>(data), classSize);
+        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL WRITE2 BIN-FILE");
+    }
+}
+
+void dropFile2(std::string file_path) {
+    std::ifstream file(file_path);
+    if (file.good()) {
+        file.close();
+        remove(file_path.c_str());
+    }
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList) {
+    jclass arrayListClass = env->GetObjectClass(categoriesList);
+    jmethodID getMethod = env->GetMethodID(arrayListClass, "get", "(I)Ljava/lang/Object;");
+    jmethodID sizeMethod = env->GetMethodID(arrayListClass, "size", "()I");
+
+    jint size = env->CallIntMethod(categoriesList, sizeMethod);
+
+    dropFile2(getCategoriesFilePath());
+
+    for (int i = 0; i < size; ++i) {
+        jobject categoryObj = env->CallObjectMethod(categoriesList, getMethod, i);
+        jclass categoryClass = env->GetObjectClass(categoryObj);
+        jfieldID nameField = env->GetFieldID(categoryClass, "name", "Ljava/lang/String;");
+        jstring name = static_cast<jstring>(env->GetObjectField(categoryObj, nameField));
+
+        const char* nameStr = env->GetStringUTFChars(name, nullptr);
+        Category category{nameStr};
+
+        writeToBinFile2(getCategoriesFilePath(),
+                       reinterpret_cast<char*>(&category),
+                       sizeof(category),
+                       sizeof(Category)
+        );
+
+        env->ReleaseStringUTFChars(name, nameStr);
+        env->DeleteLocalRef(categoryObj);
+    }
+
+}
