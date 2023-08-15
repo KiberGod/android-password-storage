@@ -66,6 +66,7 @@ public class CreateCategoryFragment extends Fragment {
         String categoryName = editText.getText().toString();
         if (sharedDataViewModel.checkNameUnique(categoryName)) {
             textViewStatus.setText("");
+            sharedDataViewModel.addCategory(categoryName);
             Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
             getActivity().onBackPressed();
         } else {

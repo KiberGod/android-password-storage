@@ -91,4 +91,10 @@ public class SharedDataViewModel extends ViewModel {
         return true;
     }
 
+    // Створення новогої категорії да додавання її до списку
+    public void addCategory(String name) {
+        Category category = new Category(name);
+        categories.add(category);
+    }
+
 }
