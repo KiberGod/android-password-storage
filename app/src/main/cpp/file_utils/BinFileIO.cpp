@@ -141,7 +141,7 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
     return arrayList;
 }
 
-void writeToBinFile2(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
+void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
     std::ofstream file;
     file.open(file_path, std::ofstream::app);
 
@@ -156,7 +156,7 @@ void writeToBinFile2(std::string file_path, char* data, std::size_t dataSize, st
     }
 }
 
-void dropFile2(std::string file_path) {
+void dropFile(std::string file_path) {
     std::ifstream file(file_path);
     if (file.good()) {
         file.close();
@@ -172,7 +172,7 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
 
     jint size = env->CallIntMethod(categoriesList, sizeMethod);
 
-    dropFile2(getCategoriesFilePath());
+    dropFile(getCategoriesFilePath());
 
     for (int i = 0; i < size; ++i) {
         jobject categoryObj = env->CallObjectMethod(categoriesList, getMethod, i);
@@ -183,7 +183,7 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
         const char* nameStr = env->GetStringUTFChars(name, nullptr);
         Category category{nameStr};
 
-        writeToBinFile2(getCategoriesFilePath(),
+        writeToBinFile(getCategoriesFilePath(),
                        reinterpret_cast<char*>(&category),
                        sizeof(category),
                        sizeof(Category)

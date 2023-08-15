@@ -4,7 +4,6 @@
 
 #include <string>
 #include "create_categories.h"
-#include "utils/MigrationUtils.h"
 #include "../model/Category.h"
 #include "../file_utils/BinFileIO.h"
 

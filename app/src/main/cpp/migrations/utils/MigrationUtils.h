@@ -10,8 +10,4 @@
  * різними класами міграцій
  */
 
-void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
-
-void dropFile(std::string file_path);
-
 #endif //PASSWORD_STORAGE_MIGRATIONUTILS_H

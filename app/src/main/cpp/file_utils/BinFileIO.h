@@ -46,10 +46,10 @@ extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
 
 // Функція запису змін до бінарного файла
-void writeToBinFile2(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
+void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
 
 // Видалення бінарного файла
-void dropFile2(std::string file_path);
+void dropFile(std::string file_path);
 
 // Отримання нових даних категорій з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
