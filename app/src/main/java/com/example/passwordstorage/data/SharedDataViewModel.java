@@ -37,10 +37,11 @@ public class SharedDataViewModel extends ViewModel {
 
     // Повертає назву категорії запису за ідентифікатором
     public String getRecordCategoryById(int index) {
-        Integer categoryId = records.get(index).getCategoryId();
-        if (!categoryId.equals(Record.NULL_CATEGORY_VALUE)) {
-            return categories.get(categoryId).getName();
-        } else {
+        try {
+            return categories.get(
+                    records.get(index).getCategoryId()
+            ).getName();
+        } catch (IndexOutOfBoundsException e) {
             return "";
         }
     }
