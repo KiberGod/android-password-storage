@@ -79,17 +79,22 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;)V");
 
     std::vector<Record> records;
 
     // Упакування Record у ArrayList
     for (const auto& record : loadDataFromBinFile(getFilesPath() + TEST_RECORDS_FILE, records)) {
-
         jstring jTitle = env->NewStringUTF(record.getTitle());
         jstring jText = env->NewStringUTF(record.getText());
-        jstring jCategory = env->NewStringUTF(record.getCategory());
 
+        // Створення об`єкта Integer
+        jobject jCategory = NULL;
+        if (record.getCategoryId() != NULL) {
+            jclass integerClass = env->FindClass("java/lang/Integer");
+            jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
+            jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
+        }
         // Створення об`єкта Record в Java
         jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory);
 
@@ -104,6 +109,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
 
     return arrayList;
 }
+
 
 /*
  * Функція передає вектор categories-об`єктів з данного С++ модуля у Java-код

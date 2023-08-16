@@ -13,19 +13,18 @@ class Record {
 private:
     static const int MAX_TITLE_LENGTH = 20;
     static const int MAX_TEXT_LENGTH = 100;
-    static const int MAX_CATEGORY_LENGTH = 20;
 
     char title[MAX_TITLE_LENGTH];
     char text[MAX_TEXT_LENGTH];
-    char category[MAX_CATEGORY_LENGTH];
+    int category_id;
 
 public:
     Record();
-    Record(const char* title, const char* text, const char* category);
+    Record(const char* title, const char* text, const int category_id);
     void printLog();
     const char* getTitle() const;
     const char* getText() const;
-    const char* getCategory() const;
+    const int getCategoryId() const;
 };
 
 

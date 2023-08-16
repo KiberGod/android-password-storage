@@ -7,12 +7,12 @@ public class Record {
 
     private String title;
     private String text;
-    private String category;
+    private Integer category_id;
 
-    public Record(String title, String text, String category) {
+    public Record(String title, String text, Integer category_id) {
         this.title = title;
         this.text = text;
-        this.category = category;
+        this.category_id = category_id;
     }
 
     public String getTitle() {
@@ -23,7 +23,7 @@ public class Record {
         return text;
     }
 
-    public String getCategory() {
-        return category;
+    public Integer getCategoryId() {
+        return category_id;
     }
 }

@@ -35,8 +35,15 @@ public class SharedDataViewModel extends ViewModel {
     // Повертає текст запису за ідентифікатором
     public String getRecordTextById(int index) { return records.get(index).getText(); }
 
-    // Повертає категорію запису за ідентифікатором (застаріле, у майбутніх версіях буде змінено)
-    public String getRecordCategoryById(int index) { return records.get(index).getCategory(); }
+    // Повертає назву категорії запису за ідентифікатором
+    public String getRecordCategoryById(int index) {
+        Integer categoryId = records.get(index).getCategoryId();
+        if (categoryId != null) {
+            return categories.get(categoryId).getName();
+        } else {
+            return "";
+        }
+    }
 
     // Повертає загальну кількість записів
     public int getRecordsCount() {
@@ -49,7 +56,7 @@ public class SharedDataViewModel extends ViewModel {
         for (Record record : records) {
             System.out.println("Title: " + record.getTitle());
             System.out.println("Text: " + record.getText());
-            System.out.println("Category: " + record.getCategory());
+            System.out.println("Category id: " + record.getCategoryId());
             System.out.println();
         }
         System.out.println("----- END RECORD LOGS -----");
