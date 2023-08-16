@@ -7,7 +7,13 @@ public class Record {
 
     private String title;
     private String text;
+
+    /*
+     * Відсутність значення у даному полі слід позначати як NULL_CATEGORY_VALUE (-1)
+     */
     private Integer category_id;
+
+    public static final Integer NULL_CATEGORY_VALUE = -1;
 
     public Record(String title, String text, Integer category_id) {
         this.title = title;

@@ -89,12 +89,10 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
         jstring jText = env->NewStringUTF(record.getText());
 
         // Створення об`єкта Integer
-        jobject jCategory = NULL;
-        if (record.getCategoryId() != NULL) {
-            jclass integerClass = env->FindClass("java/lang/Integer");
-            jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
-            jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
-        }
+        jclass integerClass = env->FindClass("java/lang/Integer");
+        jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
+        jobject jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
+
         // Створення об`єкта Record в Java
         jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory);
 

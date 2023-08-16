@@ -9,7 +9,7 @@
 Record::Record() {
     title[0] = '\0';
     text[0] = '\0';
-    category_id = NULL;
+    category_id = NULL_CATEGORY_VALUE;
 }
 
 // Конструктор, що використовується для створення тестових записів

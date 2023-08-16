@@ -16,9 +16,15 @@ private:
 
     char title[MAX_TITLE_LENGTH];
     char text[MAX_TEXT_LENGTH];
+
+    /*
+     * Відсутність значення у даному полі слід позначати як NULL_CATEGORY_VALUE (-1)
+     */
     int category_id;
 
 public:
+    static const int NULL_CATEGORY_VALUE = -1;
+
     Record();
     Record(const char* title, const char* text, const int category_id);
     void printLog();
