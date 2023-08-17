@@ -6,21 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".ui.create.CreateRecordFragment">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="THIS IS CREATE RECORD PAGE" />
 
-    <Button
-        android:id="@+id/dropdownButton"
+    <EditText
+        android:id="@+id/editCreateRecordTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:text="Оберіть категорію"
+        android:layout_marginTop="52dp"
+        android:background="@color/gray_text"
+        android:ems="10"
+        android:hint="Назва"
+        android:inputType="text"
+        android:textColor="@color/white_2"
+        android:textColorHint="#C3BEBE"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editCreateRecordText"
+        android:layout_width="356dp"
+        android:layout_height="132dp"
+        android:layout_marginTop="60dp"
+        android:background="@color/gray_text"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:hint="Основний текст"
+        android:gravity="start|top"
+        android:textColor="@color/white_2"
+        android:textColorHint="#C3BEBE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCreateRecordTitle" />
+
+    <Button
+        android:id="@+id/dropdownCreateRecordCategoryButton"
+        android:layout_width="143dp"
+        android:layout_height="44dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCreateRecordText"
+        app:layout_constraintVertical_bias="0.175" />
+
+    <Button
+        android:id="@+id/saveNewRecordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="156dp"
+        android:text="Зберегти"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dropdownCreateRecordCategoryButton" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Категорія"
+        android:textColor="@color/white_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dropdownCreateRecordCategoryButton"
+        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCreateRecordText"
+        app:layout_constraintVertical_bias="0.198" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

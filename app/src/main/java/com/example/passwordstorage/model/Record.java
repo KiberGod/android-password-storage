@@ -14,6 +14,8 @@ public class Record {
     private Integer category_id;
 
     public static final Integer NULL_CATEGORY_VALUE = -1;
+    public static final Integer MAX_TITLE_LENGTH = 20;
+    public static final Integer MAX_TEXT_LENGTH = 100;
 
     public Record(String title, String text, Integer category_id) {
         this.title = title;
