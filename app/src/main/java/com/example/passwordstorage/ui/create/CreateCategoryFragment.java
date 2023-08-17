@@ -7,7 +7,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.example.passwordstorage.data.SharedDataViewModel;
 public class CreateCategoryFragment extends Fragment {
 
     private SharedDataViewModel sharedDataViewModel;
+    private CreateViewModel createViewModel;
 
     private TextView textViewStatus;
 
@@ -32,22 +35,16 @@ public class CreateCategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_category, container, false);
 
         sharedDataViewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
+        createViewModel = new ViewModelProvider(requireActivity()).get(CreateViewModel.class);
 
         textViewStatus = view.findViewById(R.id.createCategoryStatus);
 
-        setMaxLengthForInputName(view);
+        createViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
+
         setOnClickToSaveButton(view);
         return view;
     }
 
-    // Функція встановлює обмеження у кількості символів для назви категорії
-    private void setMaxLengthForInputName(View view) {
-        EditText editText = view.findViewById(R.id.editCreateCategoryName);
-
-        InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(MAX_NAME_LENGTH);
-        editText.setFilters(filters);
-    }
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {

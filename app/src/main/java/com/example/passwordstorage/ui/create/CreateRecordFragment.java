@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class CreateRecordFragment extends Fragment {
 
     private SharedDataViewModel sharedDataViewModel;
+    private CreateViewModel createViewModel;
 
     private final String DEFAULT_CATEGORY_TEXT = "Відсутня";
 
@@ -38,9 +39,10 @@ public class CreateRecordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_record, container, false);
 
         sharedDataViewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
+        createViewModel = new ViewModelProvider(requireActivity()).get(CreateViewModel.class);
 
-        setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
-        setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
+        createViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
+        createViewModel.setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
 
         setCategoriesToDropdownButton(view);
 
@@ -77,13 +79,5 @@ public class CreateRecordFragment extends Fragment {
             }
         });
         builder.show();
-    }
-
-    // Функція встановлює обмеження у кількості символів для заданого поля
-    private void setMaxLengthForInput(View view, int id, int max_value) {
-        EditText editText = view.findViewById(id);
-        InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(max_value);
-        editText.setFilters(filters);
     }
 }
