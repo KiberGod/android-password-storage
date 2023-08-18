@@ -33,8 +33,6 @@ public class RecordsFragment extends Fragment {
 
         sharedDataViewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
 
-        sharedDataViewModel.setCategories();
-        sharedDataViewModel.setRecords();
         sharedDataViewModel.printLogCategories();
         sharedDataViewModel.printLogRecords();
         drawButtonList(view);

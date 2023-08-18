@@ -63,6 +63,27 @@ public class SharedDataViewModel extends ViewModel {
         System.out.println("----- END RECORD LOGS -----");
     }
 
+    // Перевірка нового запису на унікальність (за полем заголовку)
+    public boolean checkRecordTitleUnique(String title) {
+        for (Record record : records) {
+            if (record.getTitle().equals(title)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Створення нового запису да додавання його до списку
+    public void addRecord(String title, String text,  Integer category_id) {
+        System.out.println("TITLE ---> " + title);
+        System.out.println("TEXT ---> " + text);
+        System.out.println("CAT_ID ---> " + category_id);
+        Record record = new Record(title, text, category_id);
+        records.add(record);
+        printLogRecords();
+        //saveCategories(categories);
+    }
+
 
     // Повертає весь список категорій
     public ArrayList<Category> getAllCategories() { return categories; }
@@ -91,7 +112,7 @@ public class SharedDataViewModel extends ViewModel {
     }
 
     // Перевірка нової категорії на унікальність (за полем імені)
-    public boolean checkNameUnique(String name) {
+    public boolean checkCategoryNameUnique(String name) {
         for (Category category : categories) {
             if (category.getName().equals(name)) {
                 return false;
