@@ -11,7 +11,8 @@
 #include "../model/Category.h"
 #include "../model/Record.h"
 
-
+#include <locale>
+#include <codecvt>
 
 std::string getTestRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
 

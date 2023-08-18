@@ -12,4 +12,7 @@
 // Перезавантаження міграцій
 void refreshMigrations();
 
+// Видалення міграцій
+void dropMigrations();
+
 #endif //PASSWORD_STORAGE_MIGRATIONS_H

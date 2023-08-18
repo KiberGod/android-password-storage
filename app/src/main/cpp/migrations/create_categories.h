@@ -17,10 +17,10 @@ private:
     // Запуск міграцій
     static void runMigrations();
 
+public:
     // Видалення міграцій
     static void dropMigrations();
 
-public:
     // Оновлення міграцій
     static void refreshMigrations();
 };
