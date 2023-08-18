@@ -3,6 +3,7 @@ package com.example.passwordstorage.data;
 import static com.example.passwordstorage.NativeController.getCategories;
 import static com.example.passwordstorage.NativeController.getRecords;
 import static com.example.passwordstorage.NativeController.saveCategories;
+import static com.example.passwordstorage.NativeController.saveRecords;
 
 import androidx.lifecycle.ViewModel;
 
@@ -80,8 +81,7 @@ public class SharedDataViewModel extends ViewModel {
         System.out.println("CAT_ID ---> " + category_id);
         Record record = new Record(title, text, category_id);
         records.add(record);
-        printLogRecords();
-        //saveCategories(categories);
+        saveRecords(records);
     }
 
 

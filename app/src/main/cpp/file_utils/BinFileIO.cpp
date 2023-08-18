@@ -198,3 +198,50 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
     }
 
 }
+
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList) {
+    jclass arrayListClass = env->GetObjectClass(recordsList);
+    jmethodID getMethod = env->GetMethodID(arrayListClass, "get", "(I)Ljava/lang/Object;");
+    jmethodID sizeMethod = env->GetMethodID(arrayListClass, "size", "()I");
+
+    jint size = env->CallIntMethod(recordsList, sizeMethod);
+
+    dropFile(getTestRecordsFilePath());
+
+    for (int i = 0; i < size; ++i) {
+        jobject recordObj = env->CallObjectMethod(recordsList, getMethod, i);
+        jclass recordClass = env->GetObjectClass(recordObj);
+
+        jfieldID titleField = env->GetFieldID(recordClass, "title", "Ljava/lang/String;");
+        jfieldID textField = env->GetFieldID(recordClass, "text", "Ljava/lang/String;");
+        jfieldID categoryIdField = env->GetFieldID(recordClass, "category_id", "Ljava/lang/Integer;");
+
+        jstring title = static_cast<jstring>(env->GetObjectField(recordObj, titleField));
+        jstring text = static_cast<jstring>(env->GetObjectField(recordObj, textField));
+        jobject category_idObj = env->GetObjectField(recordObj, categoryIdField);
+
+        const char* titleStr = env->GetStringUTFChars(title, nullptr);
+        const char* textStr = env->GetStringUTFChars(text, nullptr);
+
+        jint category_id = 0;
+        if (category_idObj != nullptr) {
+            jclass integerClass = env->GetObjectClass(category_idObj);
+            jmethodID intValueMethod = env->GetMethodID(integerClass, "intValue", "()I");
+            category_id = env->CallIntMethod(category_idObj, intValueMethod);
+        }
+
+        Record record{titleStr, textStr, category_id};
+
+        writeToBinFile(getTestRecordsFilePath(),
+                       reinterpret_cast<char*>(&record),
+                       sizeof(record),
+                       sizeof(Record)
+        );
+
+        env->ReleaseStringUTFChars(title, titleStr);
+        env->ReleaseStringUTFChars(text, textStr);
+        env->DeleteLocalRef(recordObj);
+    }
+}

@@ -55,4 +55,8 @@ void dropFile(std::string file_path);
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList);
 
+// Отримання нових даних записів з java, які необхідно внести у файл
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList);
+
 #endif //PASSWORD_STORAGE_BINFILEIO_H
