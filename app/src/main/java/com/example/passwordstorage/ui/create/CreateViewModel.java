@@ -24,8 +24,8 @@ public class CreateViewModel extends ViewModel {
                 try {
                     editText.removeTextChangedListener(this); // Убираем слушатель временно
                     byte[] bytes = charSequence.toString().getBytes();
-                    if (bytes.length > max_value) {
-                        String newText = new String(bytes, 0, max_value);
+                    if (bytes.length > max_value-1) {
+                        String newText = new String(bytes, 0, max_value-1);
                         newText = newText.substring(0, newText.length() - 1);
                         editText.setText(newText);
                         editText.setSelection(newText.length());
