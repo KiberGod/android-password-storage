@@ -35,4 +35,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recordTitle" />
+
+    <Button
+        android:id="@+id/openEditRecordPageButton"
+        android:layout_width="179dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="232dp"
+        android:text="Редагувати"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

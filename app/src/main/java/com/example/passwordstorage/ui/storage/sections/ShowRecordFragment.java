@@ -9,11 +9,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
+import com.example.passwordstorage.ui.HomeActivity;
 
 public class ShowRecordFragment extends Fragment {
 
@@ -53,6 +55,7 @@ public class ShowRecordFragment extends Fragment {
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
         printRecordData(view);
+        setOnClickToEditRecordButton(view);
 
         return view;
     }
@@ -70,5 +73,16 @@ public class ShowRecordFragment extends Fragment {
     private void setTextViewText(@NonNull View view, int textViewId, String text) {
         TextView textView = view.findViewById(textViewId);
         textView.setText(text);
+    }
+
+    // Функція встановлює подію переходу на сторінку редагувння запису по натисненню кнопки
+    private void setOnClickToEditRecordButton(View view) {
+        Button button = view.findViewById(R.id.openEditRecordPageButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) requireActivity()).setEditRecordFragment(record_id);
+            }
+        });
     }
 }
