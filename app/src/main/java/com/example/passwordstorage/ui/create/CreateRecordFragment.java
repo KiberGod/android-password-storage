@@ -23,6 +23,7 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.model.Category;
+import com.example.passwordstorage.ui.HomeViewModel;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class CreateRecordFragment extends Fragment {
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
-    private CreateViewModel createViewModel;
+    private HomeViewModel homeViewModel;
 
     private TextView textViewStatus;
 
@@ -48,10 +49,10 @@ public class CreateRecordFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
-        createViewModel = new ViewModelProvider(requireActivity()).get(CreateViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
-        createViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
-        createViewModel.setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
+        homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
+        homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
 
         textViewStatus = view.findViewById(R.id.createRecordStatus);
 

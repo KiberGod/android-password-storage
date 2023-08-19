@@ -17,11 +17,12 @@ import android.widget.Toast;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.ui.HomeViewModel;
 
 public class CreateCategoryFragment extends Fragment {
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
-    private CreateViewModel createViewModel;
+    private HomeViewModel homeViewModel;
 
     private TextView textViewStatus;
 
@@ -32,11 +33,11 @@ public class CreateCategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_category, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
-        createViewModel = new ViewModelProvider(requireActivity()).get(CreateViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.createCategoryStatus);
 
-        createViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
+        homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
 
         setOnClickToSaveButton(view);
         return view;
