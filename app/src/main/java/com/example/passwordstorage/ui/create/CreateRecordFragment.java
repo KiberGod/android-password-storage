@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.data.SharedDataViewModel;
+import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.model.Category;
 
 import java.util.ArrayList;
@@ -29,7 +29,8 @@ import java.util.ArrayList;
 
 public class CreateRecordFragment extends Fragment {
 
-    private SharedDataViewModel sharedDataViewModel;
+    private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
+    private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private CreateViewModel createViewModel;
 
     private TextView textViewStatus;
@@ -45,7 +46,8 @@ public class CreateRecordFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_record, container, false);
 
-        sharedDataViewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
+        sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
+        sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         createViewModel = new ViewModelProvider(requireActivity()).get(CreateViewModel.class);
 
         createViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
@@ -65,7 +67,7 @@ public class CreateRecordFragment extends Fragment {
 
         dropdownButton.setText(DEFAULT_CATEGORY_TEXT);
 
-        ArrayList<Category> categories = new ArrayList<>(sharedDataViewModel.getAllCategories());
+        ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
         categories.add(0, new Category(DEFAULT_CATEGORY_TEXT));
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
@@ -109,9 +111,9 @@ public class CreateRecordFragment extends Fragment {
         EditText titleInput = view.findViewById(R.id.editCreateRecordTitle);
         String recordTitle = titleInput.getText().toString();
         if (recordTitle.length() != 0) {
-            if (sharedDataViewModel.checkRecordTitleUnique(recordTitle)) {
+            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
                 textViewStatus.setText("");
-                sharedDataViewModel.addRecord(recordTitle, textInput.getText().toString(), selectedCategoryId);
+                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), selectedCategoryId);
                 Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {

@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.data.SharedDataViewModel;
+import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 
 public class ShowRecordFragment extends Fragment {
 
-    private SharedDataViewModel viewModel;
+    private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
+    private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     private static final String RECORD_ID = "record_id";
 
@@ -47,7 +49,8 @@ public class ShowRecordFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_record, container, false);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
+        sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
+        sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
         printRecordData(view);
 
@@ -56,9 +59,11 @@ public class ShowRecordFragment extends Fragment {
 
     // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
     private void printRecordData(View view) {
-        setTextViewText(view, R.id.recordTitle, viewModel.getRecordTitleById(record_id));
-        setTextViewText(view, R.id.recordCategory, viewModel.getRecordCategoryById(record_id));
-        setTextViewText(view, R.id.mainRecordText, viewModel.getRecordTextById(record_id));
+        setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleById(record_id));
+        setTextViewText(view, R.id.recordCategory,
+                sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(record_id))
+        );
+        setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextById(record_id));
     }
 
     // Функція встановлення тексту до UI-компонентів

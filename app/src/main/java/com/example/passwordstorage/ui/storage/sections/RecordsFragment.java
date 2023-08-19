@@ -18,12 +18,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.data.SharedDataViewModel;
+import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.ui.HomeActivity;
 
 public class RecordsFragment extends Fragment {
 
-    private SharedDataViewModel sharedDataViewModel;
+    private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,10 +31,9 @@ public class RecordsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_records, container, false);
 
-        sharedDataViewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
+        sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
-        sharedDataViewModel.printLogCategories();
-        sharedDataViewModel.printLogRecords();
+        sharedRecordsDataViewModel.printLogRecords();
         drawButtonList(view);
 
         return view;
@@ -42,8 +41,8 @@ public class RecordsFragment extends Fragment {
 
     // Функція виводить весь список записів
     private void drawButtonList(View view) {
-        for (int i=0; i<sharedDataViewModel.getRecordsCount(); i++) {
-            drawRecordButton(view, sharedDataViewModel.getRecordTitleById(i), i);
+        for (int i=0; i<sharedRecordsDataViewModel.getRecordsCount(); i++) {
+            drawRecordButton(view, sharedRecordsDataViewModel.getRecordTitleById(i), i);
         }
     }
 

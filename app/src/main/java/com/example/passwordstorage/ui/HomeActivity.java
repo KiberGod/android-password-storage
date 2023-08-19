@@ -14,7 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.data.SharedDataViewModel;
+import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateCategoryFragment;
 import com.example.passwordstorage.ui.create.CreateFragment;
@@ -28,7 +29,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 
-    private SharedDataViewModel sharedDataViewModel;
+    private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
+    private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,8 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sharedDataViewModel = new ViewModelProvider(this).get(SharedDataViewModel.class);
+        sharedCategoriesDataViewModel = new ViewModelProvider(this).get(SharedCategoriesDataViewModel.class);
+        sharedRecordsDataViewModel = new ViewModelProvider(this).get(SharedRecordsDataViewModel.class);
 
         setFragment(new StorageFragment());
         setSelectedFromBottomNavBar();
@@ -46,8 +49,8 @@ public class HomeActivity extends AppCompatActivity {
         // Підключення основного С++ ядра
         initSecurityCore(this);
 
-        sharedDataViewModel.setCategories();
-        sharedDataViewModel.setRecords();
+        sharedCategoriesDataViewModel.setCategories();
+        sharedRecordsDataViewModel.setRecords();
     }
 
     // Функція встановлює прослуховування натискань на нижнє меню навігації

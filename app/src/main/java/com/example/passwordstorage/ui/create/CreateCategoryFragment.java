@@ -7,9 +7,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.passwordstorage.R;
-import com.example.passwordstorage.data.SharedDataViewModel;
+import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 
 public class CreateCategoryFragment extends Fragment {
 
-    private SharedDataViewModel sharedDataViewModel;
+    private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private CreateViewModel createViewModel;
 
     private TextView textViewStatus;
@@ -34,7 +31,7 @@ public class CreateCategoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_category, container, false);
 
-        sharedDataViewModel = new ViewModelProvider(requireActivity()).get(SharedDataViewModel.class);
+        sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         createViewModel = new ViewModelProvider(requireActivity()).get(CreateViewModel.class);
 
         textViewStatus = view.findViewById(R.id.createCategoryStatus);
@@ -61,9 +58,9 @@ public class CreateCategoryFragment extends Fragment {
     private void getNewCategory(View view) {
         EditText editText = view.findViewById(R.id.editCreateCategoryName);
         String categoryName = editText.getText().toString();
-        if (sharedDataViewModel.checkCategoryNameUnique(categoryName)) {
+        if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
             textViewStatus.setText("");
-            sharedDataViewModel.addCategory(categoryName);
+            sharedCategoriesDataViewModel.addCategory(categoryName);
             Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
             getActivity().onBackPressed();
         } else {
