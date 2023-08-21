@@ -64,7 +64,7 @@ public class CreateRecordFragment extends Fragment {
         dropdownButton.setText(homeViewModel.setEmptyCategoryText());
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(homeViewModel.setEmptyCategoryText()));
+        categories.add(0, new Category(null, homeViewModel.setEmptyCategoryText()));
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         dropdownButton.setOnClickListener(new View.OnClickListener() {

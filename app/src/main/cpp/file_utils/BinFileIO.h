@@ -16,10 +16,10 @@
 static std::string FILES_PATH;
 
 // Тестовий файл записів
-static const std::string TEST_RECORDS_FILE = "/example2.bin";
+static const std::string TEST_RECORDS_FILE = "/example3.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories.bin";
+static const std::string CATEGORIES_FILE = "/categories_v1.bin";
 
 // Повертає і`мя файла тестових записів
 std::string getTestRecordsFilePath();

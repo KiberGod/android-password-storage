@@ -34,9 +34,9 @@ public class EditRecordFragment extends Fragment {
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
-    private static final String RECORD_ID = "record_id";
+    private static final String RECORD_INDEX = "record_index";
 
-    private int record_id;
+    private int recordIndex;
 
     private TextView textViewStatus;
 
@@ -45,10 +45,10 @@ public class EditRecordFragment extends Fragment {
     }
 
 
-    public static EditRecordFragment newInstance(int record_id) {
+    public static EditRecordFragment newInstance(int recordIndex) {
         EditRecordFragment fragment = new EditRecordFragment();
         Bundle args = new Bundle();
-        args.putInt(RECORD_ID, record_id);
+        args.putInt(RECORD_INDEX, recordIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +57,7 @@ public class EditRecordFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            record_id = getArguments().getInt(RECORD_ID);
+            recordIndex = getArguments().getInt(RECORD_INDEX);
         }
     }
 
@@ -86,8 +86,8 @@ public class EditRecordFragment extends Fragment {
 
     // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
     private void printRecordData(View view) {
-        setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleById(record_id));
-        setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextById(record_id));
+        setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
+        setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -110,7 +110,7 @@ public class EditRecordFragment extends Fragment {
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
     private void setCategoriesToDropdownButton(View view) {
         String buttonText = sharedCategoriesDataViewModel.getCategoryNameById(
-                sharedRecordsDataViewModel.getRecordCategory_idById(record_id)
+                sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)
         );
         if (buttonText.equals("")) {
             buttonText = homeViewModel.setEmptyCategoryText();
@@ -119,7 +119,7 @@ public class EditRecordFragment extends Fragment {
         dropdownButton.setText(buttonText);
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(homeViewModel.setEmptyCategoryText()));
+        categories.add(0, new Category(null, homeViewModel.setEmptyCategoryText()));
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         dropdownButton.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +165,7 @@ public class EditRecordFragment extends Fragment {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
-                sharedRecordsDataViewModel.editRecord(record_id, recordTitle, textInput.getText().toString(), category_id);
+                sharedRecordsDataViewModel.editRecord(recordIndex, recordTitle, textInput.getText().toString(), category_id);
                 Toast.makeText(getActivity(), "Запис змінено " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {

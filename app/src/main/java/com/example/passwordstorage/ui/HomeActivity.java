@@ -96,18 +96,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Перехід на сторінку перегляду запису
-    public void setShowRecordFragment(int record_id) {
+    public void setShowRecordFragment(int recordIndex) {
         ShowRecordFragment showRecordFragment = new ShowRecordFragment();
         Bundle args = new Bundle();
-        args.putInt("record_id", record_id);
+        args.putInt("record_index", recordIndex);
         navigateToFragment(showRecordFragment, args);
     }
 
     // Перехід на сторінку редагування запису
-    public void setEditRecordFragment(int record_id) {
+    public void setEditRecordFragment(int recordIndex) {
         EditRecordFragment editRecordFragment = new EditRecordFragment();
         Bundle args = new Bundle();
-        args.putInt("record_id", record_id);
+        args.putInt("record_index", recordIndex);
         navigateToFragment(editRecordFragment, args);
     }
 

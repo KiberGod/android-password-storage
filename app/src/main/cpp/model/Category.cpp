@@ -5,20 +5,21 @@
 #include <android/log.h>
 #include "Category.h"
 
-// Конструктор, що використовується програмою під час парсингу бінарного файлу даних
-Category::Category() {
-    name[0] = '\0';
-}
 
 // Конструктор, що використовується для створення тестових записів
-Category::Category(const char* name) {
+Category::Category(const int id, const char* name) {
     strncpy(this->name, name, MAX_NAME_LENGTH - 1);
     this->name[MAX_NAME_LENGTH - 1] = '\0';
+    this->id = id;
 }
 
 // Друк запису у лог
 void Category::printLog() {
     __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "Name: %s", name);
+}
+
+const int Category::getId() const {
+    return id;
 }
 
 const char* Category::getName() const {

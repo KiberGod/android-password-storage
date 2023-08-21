@@ -30,20 +30,31 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     // Повертає весь список категорій
     public ArrayList<Category> getAllCategories() { return categories; }
 
-    // Повертає назву категорії за ідентифікатором (або попрожнэ значення, якщо такої категорії немає)
-    public String getCategoryNameById(int index) {
-        try {
-            return categories.get(index).getName();
-        } catch (IndexOutOfBoundsException e) {
+    // Повертає назву категорії за ідентифікатором (або попрожнє значення, якщо такої категорії немає)
+    public String getCategoryNameById(Integer id) {
+        Category category = getCategoryById(id);
+        if (category != null) {
+            return category.getName();
+        } else {
             return "";
         }
     }
 
-    // Пошук категорії за назвою
+    // Повертає всю категорію за id
+    private Category getCategoryById(Integer id) {
+        for (Category category : categories) {
+            if (category.getId().equals(id)) {
+                return category;
+            }
+        }
+        return null;
+    }
+
+    // Пошук id категорії за назвою
     public int getCategoryIdByName(String categoryName) {
-        for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).getName().equals(categoryName)) {
-                return i;
+        for (Category category : categories) {
+            if (category.getName().equals(categoryName)) {
+                return category.getId();
             }
         }
         return -1;
@@ -58,6 +69,7 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     public void printLogCategories() {
         System.out.println("----- BEGIN CATEGORY LOGS -----");
         for (Category category : categories) {
+            System.out.println("Id: " + category.getId());
             System.out.println("Name: " + category.getName());
             System.out.println();
         }
@@ -76,8 +88,17 @@ public class SharedCategoriesDataViewModel extends ViewModel {
 
     // Створення новогої категорії да додавання її до списку
     public void addCategory(String name) {
-        Category category = new Category(name);
+        Category category = new Category(generateNewId(), name);
         categories.add(category);
         saveCategories(categories);
+    }
+
+    // Функція створює новий ідентифікатор на основі існуючого найстаршого
+    private Integer generateNewId() {
+        if (categories.size() != 0) {
+            return categories.get(categories.size() - 1).getId() +1;
+        } else {
+            return 0;
+        }
     }
 }

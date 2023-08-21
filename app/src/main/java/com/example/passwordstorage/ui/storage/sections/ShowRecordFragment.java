@@ -22,18 +22,18 @@ public class ShowRecordFragment extends Fragment {
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
-    private static final String RECORD_ID = "record_id";
+    private static final String RECORD_INDEX = "record_index";
 
-    private int record_id;
+    private int recordIndex;
 
     public ShowRecordFragment() {
         // Required empty public constructor
     }
 
-    public static ShowRecordFragment newInstance(int record_id) {
+    public static ShowRecordFragment newInstance(int recordIndex) {
         ShowRecordFragment fragment = new ShowRecordFragment();
         Bundle args = new Bundle();
-        args.putInt(RECORD_ID, record_id);
+        args.putInt(RECORD_INDEX, recordIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,7 +42,7 @@ public class ShowRecordFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            record_id = getArguments().getInt(RECORD_ID);
+            recordIndex = getArguments().getInt(RECORD_INDEX);
         }
     }
 
@@ -62,11 +62,11 @@ public class ShowRecordFragment extends Fragment {
 
     // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
     private void printRecordData(View view) {
-        setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleById(record_id));
+        setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
         setTextViewText(view, R.id.recordCategory,
-                sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(record_id))
+                sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex))
         );
-        setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextById(record_id));
+        setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -81,7 +81,7 @@ public class ShowRecordFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setEditRecordFragment(record_id);
+                ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex);
             }
         });
     }

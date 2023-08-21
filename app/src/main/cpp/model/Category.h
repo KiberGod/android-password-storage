@@ -13,12 +13,13 @@ class Category {
 private:
     static const int MAX_NAME_LENGTH = 20;
 
+    int id;
     char name[MAX_NAME_LENGTH];
 
 public:
-    Category();
-    Category(const char* name);
+    Category(const int id, const char* name);
     void printLog();
+    const int getId() const;
     const char* getName() const;
 };
 

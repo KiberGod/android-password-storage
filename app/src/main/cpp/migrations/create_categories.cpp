@@ -7,9 +7,9 @@
 #include "../model/Category.h"
 #include "../file_utils/BinFileIO.h"
 
-void create_categories::insert(char* name) {
+void create_categories::insert(const int id, char* name) {
 
-    Category category(name);
+    Category category(id, name);
     writeToBinFile(getCategoriesFilePath(),
                    reinterpret_cast<char*>(&category),
                    sizeof(category),
@@ -18,10 +18,10 @@ void create_categories::insert(char* name) {
 }
 
 void create_categories::runMigrations() {
-    insert("Google");
-    insert("sites");
-    insert("social media");
-    insert("messengeres");
+    insert(-4, "Google");
+    insert(-3,"sites");
+    insert(-2,"social media");
+    insert(-1,"messengeres");
 
     // insert("");
 }

@@ -42,12 +42,12 @@ public class RecordsFragment extends Fragment {
     // Функція виводить весь список записів
     private void drawButtonList(View view) {
         for (int i=0; i<sharedRecordsDataViewModel.getRecordsCount(); i++) {
-            drawRecordButton(view, sharedRecordsDataViewModel.getRecordTitleById(i), i);
+            drawRecordButton(view, sharedRecordsDataViewModel.getRecordTitleByIndex(i), i);
         }
     }
 
     // Функція додає кнопку запису
-    private void drawRecordButton(View view, String title, int record_id) {
+    private void drawRecordButton(View view, String title, int recordIndex) {
         Button button = new Button(requireContext());
         button.setText(title);
         button.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text));
@@ -84,7 +84,7 @@ public class RecordsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setShowRecordFragment(record_id);
+                ((HomeActivity) requireActivity()).setShowRecordFragment(recordIndex);
             }
         });
     }

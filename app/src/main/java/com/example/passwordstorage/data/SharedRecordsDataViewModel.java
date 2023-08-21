@@ -28,14 +28,14 @@ public class SharedRecordsDataViewModel extends ViewModel {
         records = getRecords();
     }
 
-    // Повертає назву запису за ідентифікатором
-    public String getRecordTitleById(int index) { return records.get(index).getTitle(); }
+    // Повертає назву запису за індексом у списку
+    public String getRecordTitleByIndex(int index) { return records.get(index).getTitle(); }
 
-    // Повертає текст запису за ідентифікатором
-    public String getRecordTextById(int index) { return records.get(index).getText(); }
+    // Повертає текст запису за індексом у списку
+    public String getRecordTextByIndex(int index) { return records.get(index).getText(); }
 
-    // Повертає id категорії запису за ідентифікатором
-    public Integer getRecordCategory_idById(int index) { return records.get(index).getCategoryId(); }
+    // Повертає id категорії запису за індексом у списку
+    public Integer getRecordCategory_idByIndex(int index) { return records.get(index).getCategoryId(); }
 
     // Повертає загальну кількість записів
     public int getRecordsCount() {

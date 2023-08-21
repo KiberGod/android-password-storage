@@ -122,17 +122,22 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/String;)V");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;)V");
 
     std::vector<Category> categories;
 
     // Упакування Category у ArrayList
     for (const auto& category : loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, categories)) {
 
+        // Створення об`єкта Integer
+        jclass integerClass = env->FindClass("java/lang/Integer");
+        jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
+        jobject jId = env->NewObject(integerClass, integerConstructor, category.getId());
+
         jstring jName = env->NewStringUTF(category.getName());
 
         // Створення об`єкта Category в Java
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jName);
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName);
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
@@ -180,11 +185,23 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
     for (int i = 0; i < size; ++i) {
         jobject categoryObj = env->CallObjectMethod(categoriesList, getMethod, i);
         jclass categoryClass = env->GetObjectClass(categoryObj);
+
+        jfieldID idField = env->GetFieldID(categoryClass, "id", "Ljava/lang/Integer;");
         jfieldID nameField = env->GetFieldID(categoryClass, "name", "Ljava/lang/String;");
+
+        jobject idObj = env->GetObjectField(categoryObj, idField);
         jstring name = static_cast<jstring>(env->GetObjectField(categoryObj, nameField));
 
         const char* nameStr = env->GetStringUTFChars(name, nullptr);
-        Category category{nameStr};
+
+        jint id = 0;
+        if (idObj != nullptr) {
+            jclass integerClass = env->GetObjectClass(idObj);
+            jmethodID intValueMethod = env->GetMethodID(integerClass, "intValue", "()I");
+            id = env->CallIntMethod(idObj, intValueMethod);
+        }
+
+        Category category{id, nameStr};
 
         writeToBinFile(getCategoriesFilePath(),
                        reinterpret_cast<char*>(&category),

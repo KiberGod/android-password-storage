@@ -12,7 +12,7 @@
 class create_categories {
 private:
     // Вставка даних
-    static void insert(char* name);
+    static void insert(int id, char* name);
 
     // Запуск міграцій
     static void runMigrations();
