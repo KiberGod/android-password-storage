@@ -59,13 +59,17 @@ public class CreateCategoryFragment extends Fragment {
     private void getNewCategory(View view) {
         EditText editText = view.findViewById(R.id.editCreateCategoryName);
         String categoryName = editText.getText().toString();
-        if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
-            textViewStatus.setText("");
-            sharedCategoriesDataViewModel.addCategory(categoryName);
-            Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
-            getActivity().onBackPressed();
+        if (categoryName.length() != 0) {
+            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
+                textViewStatus.setText("");
+                sharedCategoriesDataViewModel.addCategory(categoryName);
+                Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+            } else {
+                textViewStatus.setText("Категорія з таким іменем вже існує");
+            }
         } else {
-            textViewStatus.setText("Категорія з таким іменем вже існує");
+            textViewStatus.setText("І`мя не може бути порожнім");
         }
     }
 }
