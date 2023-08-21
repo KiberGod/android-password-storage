@@ -39,6 +39,16 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         }
     }
 
+    // Пошук категорії за назвою
+    public int getCategoryIdByName(String categoryName) {
+        for (int i = 0; i < categories.size(); i++) {
+            if (categories.get(i).getName().equals(categoryName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // Повертає загальну кількість категоірй
     public int getCategoriesCount() {
         return categories.size();

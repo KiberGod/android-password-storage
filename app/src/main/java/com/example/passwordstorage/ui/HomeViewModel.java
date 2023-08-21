@@ -42,4 +42,7 @@ public class HomeViewModel extends ViewModel {
             }
         });
     }
+
+    // Повертає текст відсутності категорії для кнопки з списком категорій
+    public String setEmptyCategoryText() { return "Відсутня"; }
 }

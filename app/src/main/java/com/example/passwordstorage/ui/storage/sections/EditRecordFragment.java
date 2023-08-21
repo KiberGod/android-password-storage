@@ -3,22 +3,28 @@ package com.example.passwordstorage.ui.storage.sections;
 import static com.example.passwordstorage.model.Record.MAX_TEXT_LENGTH;
 import static com.example.passwordstorage.model.Record.MAX_TITLE_LENGTH;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
+import com.example.passwordstorage.model.Category;
 import com.example.passwordstorage.ui.HomeViewModel;
+
+import java.util.ArrayList;
 
 public class EditRecordFragment extends Fragment {
 
@@ -66,6 +72,7 @@ public class EditRecordFragment extends Fragment {
 
         printRecordData(view);
         setOnClickToCancelEditRecordButton(view);
+        setCategoriesToDropdownButton(view);
 
         return view;
     }
@@ -91,5 +98,42 @@ public class EditRecordFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+    }
+    
+    // Функція закріпляє за кнопкою діалогове меню зі списком категорій
+    private void setCategoriesToDropdownButton(View view) {
+        String buttonText = sharedCategoriesDataViewModel.getCategoryNameById(
+                sharedRecordsDataViewModel.getRecordCategory_idById(record_id)
+        );
+        if (buttonText.equals("")) {
+            buttonText = homeViewModel.setEmptyCategoryText();
+        }
+        Button dropdownButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
+        dropdownButton.setText(buttonText);
+
+        ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
+        categories.add(0, new Category(homeViewModel.setEmptyCategoryText()));
+
+        ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
+        dropdownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDropdownMenu(dropdownButton, adapter, categories);
+            }
+        });
+    }
+
+    // Функція, що спрацьовуватиме при обранні категорій з списку
+    private void showDropdownMenu(Button dropdownButton, ArrayAdapter<Category> adapter, ArrayList<Category> categories) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Category selectedCategory = categories.get(which);
+                dropdownButton.setText(selectedCategory.getName());
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

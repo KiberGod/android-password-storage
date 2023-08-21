@@ -36,11 +36,6 @@ public class CreateRecordFragment extends Fragment {
 
     private TextView textViewStatus;
 
-    private final String DEFAULT_CATEGORY_TEXT = "Відсутня";
-
-    // id обраної категорії
-    private Integer selectedCategoryId = -1;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,10 +61,10 @@ public class CreateRecordFragment extends Fragment {
     private void setCategoriesToDropdownButton(View view) {
         Button dropdownButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
 
-        dropdownButton.setText(DEFAULT_CATEGORY_TEXT);
+        dropdownButton.setText(homeViewModel.setEmptyCategoryText());
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(DEFAULT_CATEGORY_TEXT));
+        categories.add(0, new Category(homeViewModel.setEmptyCategoryText()));
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         dropdownButton.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +83,6 @@ public class CreateRecordFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 Category selectedCategory = categories.get(which);
                 dropdownButton.setText(selectedCategory.getName());
-                selectedCategoryId = which - 1;
                 dialog.dismiss();
             }
         });
@@ -114,7 +108,9 @@ public class CreateRecordFragment extends Fragment {
         if (recordTitle.length() != 0) {
             if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
                 textViewStatus.setText("");
-                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), selectedCategoryId);
+                Button categoryButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
+                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
+                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), category_id);
                 Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
