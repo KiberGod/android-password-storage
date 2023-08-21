@@ -56,8 +56,17 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Перевірка нового запису на унікальність (за полем заголовку)
     public boolean checkRecordTitleUnique(String title) {
+        return checkRecordTitleUnique(title, "");
+    }
+
+    /*
+     *  Перевірка нового запису на унікальність (за полем заголовку) з використанням параметру для ігнорування
+     *  певного рядка під час перевірки
+     */
+
+    public boolean checkRecordTitleUnique(String title, String strIgnore) {
         for (Record record : records) {
-            if (record.getTitle().equals(title)) {
+            if (record.getTitle().equals(title) && !record.getTitle().equals(strIgnore)) {
                 return false;
             }
         }
@@ -68,6 +77,12 @@ public class SharedRecordsDataViewModel extends ViewModel {
     public void addRecord(String title, String text,  Integer category_id) {
         Record record = new Record(title, text, category_id);
         records.add(record);
+        saveRecords(records);
+    }
+
+    // Редагування запису
+    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id) {
+        records.get(index).update(newTitle, newText, newCategory_id);
         saveRecords(records);
     }
 }

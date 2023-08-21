@@ -34,4 +34,10 @@ public class Record {
     public Integer getCategoryId() {
         return category_id;
     }
+
+    public void update(String newTitle, String newText, Integer newCategory_id) {
+        this.title = newTitle;
+        this.text = newText;
+        this.category_id = newCategory_id;
+    }
 }

@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
@@ -35,6 +37,8 @@ public class EditRecordFragment extends Fragment {
     private static final String RECORD_ID = "record_id";
 
     private int record_id;
+
+    private TextView textViewStatus;
 
     public EditRecordFragment() {
         // Required empty public constructor
@@ -70,9 +74,12 @@ public class EditRecordFragment extends Fragment {
         homeViewModel.setMaxLengthForInput(view, R.id.editEditRecordTitle, MAX_TITLE_LENGTH);
         homeViewModel.setMaxLengthForInput(view, R.id.editEditRecordText, MAX_TEXT_LENGTH);
 
+        textViewStatus = view.findViewById(R.id.editRecordStatus);
+
         printRecordData(view);
         setOnClickToCancelEditRecordButton(view);
         setCategoriesToDropdownButton(view);
+        setOnClickToSaveButton(view);
 
         return view;
     }
@@ -99,7 +106,7 @@ public class EditRecordFragment extends Fragment {
             }
         });
     }
-    
+
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
     private void setCategoriesToDropdownButton(View view) {
         String buttonText = sharedCategoriesDataViewModel.getCategoryNameById(
@@ -135,5 +142,37 @@ public class EditRecordFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    // Функція встановлює подію натискання кнопки збереження введених змін
+    private void setOnClickToSaveButton(View view) {
+        Button button = view.findViewById(R.id.saveEditRecordButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getEditRecord(view);
+            }
+        });
+    }
+
+    // Обробка редагування запису
+    private void getEditRecord(View view) {
+        EditText textInput = view.findViewById(R.id.editEditRecordText);
+        EditText titleInput = view.findViewById(R.id.editEditRecordTitle);
+        String recordTitle = titleInput.getText().toString();
+        if (recordTitle.length() != 0) {
+            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordTitle)) {
+                textViewStatus.setText("");
+                Button categoryButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
+                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
+                sharedRecordsDataViewModel.editRecord(record_id, recordTitle, textInput.getText().toString(), category_id);
+                Toast.makeText(getActivity(), "Запис змінено " + recordTitle, Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+            } else {
+                textViewStatus.setText("Запис з таким заголовком вже існує");
+            }
+        } else {
+            textViewStatus.setText("Заголовок запису не може бути порожнім");
+        }
     }
 }
