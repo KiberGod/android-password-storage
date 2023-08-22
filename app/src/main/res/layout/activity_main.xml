@@ -10,259 +10,41 @@
 
     <TextView
         android:id="@+id/previewResultPlace"
-        android:layout_width="0dp"
+        android:layout_width="366dp"
         android:layout_height="40dp"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginTop="16dp"
         android:gravity="bottom|right"
         android:text="0"
         android:textColor="#979393"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/topLine" />
 
     <View
         android:id="@+id/topLine"
         style="@style/CalcLine"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_percentage"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resultPlace" />
 
     <View
         android:id="@+id/bottomLine"
         style="@style/CalcLine"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_percentage"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_percentage"
-        style="@style/CalcButtonStyle"
-        android:layout_marginTop="292dp"
-        android:onClick="calcPercentage"
-        android:text="%"
-        app:layout_constraintBottom_toTopOf="@+id/button_9"
-        app:layout_constraintEnd_toStartOf="@+id/button_division"
-        app:layout_constraintStart_toEndOf="@+id/button_erase"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_erase"
-        style="@style/CalcButtonStyle"
-        android:layout_marginTop="292dp"
-        android:onClick="onClickEraseButton"
-        android:text="⌫"
-        app:layout_constraintBottom_toTopOf="@+id/button_8"
-        app:layout_constraintEnd_toStartOf="@+id/button_percentage"
-        app:layout_constraintStart_toEndOf="@+id/button_clear"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_division"
-        style="@style/CalcButtonStyle"
-        android:layout_marginTop="292dp"
-        android:layout_marginEnd="23dp"
-        android:onClick="setOperation"
-        android:text="÷"
-        app:layout_constraintBottom_toTopOf="@+id/button_multiplication"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_percentage"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_9"
-        style="@style/CalcButtonStyle"
-        android:onClick="setDigit"
-        android:text="9"
-        app:layout_constraintBottom_toTopOf="@+id/button_6"
-        app:layout_constraintEnd_toStartOf="@+id/button_multiplication"
-        app:layout_constraintStart_toEndOf="@+id/button_8"
-        app:layout_constraintTop_toBottomOf="@+id/button_percentage" />
-
-    <Button
-        android:id="@+id/button_8"
-        style="@style/CalcButtonStyle"
-        android:onClick="setDigit"
-        android:text="8"
-        app:layout_constraintBottom_toTopOf="@+id/button_5"
-        app:layout_constraintEnd_toStartOf="@+id/button_9"
-        app:layout_constraintStart_toEndOf="@+id/button_7"
-        app:layout_constraintTop_toBottomOf="@+id/button_erase" />
-
-    <Button
-        android:id="@+id/button_7"
-        style="@style/CalcButtonStyle"
-        android:layout_marginStart="23dp"
-        android:onClick="setDigit"
-        android:text="7"
-        app:layout_constraintBottom_toTopOf="@+id/button_4"
-        app:layout_constraintEnd_toStartOf="@+id/button_8"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_clear" />
-
-    <Button
-        android:id="@+id/button_4"
-        style="@style/CalcButtonStyle"
-        android:layout_marginStart="23dp"
-        android:onClick="setDigit"
-        android:text="4"
-        app:layout_constraintBottom_toTopOf="@+id/button_1"
-        app:layout_constraintEnd_toStartOf="@+id/button_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_7" />
-
-    <Button
-        android:id="@+id/button_inversion"
-        style="@style/CalcButtonStyle"
-        android:layout_marginStart="23dp"
-        android:onClick="inversionSignNumber"
-        android:text="+/-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_1" />
-
-    <Button
-        android:id="@+id/button_clear"
-        style="@style/CalcButtonStyle"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="292dp"
-        android:onClick="onClickClearButton"
-        android:text="AC"
-        app:layout_constraintBottom_toTopOf="@+id/button_7"
-        app:layout_constraintEnd_toStartOf="@+id/button_erase"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_1"
-        style="@style/CalcButtonStyle"
-        android:layout_marginStart="23dp"
-        android:onClick="setDigit"
-        android:text="1"
-        app:layout_constraintBottom_toTopOf="@+id/button_inversion"
-        app:layout_constraintEnd_toStartOf="@+id/button_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_4" />
-
-    <Button
-        android:id="@+id/button_multiplication"
-        style="@style/CalcButtonStyle"
-        android:layout_marginEnd="23dp"
-        android:onClick="setOperation"
-        android:text="×"
-        app:layout_constraintBottom_toTopOf="@+id/button_difference"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_9"
-        app:layout_constraintTop_toBottomOf="@+id/button_division" />
-
-    <Button
-        android:id="@+id/button_6"
-        style="@style/CalcButtonStyle"
-        android:onClick="setDigit"
-        android:text="6"
-        app:layout_constraintBottom_toTopOf="@+id/button_3"
-        app:layout_constraintEnd_toStartOf="@+id/button_difference"
-        app:layout_constraintStart_toEndOf="@+id/button_5"
-        app:layout_constraintTop_toBottomOf="@+id/button_9" />
-
-    <Button
-        android:id="@+id/button_5"
-        style="@style/CalcButtonStyle"
-        android:onClick="setDigit"
-        android:text="5"
-        app:layout_constraintBottom_toTopOf="@+id/button_2"
-        app:layout_constraintEnd_toStartOf="@+id/button_6"
-        app:layout_constraintStart_toEndOf="@+id/button_4"
-        app:layout_constraintTop_toBottomOf="@+id/button_8" />
-
-    <Button
-        android:id="@+id/button_difference"
-        style="@style/CalcButtonStyle"
-        android:layout_marginEnd="23dp"
-        android:onClick="setOperation"
-        android:text="-"
-        app:layout_constraintBottom_toTopOf="@+id/button_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_6"
-        app:layout_constraintTop_toBottomOf="@+id/button_multiplication" />
-
-    <Button
-        android:id="@+id/button_2"
-        style="@style/CalcButtonStyle"
-        android:onClick="setDigit"
-        android:text="2"
-        app:layout_constraintBottom_toTopOf="@+id/button_0"
-        app:layout_constraintEnd_toStartOf="@+id/button_3"
-        app:layout_constraintStart_toEndOf="@+id/button_1"
-        app:layout_constraintTop_toBottomOf="@+id/button_5" />
-
-    <Button
-        android:id="@+id/button_amount"
-        style="@style/CalcButtonStyle"
-        android:layout_marginEnd="23dp"
-        android:onClick="setOperation"
-        android:text="+"
-        app:layout_constraintBottom_toTopOf="@+id/button_result"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_3"
-        app:layout_constraintTop_toBottomOf="@+id/button_difference" />
-
-    <Button
-        android:id="@+id/button_3"
-        style="@style/CalcButtonStyle"
-        android:text="3"
-        app:layout_constraintBottom_toTopOf="@+id/button_comma"
-        app:layout_constraintEnd_toStartOf="@+id/button_amount"
-        app:layout_constraintStart_toEndOf="@+id/button_2"
-        app:layout_constraintTop_toBottomOf="@+id/button_6"
-        android:onClick="setDigit" />
-
-    <Button
-        android:id="@+id/button_comma"
-        style="@style/CalcButtonStyle"
-        android:layout_marginEnd="15dp"
-        android:onClick="setFloatingComma"
-        android:text="."
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_result"
-        app:layout_constraintStart_toEndOf="@+id/button_0"
-        app:layout_constraintTop_toBottomOf="@+id/button_3" />
-
-    <Button
-        android:id="@+id/button_result"
-        style="@style/CalcButtonStyle"
-        android:layout_marginEnd="23dp"
-        android:onClick="setResult"
-        android:text="="
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_comma"
-        app:layout_constraintTop_toBottomOf="@+id/button_amount" />
-
-    <Button
-        android:id="@+id/button_0"
-        style="@style/CalcButtonStyle"
-        android:layout_marginEnd="14dp"
-        android:onClick="setDigit"
-        android:text="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_comma"
-        app:layout_constraintStart_toEndOf="@+id/button_inversion"
-        app:layout_constraintTop_toBottomOf="@+id/button_2" />
+        app:layout_constraintTop_toBottomOf="@+id/previewResultPlace" />
 
     <TextView
         android:id="@+id/resultPlace"
-        android:layout_width="0dp"
-        android:layout_height="180dp"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="23dp"
+        android:layout_width="358dp"
+        android:layout_height="167dp"
+        android:layout_marginTop="28dp"
         android:gravity="bottom|right"
         android:hint="0"
         android:text="0"
@@ -270,8 +52,172 @@
         android:textColorHint="#FAF4F4"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TableLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomLine">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_clear"
+                style="@style/CalcButtonStyle"
+                android:layout_marginStart="32dp"
+                android:onClick="onClickClearButton"
+                android:text="AC" />
+
+            <Button
+                android:id="@+id/button_erase"
+                style="@style/CalcButtonStyle"
+                android:onClick="onClickEraseButton"
+                android:text="⌫" />
+
+            <Button
+                android:id="@+id/button_percentage"
+                style="@style/CalcButtonStyle"
+                android:onClick="calcPercentage"
+                android:text="%" />
+
+            <Button
+                android:id="@+id/button_division"
+                style="@style/CalcButtonStyle"
+                android:onClick="setOperation"
+                android:text="÷" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_7"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="7" />
+
+            <Button
+                android:id="@+id/button_8"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="8" />
+
+            <Button
+                android:id="@+id/button_9"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="9" />
+
+            <Button
+                android:id="@+id/button_multiplication"
+                style="@style/CalcButtonStyle"
+                android:onClick="setOperation"
+                android:text="×" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_4"
+                style="@style/CalcButtonStyle"
+                android:layout_marginStart="16dp"
+                android:onClick="setDigit"
+                android:text="4" />
+
+            <Button
+                android:id="@+id/button_5"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/button_6"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/button_difference"
+                style="@style/CalcButtonStyle"
+                android:onClick="setOperation"
+                android:text="-" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_1"
+                style="@style/CalcButtonStyle"
+                android:layout_marginStart="16dp"
+                android:onClick="setDigit"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/button_2"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/button_3"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/button_amount"
+                style="@style/CalcButtonStyle"
+                android:onClick="setOperation"
+                android:text="+" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/button_inversion"
+                style="@style/CalcButtonStyle"
+                android:onClick="inversionSignNumber"
+                android:text="+/-" />
+
+            <Button
+                android:id="@+id/button_0"
+                style="@style/CalcButtonStyle"
+                android:onClick="setDigit"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/button_comma"
+                style="@style/CalcButtonStyle"
+                android:onClick="setFloatingComma"
+                android:text="." />
+
+            <Button
+                android:id="@+id/button_result"
+                style="@style/CalcButtonStyle"
+                android:onClick="setResult"
+                android:text="=" />
+        </TableRow>
+    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
