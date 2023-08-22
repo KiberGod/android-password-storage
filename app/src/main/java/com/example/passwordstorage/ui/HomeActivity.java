@@ -122,4 +122,10 @@ public class HomeActivity extends AppCompatActivity {
         CreateCategoryFragment createCategoryFragment = new CreateCategoryFragment();
         navigateToFragment(createCategoryFragment, null);
     }
+
+    // Перехід до стартового вікна сховища
+    public void setStorageFragment() {
+        StorageFragment storageFragment = new StorageFragment();
+        navigateToFragment(storageFragment, null);
+    }
 }

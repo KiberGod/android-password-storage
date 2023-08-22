@@ -16,7 +16,7 @@
         android:textColor="#FF0000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +24,7 @@
         android:id="@+id/editEditRecordTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="20dp"
         android:background="@color/gray_text"
         android:ems="10"
         android:hint="Назва"
@@ -34,22 +34,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
         android:id="@+id/editEditRecordText"
         android:layout_width="356dp"
         android:layout_height="132dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:background="@color/gray_text"
         android:ems="10"
-        android:inputType="textMultiLine"
-        android:hint="Основний текст"
         android:gravity="start|top"
+        android:hint="Основний текст"
+        android:inputType="textMultiLine"
         android:textColor="@color/white_2"
         android:textColorHint="#C3BEBE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editEditRecordTitle" />
 
@@ -58,59 +57,65 @@
         android:layout_width="143dp"
         android:layout_height="44dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editEditRecordText"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintTop_toBottomOf="@+id/editEditRecordText" />
 
     <TextView
         android:id="@+id/textview13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="24dp"
         android:text="Категорія"
         android:textColor="@color/white_2"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dropdownEditRecordCategoryButton"
-        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editEditRecordText"
-        app:layout_constraintVertical_bias="0.198" />
+        app:layout_constraintTop_toBottomOf="@+id/editEditRecordText" />
 
     <TextView
         android:id="@+id/editRecordStatus"
         android:layout_width="340dp"
         android:layout_height="32dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="32dp"
         android:text=""
-        app:layout_constraintBottom_toTopOf="@+id/saveEditRecordButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dropdownEditRecordCategoryButton"
-        app:layout_constraintVertical_bias="0.162" />
-
-    <Button
-        android:id="@+id/saveEditRecordButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:text="Зберегти"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dropdownEditRecordCategoryButton" />
 
     <Button
+        android:id="@+id/saveEditRecordButton"
+        android:layout_width="121dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="84dp"
+        android:text="Зберегти"
+        app:layout_constraintEnd_toStartOf="@+id/cancelEditRecordButton"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editRecordStatus" />
+
+    <Button
         android:id="@+id/cancelEditRecordButton"
-        android:layout_width="120dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="104dp"
+        android:layout_width="119dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="84dp"
         android:text="Відмінити"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editRecordStatus" />
+
+    <Button
+        android:id="@+id/deleteRecordButton"
+        android:layout_width="121dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="12dp"
+        android:text="Видалити"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.692"
+        app:layout_constraintStart_toEndOf="@+id/cancelEditRecordButton"
         app:layout_constraintTop_toBottomOf="@+id/editRecordStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

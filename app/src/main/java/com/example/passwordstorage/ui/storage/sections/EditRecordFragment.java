@@ -24,6 +24,7 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.model.Category;
+import com.example.passwordstorage.ui.HomeActivity;
 import com.example.passwordstorage.ui.HomeViewModel;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class EditRecordFragment extends Fragment {
         setOnClickToCancelEditRecordButton(view);
         setCategoriesToDropdownButton(view);
         setOnClickToSaveButton(view);
+        setOnClickToDeleteButton(view);
 
         return view;
     }
@@ -155,6 +157,17 @@ public class EditRecordFragment extends Fragment {
         });
     }
 
+    // Функція встановлює подію натискання кнопки видалення запису
+    private void setOnClickToDeleteButton(View view) {
+        Button button = view.findViewById(R.id.deleteRecordButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteConfirmationDialog();
+            }
+        });
+    }
+
     // Обробка редагування запису
     private void getEditRecord(View view) {
         EditText textInput = view.findViewById(R.id.editEditRecordText);
@@ -174,5 +187,25 @@ public class EditRecordFragment extends Fragment {
         } else {
             textViewStatus.setText("Заголовок запису не може бути порожнім");
         }
+    }
+
+    // Вікно з підтвердженням видалення запису
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Ви впевнені, що хочете видалити запис? Цю дію буде неможливо відмінити.");
+        builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteRecord();
+            }
+        });
+        builder.setNegativeButton("Відмінити", null);
+        builder.show();
+    }
+
+    // Оброка видалення запису
+    private void deleteRecord() {
+        sharedRecordsDataViewModel.deleteRecord(recordIndex);
+        ((HomeActivity) requireActivity()).setStorageFragment();
     }
 }

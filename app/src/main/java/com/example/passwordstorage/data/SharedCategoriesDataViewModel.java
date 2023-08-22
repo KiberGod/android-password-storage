@@ -30,16 +30,6 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     // Повертає весь список категорій
     public ArrayList<Category> getAllCategories() { return categories; }
 
-    // Повертає назву категорії за ідентифікатором (або попрожнє значення, якщо такої категорії немає)
-    public String getCategoryNameById(Integer id) {
-        Category category = getCategoryById(id);
-        if (category != null) {
-            return category.getName();
-        } else {
-            return "";
-        }
-    }
-
     // Повертає всю категорію за id
     private Category getCategoryById(Integer id) {
         for (Category category : categories) {
@@ -48,6 +38,16 @@ public class SharedCategoriesDataViewModel extends ViewModel {
             }
         }
         return null;
+    }
+
+    // Повертає назву категорії за ідентифікатором (або попрожнє значення, якщо такої категорії немає)
+    public String getCategoryNameById(Integer id) {
+        Category category = getCategoryById(id);
+        if (category != null) {
+            return category.getName();
+        } else {
+            return "";
+        }
     }
 
     // Пошук id категорії за назвою

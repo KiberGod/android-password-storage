@@ -24,7 +24,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Ініціалізація списку записів
     public void setRecords() {
-        System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         records = getRecords();
     }
 
@@ -83,6 +82,12 @@ public class SharedRecordsDataViewModel extends ViewModel {
     // Редагування запису
     public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id) {
         records.get(index).update(newTitle, newText, newCategory_id);
+        saveRecords(records);
+    }
+
+    // Видалення запису
+    public void deleteRecord(int index) {
+        records.remove(index);
         saveRecords(records);
     }
 }
