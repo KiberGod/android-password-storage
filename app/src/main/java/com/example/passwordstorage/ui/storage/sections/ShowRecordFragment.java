@@ -3,6 +3,7 @@ package com.example.passwordstorage.ui.storage.sections;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
@@ -25,6 +27,8 @@ public class ShowRecordFragment extends Fragment {
     private static final String RECORD_INDEX = "record_index";
 
     private int recordIndex;
+
+    ImageView bookmarkButton;
 
     public ShowRecordFragment() {
         // Required empty public constructor
@@ -56,6 +60,7 @@ public class ShowRecordFragment extends Fragment {
 
         printRecordData(view);
         setOnClickToEditRecordButton(view);
+        setOnClickToEditBookmarkButton(view);
 
         return view;
     }
@@ -67,6 +72,9 @@ public class ShowRecordFragment extends Fragment {
                 sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex))
         );
         setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+
+        bookmarkButton = view.findViewById(R.id.bookmarkButton);
+        resetBookmarkButtonColor();
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -82,6 +90,26 @@ public class ShowRecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex);
+            }
+        });
+    }
+
+    // Функція змінює забарвлення кнопки закладки
+    private void resetBookmarkButtonColor() {
+        if (sharedRecordsDataViewModel.getBookmarkByIndex(recordIndex)) {
+            bookmarkButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.purple));
+        } else {
+            bookmarkButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white_2));
+        }
+    }
+
+    // Функція встановлює подію зміни статусу закладки по натисненню кнопки
+    private void setOnClickToEditBookmarkButton(View view) {
+        bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedRecordsDataViewModel.editBookmarkInRecordByIndex(recordIndex);
+                resetBookmarkButtonColor();
             }
         });
     }

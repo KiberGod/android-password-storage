@@ -45,4 +45,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
+
+    <ImageView
+        android:id="@+id/bookmarkButton"
+        android:layout_width="54dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/vector_bookmark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.915"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

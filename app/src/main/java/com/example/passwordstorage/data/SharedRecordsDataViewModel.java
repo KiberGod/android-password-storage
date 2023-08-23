@@ -41,6 +41,11 @@ public class SharedRecordsDataViewModel extends ViewModel {
         return records.size();
     }
 
+    // Повертає інформацію про закладку у заданого запису
+    public boolean getBookmarkByIndex(int index) {
+        return records.get(index).getBookmark();
+    }
+
     // Логування записів, отриманих з С++
     public void printLogRecords() {
         System.out.println("----- BEGIN RECORD LOGS -----");
@@ -110,5 +115,11 @@ public class SharedRecordsDataViewModel extends ViewModel {
                 record.setEmptyCategoryId();
             }
         }
+    }
+
+    // Редагування статусу закладки у записі
+    public void editBookmarkInRecordByIndex(int index) {
+        records.get(index).inversionBookmark();
+        saveRecords(records);
     }
 }

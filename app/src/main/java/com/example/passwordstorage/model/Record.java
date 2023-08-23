@@ -61,4 +61,8 @@ public class Record {
         this.text = newText;
         this.category_id = newCategory_id;
     }
+
+    public void inversionBookmark() {
+        bookmark = !bookmark;
+    }
 }
