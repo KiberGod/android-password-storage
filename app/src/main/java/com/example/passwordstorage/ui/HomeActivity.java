@@ -32,6 +32,7 @@ import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.create.CreateRecordFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
 import com.example.passwordstorage.ui.storage.sections.EditRecordFragment;
+import com.example.passwordstorage.ui.storage.sections.ShowCategoryFragment;
 import com.example.passwordstorage.ui.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -119,6 +120,14 @@ public class HomeActivity extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putInt("record_index", recordIndex);
         navigateToFragment(editRecordFragment, args);
+    }
+
+    // Перехід на сторінку перегляду категорії
+    public void setShowCategoryFragment(int categoryIndex) {
+        ShowCategoryFragment showCategoryFragment = new ShowCategoryFragment();
+        Bundle args = new Bundle();
+        args.putInt("category_index", categoryIndex);
+        navigateToFragment(showCategoryFragment, args);
     }
 
     // Перехід на сторінку створення запису

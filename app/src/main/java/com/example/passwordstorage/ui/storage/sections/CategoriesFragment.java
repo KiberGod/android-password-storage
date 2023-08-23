@@ -45,7 +45,7 @@ public class CategoriesFragment extends Fragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //((HomeActivity) requireActivity()).setShowRecordFragment(index);
+                    ((HomeActivity) requireActivity()).setShowCategoryFragment(index);
                 }
             });
         }
