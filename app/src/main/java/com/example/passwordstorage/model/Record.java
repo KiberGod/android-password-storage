@@ -23,6 +23,10 @@ public class Record {
         this.category_id = category_id;
     }
 
+    public void setEmptyCategoryId() {
+        this.category_id = NULL_CATEGORY_VALUE;
+    }
+
     public String getTitle() {
         return title;
     }

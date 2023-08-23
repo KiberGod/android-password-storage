@@ -101,4 +101,13 @@ public class SharedRecordsDataViewModel extends ViewModel {
         }
         return recordCounter;
     }
+
+    // Від`єднує вказану категорію від всіх записів, де вона міститься
+    public void detachCategory(Integer category_id) {
+        for (Record record: records) {
+            if (record.getCategoryId().equals(category_id)) {
+                record.setEmptyCategoryId();
+            }
+        }
+    }
 }

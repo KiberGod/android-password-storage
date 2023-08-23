@@ -2,8 +2,10 @@ package com.example.passwordstorage.ui.storage.sections;
 
 import static com.example.passwordstorage.model.Category.MAX_NAME_LENGTH;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,12 +19,15 @@ import android.widget.Toast;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.data.SharedRecordsDataViewModel;
+import com.example.passwordstorage.ui.HomeActivity;
 import com.example.passwordstorage.ui.HomeViewModel;
 
 public class EditCategoryFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
+    private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     private static final String CATEGORY_INDEX = "category_index";
 
@@ -57,6 +62,7 @@ public class EditCategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_category, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
+        sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editCategoryStatus);
@@ -66,6 +72,7 @@ public class EditCategoryFragment extends Fragment {
         printCategoryData(view);
         setOnClickToCancelEditCategoryButton(view);
         setOnClickToSaveButton(view);
+        setOnClickToDeleteButton(view);
 
         return view;
     }
@@ -114,5 +121,39 @@ public class EditCategoryFragment extends Fragment {
         } else {
             textViewStatus.setText("І`мя не може бути порожнім");
         }
+    }
+
+    // Функція встановлює подію натискання кнопки видалення категорії
+    private void setOnClickToDeleteButton(View view) {
+        Button button = view.findViewById(R.id.deleteCategoryButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteConfirmationDialog();
+            }
+        });
+    }
+
+    // Вікно з підтвердженням видалення категорії
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Ви впевнені, що хочете видалити категорію? Цю дію буде неможливо відмінити.");
+        builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteCategory();
+            }
+        });
+        builder.setNegativeButton("Відмінити", null);
+        builder.show();
+    }
+
+    // Оброка видалення запису
+    private void deleteCategory() {
+        sharedCategoriesDataViewModel.deleteCategory(categoryIndex);
+        sharedRecordsDataViewModel.detachCategory(
+                sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
+        );
+        ((HomeActivity) requireActivity()).setStorageFragment();
     }
 }

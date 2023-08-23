@@ -107,6 +107,12 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         saveCategories(categories);
     }
 
+    // Видалення категорії
+    public void deleteCategory(int index) {
+        categories.remove(index);
+        saveCategories(categories);
+    }
+
     // Функція створює новий ідентифікатор на основі існуючого найстаршого
     private Integer generateNewId() {
         if (categories.size() != 0) {
