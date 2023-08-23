@@ -31,6 +31,7 @@ import com.example.passwordstorage.ui.create.CreateCategoryFragment;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.create.CreateRecordFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
+import com.example.passwordstorage.ui.storage.sections.EditCategoryFragment;
 import com.example.passwordstorage.ui.storage.sections.EditRecordFragment;
 import com.example.passwordstorage.ui.storage.sections.ShowCategoryFragment;
 import com.example.passwordstorage.ui.storage.sections.ShowRecordFragment;
@@ -128,6 +129,14 @@ public class HomeActivity extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putInt("category_index", categoryIndex);
         navigateToFragment(showCategoryFragment, args);
+    }
+
+    // Перехід на сторінку редагування категорії
+    public void setEditCategoryFragment(int categoryIndex) {
+        EditCategoryFragment editCategoryFragment = new EditCategoryFragment();
+        Bundle args = new Bundle();
+        args.putInt("category_index", categoryIndex);
+        navigateToFragment(editCategoryFragment, args);
     }
 
     // Перехід на сторінку створення запису

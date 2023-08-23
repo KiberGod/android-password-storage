@@ -101,6 +101,12 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         saveCategories(categories);
     }
 
+    // Редагування категорії
+    public void editCategory(int index, String name) {
+        categories.get(index).update(name);
+        saveCategories(categories);
+    }
+
     // Функція створює новий ідентифікатор на основі існуючого найстаршого
     private Integer generateNewId() {
         if (categories.size() != 0) {

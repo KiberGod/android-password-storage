@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
+import com.example.passwordstorage.ui.HomeActivity;
 
 public class ShowCategoryFragment extends Fragment {
 
@@ -53,6 +55,7 @@ public class ShowCategoryFragment extends Fragment {
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
         printCategoryData(view);
+        setOnClickToEditCategoryButton(view);
 
         return view;
     }
@@ -68,5 +71,16 @@ public class ShowCategoryFragment extends Fragment {
                                 sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
                         )
         );
+    }
+
+    // Функція встановлює подію переходу на сторінку редагувння категорії по натисненню кнопки
+    private void setOnClickToEditCategoryButton(View view) {
+        Button button = view.findViewById(R.id.openEditCategoryPageButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryIndex);
+            }
+        });
     }
 }

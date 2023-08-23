@@ -23,4 +23,8 @@ public class Category {
     public String toString() {
         return name;
     }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }
