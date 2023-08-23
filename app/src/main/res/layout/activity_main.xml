@@ -6,70 +6,66 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
+    android:padding="10dp"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/previewResultPlace"
-        android:layout_width="366dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:gravity="bottom|right"
-        android:text="0"
-        android:textColor="#979393"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLine" />
-
-    <View
-        android:id="@+id/topLine"
-        style="@style/CalcLine"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultPlace" />
-
-    <View
-        android:id="@+id/bottomLine"
-        style="@style/CalcLine"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previewResultPlace" />
-
-    <TextView
         android:id="@+id/resultPlace"
-        android:layout_width="358dp"
-        android:layout_height="167dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
         android:gravity="bottom|right"
         android:hint="0"
         android:text="0"
         android:textColor="#FAF4F4"
         android:textColorHint="#FAF4F4"
         android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/topLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/topLine"
+        style="@style/CalcLine"
+        app:layout_constraintBottom_toTopOf="@+id/previewResultPlace"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/previewResultPlace"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#000000"
+        android:gravity="bottom|right"
+        android:text="0"
+        android:textColor="#979393"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/bottomLine"
+        style="@style/CalcLine"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TableLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
+        android:id="@+id/tableLayout"
+        android:layout_width="391dp"
+
+        android:layout_height="422dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottomLine">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:minHeight="70dp">
 
             <Button
                 android:id="@+id/button_clear"
@@ -100,7 +96,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:minHeight="70dp">
 
             <Button
                 android:id="@+id/button_7"
@@ -130,7 +127,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:minHeight="70dp">
 
             <Button
                 android:id="@+id/button_4"
@@ -161,7 +159,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:minHeight="70dp">
 
             <Button
                 android:id="@+id/button_1"
@@ -192,7 +191,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:minHeight="70dp">
 
             <Button
                 android:id="@+id/button_inversion"
