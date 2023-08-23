@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.ui.HomeActivity;
 
 public class CategoriesFragment extends Fragment {
 
@@ -25,6 +27,27 @@ public class CategoriesFragment extends Fragment {
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
 
         sharedCategoriesDataViewModel.printLogCategories();
+        drawButtonList(view);
+
         return view;
+    }
+
+    // Функція виводить весь список категорый
+    private void drawButtonList(View view) {
+        for (int i=0; i<sharedCategoriesDataViewModel.getCategoriesCount(); i++) {
+            Button button = ((HomeActivity) requireActivity()).drawButton(
+                    view,
+                    requireContext(),
+                    sharedCategoriesDataViewModel.getCategoryNameByIndex(i),
+                    R.id.categoriesScrollArea
+            );
+            final int index = i;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //((HomeActivity) requireActivity()).setShowRecordFragment(index);
+                }
+            });
+        }
     }
 }

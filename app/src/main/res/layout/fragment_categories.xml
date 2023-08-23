@@ -5,11 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.storage.sections.CategoriesFragment">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="categories"
-        android:textColor="#D30909"
-        android:textSize="20dp" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/categoriesScrollArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

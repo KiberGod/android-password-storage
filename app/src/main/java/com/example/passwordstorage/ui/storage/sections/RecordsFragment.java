@@ -42,50 +42,21 @@ public class RecordsFragment extends Fragment {
     // Функція виводить весь список записів
     private void drawButtonList(View view) {
         for (int i=0; i<sharedRecordsDataViewModel.getRecordsCount(); i++) {
-            drawRecordButton(view, sharedRecordsDataViewModel.getRecordTitleByIndex(i), i);
+            Button button = ((HomeActivity) requireActivity()).drawButton(
+                    view,
+                    requireContext(),
+                    sharedRecordsDataViewModel.getRecordTitleByIndex(i),
+                    R.id.recordsScrollArea
+            );
+            final int index = i;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((HomeActivity) requireActivity()).setShowRecordFragment(index);
+                }
+            });
         }
     }
 
-    // Функція додає кнопку запису
-    private void drawRecordButton(View view, String title, int recordIndex) {
-        Button button = new Button(requireContext());
-        button.setText(title);
-        button.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text));
 
-        GradientDrawable roundedRectangle = new GradientDrawable();
-        roundedRectangle.setColor(ContextCompat.getColor(requireContext(), R.color.gray_2));
-        roundedRectangle.setCornerRadius(36);
-        ViewCompat.setBackground(button, roundedRectangle);
-
-
-        ImageView vectorImageView = new ImageView(requireContext());
-        Drawable vectorDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.vector_template_image);
-        vectorImageView.setImageDrawable(vectorDrawable);
-
-        vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        vectorImageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_text));
-
-
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        buttonParams.gravity = Gravity.CENTER;
-        buttonParams.bottomMargin = 20;
-        buttonParams.topMargin = 20;
-        buttonParams.rightMargin = 40;
-        buttonParams.leftMargin = 40;
-        button.setLayoutParams(buttonParams);
-
-        button.setCompoundDrawablesWithIntrinsicBounds(vectorImageView.getDrawable(), null, null, null);
-
-        LinearLayout rootLayout = view.findViewById(R.id.scrollArea);
-        rootLayout.addView(button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setShowRecordFragment(recordIndex);
-            }
-        });
-    }
 }

@@ -54,15 +54,15 @@
     <TableLayout
 
         android:id="@+id/tableLayout"
-        android:layout_width="391dp"
+        android:layout_width="match_parent"
 
-        android:layout_height="422dp"
+        android:layout_height="408dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="70dp">
@@ -70,7 +70,6 @@
             <Button
                 android:id="@+id/button_clear"
                 style="@style/CalcButtonStyle"
-                android:layout_marginStart="32dp"
                 android:onClick="onClickClearButton"
                 android:text="AC" />
 
@@ -94,7 +93,7 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="70dp">
@@ -125,7 +124,7 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="70dp">
@@ -157,7 +156,7 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="70dp">
@@ -189,7 +188,7 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="70dp">

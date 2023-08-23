@@ -50,6 +50,11 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         }
     }
 
+    // Повертає назву категорії за індексом
+    public String getCategoryNameByIndex(int index) {
+        return categories.get(index).getName();
+    }
+
     // Пошук id категорії за назвою
     public int getCategoryIdByName(String categoryName) {
         for (Category category : categories) {

@@ -4,14 +4,24 @@ package com.example.passwordstorage.ui;
 import static com.example.passwordstorage.NativeController.initSecurityCore;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
@@ -127,5 +137,43 @@ public class HomeActivity extends AppCompatActivity {
     public void setStorageFragment() {
         StorageFragment storageFragment = new StorageFragment();
         navigateToFragment(storageFragment, null);
+    }
+
+    // Функція додає кнопку запису або категорії
+    public Button drawButton(View view, Context context, String title, int id_scrollArea) {
+        Button button = new Button(context);
+        button.setText(title);
+        button.setTextColor(ContextCompat.getColor(context, R.color.gray_text));
+
+        GradientDrawable roundedRectangle = new GradientDrawable();
+        roundedRectangle.setColor(ContextCompat.getColor(context, R.color.gray_2));
+        roundedRectangle.setCornerRadius(36);
+        ViewCompat.setBackground(button, roundedRectangle);
+
+
+        ImageView vectorImageView = new ImageView(context);
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.vector_template_image);
+        vectorImageView.setImageDrawable(vectorDrawable);
+
+        vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        vectorImageView.setColorFilter(ContextCompat.getColor(context, R.color.gray_text));
+
+
+        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        buttonParams.gravity = Gravity.CENTER;
+        buttonParams.bottomMargin = 20;
+        buttonParams.topMargin = 20;
+        buttonParams.rightMargin = 40;
+        buttonParams.leftMargin = 40;
+        button.setLayoutParams(buttonParams);
+
+        button.setCompoundDrawablesWithIntrinsicBounds(vectorImageView.getDrawable(), null, null, null);
+
+        LinearLayout rootLayout = view.findViewById(id_scrollArea);
+        rootLayout.addView(button);
+
+        return button;
     }
 }
