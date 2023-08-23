@@ -90,4 +90,15 @@ public class SharedRecordsDataViewModel extends ViewModel {
         records.remove(index);
         saveRecords(records);
     }
+
+    // Повертає кількість записів, що мають задану категорію
+    public int getRecordCountByCategoryId(Integer category_id) {
+        int recordCounter = 0;
+        for (Record record: records) {
+            if (record.getCategoryId().equals(category_id)) {
+                recordCounter++;
+            }
+        }
+        return recordCounter;
+    }
 }
