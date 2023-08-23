@@ -22,15 +22,23 @@ private:
      */
     int category_id;
 
+    /*
+     *  True - запис додано до закладок
+     *  false - запис не додано до закладок
+     */
+     bool bookmark;
+
 public:
     static const int NULL_CATEGORY_VALUE = -1;
+    static const bool NULL_BOOKMARK_VALUE = false;
 
     Record();
-    Record(const char* title, const char* text, const int category_id);
+    Record(const char* title, const char* text, const int category_id, const bool bookmark);
     void printLog();
     const char* getTitle() const;
     const char* getText() const;
     const int getCategoryId() const;
+    const bool getBookmark() const;
 };
 
 

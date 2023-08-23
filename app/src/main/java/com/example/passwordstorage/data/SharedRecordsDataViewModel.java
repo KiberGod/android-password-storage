@@ -48,6 +48,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
             System.out.println("Title: " + record.getTitle());
             System.out.println("Text: " + record.getText());
             System.out.println("Category id: " + record.getCategoryId());
+            System.out.println("Bookmark: " + record.getBookmark());
             System.out.println();
         }
         System.out.println("----- END RECORD LOGS -----");

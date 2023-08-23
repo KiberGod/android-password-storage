@@ -10,10 +10,11 @@ Record::Record() {
     title[0] = '\0';
     text[0] = '\0';
     category_id = NULL_CATEGORY_VALUE;
+    bookmark = NULL_BOOKMARK_VALUE;
 }
 
 // Конструктор, що використовується для створення тестових записів
-Record::Record(const char* title, const char* text, const int category_id) {
+Record::Record(const char* title, const char* text, const int category_id, const bool bookmark) {
 
     strncpy(this->title, title, MAX_TITLE_LENGTH - 1);
     this->title[MAX_TITLE_LENGTH - 1] = '\0';
@@ -22,6 +23,7 @@ Record::Record(const char* title, const char* text, const int category_id) {
     this->text[MAX_TEXT_LENGTH - 1] = '\0';
 
     this->category_id = category_id;
+    this->bookmark = bookmark;
 }
 
 // Друк запису у лог
@@ -42,4 +44,8 @@ const char* Record::getText() const {
 
 const int Record::getCategoryId() const {
     return category_id;
+}
+
+const bool Record::getBookmark() const {
+    return  bookmark;
 }

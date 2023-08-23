@@ -9,18 +9,31 @@ public class Record {
     private String text;
 
     /*
-     * Відсутність значення у даному полі слід позначати як NULL_CATEGORY_VALUE (-1)
+     *  Відсутність значення у даному полі слід позначати як NULL_CATEGORY_VALUE (-1)
      */
     private Integer category_id;
 
+    /*
+     *  True - запис додано до закладок
+     *  false - запис не додано до закладок
+     */
+    private Boolean bookmark;
+
     public static final Integer NULL_CATEGORY_VALUE = -1;
+    public static final boolean NULL_BOOKMARK_VALUE = false;
+
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
     public Record(String title, String text, Integer category_id) {
+        this(title, text, category_id, NULL_BOOKMARK_VALUE);
+    }
+
+    public Record(String title, String text, Integer category_id, Boolean bookmark) {
         this.title = title;
         this.text = text;
         this.category_id = category_id;
+        this.bookmark = bookmark;
     }
 
     public void setEmptyCategoryId() {
@@ -37,6 +50,10 @@ public class Record {
 
     public Integer getCategoryId() {
         return category_id;
+    }
+
+    public boolean getBookmark() {
+        return bookmark;
     }
 
     public void update(String newTitle, String newText, Integer newCategory_id) {

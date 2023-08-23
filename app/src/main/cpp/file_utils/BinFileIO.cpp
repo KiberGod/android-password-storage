@@ -78,7 +78,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;)V");
 
     std::vector<Record> records;
 
@@ -92,8 +92,12 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
         jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
         jobject jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
 
+        jclass booleanClass = env->FindClass("java/lang/Boolean");
+        jmethodID booleanConstructor = env->GetMethodID(booleanClass, "<init>", "(Z)V");
+        jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
+
         // Створення об`єкта Record в Java
-        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory);
+        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark);
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
@@ -101,6 +105,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
         env->DeleteLocalRef(jTitle);
         env->DeleteLocalRef(jText);
         env->DeleteLocalRef(jCategory);
+        env->DeleteLocalRef(jBookmark);
         env->DeleteLocalRef(recordObject);
     }
 
@@ -233,22 +238,31 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
         jfieldID titleField = env->GetFieldID(recordClass, "title", "Ljava/lang/String;");
         jfieldID textField = env->GetFieldID(recordClass, "text", "Ljava/lang/String;");
         jfieldID categoryIdField = env->GetFieldID(recordClass, "category_id", "Ljava/lang/Integer;");
+        jfieldID bookmarkField = env->GetFieldID(recordClass, "bookmark", "Ljava/lang/Boolean;");
 
         jstring title = static_cast<jstring>(env->GetObjectField(recordObj, titleField));
         jstring text = static_cast<jstring>(env->GetObjectField(recordObj, textField));
         jobject category_idObj = env->GetObjectField(recordObj, categoryIdField);
+        jobject bookmarkObj = env->GetObjectField(recordObj, bookmarkField);
 
         const char* titleStr = env->GetStringUTFChars(title, nullptr);
         const char* textStr = env->GetStringUTFChars(text, nullptr);
 
-        jint category_id = 0;
+        jint category_id = Record::NULL_CATEGORY_VALUE;
         if (category_idObj != nullptr) {
             jclass integerClass = env->GetObjectClass(category_idObj);
             jmethodID intValueMethod = env->GetMethodID(integerClass, "intValue", "()I");
             category_id = env->CallIntMethod(category_idObj, intValueMethod);
         }
 
-        Record record{titleStr, textStr, category_id};
+        bool bookmark = Record::NULL_BOOKMARK_VALUE;
+        if (bookmarkObj != nullptr) {
+            jclass booleanClass = env->GetObjectClass(bookmarkObj);
+            jmethodID booleanValueMethod = env->GetMethodID(booleanClass, "booleanValue", "()Z");
+            bookmark = env->CallBooleanMethod(bookmarkObj, booleanValueMethod);
+        }
+
+        Record record{titleStr, textStr, category_id, bookmark};
 
         writeToBinFile(getTestRecordsFilePath(),
                        reinterpret_cast<char*>(&record),

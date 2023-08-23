@@ -12,7 +12,7 @@
 class create_test_records {
 private:
     // Вставка даних
-    static void insert(char* title, char* text, int category_id);
+    static void insert(char* title, char* text, int category_id, bool bookmark);
 
     // Запуск міграцій
     static void runMigrations();
