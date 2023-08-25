@@ -6,28 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.create.CreateCategoryFragment">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="16dp"
-        android:text="THIS IS CREATE category PAGE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="-209dp" />
-
     <EditText
         android:id="@+id/editCreateCategoryName"
         android:layout_width="250dp"
         android:layout_height="47dp"
-        android:layout_marginTop="100dp"
         android:ems="10"
-        android:inputType="text"
         android:hint="Name"
+        android:inputType="text"
         android:textColor="@color/white_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        tools:layout_editor_absoluteY="100dp" />
 
     <Button
         android:id="@+id/saveNewCategoryButton"
@@ -47,10 +37,19 @@
         android:text=""
         android:textColor="#E32626"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveNewCategoryButton"
         app:layout_constraintVertical_bias="0.1" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="144dp"
+        android:text="Test check icons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createCategoryStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

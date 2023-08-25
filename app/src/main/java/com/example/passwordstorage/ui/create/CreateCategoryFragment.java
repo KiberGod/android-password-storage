@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.ui.HomeActivity;
 import com.example.passwordstorage.ui.HomeViewModel;
 
 public class CreateCategoryFragment extends Fragment {
@@ -40,6 +41,7 @@ public class CreateCategoryFragment extends Fragment {
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
 
         setOnClickToSaveButton(view);
+        setOnClickToTest(view);
         return view;
     }
 
@@ -71,5 +73,16 @@ public class CreateCategoryFragment extends Fragment {
         } else {
             textViewStatus.setText("І`мя не може бути порожнім");
         }
+    }
+
+
+    private void setOnClickToTest(View view) {
+        Button button = view.findViewById(R.id.button2);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext());
+            }
+        });
     }
 }

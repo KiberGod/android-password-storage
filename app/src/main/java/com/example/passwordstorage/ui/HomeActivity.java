@@ -3,8 +3,10 @@ package com.example.passwordstorage.ui;
 
 import static com.example.passwordstorage.NativeController.initSecurityCore;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,6 +14,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -20,8 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
@@ -175,7 +182,7 @@ public class HomeActivity extends AppCompatActivity {
 
         vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        vectorImageView.setColorFilter(ContextCompat.getColor(context, R.color.gray_text));
+        //vectorImageView.setColorFilter(ContextCompat.getColor(context, R.color.gray_text));
 
 
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
@@ -193,5 +200,66 @@ public class HomeActivity extends AppCompatActivity {
         rootLayout.addView(button);
 
         return button;
+    }
+
+    // Функція відмальовує вспливаюче вікно вибору іконки
+    public void showIconSelectionDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_icon_selection, null);
+        builder.setView(dialogView);
+
+        GridLayout rootLayout = dialogView.findViewById(R.id.iconsScrollArea);
+
+        Resources res = context.getResources();
+        String[] iconArray = getResources().getStringArray(R.array.vector_icons_array);
+
+        int numColumns = 4;
+        int numRows = (int) Math.ceil((float) iconArray.length / numColumns);
+
+        rootLayout.setRowCount(numRows);
+
+        for (int i = 0; i < iconArray.length; i++) {
+
+            int iconResourceId = getResources().getIdentifier(iconArray[i], "drawable", context.getPackageName());
+            //System.out.println(iconResourceId);
+
+            ImageView imageView = getResizeIcon(context, iconResourceId);
+
+            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+            layoutParams.setMargins(0, 15, 0, 15);
+            layoutParams.columnSpec = GridLayout.spec(i % numColumns, 1f);
+            imageView.setLayoutParams(layoutParams);
+
+            rootLayout.addView(imageView);
+        }
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        Button button = dialogView.findViewById(R.id.cancelEditIconButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    // Функція зменшує векторне зображення, задане ідентифікатором
+    public ImageView getResizeIcon(Context context, int iconResourceId) {
+        ImageView imageView = new ImageView(context);
+        Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), iconResourceId, null);
+
+        int newWidth = vectorDrawable.getIntrinsicWidth() / 2;
+        int newHeight = vectorDrawable.getIntrinsicHeight() / 2;
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(resizedBitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+
+        imageView.setImageBitmap(resizedBitmap);
+        return imageView;
     }
 }
