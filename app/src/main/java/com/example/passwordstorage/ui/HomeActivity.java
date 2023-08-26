@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -204,6 +205,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Функція відмальовує вспливаюче вікно вибору іконки
     public void showIconSelectionDialog(Context context) {
+        hideKeyboard();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_icon_selection, null);
@@ -240,9 +242,7 @@ public class HomeActivity extends AppCompatActivity {
         Button button = dialogView.findViewById(R.id.cancelEditIconButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
+            public void onClick(View view) { alertDialog.dismiss(); }
         });
     }
 
@@ -261,5 +261,14 @@ public class HomeActivity extends AppCompatActivity {
 
         imageView.setImageBitmap(resizedBitmap);
         return imageView;
+    }
+
+    // Функція приховує клавіатуру вводу, якщо та відкрита
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
