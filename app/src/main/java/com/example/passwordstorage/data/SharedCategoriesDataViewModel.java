@@ -104,9 +104,10 @@ public class SharedCategoriesDataViewModel extends ViewModel {
      *  Перевірка нової категорії на унікальність (за полем імені) з використанням параметру для ігнорування
      *  певного рядка під час перевірки
      */
-    public boolean checkCategoryNameUnique(String name, String strIgnore) {
+    public boolean checkCategoryNameUnique(String name, int index) {
+        Category selfCategory = categories.get(index);
         for (Category category : categories) {
-            if (category.getName().equals(name) && !category.getName().equals(strIgnore)) {
+            if (!category.equals(selfCategory) && category.getName().equals(name)) {
                 return false;
             }
         }

@@ -174,7 +174,7 @@ public class EditRecordFragment extends Fragment {
         EditText titleInput = view.findViewById(R.id.editEditRecordTitle);
         String recordTitle = titleInput.getText().toString();
         if (recordTitle.length() != 0) {
-            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordTitle)) {
+            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordIndex)) {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());

@@ -122,7 +122,7 @@ public class EditCategoryFragment extends Fragment {
         EditText nameInput = view.findViewById(R.id.editEditCategoryName);
         String categoryName = nameInput.getText().toString();
         if (categoryName.length() != 0) {
-            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryName)) {
+            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryIndex)) {
                 textViewStatus.setText("");
                 sharedCategoriesDataViewModel.editCategory(categoryIndex, categoryName, tempIconId);
                 Toast.makeText(getActivity(), "Змінено категорію " + categoryName, Toast.LENGTH_SHORT).show();

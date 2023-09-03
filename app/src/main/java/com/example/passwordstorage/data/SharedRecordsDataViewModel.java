@@ -5,6 +5,7 @@ import static com.example.passwordstorage.NativeController.saveRecords;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.passwordstorage.model.Category;
 import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
@@ -61,16 +62,22 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Перевірка нового запису на унікальність (за полем заголовку)
     public boolean checkRecordTitleUnique(String title) {
-        return checkRecordTitleUnique(title, "");
+        for (Record record : records) {
+            if (record.getTitle().equals(title)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*
      *  Перевірка нового запису на унікальність (за полем заголовку) з використанням параметру для ігнорування
      *  певного рядка під час перевірки
      */
-    public boolean checkRecordTitleUnique(String title, String strIgnore) {
+    public boolean checkRecordTitleUnique(String title, int index) {
+        Record selfRecord = records.get(index);
         for (Record record : records) {
-            if (record.getTitle().equals(title) && !record.getTitle().equals(strIgnore)) {
+            if (!record.equals(selfRecord) && record.getTitle().equals(title)) {
                 return false;
             }
         }
