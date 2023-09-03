@@ -34,7 +34,7 @@ public class EditCategoryFragment extends Fragment {
 
     private int categoryIndex;
 
-    private int tempIconId = -1;
+    private int tempIconId;
 
     private TextView textViewStatus;
 
@@ -71,6 +71,8 @@ public class EditCategoryFragment extends Fragment {
         textViewStatus = view.findViewById(R.id.editCategoryStatus);
 
         homeViewModel.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
+
+        tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex);
 
         printCategoryData(view);
         setOnClickToCancelEditCategoryButton(view);
@@ -120,7 +122,7 @@ public class EditCategoryFragment extends Fragment {
         EditText nameInput = view.findViewById(R.id.editEditCategoryName);
         String categoryName = nameInput.getText().toString();
         if (categoryName.length() != 0) {
-            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
+            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryName)) {
                 textViewStatus.setText("");
                 sharedCategoriesDataViewModel.editCategory(categoryIndex, categoryName, tempIconId);
                 Toast.makeText(getActivity(), "Змінено категорію " + categoryName, Toast.LENGTH_SHORT).show();
@@ -160,10 +162,10 @@ public class EditCategoryFragment extends Fragment {
 
     // Оброка видалення запису
     private void deleteCategory() {
-        sharedCategoriesDataViewModel.deleteCategory(categoryIndex);
         sharedRecordsDataViewModel.detachCategory(
                 sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
         );
+        sharedCategoriesDataViewModel.deleteCategory(categoryIndex);
         ((HomeActivity) requireActivity()).setStorageFragment();
     }
 

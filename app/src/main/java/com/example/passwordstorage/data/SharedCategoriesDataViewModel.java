@@ -6,6 +6,7 @@ import static com.example.passwordstorage.NativeController.saveCategories;
 import androidx.lifecycle.ViewModel;
 
 import com.example.passwordstorage.model.Category;
+import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
 
@@ -93,6 +94,19 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     public boolean checkCategoryNameUnique(String name) {
         for (Category category : categories) {
             if (category.getName().equals(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*
+     *  Перевірка нової категорії на унікальність (за полем імені) з використанням параметру для ігнорування
+     *  певного рядка під час перевірки
+     */
+    public boolean checkCategoryNameUnique(String name, String strIgnore) {
+        for (Category category : categories) {
+            if (category.getName().equals(name) && !category.getName().equals(strIgnore)) {
                 return false;
             }
         }

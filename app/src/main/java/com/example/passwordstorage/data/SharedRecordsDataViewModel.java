@@ -68,7 +68,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
      *  Перевірка нового запису на унікальність (за полем заголовку) з використанням параметру для ігнорування
      *  певного рядка під час перевірки
      */
-
     public boolean checkRecordTitleUnique(String title, String strIgnore) {
         for (Record record : records) {
             if (record.getTitle().equals(title) && !record.getTitle().equals(strIgnore)) {
