@@ -55,6 +55,11 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         return categories.get(index).getName();
     }
 
+    // Повертає id іконки категорії за індексом
+    public int getCategoryIconIdByIndex(int index) {
+        return categories.get(index).getIconId();
+    }
+
     // Повертає id по індексу
     public Integer getCategoryIdByIndex(int index) {return categories.get(index).getId(); }
 
@@ -95,15 +100,15 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     }
 
     // Створення новогої категорії да додавання її до списку
-    public void addCategory(String name) {
-        Category category = new Category(generateNewId(), name);
+    public void addCategory(String name, int icon_id) {
+        Category category = new Category(generateNewId(), name, icon_id);
         categories.add(category);
         saveCategories(categories);
     }
 
     // Редагування категорії
-    public void editCategory(int index, String name) {
-        categories.get(index).update(name);
+    public void editCategory(int index, String name, int icon_id) {
+        categories.get(index).update(name, icon_id);
         saveCategories(categories);
     }
 
@@ -119,6 +124,15 @@ public class SharedCategoriesDataViewModel extends ViewModel {
             return categories.get(categories.size() - 1).getId() +1;
         } else {
             return 0;
+        }
+    }
+
+    // Перевірка на наявність іконки категорії
+    public boolean isEmptyIconId(int index) {
+        if (categories.get(index).getIconId() == Category.NULL_ICON_ID_VALUE) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
@@ -71,6 +72,12 @@ public class ShowCategoryFragment extends Fragment {
                                 sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
                         )
         );
+
+        if (!sharedCategoriesDataViewModel.isEmptyIconId(categoryIndex))
+        {
+            ImageView categoryIcon = view.findViewById(R.id.categoryIcon);
+            categoryIcon.setImageResource(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex));
+        }
     }
 
     // Функція встановлює подію переходу на сторінку редагувння категорії по натисненню кнопки

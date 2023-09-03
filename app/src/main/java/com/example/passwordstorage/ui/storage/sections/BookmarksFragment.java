@@ -40,7 +40,8 @@ public class BookmarksFragment extends Fragment {
                         view,
                         requireContext(),
                         sharedRecordsDataViewModel.getRecordTitleByIndex(i),
-                        R.id.bookmarksScrollArea
+                        R.id.bookmarksScrollArea,
+                        -1 // тимчасово
                 );
                 final int index = i;
                 button.setOnClickListener(new View.OnClickListener() {

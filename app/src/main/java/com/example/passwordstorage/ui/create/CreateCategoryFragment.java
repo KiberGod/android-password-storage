@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ public class CreateCategoryFragment extends Fragment {
 
     private TextView textViewStatus;
 
+    private int tempIconId = -1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class CreateCategoryFragment extends Fragment {
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
 
         setOnClickToSaveButton(view);
-        setOnClickToTest(view);
+        setOnClickToIconSelectWindow(view);
         return view;
     }
 
@@ -64,7 +67,7 @@ public class CreateCategoryFragment extends Fragment {
         if (categoryName.length() != 0) {
             if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
                 textViewStatus.setText("");
-                sharedCategoriesDataViewModel.addCategory(categoryName);
+                sharedCategoriesDataViewModel.addCategory(categoryName, tempIconId);
                 Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -75,13 +78,17 @@ public class CreateCategoryFragment extends Fragment {
         }
     }
 
+    // Встановлення обробника події натиснення на іконку
+    private void setOnClickToIconSelectWindow(View view) {
+        ImageView imageView = view.findViewById(R.id.createCategoryIcon);
 
-    private void setOnClickToTest(View view) {
-        Button button = view.findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext());
+                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                    tempIconId = iconResourceId;
+                    imageView.setImageResource(iconResourceId);
+                });
             }
         });
     }

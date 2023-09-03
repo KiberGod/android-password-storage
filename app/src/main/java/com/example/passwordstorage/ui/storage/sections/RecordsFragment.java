@@ -46,7 +46,8 @@ public class RecordsFragment extends Fragment {
                     view,
                     requireContext(),
                     sharedRecordsDataViewModel.getRecordTitleByIndex(i),
-                    R.id.recordsScrollArea
+                    R.id.recordsScrollArea,
+                    -1 // тимчасово
             );
             final int index = i;
             button.setOnClickListener(new View.OnClickListener() {

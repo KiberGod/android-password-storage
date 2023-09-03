@@ -19,7 +19,7 @@ static std::string FILES_PATH;
 static const std::string TEST_RECORDS_FILE = "/example4.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories_v1.bin";
+static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 
 // Повертає і`мя файла тестових записів
 std::string getTestRecordsFilePath();

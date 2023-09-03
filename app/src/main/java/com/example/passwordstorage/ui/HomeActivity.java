@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
@@ -44,6 +43,8 @@ import com.example.passwordstorage.ui.storage.sections.EditRecordFragment;
 import com.example.passwordstorage.ui.storage.sections.ShowCategoryFragment;
 import com.example.passwordstorage.ui.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.function.Consumer;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -166,7 +167,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція додає кнопку запису або категорії
-    public Button drawButton(View view, Context context, String title, int id_scrollArea) {
+    public Button drawButton(View view, Context context, String title, int id_scrollArea, int icon_id) {
         Button button = new Button(context);
         button.setText(title);
         button.setTextColor(ContextCompat.getColor(context, R.color.gray_text));
@@ -177,9 +178,14 @@ public class HomeActivity extends AppCompatActivity {
         ViewCompat.setBackground(button, roundedRectangle);
 
 
-        ImageView vectorImageView = new ImageView(context);
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.vector_template_image);
-        vectorImageView.setImageDrawable(vectorDrawable);
+        //ImageView vectorImageView = new ImageView(context);
+        if (icon_id == -1 ) {
+            icon_id = R.drawable.vector_template_image;
+        }
+        //Drawable vectorDrawable = ContextCompat.getDrawable(context, icon_id);
+        //vectorImageView.setImageDrawable(vectorDrawable);
+
+        ImageView vectorImageView = getResizeIcon(context, icon_id);
 
         vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -204,7 +210,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція відмальовує вспливаюче вікно вибору іконки
-    public void showIconSelectionDialog(Context context) {
+    public void showIconSelectionDialog(Context context, Consumer<Integer> func) {
         hideKeyboard();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -221,10 +227,12 @@ public class HomeActivity extends AppCompatActivity {
 
         rootLayout.setRowCount(numRows);
 
+        AlertDialog alertDialog = builder.create();
+
         for (int i = 0; i < iconArray.length; i++) {
 
             int iconResourceId = getResources().getIdentifier(iconArray[i], "drawable", context.getPackageName());
-            //System.out.println(iconResourceId);
+            System.out.println(iconResourceId);
 
             ImageView imageView = getResizeIcon(context, iconResourceId);
 
@@ -233,10 +241,19 @@ public class HomeActivity extends AppCompatActivity {
             layoutParams.columnSpec = GridLayout.spec(i % numColumns, 1f);
             imageView.setLayoutParams(layoutParams);
 
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (func != null) {
+                        func.accept(iconResourceId);
+                    }
+                    alertDialog.dismiss();
+                }
+            });
+
             rootLayout.addView(imageView);
         }
 
-        AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
         Button button = dialogView.findViewById(R.id.cancelEditIconButton);

@@ -127,7 +127,7 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;)V");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;I)V");
 
     std::vector<Category> categories;
 
@@ -142,7 +142,7 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
         jstring jName = env->NewStringUTF(category.getName());
 
         // Створення об`єкта Category в Java
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName);
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, category.getIconId());
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
@@ -193,9 +193,11 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
 
         jfieldID idField = env->GetFieldID(categoryClass, "id", "Ljava/lang/Integer;");
         jfieldID nameField = env->GetFieldID(categoryClass, "name", "Ljava/lang/String;");
+        jfieldID iconIdField = env->GetFieldID(categoryClass, "icon_id", "I");
 
         jobject idObj = env->GetObjectField(categoryObj, idField);
         jstring name = static_cast<jstring>(env->GetObjectField(categoryObj, nameField));
+        jint icon_id = env->GetIntField(categoryObj, iconIdField);
 
         const char* nameStr = env->GetStringUTFChars(name, nullptr);
 
@@ -206,7 +208,7 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
             id = env->CallIntMethod(idObj, intValueMethod);
         }
 
-        Category category{id, nameStr};
+        Category category{id, nameStr, icon_id};
 
         writeToBinFile(getCategoriesFilePath(),
                        reinterpret_cast<char*>(&category),

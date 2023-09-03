@@ -39,7 +39,8 @@ public class CategoriesFragment extends Fragment {
                     view,
                     requireContext(),
                     sharedCategoriesDataViewModel.getCategoryNameByIndex(i),
-                    R.id.categoriesScrollArea
+                    R.id.categoriesScrollArea,
+                    sharedCategoriesDataViewModel.getCategoryIconIdByIndex(i)
             );
             final int index = i;
             button.setOnClickListener(new View.OnClickListener() {

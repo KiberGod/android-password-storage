@@ -36,4 +36,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryRecordCounter" />
+
+    <ImageView
+        android:id="@+id/categoryIcon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/vector_template_image"
+        android:background="@color/gray_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openEditCategoryPageButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

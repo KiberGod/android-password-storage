@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,8 @@ public class EditCategoryFragment extends Fragment {
     private static final String CATEGORY_INDEX = "category_index";
 
     private int categoryIndex;
+
+    private int tempIconId = -1;
 
     private TextView textViewStatus;
 
@@ -73,6 +76,7 @@ public class EditCategoryFragment extends Fragment {
         setOnClickToCancelEditCategoryButton(view);
         setOnClickToSaveButton(view);
         setOnClickToDeleteButton(view);
+        setOnClickToIconSelectWindow(view);
 
         return view;
     }
@@ -81,6 +85,12 @@ public class EditCategoryFragment extends Fragment {
     private void printCategoryData(View view) {
         TextView categoryName = view.findViewById(R.id.editEditCategoryName);
         categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameByIndex(categoryIndex));
+
+        if (!sharedCategoriesDataViewModel.isEmptyIconId(categoryIndex))
+        {
+            ImageView categoryIcon = view.findViewById(R.id.editCategoryIcon);
+            categoryIcon.setImageResource(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex));
+        }
     }
 
     // Функція встановлює подію переходу на попередню сторінку (з переглядом категорії)
@@ -112,7 +122,7 @@ public class EditCategoryFragment extends Fragment {
         if (categoryName.length() != 0) {
             if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
                 textViewStatus.setText("");
-                sharedCategoriesDataViewModel.editCategory(categoryIndex, categoryName);
+                sharedCategoriesDataViewModel.editCategory(categoryIndex, categoryName, tempIconId);
                 Toast.makeText(getActivity(), "Змінено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -155,5 +165,20 @@ public class EditCategoryFragment extends Fragment {
                 sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
         );
         ((HomeActivity) requireActivity()).setStorageFragment();
+    }
+
+    // Встановлення обробника події натиснення на іконку
+    private void setOnClickToIconSelectWindow(View view) {
+        ImageView imageView = view.findViewById(R.id.editCategoryIcon);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                    tempIconId = iconResourceId;
+                    imageView.setImageResource(iconResourceId);
+                });
+            }
+        });
     }
 }

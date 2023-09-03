@@ -65,4 +65,17 @@
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cancelEditCategoryButton" />
+
+    <ImageView
+        android:id="@+id/editCategoryIcon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="44dp"
+        android:background="@color/gray_text"
+        android:src="@drawable/vector_template_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteCategoryButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
