@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.model.Category;
+import com.example.passwordstorage.ui.HomeActivity;
 import com.example.passwordstorage.ui.HomeViewModel;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class CreateRecordFragment extends Fragment {
     private HomeViewModel homeViewModel;
 
     private TextView textViewStatus;
+
+    private int tempIconId = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +58,7 @@ public class CreateRecordFragment extends Fragment {
         setCategoriesToDropdownButton(view);
 
         setOnClickToSaveButton(view);
+        setOnClickToIconSelectWindow(view);
         return view;
     }
 
@@ -110,7 +115,7 @@ public class CreateRecordFragment extends Fragment {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
-                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), category_id);
+                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), category_id, tempIconId);
                 Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -119,5 +124,20 @@ public class CreateRecordFragment extends Fragment {
         } else {
             textViewStatus.setText("Заголовок запису не може бути порожнім");
         }
+    }
+
+    // Встановлення обробника події натиснення на іконку
+    private void setOnClickToIconSelectWindow(View view) {
+        ImageView imageView = view.findViewById(R.id.createRecordIcon);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                    tempIconId = iconResourceId;
+                    imageView.setImageResource(iconResourceId);
+                });
+            }
+        });
     }
 }

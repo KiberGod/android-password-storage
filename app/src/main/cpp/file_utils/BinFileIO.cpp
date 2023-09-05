@@ -78,7 +78,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
 
     std::vector<Record> records;
 
@@ -97,7 +97,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
         jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
 
         // Створення об`єкта Record в Java
-        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark);
+        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, record.getIconId());
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
@@ -241,11 +241,13 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
         jfieldID textField = env->GetFieldID(recordClass, "text", "Ljava/lang/String;");
         jfieldID categoryIdField = env->GetFieldID(recordClass, "category_id", "Ljava/lang/Integer;");
         jfieldID bookmarkField = env->GetFieldID(recordClass, "bookmark", "Ljava/lang/Boolean;");
+        jfieldID iconIdField = env->GetFieldID(recordClass, "icon_id", "I");
 
         jstring title = static_cast<jstring>(env->GetObjectField(recordObj, titleField));
         jstring text = static_cast<jstring>(env->GetObjectField(recordObj, textField));
         jobject category_idObj = env->GetObjectField(recordObj, categoryIdField);
         jobject bookmarkObj = env->GetObjectField(recordObj, bookmarkField);
+        jint icon_id = env->GetIntField(recordObj, iconIdField);
 
         const char* titleStr = env->GetStringUTFChars(title, nullptr);
         const char* textStr = env->GetStringUTFChars(text, nullptr);
@@ -264,7 +266,7 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
             bookmark = env->CallBooleanMethod(bookmarkObj, booleanValueMethod);
         }
 
-        Record record{titleStr, textStr, category_id, bookmark};
+        Record record{titleStr, textStr, category_id, bookmark, icon_id};
 
         writeToBinFile(getTestRecordsFilePath(),
                        reinterpret_cast<char*>(&record),

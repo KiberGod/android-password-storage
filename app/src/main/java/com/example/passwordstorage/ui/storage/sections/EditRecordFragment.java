@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class EditRecordFragment extends Fragment {
     private static final String RECORD_INDEX = "record_index";
 
     private int recordIndex;
+
+    private int tempIconId;
 
     private TextView textViewStatus;
 
@@ -77,11 +80,14 @@ public class EditRecordFragment extends Fragment {
 
         textViewStatus = view.findViewById(R.id.editRecordStatus);
 
+        tempIconId = sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex);
+
         printRecordData(view);
         setOnClickToCancelEditRecordButton(view);
         setCategoriesToDropdownButton(view);
         setOnClickToSaveButton(view);
         setOnClickToDeleteButton(view);
+        setOnClickToIconSelectWindow(view);
 
         return view;
     }
@@ -90,6 +96,12 @@ public class EditRecordFragment extends Fragment {
     private void printRecordData(View view) {
         setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
         setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+
+        if (!sharedRecordsDataViewModel.isEmptyIconId(recordIndex))
+        {
+            ImageView recordIcon = view.findViewById(R.id.editRecordIcon);
+            recordIcon.setImageResource(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex));
+        }
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -178,7 +190,7 @@ public class EditRecordFragment extends Fragment {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
-                sharedRecordsDataViewModel.editRecord(recordIndex, recordTitle, textInput.getText().toString(), category_id);
+                sharedRecordsDataViewModel.editRecord(recordIndex, recordTitle, textInput.getText().toString(), category_id, tempIconId);
                 Toast.makeText(getActivity(), "Запис змінено " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -207,5 +219,20 @@ public class EditRecordFragment extends Fragment {
     private void deleteRecord() {
         sharedRecordsDataViewModel.deleteRecord(recordIndex);
         ((HomeActivity) requireActivity()).setStorageFragment();
+    }
+
+    // Встановлення обробника події натиснення на іконку
+    private void setOnClickToIconSelectWindow(View view) {
+        ImageView imageView = view.findViewById(R.id.editRecordIcon);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                    tempIconId = iconResourceId;
+                    imageView.setImageResource(iconResourceId);
+                });
+            }
+        });
     }
 }

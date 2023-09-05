@@ -85,15 +85,15 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Створення нового запису да додавання його до списку
-    public void addRecord(String title, String text,  Integer category_id) {
-        Record record = new Record(title, text, category_id);
+    public void addRecord(String title, String text,  Integer category_id, int icon_id) {
+        Record record = new Record(title, text, category_id, icon_id);
         records.add(record);
         saveRecords(records);
     }
 
     // Редагування запису
-    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id) {
-        records.get(index).update(newTitle, newText, newCategory_id);
+    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, int newIcon_id) {
+        records.get(index).update(newTitle, newText, newCategory_id, newIcon_id);
         saveRecords(records);
     }
 
@@ -127,5 +127,19 @@ public class SharedRecordsDataViewModel extends ViewModel {
     public void editBookmarkInRecordByIndex(int index) {
         records.get(index).inversionBookmark();
         saveRecords(records);
+    }
+
+    // Повертає id іконки запису за індексом
+    public int getRecordIconIdByIndex(int index) {
+        return records.get(index).getIconId();
+    }
+
+    // Перевірка на наявність іконки запису
+    public boolean isEmptyIconId(int index) {
+        if (records.get(index).getIconId() == Record.NULL_ICON_ID_VALUE) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

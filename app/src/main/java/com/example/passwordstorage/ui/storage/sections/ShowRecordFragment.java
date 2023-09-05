@@ -75,6 +75,12 @@ public class ShowRecordFragment extends Fragment {
 
         bookmarkButton = view.findViewById(R.id.bookmarkButton);
         resetBookmarkButtonColor();
+
+        if (!sharedRecordsDataViewModel.isEmptyIconId(recordIndex))
+        {
+            ImageView recordIcon = view.findViewById(R.id.recordIcon);
+            recordIcon.setImageResource(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex));
+        }
     }
 
     // Функція встановлення тексту до UI-компонентів

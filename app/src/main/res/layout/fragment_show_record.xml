@@ -57,4 +57,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
 
+    <ImageView
+        android:id="@+id/recordIcon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="52dp"
+        android:background="@color/gray_text"
+        android:src="@drawable/vector_template_image"
+        app:layout_constraintEnd_toStartOf="@+id/bookmarkButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

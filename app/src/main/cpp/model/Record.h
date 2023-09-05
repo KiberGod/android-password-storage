@@ -26,19 +26,22 @@ private:
      *  True - запис додано до закладок
      *  false - запис не додано до закладок
      */
-     bool bookmark;
+    bool bookmark;
+    int icon_id;
 
 public:
+    static const int NULL_ICON_ID_VALUE = -1;
     static const int NULL_CATEGORY_VALUE = -1;
     static const bool NULL_BOOKMARK_VALUE = false;
 
     Record();
-    Record(const char* title, const char* text, const int category_id, const bool bookmark);
+    Record(const char* title, const char* text, const int category_id, const bool bookmark, const int icon_id);
     void printLog();
     const char* getTitle() const;
     const char* getText() const;
     const int getCategoryId() const;
     const bool getBookmark() const;
+    const int getIconId() const;
 };
 
 
