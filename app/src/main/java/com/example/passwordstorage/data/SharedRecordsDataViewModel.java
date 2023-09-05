@@ -5,7 +5,6 @@ import static com.example.passwordstorage.NativeController.saveRecords;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.passwordstorage.model.Category;
 import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
@@ -137,6 +136,18 @@ public class SharedRecordsDataViewModel extends ViewModel {
     // Перевірка на наявність іконки запису
     public boolean isEmptyIconId(int index) {
         if (records.get(index).getIconId() == Record.NULL_ICON_ID_VALUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /* Перевіряє, чи треба заміняти порожню іконку запису іконкою категорії (якщо така є)
+     * true - іконка повинна бути замінена
+     * false - іконку заміняти не треба або нічим
+     */
+    public boolean needSetCategoryIconByIndex(int index) {
+        if (isEmptyIconId(index) && !records.get(index).getCategoryId().equals(Record.NULL_CATEGORY_VALUE)) {
             return true;
         } else {
             return false;

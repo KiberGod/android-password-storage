@@ -150,4 +150,9 @@ public class SharedCategoriesDataViewModel extends ViewModel {
             return false;
         }
     }
+
+    // Повертає id іконки за id категорії
+    public int getCategoryIconIdById(int id) {
+        return getCategoryById(id).getIconId();
+    }
 }
