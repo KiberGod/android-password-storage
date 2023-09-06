@@ -309,6 +309,8 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject) {
+    dropFile(getSettingsFilePath());
+
     jclass settingsClass = env->GetObjectClass(settingsObject);
 
     jfieldID activityProtectionField = env->GetFieldID(settingsClass, "activityProtection", "Z");

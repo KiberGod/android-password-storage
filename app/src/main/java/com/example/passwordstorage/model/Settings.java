@@ -24,4 +24,8 @@ public class Settings {
     }
 
     public boolean getActivityProtection() { return activityProtection; }
+
+    public void resetActivityProtection() {
+        activityProtection = !activityProtection;
+    }
 }

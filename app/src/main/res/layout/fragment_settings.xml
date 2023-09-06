@@ -8,6 +8,7 @@
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="48dp"
@@ -17,5 +18,20 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/activityProtectionFlag"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/gray_text"
+        android:text="Відкривати сторінку з калькулятором у разі втрати фокусу"
+        android:textSize="18dp"
+        android:thumbTint="@drawable/colors_settings_switch_thumb"
+        android:trackTint="@drawable/colors_settings_switch_track"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,4 +15,15 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public void setSettings() {
         settings = getSettings();
     }
+
+    // Повертає значення налаштування activityProtection
+    public boolean getActivityProtection() {
+        return settings.getActivityProtection();
+    }
+
+    // Переключення опції activityProtection
+    public void editActivityProtection() {
+        settings.resetActivityProtection();
+        saveSettings(settings);
+    }
 }
