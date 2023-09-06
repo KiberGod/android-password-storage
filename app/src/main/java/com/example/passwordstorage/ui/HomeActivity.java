@@ -39,6 +39,7 @@ import com.example.passwordstorage.databinding.ActivityHomeBinding;
 import com.example.passwordstorage.ui.create.CreateCategoryFragment;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.create.CreateRecordFragment;
+import com.example.passwordstorage.ui.settings.SettingsFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
 import com.example.passwordstorage.ui.storage.sections.EditCategoryFragment;
 import com.example.passwordstorage.ui.storage.sections.EditRecordFragment;
@@ -93,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
                 setFragment(new StorageFragment());
             } else if (item.getItemId() == R.id.create) {
                 setFragment(new CreateFragment());
+            } else if (item.getItemId() == R.id.settings) {
+                setFragment(new SettingsFragment());
             }
             return true;
         });

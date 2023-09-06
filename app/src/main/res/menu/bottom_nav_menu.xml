@@ -7,4 +7,7 @@
     <item android:title="Додати"
         android:icon="@drawable/vector__add_circle_24"
         android:id="@+id/create" />
+    <item android:title="Налаштування"
+        android:icon="@drawable/vector__settings_24"
+        android:id="@+id/settings" />
 </menu>
