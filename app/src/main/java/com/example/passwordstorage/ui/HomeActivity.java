@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,6 +31,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.passwordstorage.MainActivity;
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
@@ -73,6 +75,15 @@ public class HomeActivity extends AppCompatActivity {
 
         sharedCategoriesDataViewModel.setCategories();
         sharedRecordsDataViewModel.setRecords();
+    }
+
+    // Повертає користувача до калькулятора у разі втрати фокусу програмою
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // Функція встановлює прослуховування натискань на нижнє меню навігації
