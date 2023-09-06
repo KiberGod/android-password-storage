@@ -8,6 +8,7 @@
 #include <android/log.h>
 #include "BinFileIO.h"
 #include "../crypto_core.h"
+#include "../model/Settings.h"
 #include "../model/Category.h"
 #include "../model/Record.h"
 
@@ -15,6 +16,8 @@
 std::string getTestRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
 
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
+
+std::string getSettingsFilePath() { return FILES_PATH + SETTINGS_FILE; }
 
 void setFilesPath(JNIEnv* env, jobject context) {
     jclass contextClass = env->GetObjectClass(context);
@@ -35,7 +38,7 @@ std::string getFilesPath() {
 }
 
 /*
- * Дана поліморфна функція завантажує дані з файлів, працючи з такими типами даних, як Record та Category.
+ * Дана поліморфна функція завантажує дані з файлів, працючи з такими типами даних, як Record, Category та Settings.
  *
  * Слід зазначити, що вона актуальна лише доти, доки файли матимуть спільний алгоритм кодування.
  * У іншому випадку слід модифікувати рядок з декодуванням:
@@ -152,6 +155,30 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
     }
 
     return arrayList;
+}
+
+/*
+ * Функція передає об`єкт Settings з данного С++ модуля у Java-код
+ *
+ * return Settings obj (C++) --> Settings obj (Java)
+ */
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
+    jclass settingsClass = env->FindClass("com/example/passwordstorage/model/Settings");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(Z)V");
+
+    std::vector<Settings> settings;
+
+    if (loadDataFromBinFile(getFilesPath() + SETTINGS_FILE, settings).size() == 0) {
+        Settings defaultSettings;
+        settings.push_back(defaultSettings);
+    }
+
+    bool activityProtection = settings[0].getActivityProtection();
+
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection);
+
+    return settingsObject;
 }
 
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
@@ -278,4 +305,23 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
         env->ReleaseStringUTFChars(text, textStr);
         env->DeleteLocalRef(recordObj);
     }
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject) {
+    jclass settingsClass = env->GetObjectClass(settingsObject);
+
+    jfieldID activityProtectionField = env->GetFieldID(settingsClass, "activityProtection", "Z");
+
+    jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
+
+    Settings settings(activityProtection);
+
+    writeToBinFile(getSettingsFilePath(),
+                   reinterpret_cast<char*>(&settings),
+                   sizeof(settings),
+                   sizeof(Settings)
+    );
+
+    env->DeleteLocalRef(settingsObject);
 }

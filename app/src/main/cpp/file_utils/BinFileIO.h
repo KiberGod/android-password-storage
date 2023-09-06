@@ -21,11 +21,17 @@ static const std::string TEST_RECORDS_FILE = "/example5.bin";
 // Файл категорій
 static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 
+// Файл налаштуваннь
+static const std::string SETTINGS_FILE = "/settings_v2.bin";
+
 // Повертає і`мя файла тестових записів
 std::string getTestRecordsFilePath();
 
 // Повертає і`мя файла категорій
 std::string getCategoriesFilePath();
+
+// Повертає і`мя файла налаштуваннь
+std::string getSettingsFilePath();
 
 // Функція встановлює шлях до файлів програми
 void setFilesPath(JNIEnv* env, jobject context);
@@ -45,6 +51,10 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
 
+// Функція передає об`єкт Settings з данного С++ модуля у Java-код
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass);
+
 // Функція запису змін до бінарного файла
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
 
@@ -58,5 +68,9 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
 // Отримання нових даних записів з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList);
+
+// Отримання нових даних налаштувань з java, які необхідно внести у файл
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H

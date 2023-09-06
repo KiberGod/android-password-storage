@@ -22,6 +22,7 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
+        model/Settings.cpp
         model/Category.cpp
         model/Record.cpp
         crypto_core.cpp

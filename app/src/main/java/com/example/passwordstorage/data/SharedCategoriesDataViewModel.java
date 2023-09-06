@@ -6,7 +6,6 @@ import static com.example.passwordstorage.NativeController.saveCategories;
 import androidx.lifecycle.ViewModel;
 
 import com.example.passwordstorage.model.Category;
-import com.example.passwordstorage.model.Record;
 
 import java.util.ArrayList;
 
