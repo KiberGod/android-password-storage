@@ -22,7 +22,7 @@ static const std::string TEST_RECORDS_FILE = "/example5.bin";
 static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings_v2.bin";
+static const std::string SETTINGS_FILE = "/settings_v3.bin";
 
 // Повертає і`мя файла тестових записів
 std::string getTestRecordsFilePath();

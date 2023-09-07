@@ -1,9 +1,11 @@
 package com.example.passwordstorage;
 
 import static com.example.passwordstorage.NativeController.getKey;
+import static com.example.passwordstorage.NativeController.initSecurityCore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.ui.HomeActivity;
 
 
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private final int MAX_PASSWORD_LEN = 13;
     private String password = "";
 
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Блокування переключення на темну тему
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        // Підключення основного С++ ядра
+        initSecurityCore(this);
+
+        sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
+        sharedSettingsDataViewModel.setSettings();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sharedSettingsDataViewModel.setSettings();
     }
 
     /*
@@ -47,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
        if (password.length() == MAX_PASSWORD_LEN) {
            password = "";
        } else if (password.equals(getKey()) == true) {
+           if (sharedSettingsDataViewModel.getInputPassClearing()) {
+               dataReset();
+           }
            Intent homePage = new Intent(MainActivity.this, HomeActivity.class);
            startActivity(homePage);
        }

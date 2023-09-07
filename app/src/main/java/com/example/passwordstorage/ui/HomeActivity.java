@@ -1,8 +1,6 @@
 package com.example.passwordstorage.ui;
 
 
-import static com.example.passwordstorage.NativeController.initSecurityCore;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -73,9 +71,6 @@ public class HomeActivity extends AppCompatActivity {
         setSelectedFromBottomNavBar();
 
         hideHintForBottomNavMenu();
-
-        // Підключення основного С++ ядра
-        initSecurityCore(this);
 
         sharedSettingsDataViewModel.setSettings();
         sharedCategoriesDataViewModel.setCategories();

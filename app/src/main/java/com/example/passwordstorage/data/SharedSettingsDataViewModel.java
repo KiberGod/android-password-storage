@@ -21,9 +21,20 @@ public class SharedSettingsDataViewModel extends ViewModel {
         return settings.getActivityProtection();
     }
 
+    // Повертає значення налаштування inputPassClearing
+    public boolean getInputPassClearing() {
+        return settings.getInputPassClearing();
+    }
+
     // Переключення опції activityProtection
     public void editActivityProtection() {
         settings.resetActivityProtection();
+        saveSettings(settings);
+    }
+
+    // Переключення опції inputPassClearing
+    public void editInputPassClearing() {
+        settings.resetInputPassClearing();
         saveSettings(settings);
     }
 }

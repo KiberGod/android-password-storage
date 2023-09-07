@@ -6,12 +6,18 @@
 
 Settings::Settings() {
     activityProtection = DEFAULT_ACTIVITY_PROTECTION;
+    inputPassClearing = DEFAULT_INPUT_PASS_CLEARING;
 }
 
-Settings::Settings(bool activityProtection) {
+Settings::Settings(bool activityProtection, bool inputPassClearing) {
     this->activityProtection = activityProtection;
+    this->inputPassClearing = inputPassClearing;
 }
 
 const bool Settings::getActivityProtection() const {
     return activityProtection;
+}
+
+const bool Settings::getInputPassClearing() const {
+    return inputPassClearing;
 }

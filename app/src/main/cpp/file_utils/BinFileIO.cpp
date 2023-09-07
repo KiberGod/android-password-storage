@@ -165,7 +165,7 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
     jclass settingsClass = env->FindClass("com/example/passwordstorage/model/Settings");
-    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(Z)V");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZ)V");
 
     std::vector<Settings> settings;
 
@@ -175,8 +175,9 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
     }
 
     bool activityProtection = settings[0].getActivityProtection();
+    bool inputPassClearing = settings[0].getInputPassClearing();
 
-    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection);
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputPassClearing);
 
     return settingsObject;
 }
@@ -314,10 +315,12 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
     jclass settingsClass = env->GetObjectClass(settingsObject);
 
     jfieldID activityProtectionField = env->GetFieldID(settingsClass, "activityProtection", "Z");
+    jfieldID inputPassClearingField = env->GetFieldID(settingsClass, "inputPassClearing", "Z");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
+    jboolean inputPassClearing = env->GetBooleanField(settingsObject, inputPassClearingField);
 
-    Settings settings(activityProtection);
+    Settings settings(activityProtection, inputPassClearing);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),

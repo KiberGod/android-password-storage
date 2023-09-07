@@ -20,14 +20,24 @@ private:
     bool activityProtection;
 
     /*
-     * За замовчуванням рекомендується тримати цю опцію увімкненою
+     * Змінна вказує, чи необхідно очистити "сміття", що утворюється під час введення паролю у калькуляторі
+     *
+     *      true    -   так, необхідно очистити
+     *      false   -   ні, необхідно залишити
+     */
+    bool inputPassClearing;
+
+    /*
+     * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     static const bool DEFAULT_ACTIVITY_PROTECTION = true;
+    static const bool DEFAULT_INPUT_PASS_CLEARING = false;
 
 public:
     Settings();
-    Settings(bool activityProtection);
+    Settings(bool activityProtection, bool inputPassClearing);
     const bool getActivityProtection() const;
+    const bool getInputPassClearing() const;
 };
 
 

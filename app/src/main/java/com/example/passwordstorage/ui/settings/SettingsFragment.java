@@ -27,7 +27,8 @@ public class SettingsFragment extends Fragment {
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
 
         printSettingsData(view);
-        setOnClickToActivityProtectionSwitch(view);
+        setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
+        setOnClickToSwitch(view, R.id.inputPassClearingFlag, () -> sharedSettingsDataViewModel.editInputPassClearing());
 
         return view;
     }
@@ -36,16 +37,19 @@ public class SettingsFragment extends Fragment {
     private void printSettingsData(View view) {
         Switch activityProtectionSwitch = view.findViewById(R.id.activityProtectionFlag);
         activityProtectionSwitch.setChecked(sharedSettingsDataViewModel.getActivityProtection());
+
+        Switch inputPassClearingSwitch = view.findViewById(R.id.inputPassClearingFlag);
+        inputPassClearingSwitch.setChecked(sharedSettingsDataViewModel.getInputPassClearing());
     }
 
     // Встановлює обробник натискань на перемикач налаштування ActivityProtection
-    private void setOnClickToActivityProtectionSwitch(View view) {
-        Switch activityProtectionSwitch = view.findViewById(R.id.activityProtectionFlag);
+    private void setOnClickToSwitch(View view, int switch_id, Runnable onClickRunnable) {
+        Switch settingSwitch = view.findViewById(switch_id);
 
-        activityProtectionSwitch.setOnClickListener(new View.OnClickListener() {
+        settingSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedSettingsDataViewModel.editActivityProtection();
+                onClickRunnable.run();
             }
         });
     }
