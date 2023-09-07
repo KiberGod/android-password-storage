@@ -28,6 +28,11 @@ public class Settings {
     private static  final boolean DEFAULT_ACTIVITY_PROTECTION = true;
     private static final boolean DEFAULT_INPUT_PASS_CLEARING = false;
 
+    public Settings() {
+        activityProtection = DEFAULT_ACTIVITY_PROTECTION;
+        inputPassClearing = DEFAULT_INPUT_PASS_CLEARING;
+    }
+
     public Settings(boolean activityProtection, boolean inputPassClearing) {
         this.activityProtection = activityProtection;
         this.inputPassClearing = inputPassClearing;

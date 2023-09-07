@@ -48,4 +48,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activityProtectionFlag" />
 
+    <Button
+        android:id="@+id/setDefaultSettingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="Стандартні налаштування"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputPassClearingFlag" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

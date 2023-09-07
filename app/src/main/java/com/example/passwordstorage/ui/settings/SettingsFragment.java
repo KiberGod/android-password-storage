@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Switch;
 
 import com.example.passwordstorage.R;
@@ -29,6 +30,7 @@ public class SettingsFragment extends Fragment {
         printSettingsData(view);
         setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
         setOnClickToSwitch(view, R.id.inputPassClearingFlag, () -> sharedSettingsDataViewModel.editInputPassClearing());
+        setOnClickDefaultSettingsButton(view);
 
         return view;
     }
@@ -50,6 +52,19 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onClickRunnable.run();
+            }
+        });
+    }
+
+    // Встановлює обробник натискання на скид налаштуваннь до стандартних
+    private void setOnClickDefaultSettingsButton(View view) {
+        Button button = view.findViewById(R.id.setDefaultSettingsButton);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedSettingsDataViewModel.setDefaultSettings();
+                printSettingsData(view);
             }
         });
     }

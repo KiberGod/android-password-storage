@@ -37,4 +37,11 @@ public class SharedSettingsDataViewModel extends ViewModel {
         settings.resetInputPassClearing();
         saveSettings(settings);
     }
+
+    // Встановити налаштування за замовченням
+    public void setDefaultSettings() {
+        Settings newSettings = new Settings();
+        settings = newSettings;
+        saveSettings(settings);
+    }
 }
