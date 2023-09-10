@@ -5,6 +5,7 @@ package com.example.passwordstorage.model;
  *   існувати більш ніж в одному екземплярі
  */
 public class Settings {
+    public static final Integer MAX_PASSWORD_LENGTH = 10;
 
     /*
      * Змінна контролює, яким саме чином повинна поводитися програма при її прихованні.
@@ -54,4 +55,8 @@ public class Settings {
         activityProtection = !activityProtection;
     }
     public void resetInputPassClearing() { inputPassClearing = !inputPassClearing; }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

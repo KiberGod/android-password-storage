@@ -24,8 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:layout_marginTop="32dp"
-        android:textColor="@color/gray_text"
         android:text="Відкривати сторінку з калькулятором у разі втрати фокусу"
+        android:textColor="@color/gray_text"
         android:textSize="18dp"
         android:thumbTint="@drawable/colors_settings_switch_thumb"
         android:trackTint="@drawable/colors_settings_switch_track"
@@ -57,5 +57,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputPassClearingFlag" />
+
+    <EditText
+        android:id="@+id/inputPassword"
+        android:layout_width="296dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="text"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setDefaultSettingsButton" />
+
+    <TextView
+        android:id="@+id/editPasswordStatus"
+        android:textColor="#FFFF0000"
+        android:textSize="14dp"
+        android:layout_width="366dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="8dp"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.355"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
+
+    <Button
+        android:id="@+id/savePasswordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        android:text="Змінити пароль"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPasswordStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,4 +47,23 @@ public class SharedSettingsDataViewModel extends ViewModel {
         settings = newSettings;
         saveSettings(settings);
     }
+
+    /*
+     *  Валідація пароля (перевірка на заборонені символи)
+     *
+     *  поверне     true - якщо все гаразд
+     *             false - якщо знайшлись недопустимі символи
+     */
+    public boolean passwordValidation(String newPassword) {
+        // Паттерн для дозволених символів (цифри, '.', '-', '+')
+        String pattern = "^[0-9.\\-+]+$";
+
+        return newPassword.matches(pattern);
+    }
+
+    // Зміна пароля
+    public void editPassword(String newPassword) {
+        settings.setPassword(newPassword);
+        saveSettings(settings);
+    }
 }

@@ -21,7 +21,7 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    editText.removeTextChangedListener(this); // Убираем слушатель временно
+                    editText.removeTextChangedListener(this);
                     byte[] bytes = charSequence.toString().getBytes();
                     if (bytes.length > max_value-1) {
                         String newText = new String(bytes, 0, max_value-1);
@@ -32,7 +32,7 @@ public class HomeViewModel extends ViewModel {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    editText.addTextChangedListener(this); // Возвращаем слушатель обратно
+                    editText.addTextChangedListener(this);
                 }
             }
 
