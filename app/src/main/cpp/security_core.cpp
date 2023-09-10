@@ -4,8 +4,11 @@
 #include "migrations/migrations.h"
 #include "file_utils/BinFileIO.h"
 
-
-// Функція зберігає значення дефолтного ключа для входу у сховище
+/*
+ * застаріле, більше не використовується
+ *
+ * Функція зберігає значення дефолтного ключа для входу у сховище
+ *
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_passwordstorage_NativeController_getKey(
         JNIEnv* env,
@@ -13,6 +16,7 @@ Java_com_example_passwordstorage_NativeController_getKey(
     std::string hello = "7-.93";
     return env->NewStringUTF(hello.c_str());
 }
+ */
 
 // Ініт-функція, що містить всі стартові виклики
 extern "C" JNIEXPORT void JNICALL

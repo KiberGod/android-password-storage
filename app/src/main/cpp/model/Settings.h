@@ -11,6 +11,8 @@
  */
 class Settings {
 private:
+    static const int MAX_PASSWORD_LENGTH = 10;
+
     /*
      * Змінна контролює, яким саме чином повинна поводитися програма при її прихованні.
      *
@@ -28,16 +30,24 @@ private:
     bool inputPassClearing;
 
     /*
+     * Пароль для входу у програму
+     */
+    char password[MAX_PASSWORD_LENGTH];
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     static const bool DEFAULT_ACTIVITY_PROTECTION = true;
     static const bool DEFAULT_INPUT_PASS_CLEARING = false;
+    static const std::string DEFAULT_PASSWORD;
+
 
 public:
     Settings();
-    Settings(bool activityProtection, bool inputPassClearing);
+    Settings(const bool activityProtection, const bool inputPassClearing, const char* password);
     const bool getActivityProtection() const;
     const bool getInputPassClearing() const;
+    const char* getPassword() const;
 };
 
 

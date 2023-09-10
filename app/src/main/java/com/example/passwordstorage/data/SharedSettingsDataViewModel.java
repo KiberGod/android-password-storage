@@ -26,6 +26,9 @@ public class SharedSettingsDataViewModel extends ViewModel {
         return settings.getInputPassClearing();
     }
 
+    // Повертає пароль
+    public String getPassword() {return settings.getPassword(); }
+
     // Переключення опції activityProtection
     public void editActivityProtection() {
         settings.resetActivityProtection();
@@ -40,7 +43,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
 
     // Встановити налаштування за замовченням
     public void setDefaultSettings() {
-        Settings newSettings = new Settings();
+        Settings newSettings = new Settings(settings.getPassword());
         settings = newSettings;
         saveSettings(settings);
     }

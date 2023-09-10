@@ -1,6 +1,5 @@
 package com.example.passwordstorage;
 
-import static com.example.passwordstorage.NativeController.getKey;
 import static com.example.passwordstorage.NativeController.initSecurityCore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
        password += symbol;
        if (password.length() == MAX_PASSWORD_LEN) {
            password = "";
-       } else if (password.equals(getKey()) == true) {
+       } else if (password.equals(sharedSettingsDataViewModel.getPassword()) == true) {
            if (sharedSettingsDataViewModel.getInputPassClearing()) {
                dataReset();
            }

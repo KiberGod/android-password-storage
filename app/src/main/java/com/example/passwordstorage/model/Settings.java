@@ -23,23 +23,32 @@ public class Settings {
     private boolean inputPassClearing;
 
     /*
+     * Пароль для входу у програму
+     */
+    private String password;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     private static  final boolean DEFAULT_ACTIVITY_PROTECTION = true;
     private static final boolean DEFAULT_INPUT_PASS_CLEARING = false;
 
-    public Settings() {
+
+    public Settings(String password) {
         activityProtection = DEFAULT_ACTIVITY_PROTECTION;
         inputPassClearing = DEFAULT_INPUT_PASS_CLEARING;
+        this.password = password;
     }
 
-    public Settings(boolean activityProtection, boolean inputPassClearing) {
+    public Settings(boolean activityProtection, boolean inputPassClearing, String password) {
         this.activityProtection = activityProtection;
         this.inputPassClearing = inputPassClearing;
+        this.password = password;
     }
 
     public boolean getActivityProtection() { return activityProtection; }
     public boolean getInputPassClearing() { return inputPassClearing; }
+    public String getPassword() { return password; }
 
     public void resetActivityProtection() {
         activityProtection = !activityProtection;

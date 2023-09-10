@@ -165,7 +165,7 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
     jclass settingsClass = env->FindClass("com/example/passwordstorage/model/Settings");
-    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZ)V");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;)V");
 
     std::vector<Settings> settings;
 
@@ -176,8 +176,11 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
 
     bool activityProtection = settings[0].getActivityProtection();
     bool inputPassClearing = settings[0].getInputPassClearing();
+    const char* password = settings[0].getPassword();
 
-    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputPassClearing);
+    jstring jPassword = env->NewStringUTF(password);
+
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputPassClearing, jPassword);
 
     return settingsObject;
 }
@@ -316,11 +319,15 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
 
     jfieldID activityProtectionField = env->GetFieldID(settingsClass, "activityProtection", "Z");
     jfieldID inputPassClearingField = env->GetFieldID(settingsClass, "inputPassClearing", "Z");
+    jfieldID passwordField = env->GetFieldID(settingsClass, "password", "Ljava/lang/String;");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
     jboolean inputPassClearing = env->GetBooleanField(settingsObject, inputPassClearingField);
+    jstring jPassword = (jstring)env->GetObjectField(settingsObject, passwordField);
 
-    Settings settings(activityProtection, inputPassClearing);
+    const char* password = env->GetStringUTFChars(jPassword, nullptr);
+
+    Settings settings(activityProtection, inputPassClearing, password);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),
@@ -328,5 +335,6 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
                    sizeof(Settings)
     );
 
+    env->ReleaseStringUTFChars(jPassword, password);
     env->DeleteLocalRef(settingsObject);
 }

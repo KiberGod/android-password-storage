@@ -17,7 +17,7 @@ public class NativeController {
         System.loadLibrary("security_core");
     }
 
-    public static native String getKey();
+    // public static native String getKey(); - застаріле, більше не використовується
     public static native void initSecurityCore(Context context);
     public static native ArrayList<Record> getRecords();
     public static native ArrayList<Category> getCategories();
