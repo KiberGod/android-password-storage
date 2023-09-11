@@ -23,6 +23,7 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
         model/Settings.cpp
+        model/Calculator.cpp
         model/Category.cpp
         model/Record.cpp
         crypto_core.cpp

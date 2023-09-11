@@ -24,6 +24,9 @@ static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 // Файл налаштуваннь
 static const std::string SETTINGS_FILE = "/settings_v4.bin";
 
+// Файл даних калькулятора
+static const std::string CALCULATOR_FILE = "/calcData_v1";
+
 // Повертає і`мя файла тестових записів
 std::string getTestRecordsFilePath();
 
@@ -32,6 +35,9 @@ std::string getCategoriesFilePath();
 
 // Повертає і`мя файла налаштуваннь
 std::string getSettingsFilePath();
+
+// Повертає і`мя файла даних калькулятора
+std::string getCalculatorFilePath();
 
 // Функція встановлює шлях до файлів програми
 void setFilesPath(JNIEnv* env, jobject context);
@@ -55,6 +61,10 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass);
 
+// Функція передає об`єкт Calculator з данного С++ модуля у Java-код
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass);
+
 // Функція запису змін до бінарного файла
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
 
@@ -72,5 +82,9 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
 // Отримання нових даних налаштувань з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject);
+
+// Отримання нових даних калькулятора з java, які необхідно внести у файл
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H

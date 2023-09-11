@@ -9,6 +9,7 @@
 #include "BinFileIO.h"
 #include "../crypto_core.h"
 #include "../model/Settings.h"
+#include "../model/Calculator.h"
 #include "../model/Category.h"
 #include "../model/Record.h"
 
@@ -18,6 +19,8 @@ std::string getTestRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
 
 std::string getSettingsFilePath() { return FILES_PATH + SETTINGS_FILE; }
+
+std::string getCalculatorFilePath() { return FILES_PATH + CALCULATOR_FILE; }
 
 void setFilesPath(JNIEnv* env, jobject context) {
     jclass contextClass = env->GetObjectClass(context);
@@ -185,6 +188,39 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
     return settingsObject;
 }
 
+/*
+ * Функція передає об`єкт Calculator з данного С++ модуля у Java-код
+ *
+ * return Calculator obj (C++) --> Calculator obj (Java)
+ */
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass) {
+    jclass calculatorClass = env->FindClass("com/example/passwordstorage/model/Calculator");
+    jmethodID calculatorConstructor = env->GetMethodID(calculatorClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Character;)V");
+
+    std::vector<Calculator> calculator;
+
+    if (loadDataFromBinFile(getFilesPath() + CALCULATOR_FILE, calculator).size() == 0) {
+        Calculator newCalculator;
+        calculator.push_back(newCalculator);
+    }
+
+    const char* number1 = calculator[0].getNumber1();
+    const char* number2 = calculator[0].getNumber2();
+    char operation = calculator[0].getOperation();
+
+    jstring jNumber1 = env->NewStringUTF(number1);
+    jstring jNumber2 = env->NewStringUTF(number2);
+
+    jclass characterClass = env->FindClass("java/lang/Character");
+    jmethodID valueOfMethod = env->GetStaticMethodID(characterClass, "valueOf", "(C)Ljava/lang/Character;");
+    jobject jOperation = operation == '\0' ? nullptr : env->CallStaticObjectMethod(characterClass, valueOfMethod, operation);
+
+    jobject calculatorObject = env->NewObject(calculatorClass, calculatorConstructor, jNumber1, jNumber2, jOperation);
+
+    return calculatorObject;
+}
+
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
     std::ofstream file;
     file.open(file_path, std::ofstream::app);
@@ -337,4 +373,38 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
 
     env->ReleaseStringUTFChars(jPassword, password);
     env->DeleteLocalRef(settingsObject);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject) {
+    dropFile(getCalculatorFilePath());
+
+    jclass calculatorClass = env->GetObjectClass(calculatorObject);
+
+    jfieldID jNumber1Field = env->GetFieldID(calculatorClass, "number1", "Ljava/lang/String;");
+    jfieldID jNumber2Field = env->GetFieldID(calculatorClass, "number2", "Ljava/lang/String;");
+    jfieldID jOperationField = env->GetFieldID(calculatorClass, "operation", "Ljava/lang/Character;");
+
+    jstring jNumber1 = (jstring)env->GetObjectField(calculatorObject, jNumber1Field);
+    jstring jNumber2 = (jstring)env->GetObjectField(calculatorObject, jNumber2Field);
+    jobject jOperation = env->GetObjectField(calculatorObject, jOperationField);
+
+    jclass characterClass = env->GetObjectClass(jOperation);
+    jmethodID charValueMethod = env->GetMethodID(characterClass, "charValue", "()C");
+    char operation = env->CallCharMethod(jOperation, charValueMethod);
+
+    const char* number1 = env->GetStringUTFChars(jNumber1, nullptr);
+    const char* number2 = env->GetStringUTFChars(jNumber2, nullptr);
+
+    Calculator calculator(number1, number2, operation);
+
+    writeToBinFile(getCalculatorFilePath(),
+                   reinterpret_cast<char*>(&calculator),
+                   sizeof(calculator),
+                   sizeof(Calculator)
+    );
+
+    env->ReleaseStringUTFChars(jNumber1, number1);
+    env->ReleaseStringUTFChars(jNumber2, number2);
+    env->DeleteLocalRef(calculatorObject);
 }
