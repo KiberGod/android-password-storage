@@ -25,7 +25,7 @@ static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 static const std::string SETTINGS_FILE = "/settings_v4.bin";
 
 // Файл даних калькулятора
-static const std::string CALCULATOR_FILE = "/calcData_v1";
+static const std::string CALCULATOR_FILE = "/calcData_v5";
 
 // Повертає і`мя файла тестових записів
 std::string getTestRecordsFilePath();

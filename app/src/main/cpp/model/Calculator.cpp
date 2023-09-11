@@ -2,13 +2,12 @@
 // Created by kiber_god on 11.09.2023.
 //
 #include <cstring>
-#include <climits>
 #include "Calculator.h"
 
 Calculator::Calculator() {
     strcpy(number1, "0");
     number2[0] = '\0';
-    operation = CHAR_MIN;
+    operation = 'n';
 }
 
 Calculator::Calculator(const char* number1, const char* number2, const char operation)

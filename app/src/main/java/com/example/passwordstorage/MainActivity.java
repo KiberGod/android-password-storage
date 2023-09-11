@@ -13,15 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.passwordstorage.data.SharedCalculatorDataViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.ui.HomeActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final Character DEFAULT_OPERATION_VALUE = 'n';
+
     private String number1 = "0";
     private String number2 = "";
-    private Character operation = Character.MIN_VALUE;
+    private Character operation = DEFAULT_OPERATION_VALUE;
 
     private final int MAX_NUMBER_LEN = 15;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private String password = "";
 
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
+    private SharedCalculatorDataViewModel sharedCalculatorDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +49,28 @@ public class MainActivity extends AppCompatActivity {
         initSecurityCore(this);
 
         sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
+        sharedCalculatorDataViewModel = new ViewModelProvider(this).get(SharedCalculatorDataViewModel.class);
         sharedSettingsDataViewModel.setSettings();
+
+        checkSetOldData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         sharedSettingsDataViewModel.setSettings();
+    }
+
+    // Перевірка на необхідність встановити дані, введені у попередній сессії
+    private void checkSetOldData() {
+        if (sharedSettingsDataViewModel.getInputCalcClearing() == false) {
+            sharedCalculatorDataViewModel.setCalculator();
+            number1 = sharedCalculatorDataViewModel.getNumber1();
+            number2 = sharedCalculatorDataViewModel.getNumber2();
+            operation = sharedCalculatorDataViewModel.getOperation();
+            printResult();
+            calculation();
+        }
     }
 
     /*
@@ -73,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     public void setOperation(View view) {
         checkPassword(((Button) view).getText().charAt(0));
         if (number1 != "0" && number1.length() != 0) {
-            if (operation != Character.MIN_VALUE) {
+            if (operation != DEFAULT_OPERATION_VALUE) {
                 setResult(view);
             }
             operation = ((Button) view).getText().charAt(0);
@@ -85,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
     public void setDigit(View view) {
         checkPassword(((Button) view).getText().charAt(0));
         String digit = String.valueOf(((Button) view).getText());
-        if (operation == Character.MIN_VALUE && number1.length() < MAX_NUMBER_LEN) {
+        if (operation == DEFAULT_OPERATION_VALUE && number1.length() < MAX_NUMBER_LEN) {
             number1 = checkFirstZero(number1, digit);
-        } else if (operation != Character.MIN_VALUE && number2.length() < MAX_NUMBER_LEN){
+        } else if (operation != DEFAULT_OPERATION_VALUE && number2.length() < MAX_NUMBER_LEN){
             number2 = checkFirstZero(number2, digit);
             calculation();
         }
@@ -96,8 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Друк введених чисел та операції
     private void printResult() {
+        sharedCalculatorDataViewModel.saveCalculator(number1, number2, operation);
         TextView resultPlace = (TextView)findViewById(R.id.resultPlace);
-        if (operation == Character.MIN_VALUE) {
+        if (operation == DEFAULT_OPERATION_VALUE) {
             resultPlace.setText(number1);
         } else if (number2.length() == 0) {
             resultPlace.setText(number1 + '\n' + operation);
@@ -114,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Видалення введених чисел та операції
     private void dataReset() {
-        operation = Character.MIN_VALUE;
+        operation = DEFAULT_OPERATION_VALUE;
         number1 = "0";
         number2 = "";
         password = "";
@@ -188,8 +208,8 @@ public class MainActivity extends AppCompatActivity {
             if (number2.length() == 1 && number2.charAt(0) == '-') {
                 number2 = "";
             }
-        } else if (operation != Character.MIN_VALUE) {
-            operation = Character.MIN_VALUE;
+        } else if (operation != DEFAULT_OPERATION_VALUE) {
+            operation = DEFAULT_OPERATION_VALUE;
         } else if (number1.length() > 0) {
             number1 = number1.substring(0, number1.length() - 1);
             if (number1.length() == 1 && number1.charAt(0) == '-') {
@@ -224,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         checkPassword('.');
         if (number2.length() != 0 && !number2.contains(".") && number2.length() < MAX_NUMBER_LEN) {
             number2 = number2 + ".";
-        } else if (operation == Character.MIN_VALUE) {
+        } else if (operation == DEFAULT_OPERATION_VALUE) {
             if (number1.length() != 0 && !number1.contains(".") && number1.length() < MAX_NUMBER_LEN) {
                 number1 = number1 + ".";
             } else if (number1.length() == 0) {
@@ -240,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
             if (number2.length() != 0) {
                 number2 = String.valueOf(Float.parseFloat(number2) * (-1));
                 calculation();
-            } else if (operation == Character.MIN_VALUE && number1.length() > 0) {
+            } else if (operation == DEFAULT_OPERATION_VALUE && number1.length() > 0) {
                 number1 = String.valueOf(Float.parseFloat(number1) * (-1));
             }
             printResult();
