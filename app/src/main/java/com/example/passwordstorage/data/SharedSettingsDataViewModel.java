@@ -22,8 +22,8 @@ public class SharedSettingsDataViewModel extends ViewModel {
     }
 
     // Повертає значення налаштування inputPassClearing
-    public boolean getInputPassClearing() {
-        return settings.getInputPassClearing();
+    public boolean getInputCalcClearing() {
+        return settings.getInputCalcClearing();
     }
 
     // Повертає пароль
@@ -35,9 +35,9 @@ public class SharedSettingsDataViewModel extends ViewModel {
         saveSettings(settings);
     }
 
-    // Переключення опції inputPassClearing
-    public void editInputPassClearing() {
-        settings.resetInputPassClearing();
+    // Переключення опції inputCalcClearing
+    public void editInputCalcClearing() {
+        settings.resetInputCalcClearing();
         saveSettings(settings);
     }
 

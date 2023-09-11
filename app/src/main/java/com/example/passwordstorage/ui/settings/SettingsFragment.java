@@ -42,7 +42,7 @@ public class SettingsFragment extends Fragment {
 
         printSettingsData(view);
         setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
-        setOnClickToSwitch(view, R.id.inputPassClearingFlag, () -> sharedSettingsDataViewModel.editInputPassClearing());
+        setOnClickToSwitch(view, R.id.inputCalcClearingFlag, () -> sharedSettingsDataViewModel.editInputCalcClearing());
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
 
@@ -54,8 +54,8 @@ public class SettingsFragment extends Fragment {
         Switch activityProtectionSwitch = view.findViewById(R.id.activityProtectionFlag);
         activityProtectionSwitch.setChecked(sharedSettingsDataViewModel.getActivityProtection());
 
-        Switch inputPassClearingSwitch = view.findViewById(R.id.inputPassClearingFlag);
-        inputPassClearingSwitch.setChecked(sharedSettingsDataViewModel.getInputPassClearing());
+        Switch inputPassClearingSwitch = view.findViewById(R.id.inputCalcClearingFlag);
+        inputPassClearingSwitch.setChecked(sharedSettingsDataViewModel.getInputCalcClearing());
 
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         inputPassword.setText(sharedSettingsDataViewModel.getPassword());

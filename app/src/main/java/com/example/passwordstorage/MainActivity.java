@@ -63,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
        if (password.length() == MAX_PASSWORD_LEN) {
            password = "";
        } else if (password.equals(sharedSettingsDataViewModel.getPassword()) == true) {
-           if (sharedSettingsDataViewModel.getInputPassClearing()) {
-               dataReset();
-           }
            Intent homePage = new Intent(MainActivity.this, HomeActivity.class);
            startActivity(homePage);
        }

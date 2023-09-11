@@ -16,12 +16,12 @@ public class Settings {
     private boolean activityProtection;
 
     /*
-     * Змінна вказує, чи необхідно очистити "сміття", що утворюється під час введення паролю у калькуляторі
+     * Змінна вказує, чи необхідно очистити введені дані у калькуляторі
      *
      *      true    -   так, необхідно очистити
      *      false   -   ні, необхідно залишити
      */
-    private boolean inputPassClearing;
+    private boolean inputCalcClearing;
 
     /*
      * Пароль для входу у програму
@@ -32,29 +32,29 @@ public class Settings {
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     private static  final boolean DEFAULT_ACTIVITY_PROTECTION = true;
-    private static final boolean DEFAULT_INPUT_PASS_CLEARING = false;
+    private static final boolean DEFAULT_INPUT_CALC_CLEARING = false;
 
 
     public Settings(String password) {
         activityProtection = DEFAULT_ACTIVITY_PROTECTION;
-        inputPassClearing = DEFAULT_INPUT_PASS_CLEARING;
+        inputCalcClearing = DEFAULT_INPUT_CALC_CLEARING;
         this.password = password;
     }
 
     public Settings(boolean activityProtection, boolean inputPassClearing, String password) {
         this.activityProtection = activityProtection;
-        this.inputPassClearing = inputPassClearing;
+        this.inputCalcClearing = inputPassClearing;
         this.password = password;
     }
 
     public boolean getActivityProtection() { return activityProtection; }
-    public boolean getInputPassClearing() { return inputPassClearing; }
+    public boolean getInputCalcClearing() { return inputCalcClearing; }
     public String getPassword() { return password; }
 
     public void resetActivityProtection() {
         activityProtection = !activityProtection;
     }
-    public void resetInputPassClearing() { inputPassClearing = !inputPassClearing; }
+    public void resetInputCalcClearing() { inputCalcClearing = !inputCalcClearing; }
 
     public void setPassword(String password) {
         this.password = password;

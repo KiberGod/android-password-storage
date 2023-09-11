@@ -178,12 +178,12 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
     }
 
     bool activityProtection = settings[0].getActivityProtection();
-    bool inputPassClearing = settings[0].getInputPassClearing();
+    bool inputCalcClearing = settings[0].getInputCalcClearing();
     const char* password = settings[0].getPassword();
 
     jstring jPassword = env->NewStringUTF(password);
 
-    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputPassClearing, jPassword);
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing, jPassword);
 
     return settingsObject;
 }
@@ -354,16 +354,16 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
     jclass settingsClass = env->GetObjectClass(settingsObject);
 
     jfieldID activityProtectionField = env->GetFieldID(settingsClass, "activityProtection", "Z");
-    jfieldID inputPassClearingField = env->GetFieldID(settingsClass, "inputPassClearing", "Z");
+    jfieldID inputCalcClearingField = env->GetFieldID(settingsClass, "inputCalcClearing", "Z");
     jfieldID passwordField = env->GetFieldID(settingsClass, "password", "Ljava/lang/String;");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
-    jboolean inputPassClearing = env->GetBooleanField(settingsObject, inputPassClearingField);
+    jboolean inputCalcClearing = env->GetBooleanField(settingsObject, inputCalcClearingField);
     jstring jPassword = (jstring)env->GetObjectField(settingsObject, passwordField);
 
     const char* password = env->GetStringUTFChars(jPassword, nullptr);
 
-    Settings settings(activityProtection, inputPassClearing, password);
+    Settings settings(activityProtection, inputCalcClearing, password);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),

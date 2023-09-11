@@ -22,12 +22,12 @@ private:
     bool activityProtection;
 
     /*
-     * Змінна вказує, чи необхідно очистити "сміття", що утворюється під час введення паролю у калькуляторі
+     * Змінна вказує, чи необхідно очистити введені дані у калькуляторі
      *
      *      true    -   так, необхідно очистити
      *      false   -   ні, необхідно залишити
      */
-    bool inputPassClearing;
+    bool inputCalcClearing;
 
     /*
      * Пароль для входу у програму
@@ -38,15 +38,15 @@ private:
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     static const bool DEFAULT_ACTIVITY_PROTECTION = true;
-    static const bool DEFAULT_INPUT_PASS_CLEARING = false;
+    static const bool DEFAULT_INPUT_CALC_CLEARING = false;
     static const std::string DEFAULT_PASSWORD;
 
 
 public:
     Settings();
-    Settings(const bool activityProtection, const bool inputPassClearing, const char* password);
+    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password);
     const bool getActivityProtection() const;
-    const bool getInputPassClearing() const;
+    const bool getInputCalcClearing() const;
     const char* getPassword() const;
 };
 
