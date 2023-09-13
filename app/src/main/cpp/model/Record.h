@@ -10,10 +10,32 @@
  */
 
 class Record {
+public:
+    /*
+     * Клас поля
+     */
+    class Field {
+    private:
+        static const int MAX_NAME_LENGTH = 20;
+        static const int MAX_VALUE_LENGTH = 80;
+
+        char name[MAX_NAME_LENGTH];
+        char value[MAX_VALUE_LENGTH];
+
+    public:
+        Field();
+        Field(const char* name, const char* value);
+        const char* getName() const;
+        const char* getValue() const;
+    };
+
 private:
+
+    static const int MAX_FIELDS_LENGTH = 10;
     static const int MAX_TITLE_LENGTH = 20;
     static const int MAX_TEXT_LENGTH = 100;
 
+    Field fields[MAX_FIELDS_LENGTH];
     char title[MAX_TITLE_LENGTH];
     char text[MAX_TEXT_LENGTH];
 
@@ -35,13 +57,16 @@ public:
     static const bool NULL_BOOKMARK_VALUE = false;
 
     Record();
-    Record(const char* title, const char* text, const int category_id, const bool bookmark, const int icon_id);
+    Record(const char* title, const char* text, const int category_id, const bool bookmark, const int icon_id, const Field* fields);
     void printLog();
+    const Field* getFields() const;
     const char* getTitle() const;
     const char* getText() const;
     const int getCategoryId() const;
     const bool getBookmark() const;
     const int getIconId() const;
+
+    static const int getMaxFields();
 };
 
 

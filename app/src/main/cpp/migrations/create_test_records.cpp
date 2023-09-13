@@ -9,7 +9,7 @@
 
 void create_test_records::insert(char* title, char* text, int category_id, bool bookmark, int icon_id) {
 
-    Record record(title, text, category_id, bookmark, icon_id);
+    Record record(title, text, category_id, bookmark, icon_id, nullptr);
     writeToBinFile(getTestRecordsFilePath(),
                    reinterpret_cast<char*>(&record),
                    sizeof(record),

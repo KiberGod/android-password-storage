@@ -84,6 +84,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
+    jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
     jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
 
     std::vector<Record> records;
@@ -104,6 +105,27 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
 
         // Створення об`єкта Record в Java
         jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, record.getIconId());
+
+        jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
+        // Заповнюємо массив об`єктів Field в Java
+        for (int i = 0; i < Record::getMaxFields(); i++) {
+            //jobject jField = nullptr;
+
+            const Record::Field& cppField = record.getFields()[i];
+            jstring jName = env->NewStringUTF(cppField.getName());
+            jstring jValue = env->NewStringUTF(cppField.getValue());
+
+            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;)Lcom/example/passwordstorage/model/Record$Field;");
+            jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue);
+
+            env->DeleteLocalRef(jName);
+            env->DeleteLocalRef(jValue);
+
+            env->SetObjectArrayElement(jFields, i, jField);
+        }
+
+        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/example/passwordstorage/model/Record$Field;)V");
+        env->CallVoidMethod(recordObject, setFieldsMethod, jFields);
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
@@ -333,7 +355,32 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
             bookmark = env->CallBooleanMethod(bookmarkObj, booleanValueMethod);
         }
 
-        Record record{titleStr, textStr, category_id, bookmark, icon_id};
+        jfieldID fieldsField = env->GetFieldID(recordClass, "fields", "[Lcom/example/passwordstorage/model/Record$Field;");
+        jobjectArray fieldsArray = reinterpret_cast<jobjectArray>(env->GetObjectField(recordObj, fieldsField));
+
+        int fieldsCount = env->GetArrayLength(fieldsArray);
+        std::vector<Record::Field> cppFields;
+
+        for (int j = 0; j < fieldsCount; ++j) {
+            jobject fieldObj = env->GetObjectArrayElement(fieldsArray, j);
+
+            jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
+            jfieldID nameField = env->GetFieldID(fieldClass, "name", "Ljava/lang/String;");
+            jfieldID valueField = env->GetFieldID(fieldClass, "value", "Ljava/lang/String;");
+
+            jstring jName = static_cast<jstring>(env->GetObjectField(fieldObj, nameField));
+            jstring jValue = static_cast<jstring>(env->GetObjectField(fieldObj, valueField));
+
+            const char* nameStr = env->GetStringUTFChars(jName, nullptr);
+            const char* valueStr = env->GetStringUTFChars(jValue, nullptr);
+
+            cppFields.push_back(Record::Field{nameStr, valueStr});
+
+            env->ReleaseStringUTFChars(jName, nameStr);
+            env->ReleaseStringUTFChars(jValue, valueStr);
+        }
+
+        Record record{titleStr, textStr, category_id, bookmark, icon_id, cppFields.data()};
 
         writeToBinFile(getTestRecordsFilePath(),
                        reinterpret_cast<char*>(&record),
