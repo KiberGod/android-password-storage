@@ -84,8 +84,9 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Створення нового запису да додавання його до списку
-    public void addRecord(String title, String text,  Integer category_id, int icon_id) {
+    public void addRecord(String title, String text,  Integer category_id, int icon_id, ArrayList<String> fieldNames, ArrayList<String> fieldValues) {
         Record record = new Record(title, text, category_id, icon_id);
+        record.setFields(fieldNames, fieldValues);
         records.add(record);
         saveRecords(records);
     }
@@ -152,5 +153,15 @@ public class SharedRecordsDataViewModel extends ViewModel {
         } else {
             return false;
         }
+    }
+
+    // Повертає ім`я поля запису за ідентифікатором поля та записа
+    public String getRecordFieldNameByIndex(int recordIndex, int fieldIndex) {
+        return records.get(recordIndex).getFields()[fieldIndex].getName();
+    }
+
+    // Повертає значення поля запису за ідентифікатором поля та записа
+    public String getRecordFieldValueByIndex(int recordIndex, int fieldIndex) {
+        return records.get(recordIndex).getFields()[fieldIndex].getValue();
     }
 }

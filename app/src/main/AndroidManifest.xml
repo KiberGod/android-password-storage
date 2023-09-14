@@ -15,7 +15,9 @@
         <activity
             android:name=".ui.HomeActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,3 +31,11 @@
     </application>
 
 </manifest>
+
+    <!-- Короткі пояснення
+
+        android:screenOrientation="portrait"    -   блокує можливість розвороту програми у "широкий режим"
+
+        android:windowSoftInputMode="adjustPan" -   необхіден для того, щоб нижній навбар не "підіймала" клавіатура вводу
+
+    -->

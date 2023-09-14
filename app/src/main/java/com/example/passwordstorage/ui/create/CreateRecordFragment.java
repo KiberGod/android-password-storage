@@ -1,11 +1,15 @@
 package com.example.passwordstorage.ui.create;
 
+import static com.example.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 import static com.example.passwordstorage.model.Record.MAX_TEXT_LENGTH;
 import static com.example.passwordstorage.model.Record.MAX_TITLE_LENGTH;
+import static com.example.passwordstorage.model.Record.getMaxFieldNameLength;
+import static com.example.passwordstorage.model.Record.getMaxFieldValueLength;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +45,11 @@ public class CreateRecordFragment extends Fragment {
 
     private int tempIconId = -1;
 
+    private int fieldCounter = 0;
+
+    private ArrayList<EditText> fieldNames = new ArrayList<>();
+    private ArrayList<EditText> fieldValues = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,6 +69,7 @@ public class CreateRecordFragment extends Fragment {
 
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
+        setOnClickToAddField(view);
         return view;
     }
 
@@ -115,7 +126,7 @@ public class CreateRecordFragment extends Fragment {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
-                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), category_id, tempIconId);
+                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), category_id, tempIconId, getStringsArray(fieldNames), getStringsArray(fieldValues));
                 Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -139,5 +150,78 @@ public class CreateRecordFragment extends Fragment {
                 });
             }
         });
+    }
+
+    // Встановлення обробника події натиснення на додавання полей
+    private void setOnClickToAddField(View rootView) {
+        Button addFieldButton = rootView.findViewById(R.id.addFieldButton);
+        addFieldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewField(rootView);
+            }
+        });
+    }
+
+    // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
+    private void createNewField(View view) {
+        if (fieldCounter < MAX_FIELDS_LENGTH) {
+            LinearLayout linearLayout = view.findViewById(R.id.createRecordsScrollArea);
+
+            LinearLayout newLayout = new LinearLayout(requireContext());
+            newLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            EditText editTextName = getEditText(view, "Назва", getMaxFieldNameLength());
+            EditText editTextValue = getEditText(view, "Значення", getMaxFieldValueLength());
+
+            fieldNames.add(editTextName);
+            fieldValues.add(editTextValue);
+
+            newLayout.addView(editTextName);
+            newLayout.addView(editTextValue);
+            newLayout.addView(getButton(newLayout, editTextName, editTextValue));
+
+            linearLayout.addView(newLayout, linearLayout.getChildCount() - 3);
+            fieldCounter++;
+        }
+    }
+
+    // Повертає EditText для створення нового поля
+    private EditText getEditText(View view, String hint, int maxLength) {
+        EditText editText = new EditText(requireContext());
+        editText.setHint(hint);
+        editText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+        editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text));
+
+        homeViewModel.setMaxLengthForInput(editText, maxLength);
+
+        return editText;
+    }
+
+    // Створює кнопку видалення поля
+    private Button getButton(LinearLayout linearLayout, EditText editTextName, EditText editTextValue) {
+        Button button = new Button(requireContext());
+        button.setText("-");
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ViewGroup)linearLayout.getParent()).removeView(linearLayout);
+                fieldNames.remove(editTextName);
+                fieldValues.remove(editTextValue);
+                fieldCounter--;
+            }
+        });
+        return button;
+    }
+
+    // Функція парсить текстові значення з полів вводу
+    private ArrayList<String> getStringsArray(ArrayList<EditText> editsArray) {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (EditText editText : editsArray) {
+            String text = editText.getText().toString();
+            stringArrayList.add(text);
+        }
+        return stringArrayList;
     }
 }

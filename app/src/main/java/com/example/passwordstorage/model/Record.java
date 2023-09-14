@@ -1,5 +1,7 @@
 package com.example.passwordstorage.model;
 
+import java.util.ArrayList;
+
 /*
     Даний клас є основною структурною одиницею сховища - записом
  */
@@ -8,10 +10,10 @@ public class Record {
     /*
      * Клас поля
      */
-    private class Field {
+    public class Field {
 
-        private static final int MAX_NAME_LENGTH = 20;
-        private static final int MAX_VALUE_LENGTH = 80;
+        public static final int MAX_NAME_LENGTH = 20;
+        public static final int MAX_VALUE_LENGTH = 80;
 
         private String name;
         private String value;
@@ -20,6 +22,9 @@ public class Record {
             this.name = name;
             this.value = value;
         }
+
+        public String getName() { return name; }
+        public String getValue() {return value; }
     }
 
     private String title;
@@ -71,6 +76,9 @@ public class Record {
     }
 
 
+    public static int getMaxFieldNameLength() { return Field.MAX_NAME_LENGTH; }
+    public static int getMaxFieldValueLength() { return Field.MAX_VALUE_LENGTH; }
+
     public String getTitle() {
         return title;
     }
@@ -94,7 +102,7 @@ public class Record {
     private Field[] getEmptyFields() {
         Field[] fields = new Field[MAX_FIELDS_LENGTH];
         for (int i = 0; i < fields.length; i++) {
-            fields[i] = new Field(String.valueOf(i), String.valueOf(i));
+            fields[i] = new Field("", "");
         }
         return fields;
     }
@@ -104,6 +112,11 @@ public class Record {
         this.category_id = NULL_CATEGORY_VALUE;
     }
     public void setFields(Field[] fields) { this.fields = fields; }
+    public void setFields(ArrayList<String> names, ArrayList<String> values) {
+        for (int i=0; i<names.size(); i++) {
+            fields[i] = createField(names.get(i), values.get(i));
+        }
+    }
 
     public Field createField(String name, String value) { return new Field(name, value); }
 

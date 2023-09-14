@@ -11,7 +11,10 @@ public class HomeViewModel extends ViewModel {
     // Функція встановлює обмеження у кількості символів для заданого поля вводу
     public void setMaxLengthForInput(View view, int id, int max_value) {
         EditText editText = view.findViewById(id);
+        setMaxLengthForInput(editText, max_value);
+    }
 
+    public void setMaxLengthForInput(EditText editText, int max_value) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

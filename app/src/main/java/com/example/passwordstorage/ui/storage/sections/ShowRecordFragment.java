@@ -1,5 +1,7 @@
 package com.example.passwordstorage.ui.storage.sections;
 
+import static com.example.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.passwordstorage.R;
@@ -80,6 +83,24 @@ public class ShowRecordFragment extends Fragment {
         {
             ImageView recordIcon = view.findViewById(R.id.recordIcon);
             recordIcon.setImageResource(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex));
+        }
+
+        LinearLayout linearLayout = view.findViewById(R.id.showFieldsScrollArea);
+
+        for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
+            LinearLayout newLayout = new LinearLayout(requireContext());
+            newLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView textViewName = new TextView(requireContext());
+            textViewName.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_2));
+            textViewName.setText(sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i));
+            TextView textViewValue = new TextView(requireContext());
+            textViewValue.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i));
+
+            newLayout.addView(textViewName);
+            newLayout.addView(textViewValue);
+            linearLayout.addView(newLayout);
         }
     }
 
