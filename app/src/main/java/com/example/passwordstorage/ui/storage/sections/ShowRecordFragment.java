@@ -2,6 +2,9 @@ package com.example.passwordstorage.ui.storage.sections;
 
 import static com.example.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
@@ -86,21 +90,12 @@ public class ShowRecordFragment extends Fragment {
         }
 
         LinearLayout linearLayout = view.findViewById(R.id.showFieldsScrollArea);
-
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
-            LinearLayout newLayout = new LinearLayout(requireContext());
-            newLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView textViewName = new TextView(requireContext());
-            textViewName.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_2));
-            textViewName.setText(sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i));
-            TextView textViewValue = new TextView(requireContext());
-            textViewValue.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i));
-
-            newLayout.addView(textViewName);
-            newLayout.addView(textViewValue);
-            linearLayout.addView(newLayout);
+            String name = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
+            String value = sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i);
+            if (!name.equals("")) {
+                createField(linearLayout, name, value);
+            }
         }
     }
 
@@ -139,5 +134,55 @@ public class ShowRecordFragment extends Fragment {
                 resetBookmarkButtonColor();
             }
         });
+    }
+
+    // Створює поле запису
+    private void createField(LinearLayout linearLayout, String name, String value) {
+        LinearLayout newLayout = new LinearLayout(requireContext());
+        newLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView textViewName = new TextView(requireContext());
+        textViewName.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_2));
+
+        textViewName.setText(name);
+
+        LinearLayout.LayoutParams paramsName = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        paramsName.rightMargin = 16;
+        textViewName.setLayoutParams(paramsName);
+
+        TextView textViewValue = new TextView(requireContext());
+        textViewValue.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+        textViewValue.setText(value);
+
+        newLayout.addView(textViewName);
+        newLayout.addView(textViewValue);
+        if (!value.equals("")) {
+            newLayout.addView(getButton(value));
+        }
+        linearLayout.addView(newLayout);
+    }
+
+    // Створює кнопку швидкого копіювання
+    private Button getButton(String value) {
+        Button button = new Button(requireContext());
+        button.setText("Скопіювати");
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+
+                if (clipboard != null) {
+                    ClipData clip = ClipData.newPlainText("label", value);
+                    clipboard.setPrimaryClip(clip);
+                }
+
+                Toast.makeText(getActivity(), "Скопійовано у буфер обміну", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return button;
     }
 }
