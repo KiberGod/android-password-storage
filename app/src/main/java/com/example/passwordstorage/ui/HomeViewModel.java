@@ -1,11 +1,20 @@
 package com.example.passwordstorage.ui;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
+
+import com.example.passwordstorage.R;
+
+import java.util.ArrayList;
 
 public class HomeViewModel extends ViewModel {
     // Функція встановлює обмеження у кількості символів для заданого поля вводу
@@ -48,4 +57,26 @@ public class HomeViewModel extends ViewModel {
 
     // Повертає текст відсутності категорії для кнопки з списком категорій
     public String setEmptyCategoryText() { return "Відсутня"; }
+
+    // Функція парсить текстові значення з полів вводу
+    public ArrayList<String> getStringsArray(ArrayList<EditText> editsArray) {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (EditText editText : editsArray) {
+            String text = editText.getText().toString();
+            stringArrayList.add(text);
+        }
+        return stringArrayList;
+    }
+
+    // Повертає EditText для створення нового поля
+    public EditText getEditText(Context context, String hint, int maxLength) {
+        EditText editText = new EditText(context);
+        editText.setHint(hint);
+        editText.setTextColor(ContextCompat.getColor(context, R.color.white));
+        editText.setHintTextColor(ContextCompat.getColor(context, R.color.gray_text));
+
+        setMaxLengthForInput(editText, maxLength);
+
+        return editText;
+    }
 }

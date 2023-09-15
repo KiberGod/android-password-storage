@@ -1,13 +1,17 @@
 package com.example.passwordstorage.ui.storage.sections;
 
+import static com.example.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 import static com.example.passwordstorage.model.Record.MAX_TEXT_LENGTH;
 import static com.example.passwordstorage.model.Record.MAX_TITLE_LENGTH;
+import static com.example.passwordstorage.model.Record.getMaxFieldNameLength;
+import static com.example.passwordstorage.model.Record.getMaxFieldValueLength;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +46,11 @@ public class EditRecordFragment extends Fragment {
     private int recordIndex;
 
     private int tempIconId;
+
+    private int fieldCounter = 0;
+
+    private ArrayList<EditText> fieldNames = new ArrayList<>();
+    private ArrayList<EditText> fieldValues = new ArrayList<>();
 
     private TextView textViewStatus;
 
@@ -88,6 +98,7 @@ public class EditRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToDeleteButton(view);
         setOnClickToIconSelectWindow(view);
+        setOnClickToAddField(view);
 
         return view;
     }
@@ -101,6 +112,14 @@ public class EditRecordFragment extends Fragment {
         {
             ImageView recordIcon = view.findViewById(R.id.editRecordIcon);
             recordIcon.setImageResource(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex));
+        }
+
+        for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
+            createNewField(
+                    view,
+                    sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i),
+                    sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i)
+            );
         }
     }
 
@@ -190,7 +209,13 @@ public class EditRecordFragment extends Fragment {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
-                sharedRecordsDataViewModel.editRecord(recordIndex, recordTitle, textInput.getText().toString(), category_id, tempIconId);
+                sharedRecordsDataViewModel.editRecord(
+                        recordIndex,
+                        recordTitle,
+                        textInput.getText().toString(),
+                        category_id, tempIconId,
+                        homeViewModel.getStringsArray(fieldNames),
+                        homeViewModel.getStringsArray(fieldValues));
                 Toast.makeText(getActivity(), "Запис змінено " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -234,5 +259,59 @@ public class EditRecordFragment extends Fragment {
                 });
             }
         });
+    }
+
+    // Встановлення обробника події натиснення на додавання полей
+    private void setOnClickToAddField(View rootView) {
+        Button addFieldButton = rootView.findViewById(R.id.addNewFieldButton);
+        addFieldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewField(rootView, "", "");
+            }
+        });
+    }
+
+    // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
+    private void createNewField(View view, String fieldName, String fieldValue) {
+        if (fieldCounter < MAX_FIELDS_LENGTH) {
+            LinearLayout linearLayout = view.findViewById(R.id.editRecordsScrollArea);
+
+            LinearLayout newLayout = new LinearLayout(requireContext());
+            newLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            EditText editTextName = homeViewModel.getEditText(requireContext(), "Назва", getMaxFieldNameLength());
+            EditText editTextValue = homeViewModel.getEditText(requireContext(), "Значення", getMaxFieldValueLength());
+
+            editTextName.setText(fieldName);
+            editTextValue.setText(fieldValue);
+
+            fieldNames.add(editTextName);
+            fieldValues.add(editTextValue);
+
+            newLayout.addView(editTextName);
+            newLayout.addView(editTextValue);
+            newLayout.addView(getButton(newLayout, editTextName, editTextValue));
+
+            linearLayout.addView(newLayout, linearLayout.getChildCount() - 4);
+            fieldCounter++;
+        }
+    }
+
+    // Створює кнопку видалення поля
+    private Button getButton(LinearLayout linearLayout, EditText editTextName, EditText editTextValue) {
+        Button button = new Button(requireContext());
+        button.setText("-");
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ViewGroup)linearLayout.getParent()).removeView(linearLayout);
+                fieldNames.remove(editTextName);
+                fieldValues.remove(editTextValue);
+                fieldCounter--;
+            }
+        });
+        return button;
     }
 }

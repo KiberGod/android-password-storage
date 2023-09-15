@@ -92,8 +92,8 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Редагування запису
-    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, int newIcon_id) {
-        records.get(index).update(newTitle, newText, newCategory_id, newIcon_id);
+    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, int newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
+        records.get(index).update(newTitle, newText, newCategory_id, newIcon_id, newFieldNames, newFieldValues);
         saveRecords(records);
     }
 

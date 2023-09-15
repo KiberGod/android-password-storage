@@ -126,7 +126,13 @@ public class CreateRecordFragment extends Fragment {
                 textViewStatus.setText("");
                 Button categoryButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
-                sharedRecordsDataViewModel.addRecord(recordTitle, textInput.getText().toString(), category_id, tempIconId, getStringsArray(fieldNames), getStringsArray(fieldValues));
+                sharedRecordsDataViewModel.addRecord(
+                        recordTitle,
+                        textInput.getText().toString(),
+                        category_id,
+                        tempIconId,
+                        homeViewModel.getStringsArray(fieldNames),
+                        homeViewModel.getStringsArray(fieldValues));
                 Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -171,8 +177,8 @@ public class CreateRecordFragment extends Fragment {
             LinearLayout newLayout = new LinearLayout(requireContext());
             newLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            EditText editTextName = getEditText(view, "Назва", getMaxFieldNameLength());
-            EditText editTextValue = getEditText(view, "Значення", getMaxFieldValueLength());
+            EditText editTextName = homeViewModel.getEditText(requireContext(), "Назва", getMaxFieldNameLength());
+            EditText editTextValue = homeViewModel.getEditText(requireContext(), "Значення", getMaxFieldValueLength());
 
             fieldNames.add(editTextName);
             fieldValues.add(editTextValue);
@@ -184,18 +190,6 @@ public class CreateRecordFragment extends Fragment {
             linearLayout.addView(newLayout, linearLayout.getChildCount() - 3);
             fieldCounter++;
         }
-    }
-
-    // Повертає EditText для створення нового поля
-    private EditText getEditText(View view, String hint, int maxLength) {
-        EditText editText = new EditText(requireContext());
-        editText.setHint(hint);
-        editText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-        editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_text));
-
-        homeViewModel.setMaxLengthForInput(editText, maxLength);
-
-        return editText;
     }
 
     // Створює кнопку видалення поля
@@ -213,15 +207,5 @@ public class CreateRecordFragment extends Fragment {
             }
         });
         return button;
-    }
-
-    // Функція парсить текстові значення з полів вводу
-    private ArrayList<String> getStringsArray(ArrayList<EditText> editsArray) {
-        ArrayList<String> stringArrayList = new ArrayList<>();
-        for (EditText editText : editsArray) {
-            String text = editText.getText().toString();
-            stringArrayList.add(text);
-        }
-        return stringArrayList;
     }
 }

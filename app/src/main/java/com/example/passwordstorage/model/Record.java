@@ -120,11 +120,13 @@ public class Record {
 
     public Field createField(String name, String value) { return new Field(name, value); }
 
-    public void update(String newTitle, String newText, Integer newCategory_id, int newIcon_id) {
+    public void update(String newTitle, String newText, Integer newCategory_id, int newIcon_id, ArrayList<String> newNames, ArrayList<String> newValues) {
         this.title = newTitle;
         this.text = newText;
         this.category_id = newCategory_id;
         this.icon_id = newIcon_id;
+        this.fields = getEmptyFields();
+        setFields(newNames, newValues);
     }
 
     public void inversionBookmark() {
