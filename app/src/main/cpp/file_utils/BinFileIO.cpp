@@ -114,9 +114,16 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
             const Record::Field& cppField = record.getFields()[i];
             jstring jName = env->NewStringUTF(cppField.getName());
             jstring jValue = env->NewStringUTF(cppField.getValue());
+            jboolean jValueVisibility = cppField.getValueVisibility();
 
-            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;)Lcom/example/passwordstorage/model/Record$Field;");
-            jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue);
+            jobject valueVisibility = env->NewObject(
+                    env->FindClass("java/lang/Boolean"),
+                    env->GetMethodID(env->FindClass("java/lang/Boolean"), "<init>", "(Z)V"),
+                    jValueVisibility
+            );
+
+            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/example/passwordstorage/model/Record$Field;");
+            jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue, valueVisibility);
 
             env->DeleteLocalRef(jName);
             env->DeleteLocalRef(jValue);
@@ -367,14 +374,17 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
             jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
             jfieldID nameField = env->GetFieldID(fieldClass, "name", "Ljava/lang/String;");
             jfieldID valueField = env->GetFieldID(fieldClass, "value", "Ljava/lang/String;");
+            jfieldID valueVisibilityField = env->GetFieldID(fieldClass, "valueVisibility", "Z");
 
             jstring jName = static_cast<jstring>(env->GetObjectField(fieldObj, nameField));
             jstring jValue = static_cast<jstring>(env->GetObjectField(fieldObj, valueField));
+            jboolean jValueVisibility = env->GetBooleanField(fieldObj, valueVisibilityField);
 
             const char* nameStr = env->GetStringUTFChars(jName, nullptr);
             const char* valueStr = env->GetStringUTFChars(jValue, nullptr);
+            bool valueVisibility = static_cast<bool>(jValueVisibility);
 
-            cppFields.push_back(Record::Field{nameStr, valueStr});
+            cppFields.push_back(Record::Field{nameStr, valueStr, valueVisibility});
 
             env->ReleaseStringUTFChars(jName, nameStr);
             env->ReleaseStringUTFChars(jValue, valueStr);

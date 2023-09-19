@@ -8,14 +8,17 @@
 Record::Field::Field() {
     name[0] = '\0';
     value[0] = '\0';
+    valueVisibility = DEFAULT_VALUE_VISIBILITY;
 }
 
-Record::Field::Field(const char *name, const char *value) {
+Record::Field::Field(const char *name, const char *value, const bool valueVisibility) {
     strncpy(this->name, name, MAX_NAME_LENGTH - 1);
     this->name[MAX_NAME_LENGTH - 1] = '\0';
 
     strncpy(this->value, value, MAX_VALUE_LENGTH - 1);
     this->value[MAX_VALUE_LENGTH - 1] = '\0';
+
+    this->valueVisibility = valueVisibility;
 }
 
 const char* Record::Field::getName() const {
@@ -26,7 +29,9 @@ const char* Record::Field::getValue() const {
     return value;
 }
 
-
+const bool Record::Field::getValueVisibility() const {
+    return valueVisibility;
+}
 
 // Конструктор, що використовується програмою під час парсингу бінарного файлу даних
 Record::Record() {

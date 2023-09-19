@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,9 +93,9 @@ public class ShowRecordFragment extends Fragment {
         LinearLayout linearLayout = view.findViewById(R.id.showFieldsScrollArea);
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
             String name = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
-            String value = sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i);
+            String value = sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, i);
             if (!name.equals("")) {
-                createField(linearLayout, name, value);
+                createField(view, linearLayout, name, value, i);
             }
         }
     }
@@ -137,7 +138,7 @@ public class ShowRecordFragment extends Fragment {
     }
 
     // Створює поле запису
-    private void createField(LinearLayout linearLayout, String name, String value) {
+    private void createField(View rootView, LinearLayout linearLayout, String name, String value, int fieldIndex) {
         LinearLayout newLayout = new LinearLayout(requireContext());
         newLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -162,6 +163,19 @@ public class ShowRecordFragment extends Fragment {
         if (!value.equals("")) {
             newLayout.addView(getButton(value));
         }
+
+        Switch switchView = new Switch(requireContext());
+        switchView.setChecked(sharedRecordsDataViewModel.getRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex));
+        newLayout.addView(switchView);
+
+        switchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedRecordsDataViewModel.setRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex);
+                textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
+            }
+        });
+
         linearLayout.addView(newLayout);
     }
 

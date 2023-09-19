@@ -18,15 +18,18 @@ public:
     private:
         static const int MAX_NAME_LENGTH = 20;
         static const int MAX_VALUE_LENGTH = 80;
+        static const bool DEFAULT_VALUE_VISIBILITY = false;
 
         char name[MAX_NAME_LENGTH];
         char value[MAX_VALUE_LENGTH];
+        bool valueVisibility;
 
     public:
         Field();
-        Field(const char* name, const char* value);
+        Field(const char* name, const char* value, const bool valueVisibility);
         const char* getName() const;
         const char* getValue() const;
+        const bool getValueVisibility() const;
     };
 
 private:

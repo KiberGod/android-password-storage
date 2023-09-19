@@ -164,4 +164,21 @@ public class SharedRecordsDataViewModel extends ViewModel {
     public String getRecordFieldValueByIndex(int recordIndex, int fieldIndex) {
         return records.get(recordIndex).getFields()[fieldIndex].getValue();
     }
+
+    // Повертає захищене значення поля запису за ідентифікатором поля та записа
+    public String getRecordFieldProtectedValueByIndex(int recordIndex, int fieldIndex) {
+        return records.get(recordIndex).getFields()[fieldIndex].getProtectedgetValue();
+    }
+
+    // Повертає налаштування значення поля запису за ідентифікатором поля та записа
+    public boolean getRecordFieldValueVisibilityByIndex(int recordIndex, int fieldIndex) {
+        return records.get(recordIndex).getFields()[fieldIndex].getValueVisibility();
+    }
+
+    // Редагування налаштування значення поля запису за ідентифікатором поля та записа
+    public void setRecordFieldValueVisibilityByIndex(int recordIndex, int fieldIndex) {
+        records.get(recordIndex).getFields()[fieldIndex].inversionValueVisibility();
+        saveRecords(records);
+    }
+
 }

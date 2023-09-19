@@ -15,16 +15,44 @@ public class Record {
         public static final int MAX_NAME_LENGTH = 20;
         public static final int MAX_VALUE_LENGTH = 80;
 
+        public static  final boolean DEFAULT_VALUE_VISIBILITY = false;
+
         private String name;
         private String value;
 
+        private boolean valueVisibility;
+
         public Field(String name, String value) {
+            this(name, value, DEFAULT_VALUE_VISIBILITY);
+        }
+
+        public Field(String name, String value, Boolean valueVisibility) {
             this.name = name;
             this.value = value;
+            this.valueVisibility = valueVisibility;
         }
 
         public String getName() { return name; }
-        public String getValue() {return value; }
+
+        public String getValue() { return value; }
+
+        public String getProtectedgetValue() {
+            if (this.valueVisibility == true) {
+                return value;
+            } else {
+                StringBuilder protectedStr = new StringBuilder();
+                for (int i = 0; i < value.length(); i++) {
+                    protectedStr.append('*');
+                }
+                return protectedStr.toString();
+            }
+        }
+
+        public boolean getValueVisibility() { return valueVisibility; }
+
+        public void inversionValueVisibility() {
+            valueVisibility = !valueVisibility;
+        }
     }
 
     private String title;
@@ -114,11 +142,11 @@ public class Record {
     public void setFields(Field[] fields) { this.fields = fields; }
     public void setFields(ArrayList<String> names, ArrayList<String> values) {
         for (int i=0; i<names.size(); i++) {
-            fields[i] = createField(names.get(i), values.get(i));
+            fields[i] = createField(names.get(i), values.get(i), Field.DEFAULT_VALUE_VISIBILITY);
         }
     }
 
-    public Field createField(String name, String value) { return new Field(name, value); }
+    public Field createField(String name, String value, Boolean valueVisibility) { return new Field(name, value, valueVisibility); }
 
     public void update(String newTitle, String newText, Integer newCategory_id, int newIcon_id, ArrayList<String> newNames, ArrayList<String> newValues) {
         this.title = newTitle;
