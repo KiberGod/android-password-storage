@@ -12,6 +12,7 @@
 #include "../model/Calculator.h"
 #include "../model/Category.h"
 #include "../model/Record.h"
+#include "../model/DigitalOwner.h"
 
 
 std::string getRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
@@ -21,6 +22,8 @@ std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
 std::string getSettingsFilePath() { return FILES_PATH + SETTINGS_FILE; }
 
 std::string getCalculatorFilePath() { return FILES_PATH + CALCULATOR_FILE; }
+
+std::string getDigitalOwnerFilePath() { return FILES_PATH + DIGITAL_OWNER_FILE; }
 
 void setFilesPath(JNIEnv* env, jobject context) {
     jclass contextClass = env->GetObjectClass(context);
@@ -250,6 +253,36 @@ Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jcl
     return calculatorObject;
 }
 
+/*
+ * Функція передає об`єкт DigitalOwner з данного С++ модуля у Java-код
+ *
+ * return DigitalOwner obj (C++) --> DigitalOwner obj (Java)
+ */
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass) {
+    jclass digitalOwnerClass = env->FindClass("com/example/passwordstorage/model/DigitalOwner");
+    jmethodID digitalOwnerConstructor = env->GetMethodID(digitalOwnerClass, "<init>", "(IIIII)V");
+
+    std::vector<DigitalOwner> digitalOwner;
+
+    if (loadDataFromBinFile(getFilesPath() + DIGITAL_OWNER_FILE, digitalOwner).size() == 0) {
+        DigitalOwner newDigitalOwner;
+        digitalOwner.push_back(newDigitalOwner);
+    }
+
+    int dayLastVisit = digitalOwner[0].getDayLastVisit();
+    int monthLastVisit = digitalOwner[0].getMonthLastVisit();
+    int yearLastVisit = digitalOwner[0].getYearLastVisit();
+    int numberDaysBeforeTriggering = digitalOwner[0].getNumberDaysBeforeTriggering();
+    int mode = digitalOwner[0].getMode();
+
+    jobject digitalOwnerObject = env->NewObject(digitalOwnerClass, digitalOwnerConstructor,
+                                                dayLastVisit, monthLastVisit, yearLastVisit, numberDaysBeforeTriggering, mode);
+
+    return digitalOwnerObject;
+}
+
+
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
     std::ofstream file;
     file.open(file_path, std::ofstream::app);
@@ -464,4 +497,35 @@ Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jc
     env->ReleaseStringUTFChars(jNumber1, number1);
     env->ReleaseStringUTFChars(jNumber2, number2);
     env->DeleteLocalRef(calculatorObject);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject) {
+    dropFile(getDigitalOwnerFilePath());
+
+    jclass digitalOwnerClass = env->GetObjectClass(digitalOwnerObject);
+
+    jfieldID dayLastVisitField = env->GetFieldID(digitalOwnerClass, "dayLastVisit", "I");
+    jfieldID monthLastVisitField = env->GetFieldID(digitalOwnerClass, "monthLastVisit", "I");
+    jfieldID yearLastVisitField = env->GetFieldID(digitalOwnerClass, "yearLastVisit", "I");
+    jfieldID numberDaysBeforeTriggeringField = env->GetFieldID(digitalOwnerClass, "numberDaysBeforeTriggering", "I");
+    jfieldID modeField = env->GetFieldID(digitalOwnerClass, "mode", "I");
+
+    jint dayLastVisit = env->GetIntField(digitalOwnerObject, dayLastVisitField);
+    jint monthLastVisit = env->GetIntField(digitalOwnerObject, monthLastVisitField);
+    jint yearLastVisit = env->GetIntField(digitalOwnerObject, yearLastVisitField);
+    jint numberDaysBeforeTriggering = env->GetIntField(digitalOwnerObject, numberDaysBeforeTriggeringField);
+    jint mode = env->GetIntField(digitalOwnerObject, modeField);
+
+
+    DigitalOwner digitalOwner(dayLastVisit, monthLastVisit, yearLastVisit, numberDaysBeforeTriggering, mode);
+
+    writeToBinFile(getDigitalOwnerFilePath(),
+                   reinterpret_cast<char*>(&digitalOwner),
+                   sizeof(digitalOwner),
+                   sizeof(DigitalOwner)
+    );
+
+
+    env->DeleteLocalRef(digitalOwnerObject);
 }

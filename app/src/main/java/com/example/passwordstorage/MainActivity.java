@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.passwordstorage.data.SharedCalculatorDataViewModel;
+import com.example.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.ui.HomeActivity;
 
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCalculatorDataViewModel sharedCalculatorDataViewModel;
 
+    private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
         sharedCalculatorDataViewModel = new ViewModelProvider(this).get(SharedCalculatorDataViewModel.class);
+        sharedDigitalOwnerViewModel = new ViewModelProvider(this).get(SharedDigitalOwnerViewModel.class);
         sharedSettingsDataViewModel.setSettings();
+        sharedDigitalOwnerViewModel.setDigitalOwner();
 
         checkSetOldData();
     }

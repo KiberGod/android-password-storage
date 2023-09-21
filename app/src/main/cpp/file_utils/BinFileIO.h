@@ -27,6 +27,10 @@ static const std::string SETTINGS_FILE = "/settings_v4.bin";
 // Файл даних калькулятора
 static const std::string CALCULATOR_FILE = "/calcData_v5";
 
+// Файл даних "Цифрового власника"
+static const std::string DIGITAL_OWNER_FILE = "/digitalOwner_v1";
+
+
 // Повертає і`мя файла тестових записів
 std::string getRecordsFilePath();
 
@@ -38,6 +42,9 @@ std::string getSettingsFilePath();
 
 // Повертає і`мя файла даних калькулятора
 std::string getCalculatorFilePath();
+
+// Повертає і`мя файла даних "Цифрового власника"
+std::string getDigitalOwnerFilePath();
 
 // Функція встановлює шлях до файлів програми
 void setFilesPath(JNIEnv* env, jobject context);
@@ -65,6 +72,10 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass);
 
+// Функція передає об`єкт DivitalOwner з данного С++ модуля у Java-код
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_example_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass);
+
 // Функція запису змін до бінарного файла
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
 
@@ -86,5 +97,9 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
 // Отримання нових даних калькулятора з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject);
+
+// Отримання нових даних "Цифрового власника" з java, які необхідно внести у файл
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H
