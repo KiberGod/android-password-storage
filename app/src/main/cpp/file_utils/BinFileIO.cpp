@@ -14,7 +14,7 @@
 #include "../model/Record.h"
 
 
-std::string getTestRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
+std::string getRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
 
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
 
@@ -33,7 +33,7 @@ void setFilesPath(JNIEnv* env, jobject context) {
 
     FILES_PATH = env->GetStringUTFChars(absolutePath, nullptr);
 
-    __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "FILES PATH: %s", FILES_PATH.c_str());
+    //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "FILES PATH: %s", FILES_PATH.c_str());
 }
 
 std::string getFilesPath() {
@@ -53,9 +53,9 @@ std::vector<T> loadDataFromBinFile(const std::string& filename, std::vector<T>& 
     file.open(filename, std::ios::binary);
 
     if (!file.is_open()) {
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READING BIN-FILE: %s", filename.c_str());
+        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READING BIN-FILE: %s", filename.c_str());
     } else {
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFULLY READ BIN-FILE: %s", filename.c_str());
+        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFULLY READ BIN-FILE: %s", filename.c_str());
 
         char buffer[sizeof(T)];
         while (file.read(buffer, sizeof(buffer))) {
@@ -255,13 +255,13 @@ void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std
     file.open(file_path, std::ofstream::app);
 
     if (!file.is_open()) {
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR WRITE2 BIN-FILE");
+        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR WRITE2 BIN-FILE");
     } else {
         // XOR-шифрування
         encryptData(data, dataSize);
 
         file.write(reinterpret_cast<char*>(data), classSize);
-        __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL WRITE2 BIN-FILE");
+        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL WRITE2 BIN-FILE");
     }
 }
 
@@ -327,7 +327,7 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
 
     jint size = env->CallIntMethod(recordsList, sizeMethod);
 
-    dropFile(getTestRecordsFilePath());
+    dropFile(getRecordsFilePath());
 
     for (int i = 0; i < size; ++i) {
         jobject recordObj = env->CallObjectMethod(recordsList, getMethod, i);
@@ -392,7 +392,7 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
 
         Record record{titleStr, textStr, category_id, bookmark, icon_id, cppFields.data()};
 
-        writeToBinFile(getTestRecordsFilePath(),
+        writeToBinFile(getRecordsFilePath(),
                        reinterpret_cast<char*>(&record),
                        sizeof(record),
                        sizeof(Record)
