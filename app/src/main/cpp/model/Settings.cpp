@@ -9,14 +9,16 @@ const std::string Settings::DEFAULT_PASSWORD = "7-.93";
 Settings::Settings() {
     activityProtection = DEFAULT_ACTIVITY_PROTECTION;
     inputCalcClearing = DEFAULT_INPUT_CALC_CLEARING;
+    digitalOwner = DEFAULT_DIGITAL_OWNER;
 
     strncpy(password, Settings::DEFAULT_PASSWORD.c_str(), MAX_PASSWORD_LENGTH);
     password[MAX_PASSWORD_LENGTH - 1] = '\0';
 }
 
-Settings::Settings(const bool activityProtection, const bool inputCalcClearing, const char* password) {
+Settings::Settings(const bool activityProtection, const bool inputCalcClearing, const char* password, const bool digitalOwner) {
     this->activityProtection = activityProtection;
     this->inputCalcClearing = inputCalcClearing;
+    this->digitalOwner = digitalOwner;
 
     strncpy(this->password, password, MAX_PASSWORD_LENGTH - 1);
     this->password[MAX_PASSWORD_LENGTH - 1] = '\0';
@@ -32,4 +34,8 @@ const bool Settings::getInputCalcClearing() const {
 
 const char* Settings::getPassword() const {
     return password;
+}
+
+const bool Settings::getDigitalOwner() const {
+    return digitalOwner;
 }

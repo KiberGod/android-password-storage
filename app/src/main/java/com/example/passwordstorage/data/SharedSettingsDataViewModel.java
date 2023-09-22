@@ -29,6 +29,9 @@ public class SharedSettingsDataViewModel extends ViewModel {
     // Повертає пароль
     public String getPassword() {return settings.getPassword(); }
 
+    // Повертає значення налаштування digitalOwner
+    public boolean getDigitalOwner() { return settings.getDigitalOwner(); }
+
     // Переключення опції activityProtection
     public void editActivityProtection() {
         settings.resetActivityProtection();
@@ -38,6 +41,12 @@ public class SharedSettingsDataViewModel extends ViewModel {
     // Переключення опції inputCalcClearing
     public void editInputCalcClearing() {
         settings.resetInputCalcClearing();
+        saveSettings(settings);
+    }
+
+    // Переключення опції digitalOwner
+    public void editDigitalOwner() {
+        settings.resetDigitalOwner();
         saveSettings(settings);
     }
 

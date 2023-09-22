@@ -35,19 +35,29 @@ private:
     char password[MAX_PASSWORD_LENGTH];
 
     /*
+     * Змінна вказує, у якому стані знаходиться "Цифровий власник"
+     *
+     *      true    -   увімкнений
+     *      false   -   вимкнутий
+     */
+    bool digitalOwner;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     static const bool DEFAULT_ACTIVITY_PROTECTION = true;
     static const bool DEFAULT_INPUT_CALC_CLEARING = false;
     static const std::string DEFAULT_PASSWORD;
+    static const bool DEFAULT_DIGITAL_OWNER = false;
 
 
 public:
     Settings();
-    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password);
+    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password, const bool digitalOwner);
     const bool getActivityProtection() const;
     const bool getInputCalcClearing() const;
     const char* getPassword() const;
+    const bool getDigitalOwner() const;
 };
 
 

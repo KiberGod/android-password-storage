@@ -22,7 +22,7 @@ static const std::string TEST_RECORDS_FILE = "/example13.bin";
 static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings_v4.bin";
+static const std::string SETTINGS_FILE = "/settings_v5.bin";
 
 // Файл даних калькулятора
 static const std::string CALCULATOR_FILE = "/calcData_v5";

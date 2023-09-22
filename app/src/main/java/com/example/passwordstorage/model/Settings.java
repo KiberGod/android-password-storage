@@ -29,32 +29,45 @@ public class Settings {
     private String password;
 
     /*
+     * Змінна вказує, у якому стані знаходиться "Цифровий власник"
+     *
+     *      true    -   увімкнений
+     *      false   -   вимкнутий
+     */
+    private boolean digitalOwner;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     private static  final boolean DEFAULT_ACTIVITY_PROTECTION = true;
     private static final boolean DEFAULT_INPUT_CALC_CLEARING = false;
+    private static final boolean DEFAULT_DIGITAL_OWNER = false;
 
 
     public Settings(String password) {
         activityProtection = DEFAULT_ACTIVITY_PROTECTION;
         inputCalcClearing = DEFAULT_INPUT_CALC_CLEARING;
         this.password = password;
+        digitalOwner = DEFAULT_DIGITAL_OWNER;
     }
 
-    public Settings(boolean activityProtection, boolean inputPassClearing, String password) {
+    public Settings(boolean activityProtection, boolean inputPassClearing, String password, boolean digitalOwner) {
         this.activityProtection = activityProtection;
         this.inputCalcClearing = inputPassClearing;
         this.password = password;
+        this.digitalOwner = digitalOwner;
     }
 
     public boolean getActivityProtection() { return activityProtection; }
     public boolean getInputCalcClearing() { return inputCalcClearing; }
     public String getPassword() { return password; }
+    public boolean getDigitalOwner() { return digitalOwner; }
 
     public void resetActivityProtection() {
         activityProtection = !activityProtection;
     }
     public void resetInputCalcClearing() { inputCalcClearing = !inputCalcClearing; }
+    public void resetDigitalOwner() { digitalOwner = !digitalOwner; }
 
     public void setPassword(String password) {
         this.password = password;

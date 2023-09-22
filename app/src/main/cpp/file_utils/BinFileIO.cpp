@@ -200,7 +200,7 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
     jclass settingsClass = env->FindClass("com/example/passwordstorage/model/Settings");
-    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;)V");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;Z)V");
 
     std::vector<Settings> settings;
 
@@ -212,10 +212,11 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
     bool activityProtection = settings[0].getActivityProtection();
     bool inputCalcClearing = settings[0].getInputCalcClearing();
     const char* password = settings[0].getPassword();
+    bool digitalOwner = settings[0].getDigitalOwner();
 
     jstring jPassword = env->NewStringUTF(password);
 
-    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing, jPassword);
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing, jPassword, digitalOwner);
 
     return settingsObject;
 }
@@ -446,14 +447,16 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
     jfieldID activityProtectionField = env->GetFieldID(settingsClass, "activityProtection", "Z");
     jfieldID inputCalcClearingField = env->GetFieldID(settingsClass, "inputCalcClearing", "Z");
     jfieldID passwordField = env->GetFieldID(settingsClass, "password", "Ljava/lang/String;");
+    jfieldID digitalOwnerField = env->GetFieldID(settingsClass, "digitalOwner", "Z");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
     jboolean inputCalcClearing = env->GetBooleanField(settingsObject, inputCalcClearingField);
     jstring jPassword = (jstring)env->GetObjectField(settingsObject, passwordField);
+    jboolean digitalOwner = env->GetBooleanField(settingsObject, digitalOwnerField);
 
     const char* password = env->GetStringUTFChars(jPassword, nullptr);
 
-    Settings settings(activityProtection, inputCalcClearing, password);
+    Settings settings(activityProtection, inputCalcClearing, password, digitalOwner);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),
