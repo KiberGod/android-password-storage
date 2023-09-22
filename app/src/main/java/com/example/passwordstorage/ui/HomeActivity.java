@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import com.example.passwordstorage.MainActivity;
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;
@@ -56,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
+    private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(this).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(this).get(SharedRecordsDataViewModel.class);
+        sharedDigitalOwnerViewModel = new ViewModelProvider(this).get(SharedDigitalOwnerViewModel.class);
 
         setFragment(new StorageFragment());
         setSelectedFromBottomNavBar();
@@ -75,6 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         sharedSettingsDataViewModel.setSettings();
         sharedCategoriesDataViewModel.setCategories();
         sharedRecordsDataViewModel.setRecords();
+        sharedDigitalOwnerViewModel.setDigitalOwner();
     }
 
     // Повертає користувача до калькулятора у разі втрати фокусу програмою

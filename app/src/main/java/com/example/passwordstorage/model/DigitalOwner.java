@@ -1,14 +1,16 @@
 package com.example.passwordstorage.model;
 
+import java.util.Calendar;
+
 /*
  *  Клас "Цифрового власника"
  */
 public class DigitalOwner {
 
-    private static final int PASSIVE_MODE = 0;          // Режим бездії
-    private static final int HIDE_MODE = 1;             // Режим приховування даних
-    private static final int PROTECTED_MODE = 2;        // Режим захисту входу
-    private static final int DATA_DELETION_MODE = 3;    // Режим знищення даних
+    public static final int PASSIVE_MODE = 0;          // Режим бездії
+    public static final int HIDE_MODE = 1;             // Режим приховування даних
+    public static final int PROTECTED_MODE = 2;        // Режим захисту входу
+    public static final int DATA_DELETION_MODE = 3;    // Режим знищення даних
 
     private int dayLastVisit;
     private int monthLastVisit;
@@ -32,18 +34,20 @@ public class DigitalOwner {
     public int getNumberDaysBeforeTriggering() { return numberDaysBeforeTriggering; }
     public int getMode() { return mode; }
 
-    public void setDateLastVisit(int dayLastVisit, int monthLastVisit, int yearLastVisit) {
-        this.dayLastVisit = dayLastVisit;
-        this.monthLastVisit = monthLastVisit;
-        this.yearLastVisit = yearLastVisit;
-    }
-
     public void setNumberDaysBeforeTriggering(int numberDaysBeforeTriggering) {
         this.numberDaysBeforeTriggering = numberDaysBeforeTriggering;
     }
 
     public void setMode(int mode) {
         this.mode = mode;
+        setDate();
+    }
+
+    public void setDate() {
+        Calendar calendar = Calendar.getInstance();
+        this.dayLastVisit = calendar.get(Calendar.DAY_OF_MONTH);
+        this.monthLastVisit = calendar.get(Calendar.MONTH) + 1;
+        this.yearLastVisit = calendar.get(Calendar.YEAR);
     }
 
 }

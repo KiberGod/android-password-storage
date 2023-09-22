@@ -1,22 +1,31 @@
 package com.example.passwordstorage.ui.settings;
 
+import static com.example.passwordstorage.model.DigitalOwner.DATA_DELETION_MODE;
+import static com.example.passwordstorage.model.DigitalOwner.HIDE_MODE;
+import static com.example.passwordstorage.model.DigitalOwner.PROTECTED_MODE;
 import static com.example.passwordstorage.model.Settings.MAX_PASSWORD_LENGTH;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.ui.HomeViewModel;
 
@@ -24,8 +33,13 @@ public class SettingsFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
+    private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
 
     private TextView textViewStatus;
+
+    private final String DESCRIPTION_MOD1 = "Копії ваших файлів даних (записи та категорії) будуть приховані до моменту їх відновлення. Оригінали будуть замінені порожніми, тимчасовими файлами. Для відновлення прихованих даних необідно ввести ваш пароль входу у калькуляторі задом наперед. Після відновлення тимчасові дані будуть об`єднані з відновленними.";
+    private final String DESCRIPTION_MOD2 = "У цьому режимі Цифровий власник через задану кількість днів заблокує можливість входити по стандартному паролю. Для входу буде необхідно ввести ваш пароль задом наперед. \n\nВідлік часу почнеться з поточної дати.";
+    private final String DESCRIPTION_MOD3 = "У цьому режимі Цифровий власник через задану кількість днів після першого успішного заходу одразу знищить усі дані записів та категорій. Дані буде неможливо відновити. Видалення відбудеться до того, як хтось при вході зможе побачити дані. \n\nВідлік часу почнеться з поточної дати.";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +48,7 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
+        sharedDigitalOwnerViewModel = new ViewModelProvider(requireActivity()).get(SharedDigitalOwnerViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editPasswordStatus);
@@ -43,9 +58,13 @@ public class SettingsFragment extends Fragment {
         printSettingsData(view);
         setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
         setOnClickToSwitch(view, R.id.inputCalcClearingFlag, () -> sharedSettingsDataViewModel.editInputCalcClearing());
-        setOnClickToSwitch(view, R.id.digitalOwnerFlag, () -> sharedSettingsDataViewModel.editDigitalOwner());
+        setOnClickToSwitch(view, R.id.digitalOwnerFlag, () -> editDigitalOwnerSetting(view));
+        setOnClickToSwitch(view, R.id.digitalOwnerMode1Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode1Flag, DESCRIPTION_MOD1, HIDE_MODE));
+        setOnClickToSwitch(view, R.id.digitalOwnerMode2Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode2Flag, DESCRIPTION_MOD2, PROTECTED_MODE));
+        setOnClickToSwitch(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DESCRIPTION_MOD3, DATA_DELETION_MODE));
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
+        setOnClickToSaveDayButton(view);
 
         return view;
     }
@@ -60,9 +79,23 @@ public class SettingsFragment extends Fragment {
 
         Switch digitalOwnerSwitch = view.findViewById(R.id.digitalOwnerFlag);
         digitalOwnerSwitch.setChecked(sharedSettingsDataViewModel.getDigitalOwner());
+        showOrHideDigitalOwnerSettings(view);
 
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         inputPassword.setText(sharedSettingsDataViewModel.getPassword());
+
+        EditText inputNumberDays = view.findViewById(R.id.inputNumberDaysBeforeTriggering);
+        inputNumberDays.setText(Integer.toString(sharedDigitalOwnerViewModel.getDaysNumber()));
+
+        printDigitalOwnerMod(view, R.id.digitalOwnerMode1Flag, HIDE_MODE);
+        printDigitalOwnerMod(view, R.id.digitalOwnerMode2Flag, PROTECTED_MODE);
+        printDigitalOwnerMod(view, R.id.digitalOwnerMode3Flag, DATA_DELETION_MODE);
+
+    }
+
+    private void printDigitalOwnerMod(View view, int id, int mode) {
+        Switch digitalOwnerMode = view.findViewById(id);
+        digitalOwnerMode.setChecked(sharedDigitalOwnerViewModel.getModeFlag(mode));
     }
 
     // Встановлює обробник натискань на перемикач налаштування ActivityProtection
@@ -73,6 +106,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onClickRunnable.run();
+                hideAllKeyBoards(view);
             }
         });
     }
@@ -84,6 +118,7 @@ public class SettingsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideAllKeyBoards(view);
                 sharedSettingsDataViewModel.setDefaultSettings();
                 printSettingsData(view);
             }
@@ -96,6 +131,7 @@ public class SettingsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideAllKeyBoards(view);
                 getEditPassword(view);
             }
         });
@@ -116,5 +152,107 @@ public class SettingsFragment extends Fragment {
         } else {
             textViewStatus.setText("Пароль не може бути порожнім");
         }
+    }
+
+    // Логіка переключення налаштування DigitalOwner
+    private void editDigitalOwnerSetting(View view) {
+        sharedSettingsDataViewModel.editDigitalOwner();
+        showOrHideDigitalOwnerSettings(view);
+    }
+
+    // Автоприховання налаштувань Цифрового власника
+    private void showOrHideDigitalOwnerSettings(View view) {
+        LinearLayout digitalOwnerSettingsLayout = view.findViewById(R.id.digitalOwnerSettings);
+        if (sharedSettingsDataViewModel.getDigitalOwner()) {
+            digitalOwnerSettingsLayout.setVisibility(View.VISIBLE);
+        } else {
+            digitalOwnerSettingsLayout.setVisibility(View.GONE);
+        }
+    }
+
+    // Вікно з підтвердженням зміни режиму
+    private void showResetModeConfirmDialog(View rootView, int switchId, String text, int mode) {
+        Switch modeSwitch = rootView.findViewById(switchId);
+
+        if (modeSwitch.isChecked()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setMessage(text);
+            builder.setPositiveButton("Увімкнути", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sharedDigitalOwnerViewModel.setMode(mode);
+                    resetModeSwitches(rootView, switchId);
+                }
+            });
+            builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sharedDigitalOwnerViewModel.setPassiveMode();
+                    offAllModsSwitches(rootView);
+                }
+            });
+            builder.show();
+        } else {
+            sharedDigitalOwnerViewModel.setPassiveMode();
+        }
+    }
+
+    // Вимикає всі режими "Цифрового власника"
+    private void offAllModsSwitches(View view) {
+        Switch switch1 = view.findViewById(R.id.digitalOwnerMode1Flag);
+        Switch switch2 = view.findViewById(R.id.digitalOwnerMode2Flag);
+        Switch switch3 = view.findViewById(R.id.digitalOwnerMode3Flag);
+
+        switch1.setChecked(false);
+        switch2.setChecked(false);
+        switch3.setChecked(false);
+    }
+
+    // Оновлення перемикачів режиму "Цифрового власника"
+    private void resetModeSwitches(View view, int switchId) {
+        offAllModsSwitches(view);
+
+        Switch selectedSwitch = view.findViewById(switchId);
+        selectedSwitch.setChecked(true);
+    }
+
+
+    // Функція встановлює подію натискання кнопки збереження кількості днів для спрацювання Цифрового власника
+    private void setOnClickToSaveDayButton(View rootView) {
+        Button button = rootView.findViewById(R.id.saveDaysNumberButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAllKeyBoards(rootView);
+                EditText editText = rootView.findViewById(R.id.inputNumberDaysBeforeTriggering);
+                String inputText = editText.getText().toString().trim();
+
+                if (!inputText.isEmpty() && inputText.matches("\\d+")) {
+                    int days = Integer.parseInt(inputText);
+                    if (days >= 0) {
+                        sharedDigitalOwnerViewModel.setDaysNumber(days);
+                        Toast.makeText(getActivity(), "Точка спрацювання встановлена", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Ви не можете задати точку спрацювання у минулому", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Кількість днів до спрацювання вказано некоректно", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    // Функція приховання клавіатур
+    private void hideAllKeyBoards(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        hideKeyBoard(inputMethodManager, view, R.id.inputPassword);
+        hideKeyBoard(inputMethodManager, view, R.id.inputNumberDaysBeforeTriggering);
+    }
+
+    // Приховання клавіатури для конкретного поля
+    private void hideKeyBoard(InputMethodManager inputMethodManager, View view, int id) {
+        EditText editText = view.findViewById(id);
+        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 }
