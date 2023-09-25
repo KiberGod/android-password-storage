@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -28,6 +30,8 @@ import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.ui.HomeViewModel;
+
+import java.util.Calendar;
 
 public class SettingsFragment extends Fragment {
 
@@ -64,7 +68,7 @@ public class SettingsFragment extends Fragment {
         setOnClickToSwitch(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DESCRIPTION_MOD3, DATA_DELETION_MODE));
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
-        setOnClickToSaveDayButton(view);
+        setOnChangeToCalendar(view);
 
         return view;
     }
@@ -84,8 +88,8 @@ public class SettingsFragment extends Fragment {
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         inputPassword.setText(sharedSettingsDataViewModel.getPassword());
 
-        EditText inputNumberDays = view.findViewById(R.id.inputNumberDaysBeforeTriggering);
-        inputNumberDays.setText(Integer.toString(sharedDigitalOwnerViewModel.getDaysNumber()));
+        CalendarView calendarView = view.findViewById(R.id.calendarView);
+        calendarView.setDate(sharedDigitalOwnerViewModel.getDateMilliseconds());
 
         printDigitalOwnerMod(view, R.id.digitalOwnerMode1Flag, HIDE_MODE);
         printDigitalOwnerMod(view, R.id.digitalOwnerMode2Flag, PROTECTED_MODE);
@@ -218,28 +222,22 @@ public class SettingsFragment extends Fragment {
 
 
     // Функція встановлює подію натискання кнопки збереження кількості днів для спрацювання Цифрового власника
-    private void setOnClickToSaveDayButton(View rootView) {
-        Button button = rootView.findViewById(R.id.saveDaysNumberButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAllKeyBoards(rootView);
-                EditText editText = rootView.findViewById(R.id.inputNumberDaysBeforeTriggering);
-                String inputText = editText.getText().toString().trim();
+    private void setOnChangeToCalendar(View rootView) {
+        CalendarView calendarView = rootView.findViewById(R.id.calendarView);
 
-                if (!inputText.isEmpty() && inputText.matches("\\d+")) {
-                    int days = Integer.parseInt(inputText);
-                    if (days >= 0) {
-                        sharedDigitalOwnerViewModel.setDaysNumber(days);
-                        Toast.makeText(getActivity(), "Точка спрацювання встановлена", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Ви не можете задати точку спрацювання у минулому", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Кількість днів до спрацювання вказано некоректно", Toast.LENGTH_SHORT).show();
-                }
+        Calendar calendar = Calendar.getInstance();
+
+        calendarView.setMinDate(calendar.getTimeInMillis());
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                hideAllKeyBoards(rootView);
+                sharedDigitalOwnerViewModel.editDate(dayOfMonth, month, year);
+                Toast.makeText(getActivity(), "Точка спрацювання встановлена", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     // Функція приховання клавіатур
@@ -247,7 +245,6 @@ public class SettingsFragment extends Fragment {
         InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         hideKeyBoard(inputMethodManager, view, R.id.inputPassword);
-        hideKeyBoard(inputMethodManager, view, R.id.inputNumberDaysBeforeTriggering);
     }
 
     // Приховання клавіатури для конкретного поля

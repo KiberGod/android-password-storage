@@ -28,7 +28,7 @@ static const std::string SETTINGS_FILE = "/settings_v5.bin";
 static const std::string CALCULATOR_FILE = "/calcData_v5";
 
 // Файл даних "Цифрового власника"
-static const std::string DIGITAL_OWNER_FILE = "/digitalOwner_v1";
+static const std::string DIGITAL_OWNER_FILE = "/digitalOwner_v2";
 
 
 // Повертає і`мя файла тестових записів

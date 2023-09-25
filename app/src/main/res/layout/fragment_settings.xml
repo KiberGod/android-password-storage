@@ -152,27 +152,13 @@
                     android:textSize="18dp"
                     android:text="Введіть кількість днів до спрацювання" />
 
-                <LinearLayout
+                <CalendarView
+                    android:id="@+id/calendarView"
+                    android:theme="@style/CalenderViewCustom"
+                    android:dateTextAppearance="@style/CalenderViewDateCustomText"
+                    android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/inputNumberDaysBeforeTriggering"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="number of days"
-                        android:textColor="@color/white"
-                        android:inputType="number" />
-
-                    <Button
-                        android:id="@+id/saveDaysNumberButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Зберегти" />
-                </LinearLayout>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </LinearLayout>

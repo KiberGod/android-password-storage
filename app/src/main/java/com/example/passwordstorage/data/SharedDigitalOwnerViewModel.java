@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.passwordstorage.model.DigitalOwner;
 
+import java.util.Calendar;
+
 public class SharedDigitalOwnerViewModel extends ViewModel {
 
     private DigitalOwner digitalOwner;
@@ -25,14 +27,6 @@ public class SharedDigitalOwnerViewModel extends ViewModel {
         saveDigitalOwner(digitalOwner);
     }
 
-    public void setDaysNumber(int days) {
-        digitalOwner.setNumberDaysBeforeTriggering(days);
-        saveDigitalOwner(digitalOwner);
-    }
-
-    public int getDaysNumber() {
-        return digitalOwner.getNumberDaysBeforeTriggering();
-    }
 
     // Повертає true по співпадінню заданого режиму з встановленним
     public boolean getModeFlag(int mode) {
@@ -43,4 +37,16 @@ public class SharedDigitalOwnerViewModel extends ViewModel {
         }
     }
 
+    public void editDate(int day, int month, int year) {
+        digitalOwner.setDate(day, month, year);
+        saveDigitalOwner(digitalOwner);
+    }
+
+    public long getDateMilliseconds() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, digitalOwner.getYearTriggering());
+        calendar.set(Calendar.MONTH, digitalOwner.getMonthTriggering());
+        calendar.set(Calendar.DAY_OF_MONTH, digitalOwner.getDayTriggering());
+        return calendar.getTimeInMillis();
+    }
 }

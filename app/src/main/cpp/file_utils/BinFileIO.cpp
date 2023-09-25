@@ -262,7 +262,7 @@ Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jcl
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_example_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass) {
     jclass digitalOwnerClass = env->FindClass("com/example/passwordstorage/model/DigitalOwner");
-    jmethodID digitalOwnerConstructor = env->GetMethodID(digitalOwnerClass, "<init>", "(IIIII)V");
+    jmethodID digitalOwnerConstructor = env->GetMethodID(digitalOwnerClass, "<init>", "(IIII)V");
 
     std::vector<DigitalOwner> digitalOwner;
 
@@ -271,14 +271,13 @@ Java_com_example_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, j
         digitalOwner.push_back(newDigitalOwner);
     }
 
-    int dayLastVisit = digitalOwner[0].getDayLastVisit();
-    int monthLastVisit = digitalOwner[0].getMonthLastVisit();
-    int yearLastVisit = digitalOwner[0].getYearLastVisit();
-    int numberDaysBeforeTriggering = digitalOwner[0].getNumberDaysBeforeTriggering();
+    int dayTriggering = digitalOwner[0].getDayTriggering();
+    int monthTriggering = digitalOwner[0].getMonthTriggering();
+    int yearTriggering = digitalOwner[0].getYearTriggering();
     int mode = digitalOwner[0].getMode();
 
     jobject digitalOwnerObject = env->NewObject(digitalOwnerClass, digitalOwnerConstructor,
-                                                dayLastVisit, monthLastVisit, yearLastVisit, numberDaysBeforeTriggering, mode);
+                                                dayTriggering, monthTriggering, yearTriggering, mode);
 
     return digitalOwnerObject;
 }
@@ -508,20 +507,18 @@ Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, 
 
     jclass digitalOwnerClass = env->GetObjectClass(digitalOwnerObject);
 
-    jfieldID dayLastVisitField = env->GetFieldID(digitalOwnerClass, "dayLastVisit", "I");
-    jfieldID monthLastVisitField = env->GetFieldID(digitalOwnerClass, "monthLastVisit", "I");
-    jfieldID yearLastVisitField = env->GetFieldID(digitalOwnerClass, "yearLastVisit", "I");
-    jfieldID numberDaysBeforeTriggeringField = env->GetFieldID(digitalOwnerClass, "numberDaysBeforeTriggering", "I");
+    jfieldID dayTriggeringField = env->GetFieldID(digitalOwnerClass, "dayTriggering", "I");
+    jfieldID monthTriggeringField = env->GetFieldID(digitalOwnerClass, "monthTriggering", "I");
+    jfieldID yearTriggeringField = env->GetFieldID(digitalOwnerClass, "yearTriggering", "I");
     jfieldID modeField = env->GetFieldID(digitalOwnerClass, "mode", "I");
 
-    jint dayLastVisit = env->GetIntField(digitalOwnerObject, dayLastVisitField);
-    jint monthLastVisit = env->GetIntField(digitalOwnerObject, monthLastVisitField);
-    jint yearLastVisit = env->GetIntField(digitalOwnerObject, yearLastVisitField);
-    jint numberDaysBeforeTriggering = env->GetIntField(digitalOwnerObject, numberDaysBeforeTriggeringField);
+    jint dayTriggering = env->GetIntField(digitalOwnerObject, dayTriggeringField);
+    jint monthTriggering = env->GetIntField(digitalOwnerObject, monthTriggeringField);
+    jint yearTriggering = env->GetIntField(digitalOwnerObject, yearTriggeringField);
     jint mode = env->GetIntField(digitalOwnerObject, modeField);
 
 
-    DigitalOwner digitalOwner(dayLastVisit, monthLastVisit, yearLastVisit, numberDaysBeforeTriggering, mode);
+    DigitalOwner digitalOwner(dayTriggering, monthTriggering, yearTriggering, mode);
 
     writeToBinFile(getDigitalOwnerFilePath(),
                    reinterpret_cast<char*>(&digitalOwner),

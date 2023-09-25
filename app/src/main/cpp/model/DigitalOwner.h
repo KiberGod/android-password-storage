@@ -11,22 +11,19 @@ private:
     static const int DEFAULT_DAY_LAST_VISIT = 0;
     static const int DEFAULT_MONTH_LAST_VISIT = 0;
     static const int DEFAULT_YEAR_LAST_VISIT = 0;
-    static const int DEFAULT_NUMBER_DAYS_BEFORE_TRIGGERING = 0;
     static const int DEFAULT_MODE = 0;
 
-    int dayLastVisit;
-    int monthLastVisit;
-    int yearLastVisit;
-    int numberDaysBeforeTriggering;
+    int dayTriggering;
+    int monthTriggering;
+    int yearTriggering;
     int mode;
 
 public:
     DigitalOwner();
-    DigitalOwner(const int dayLastVisit, const int monthLastVisit, const int yearLastVisit, const int numberDaysBeforeTriggering, const int mode);
-    const int getDayLastVisit() const;
-    const int getMonthLastVisit() const;
-    const int getYearLastVisit() const;
-    const int getNumberDaysBeforeTriggering() const;
+    DigitalOwner(const int dayTriggering, const int monthTriggering, const int yearTriggering, const int mode);
+    const int getDayTriggering() const;
+    const int getMonthTriggering() const;
+    const int getYearTriggering() const;
     const int getMode() const;
 };
 

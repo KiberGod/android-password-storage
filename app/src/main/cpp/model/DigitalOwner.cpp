@@ -5,37 +5,30 @@
 #include "DigitalOwner.h"
 
 DigitalOwner::DigitalOwner() {
-    dayLastVisit = DEFAULT_DAY_LAST_VISIT;
-    monthLastVisit = DEFAULT_MONTH_LAST_VISIT;
-    yearLastVisit = DEFAULT_YEAR_LAST_VISIT;
-    numberDaysBeforeTriggering = DEFAULT_NUMBER_DAYS_BEFORE_TRIGGERING;
+    dayTriggering = DEFAULT_DAY_LAST_VISIT;
+    monthTriggering = DEFAULT_MONTH_LAST_VISIT;
+    yearTriggering = DEFAULT_YEAR_LAST_VISIT;
     mode = DEFAULT_MODE;
 }
 
-DigitalOwner::DigitalOwner(const int dayLastVisit, const int monthLastVisit,
-                           const int yearLastVisit, const int numberDaysBeforeTriggering,
-                           const int mode) {
-    this->dayLastVisit = dayLastVisit;
-    this->monthLastVisit = monthLastVisit;
-    this->yearLastVisit = yearLastVisit;
-    this->numberDaysBeforeTriggering = numberDaysBeforeTriggering;
+DigitalOwner::DigitalOwner(const int dayTriggering, const int monthTriggering,
+                           const int yearTriggering, const int mode) {
+    this->dayTriggering = dayTriggering;
+    this->monthTriggering = monthTriggering;
+    this->yearTriggering = yearTriggering;
     this->mode = mode;
 }
 
-const int DigitalOwner::getDayLastVisit() const {
-    return dayLastVisit;
+const int DigitalOwner::getDayTriggering() const {
+    return dayTriggering;
 }
 
-const int DigitalOwner::getMonthLastVisit() const {
-    return monthLastVisit;
+const int DigitalOwner::getMonthTriggering() const {
+    return monthTriggering;
 }
 
-const int DigitalOwner::getYearLastVisit() const {
-    return yearLastVisit;
-}
-
-const int DigitalOwner::getNumberDaysBeforeTriggering() const {
-    return numberDaysBeforeTriggering;
+const int DigitalOwner::getYearTriggering() const {
+    return yearTriggering;
 }
 
 const int DigitalOwner::getMode() const {
