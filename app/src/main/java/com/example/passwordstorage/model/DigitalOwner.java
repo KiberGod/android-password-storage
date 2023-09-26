@@ -11,6 +11,10 @@ public class DigitalOwner {
     public static final int PROTECTED_MODE = 2;        // Режим захисту входу
     public static final int DATA_DELETION_MODE = 3;    // Режим знищення даних
 
+    public static final int DEFAULT_DAY_TRIGGERING = 0;
+    public static final int DEFAULT_MONTH_TRIGGERING = 0;
+    public static final int DEFAULT_YEAR_TRIGGERING = 0;
+
     private int dayTriggering;
     private int monthTriggering;
     private int yearTriggering;
@@ -38,6 +42,13 @@ public class DigitalOwner {
         this.dayTriggering = day;
         this.monthTriggering = month;
         this.yearTriggering = year;
+    }
+
+    public void resetSettings() {
+        this.dayTriggering = DEFAULT_DAY_TRIGGERING;
+        this.monthTriggering = DEFAULT_MONTH_TRIGGERING;
+        this.yearTriggering = DEFAULT_YEAR_TRIGGERING;
+        this.mode = PASSIVE_MODE;
     }
 
 }

@@ -8,9 +8,9 @@
 
 class DigitalOwner {
 private:
-    static const int DEFAULT_DAY_LAST_VISIT = 0;
-    static const int DEFAULT_MONTH_LAST_VISIT = 0;
-    static const int DEFAULT_YEAR_LAST_VISIT = 0;
+    static const int DEFAULT_DAY_TRIGGERING = 0;
+    static const int DEFAULT_MONTH_TRIGGERING = 0;
+    static const int DEFAULT_YEAR_TRIGGERING = 0;
     static const int DEFAULT_MODE = 0;
 
     int dayTriggering;

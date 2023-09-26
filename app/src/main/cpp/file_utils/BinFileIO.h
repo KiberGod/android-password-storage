@@ -18,24 +18,36 @@ static std::string FILES_PATH;
 // Тестовий файл записів
 static const std::string TEST_RECORDS_FILE = "/example13.bin";
 
+// Прихована буферна копія файла записів
+static const std::string HIDDEN_RECORDS_FILE = "/hidden_example13.bin";
+
 // Файл категорій
 static const std::string CATEGORIES_FILE = "/categories_v2.bin";
 
+// Прихована буферна копія файла категорій
+static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v2.bin";
+
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings_v5.bin";
+static const std::string SETTINGS_FILE = "/settings_v6.bin";
 
 // Файл даних калькулятора
 static const std::string CALCULATOR_FILE = "/calcData_v5";
 
 // Файл даних "Цифрового власника"
-static const std::string DIGITAL_OWNER_FILE = "/digitalOwner_v2";
+static const std::string DIGITAL_OWNER_FILE = "/digitalOwner_v3";
 
 
 // Повертає і`мя файла тестових записів
 std::string getRecordsFilePath();
 
+// Повертає і`мя прихованої копії файла записів
+std::string getHiddenRecordsFilePath();
+
 // Повертає і`мя файла категорій
 std::string getCategoriesFilePath();
+
+// Повертає і`мя прихованої копії файла категорій
+std::string getHiddenCategoriesFilePath();
 
 // Повертає і`мя файла налаштуваннь
 std::string getSettingsFilePath();
@@ -82,6 +94,9 @@ void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std
 // Видалення бінарного файла
 void dropFile(std::string file_path);
 
+// Створення копії файла
+void copyFile(const std::string& mainFilePath, const std::string& copyFile);
+
 // Отримання нових даних категорій з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList);
@@ -101,5 +116,21 @@ Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jc
 // Отримання нових даних "Цифрового власника" з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject);
+
+// Знищує дані користувача (файли записів та категорій)
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass);
+
+// Приховує дані користувача (файли записів та категорій) шляхом створення копій та видалення основних файлів
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass);
+
+// Відновлення прихованих записів
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass);
+
+// Відновлення прихованих категорій
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H

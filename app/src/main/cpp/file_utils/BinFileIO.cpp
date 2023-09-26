@@ -17,7 +17,11 @@
 
 std::string getRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
 
+std::string getHiddenRecordsFilePath() { return FILES_PATH + HIDDEN_RECORDS_FILE; }
+
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
+
+std::string getHiddenCategoriesFilePath() { return FILES_PATH + HIDDEN_CATEGORIES_FILE; }
 
 std::string getSettingsFilePath() { return FILES_PATH + SETTINGS_FILE; }
 
@@ -306,6 +310,22 @@ void dropFile(std::string file_path) {
     }
 }
 
+void copyFile(const std::string& mainFilePath, const std::string& copyFilePath) {
+    std::ifstream mainFile(mainFilePath, std::ios::binary);
+    if (!mainFile) {
+        return;
+    }
+
+    std::ofstream copyFile(copyFilePath, std::ios::binary);
+    if (!copyFile) {
+        return;
+    }
+
+    copyFile << mainFile.rdbuf();
+    mainFile.close();
+    copyFile.close();
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList) {
     jclass arrayListClass = env->GetObjectClass(categoriesList);
@@ -528,4 +548,131 @@ Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, 
 
 
     env->DeleteLocalRef(digitalOwnerObject);
+}
+
+
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass) {
+    dropFile(getRecordsFilePath());
+    dropFile(getCategoriesFilePath());
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass) {
+    copyFile(getRecordsFilePath(), getHiddenRecordsFilePath());
+    copyFile(getCategoriesFilePath(), getHiddenCategoriesFilePath());
+    dropFile(getRecordsFilePath());
+    dropFile(getCategoriesFilePath());
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass) {
+    std::vector<Record> records;
+    loadDataFromBinFile(getFilesPath() + TEST_RECORDS_FILE, records);
+    loadDataFromBinFile(getFilesPath() + HIDDEN_RECORDS_FILE, records);
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
+    jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
+
+    for (const auto& record : records) {
+        jstring jTitle = env->NewStringUTF(record.getTitle());
+        jstring jText = env->NewStringUTF(record.getText());
+        jclass integerClass = env->FindClass("java/lang/Integer");
+        jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
+        jobject jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
+        jclass booleanClass = env->FindClass("java/lang/Boolean");
+        jmethodID booleanConstructor = env->GetMethodID(booleanClass, "<init>", "(Z)V");
+        jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
+
+        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, record.getIconId());
+
+        jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
+
+        for (int i = 0; i < Record::getMaxFields(); i++) {
+            const Record::Field& cppField = record.getFields()[i];
+            jstring jName = env->NewStringUTF(cppField.getName());
+            jstring jValue = env->NewStringUTF(cppField.getValue());
+            jboolean jValueVisibility = cppField.getValueVisibility();
+
+            jobject valueVisibility = env->NewObject(
+                    env->FindClass("java/lang/Boolean"),
+                    env->GetMethodID(env->FindClass("java/lang/Boolean"), "<init>", "(Z)V"),
+                    jValueVisibility
+            );
+
+            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/example/passwordstorage/model/Record$Field;");
+            jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue, valueVisibility);
+
+            env->DeleteLocalRef(jName);
+            env->DeleteLocalRef(jValue);
+
+            env->SetObjectArrayElement(jFields, i, jField);
+        }
+
+        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/example/passwordstorage/model/Record$Field;)V");
+        env->CallVoidMethod(recordObject, setFieldsMethod, jFields);
+
+        env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
+
+        env->DeleteLocalRef(jTitle);
+        env->DeleteLocalRef(jText);
+        env->DeleteLocalRef(jCategory);
+        env->DeleteLocalRef(jBookmark);
+        env->DeleteLocalRef(recordObject);
+    }
+
+    jmethodID saveRecordsMethod = env->GetStaticMethodID(
+            env->FindClass("com/example/passwordstorage/NativeController"),
+            "saveRecords",
+            "(Ljava/util/ArrayList;)V"
+    );
+    env->CallStaticVoidMethod(env->FindClass("com/example/passwordstorage/NativeController"), saveRecordsMethod, arrayList);
+
+    env->DeleteLocalRef(arrayList);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass) {
+    std::vector<Category> categories;
+    loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, categories);
+    loadDataFromBinFile(getFilesPath() + HIDDEN_CATEGORIES_FILE, categories);
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;I)V");
+
+    for (const auto& category : categories) {
+        jclass integerClass = env->FindClass("java/lang/Integer");
+        jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
+        jobject jId = env->NewObject(integerClass, integerConstructor, category.getId());
+
+        jstring jName = env->NewStringUTF(category.getName());
+
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, category.getIconId());
+
+        env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
+
+        env->DeleteLocalRef(jName);
+        env->DeleteLocalRef(categoryObject);
+    }
+
+    jmethodID saveCategoriesMethod = env->GetStaticMethodID(
+            env->FindClass("com/example/passwordstorage/NativeController"),
+            "saveCategories",
+            "(Ljava/util/ArrayList;)V"
+    );
+    env->CallStaticVoidMethod(env->FindClass("com/example/passwordstorage/NativeController"), saveCategoriesMethod, arrayList);
+
+    env->DeleteLocalRef(arrayList);
 }

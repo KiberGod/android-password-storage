@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
        password += symbol;
        if (password.length() == MAX_PASSWORD_LEN) {
            password = "";
-       } else if (password.equals(sharedSettingsDataViewModel.getPassword()) == true) {
+       } else if (sharedDigitalOwnerViewModel.secureEntry(password, sharedSettingsDataViewModel.getPassword(), sharedSettingsDataViewModel.getDigitalOwner())) {
            Intent homePage = new Intent(MainActivity.this, HomeActivity.class);
            startActivity(homePage);
        }

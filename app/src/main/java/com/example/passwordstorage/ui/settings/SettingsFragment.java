@@ -27,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.passwordstorage.R;
+import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedDigitalOwnerViewModel;
+import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.ui.HomeViewModel;
 
@@ -38,6 +40,8 @@ public class SettingsFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
+    private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
+    private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     private TextView textViewStatus;
 
@@ -53,6 +57,8 @@ public class SettingsFragment extends Fragment {
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedDigitalOwnerViewModel = new ViewModelProvider(requireActivity()).get(SharedDigitalOwnerViewModel.class);
+        sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
+        sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editPasswordStatus);
@@ -88,13 +94,17 @@ public class SettingsFragment extends Fragment {
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         inputPassword.setText(sharedSettingsDataViewModel.getPassword());
 
-        CalendarView calendarView = view.findViewById(R.id.calendarView);
-        calendarView.setDate(sharedDigitalOwnerViewModel.getDateMilliseconds());
+        printCalendarData(view);
 
         printDigitalOwnerMod(view, R.id.digitalOwnerMode1Flag, HIDE_MODE);
         printDigitalOwnerMod(view, R.id.digitalOwnerMode2Flag, PROTECTED_MODE);
         printDigitalOwnerMod(view, R.id.digitalOwnerMode3Flag, DATA_DELETION_MODE);
+    }
 
+    private void printCalendarData(View view) {
+        CalendarView calendarView = view.findViewById(R.id.calendarView);
+        calendarView.clearFocus();
+        calendarView.setDate(sharedDigitalOwnerViewModel.getDateMilliseconds());
     }
 
     private void printDigitalOwnerMod(View view, int id, int mode) {
@@ -185,12 +195,25 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     sharedDigitalOwnerViewModel.setMode(mode);
+                    if (sharedDigitalOwnerViewModel.isHideMode(mode)) {
+                        sharedDigitalOwnerViewModel.hideData();
+                        sharedCategoriesDataViewModel.dataDestroy();
+                        sharedRecordsDataViewModel.dataDestroy();
+                    }
                     resetModeSwitches(rootView, switchId);
+                    printCalendarData(rootView);
                 }
             });
             builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    sharedDigitalOwnerViewModel.setPassiveMode();
+                    offAllModsSwitches(rootView);
+                }
+            });
+            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
                     sharedDigitalOwnerViewModel.setPassiveMode();
                     offAllModsSwitches(rootView);
                 }

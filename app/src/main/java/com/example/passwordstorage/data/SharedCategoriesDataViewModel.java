@@ -154,4 +154,9 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     public int getCategoryIconIdById(int id) {
         return getCategoryById(id).getIconId();
     }
+
+    // Видалення активних даних
+    public void dataDestroy() {
+        categories.clear();
+    }
 }

@@ -181,4 +181,8 @@ public class SharedRecordsDataViewModel extends ViewModel {
         saveRecords(records);
     }
 
+    // Видалення активних даних
+    public void dataDestroy() {
+        records.clear();
+    }
 }

@@ -5,9 +5,9 @@
 #include "DigitalOwner.h"
 
 DigitalOwner::DigitalOwner() {
-    dayTriggering = DEFAULT_DAY_LAST_VISIT;
-    monthTriggering = DEFAULT_MONTH_LAST_VISIT;
-    yearTriggering = DEFAULT_YEAR_LAST_VISIT;
+    dayTriggering = DEFAULT_DAY_TRIGGERING;
+    monthTriggering = DEFAULT_MONTH_TRIGGERING;
+    yearTriggering = DEFAULT_YEAR_TRIGGERING;
     mode = DEFAULT_MODE;
 }
 
