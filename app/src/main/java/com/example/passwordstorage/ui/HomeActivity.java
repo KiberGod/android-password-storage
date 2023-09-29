@@ -40,6 +40,7 @@ import com.example.passwordstorage.ui.create.CreateCategoryFragment;
 import com.example.passwordstorage.ui.create.CreateFragment;
 import com.example.passwordstorage.ui.create.CreateRecordFragment;
 import com.example.passwordstorage.ui.generator.GeneratorFragment;
+import com.example.passwordstorage.ui.generator.PasswordGeneratorFragment;
 import com.example.passwordstorage.ui.settings.SettingsFragment;
 import com.example.passwordstorage.ui.storage.StorageFragment;
 import com.example.passwordstorage.ui.storage.sections.EditCategoryFragment;
@@ -186,6 +187,12 @@ public class HomeActivity extends AppCompatActivity {
     public void setStorageFragment() {
         StorageFragment storageFragment = new StorageFragment();
         navigateToFragment(storageFragment, null);
+    }
+
+    // Перехід на сторінку генератора паролів
+    public void setPasswordGeneratorFragment() {
+        PasswordGeneratorFragment passwordGeneratorFragment = new PasswordGeneratorFragment();
+        navigateToFragment(passwordGeneratorFragment, null);
     }
 
     // Функція додає кнопку запису або категорії
