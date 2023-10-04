@@ -24,7 +24,7 @@ public class PasswordGenerator {
 
         private static final boolean DEFAULT_USAGE = true;
         private static final boolean DEFAULT_RANDOM_LENGTH = true;
-        private static final int DEFAULT_LENGTH = 0;
+        public static final int DEFAULT_LENGTH = 0;
 
         // Тип сету, який характеризує символи, що містить у собі
         private int type;
@@ -39,22 +39,22 @@ public class PasswordGenerator {
         /*
          * Налаштування, що вказує, у який саме спосіб повинно бути задано кількість символів сету, які увійдуть до згенерованого паролю
          *
-         *      true    -   кількість символів сету, якій необхідно увійти до паролю, визначається випадково
-         *      false   -   кількість символів сету задаєтсья користувачем через налаштування SymbolSet.length
+         *      false   -   кількість символів сету, якій необхідно увійти до паролю, визначається випадково
+         *      true   -   кількість символів сету задаєтсья користувачем через налаштування SymbolSet.length
          */
         private boolean randomLength;
 
         /*
          * Вказує кількість символів сету, які повинні увійти до паролю.
-         * якщо randomLength = true, то буде згенеровано автоматично
+         * якщо randomLength = false, то буде згенеровано автоматично
          */
         private int length;
 
-        SymbolSet(int type) {
+        public SymbolSet(int type) {
             this(type, DEFAULT_USAGE, DEFAULT_RANDOM_LENGTH, DEFAULT_LENGTH);
         }
 
-        SymbolSet(int type, boolean usage, boolean randomLength, int length) {
+        public SymbolSet(int type, boolean usage, boolean randomLength, int length) {
             this.type = type;
             this.usage = usage;
             this.randomLength = randomLength;
@@ -82,7 +82,7 @@ public class PasswordGenerator {
         public void setType(int type) { this.type = type; }
         public void inversionUsage() { usage = !usage; }
         public void inversionRandomLength() { randomLength = !randomLength; }
-        public void setLength(int type) { this.type = type; }
+        public void setLength(int length) { this.length = length; }
 
     }
 
@@ -90,6 +90,7 @@ public class PasswordGenerator {
     private static final int MIN_LENGTH = 1;
     private static final int DEFAULT_LENGTH = 10;
     private static final String DEFAULT_NOT_USE_SYMBOLS = "@%*^#&";
+    private static final int MAX_NOT_USE_SYMBOLS = 50;
 
     private static final int NUMBER_TYPES = 4;
 
@@ -112,13 +113,23 @@ public class PasswordGenerator {
         this.notUseSymbols = notUseSymbols;
     }
 
-    PasswordGenerator() {
+    public PasswordGenerator() {
         init(DEFAULT_LENGTH, getDefaultSymbolSets(), DEFAULT_NOT_USE_SYMBOLS);
     }
 
-    PasswordGenerator(int length, SymbolSet[] symbolSets, String notUseSymbols) {
+    public PasswordGenerator(int length, SymbolSet[] symbolSets, String notUseSymbols) {
         init(length, symbolSets, notUseSymbols);
     }
+
+    public int getMinLength() { return MIN_LENGTH; }
+    public int getMaxLength() { return MAX_LENGTH; }
+    public int getLength() { return length; }
+    public void setLength(int length) { this.length = length; }
+    public int getMaxNotUseSymbols() { return MAX_NOT_USE_SYMBOLS; }
+    public String getNotUseSymbols() { return notUseSymbols; }
+    public void setNotUseSymbols(String notUseSymbols) { this.notUseSymbols = notUseSymbols; }
+    public int getNumberTypes() { return NUMBER_TYPES; }
+    public SymbolSet[] getSymbolSets() { return symbolSets; }
 
     // Створює набори сетів з дефолтними налаштуваннями
     private SymbolSet[] getDefaultSymbolSets() {
@@ -152,38 +163,39 @@ public class PasswordGenerator {
     }
 
     /*
-     * Функція рекурсивно перевіряє та корегує довжини сетів, щоб ті у суммі не перебільшили загальну довжину паролю
+     * Функція перевіряє та корегує довжини сетів, щоб ті у суммі не перебільшили загальну довжину паролю
      */
-    private void checkOverLength(int type) {
-        int totalSetsLength = 0;
+    public void checkOverLength() {
+        int totalSetsLen = 0;
         for (SymbolSet symbolSet: symbolSets) {
-            if (symbolSet.isUsage()) {
-                totalSetsLength += symbolSet.getLength();
+            if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
+                totalSetsLen += symbolSet.getLength();
+            } else {
+                symbolSet.setLength(SymbolSet.DEFAULT_LENGTH);
             }
         }
 
-        if (totalSetsLength > MAX_LENGTH) {
-            int setIndex = getTrimSetIndex(type);
-            symbolSets[setIndex].setLength(symbolSets[setIndex].getLength()-1);
-            checkOverLength(type);
-        }
-    }
-
-    /*
-     * Функція повертає індекс сету символів з найдовшою довжиною, для подальшого корегування довжини шляхом її підрізання
-     */
-    private int getTrimSetIndex(int type) {
-        int maxLen = 0, setIndex = -1;
-        for (SymbolSet symbolSet: symbolSets) {
-            if (symbolSet.isUsage() && symbolSet.getType() != type) {
-                if (symbolSet.getLength() > maxLen) {
-                    maxLen = symbolSet.getLength();
-                    setIndex = symbolSet.getType();
+        if (totalSetsLen < MIN_LENGTH) {
+            symbolSets[0].setLength(DEFAULT_LENGTH);
+            return;
+        } else if (totalSetsLen > length) {
+            int reductionFactor = 2;
+            while (true) {
+                if (totalSetsLen / reductionFactor > length) {
+                    reductionFactor = reductionFactor + 2;
+                } else {
+                    break;
                 }
             }
+
+            for (SymbolSet symbolSet: symbolSets) {
+                symbolSet.setLength(symbolSet.getLength() / reductionFactor);
+            }
         }
-        return setIndex;
     }
+
+
+
 
     /*
      * Генератор пароля
