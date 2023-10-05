@@ -43,7 +43,8 @@ public class PasswordGeneratorFragment extends Fragment {
             setOnCheckedToUsageSwitch(view, index);
             setOnCheckedToRandomLengthSwitch(view, index);
             homeViewModel.setMaxLengthForInput(this.lengthEdit, 4);
-            setOnChangedToTextEdit(view, index);
+            setOnChangedToEditText(index);
+            setOnFocusToEditText();
         }
 
         private void setOnCheckedToUsageSwitch(View view, int index) {
@@ -82,7 +83,7 @@ public class PasswordGeneratorFragment extends Fragment {
             });
         }
 
-        private void setOnChangedToTextEdit(View view, int index) {
+        private void setOnChangedToEditText(int index) {
             watcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) { }
@@ -99,10 +100,29 @@ public class PasswordGeneratorFragment extends Fragment {
                     }
                     sharedGeneratorDataViewModel.editSymbolSetLengthByIndex(index, Integer.parseInt(text));
                     printSetsLengths();
+                    lengthEdit.setSelection(lengthEdit.getText().length());
                     addTextChangedListeners();
                 }
             };
             lengthEdit.addTextChangedListener(watcher);
+        }
+
+        private void setOnFocusToEditText() {
+            lengthEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        removeTextChangedListeners();
+                        String currentText = lengthEdit.getText().toString();
+                        if (currentText.equals("0")) {
+                            lengthEdit.setText("");
+                        } else if (currentText.length() > 0 && currentText.charAt(0) == '0') {
+                            lengthEdit.setText(currentText.substring(1));
+                        }
+                        addTextChangedListeners();
+                    }
+                }
+            });
         }
 
         public void setData(int index) {
