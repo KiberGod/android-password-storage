@@ -50,8 +50,6 @@ public class SharedGeneratorDataViewModel extends ViewModel {
 
     public void editSymbolSetLengthByIndex(int index, int newLength) {
         passwordGenerator.getSymbolSets()[index].setLength(newLength);
-        if (index == passwordGenerator.getNumberTypes()-1) {
-            passwordGenerator.checkOverLength();
-        }
+        passwordGenerator.checkOverLength();
     }
 }

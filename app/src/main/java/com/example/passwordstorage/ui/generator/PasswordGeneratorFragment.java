@@ -33,6 +33,8 @@ public class PasswordGeneratorFragment extends Fragment {
         public Switch randomLengthSwitch;
         public EditText lengthEdit;
 
+        private TextWatcher watcher;
+
         public SymbolSetSettings(View view, int idUsageSwitch, int idRandomLengthSwitch, int idLengthEdit, int index) {
             this.usageSwitch = view.findViewById(idUsageSwitch);
             this.randomLengthSwitch = view.findViewById(idRandomLengthSwitch);
@@ -41,6 +43,7 @@ public class PasswordGeneratorFragment extends Fragment {
             setOnCheckedToUsageSwitch(view, index);
             setOnCheckedToRandomLengthSwitch(view, index);
             homeViewModel.setMaxLengthForInput(this.lengthEdit, 4);
+            setOnChangedToTextEdit(view, index);
         }
 
         private void setOnCheckedToUsageSwitch(View view, int index) {
@@ -79,6 +82,29 @@ public class PasswordGeneratorFragment extends Fragment {
             });
         }
 
+        private void setOnChangedToTextEdit(View view, int index) {
+            watcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) { }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    removeTextChangedListeners();
+                    String text = editable.toString();
+                    if (text.equals("")) {
+                        text = "0";
+                    }
+                    sharedGeneratorDataViewModel.editSymbolSetLengthByIndex(index, Integer.parseInt(text));
+                    printSetsLengths();
+                    addTextChangedListeners();
+                }
+            };
+            lengthEdit.addTextChangedListener(watcher);
+        }
+
         public void setData(int index) {
             usageSwitch.setChecked(sharedGeneratorDataViewModel.getSymbolsSetUsageByIndex(index));
             randomLengthSwitch.setChecked(sharedGeneratorDataViewModel.getSymbolsSetRandomLenByIndex(index));
@@ -105,7 +131,6 @@ public class PasswordGeneratorFragment extends Fragment {
         setSymbolsSetSettings(view);
         setSettingsToSeekBar(view);
         setSettingsToEditText(view);
-        setOnClickToSaveLengthsButton(view);
         printData(view);
 
         return view;
@@ -198,29 +223,21 @@ public class PasswordGeneratorFragment extends Fragment {
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
-    private void setOnClickToSaveLengthsButton(View view) {
-        Button button = view.findViewById(R.id.setNewLengthsButton);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAllKeyBoards(view);
-                for (int i=0; i<symbolSetSettings.length; i++) {
-                    String text = symbolSetSettings[i].lengthEdit.getText().toString();
-                    if (text.equals("")) {
-                        text = "0";
-                    }
-                    sharedGeneratorDataViewModel.editSymbolSetLengthByIndex(i, Integer.parseInt(text));
-                }
-
-                printSetsLengths();
-            }
-        });
-    }
-
     private void printSetsLengths() {
         for (int i=0; i<symbolSetSettings.length; i++) {
             symbolSetSettings[i].printLength(i);
+        }
+    }
+
+    private void removeTextChangedListeners() {
+        for (SymbolSetSettings symbolSetSetting: symbolSetSettings) {
+            symbolSetSetting.lengthEdit.removeTextChangedListener(symbolSetSetting.watcher);;
+        }
+    }
+
+    private void addTextChangedListeners() {
+        for (SymbolSetSettings symbolSetSetting: symbolSetSettings) {
+            symbolSetSetting.lengthEdit.addTextChangedListener(symbolSetSetting.watcher);;
         }
     }
 }
