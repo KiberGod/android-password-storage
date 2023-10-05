@@ -165,7 +165,70 @@ public class PasswordGenerator {
     /*
      * Функція перевіряє та корегує довжини сетів, щоб ті у суммі не перебільшили загальну довжину паролю
      */
-    public void checkOverLength() {
+    public void reduceSymbolsSetLength() {
+        int totalSetsLen = getTotalLength();
+
+        if (totalSetsLen < MIN_LENGTH) {
+            symbolSets[0].setLength(DEFAULT_LENGTH);
+            return;
+        } else if (totalSetsLen > length) {
+            while (true) {
+                decrementMaxSymbolSetLength();
+                totalSetsLen--;
+                if (totalSetsLen == length) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /*
+     * Функція автоматично збільшує довжини сетів при збільшенні загальної довжини паролю
+     */
+    public void increaseSymbolsSetLength() {
+        int totalSetsLen = getTotalLength();
+
+        if (totalSetsLen < MIN_LENGTH) {
+            return;
+        } else if (totalSetsLen < length) {
+            while (true) {
+                incrementMinSymbolSetLength();
+                totalSetsLen++;
+                if (totalSetsLen == length) {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void decrementMaxSymbolSetLength() {
+        int maxLength = MIN_LENGTH-1, index = -1;
+        for (SymbolSet symbolSet: symbolSets) {
+            if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
+                if (maxLength < symbolSet.getLength()) {
+                    maxLength = symbolSet.getLength();
+                    index = symbolSet.getType();
+                }
+            }
+        }
+        symbolSets[index].setLength(symbolSets[index].getLength() -1);
+    }
+
+    private void incrementMinSymbolSetLength() {
+        int minLength = MAX_LENGTH+1, index = -1;
+        for (SymbolSet symbolSet: symbolSets) {
+            if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
+                if (minLength > symbolSet.getLength() && symbolSet.getLength() != 0) {
+                    minLength = symbolSet.getLength();
+                    index = symbolSet.getType();
+                }
+            }
+        }
+        symbolSets[index].setLength(symbolSets[index].getLength() +1);
+    }
+
+    // Повертає загальну кількість символів активних сетів
+    private int getTotalLength() {
         int totalSetsLen = 0;
         for (SymbolSet symbolSet: symbolSets) {
             if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
@@ -174,24 +237,7 @@ public class PasswordGenerator {
                 symbolSet.setLength(SymbolSet.DEFAULT_LENGTH);
             }
         }
-
-        if (totalSetsLen < MIN_LENGTH) {
-            symbolSets[0].setLength(DEFAULT_LENGTH);
-            return;
-        } else if (totalSetsLen > length) {
-            int reductionFactor = 2;
-            while (true) {
-                if (totalSetsLen / reductionFactor > length) {
-                    reductionFactor = reductionFactor + 2;
-                } else {
-                    break;
-                }
-            }
-
-            for (SymbolSet symbolSet: symbolSets) {
-                symbolSet.setLength(symbolSet.getLength() / reductionFactor);
-            }
-        }
+        return totalSetsLen;
     }
 
 

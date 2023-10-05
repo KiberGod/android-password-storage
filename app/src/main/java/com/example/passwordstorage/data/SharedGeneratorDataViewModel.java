@@ -19,8 +19,13 @@ public class SharedGeneratorDataViewModel extends ViewModel {
     public int getPassLength() { return passwordGenerator.getLength(); }
 
     public void editPassLength(int newLength) {
+        int oldLength = passwordGenerator.getLength();
         passwordGenerator.setLength(newLength);
-        passwordGenerator.checkOverLength();
+        if (oldLength > newLength) {
+            passwordGenerator.reduceSymbolsSetLength();
+        } else if (oldLength < newLength) {
+            passwordGenerator.increaseSymbolsSetLength();
+        }
     }
 
     public int getMaxNotUseSymbols() { return passwordGenerator.getMaxNotUseSymbols(); }
@@ -50,6 +55,6 @@ public class SharedGeneratorDataViewModel extends ViewModel {
 
     public void editSymbolSetLengthByIndex(int index, int newLength) {
         passwordGenerator.getSymbolSets()[index].setLength(newLength);
-        passwordGenerator.checkOverLength();
+        passwordGenerator.reduceSymbolsSetLength();
     }
 }
