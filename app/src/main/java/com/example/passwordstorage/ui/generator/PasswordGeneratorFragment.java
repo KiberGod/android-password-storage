@@ -45,6 +45,7 @@ public class PasswordGeneratorFragment extends Fragment {
             homeViewModel.setMaxLengthForInput(this.lengthEdit, 4);
             setOnChangedToEditText(index);
             setOnFocusToEditText();
+            setOnClickToGeneratePassButton(view);
         }
 
         private void setOnCheckedToUsageSwitch(View view, int index) {
@@ -259,5 +260,18 @@ public class PasswordGeneratorFragment extends Fragment {
         for (SymbolSetSettings symbolSetSetting: symbolSetSettings) {
             symbolSetSetting.lengthEdit.addTextChangedListener(symbolSetSetting.watcher);;
         }
+    }
+
+    private void setOnClickToGeneratePassButton(View view) {
+        Button button = view.findViewById(R.id.createPassword);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText passwordEdit = view.findViewById(R.id.passwordEdit);
+                passwordEdit.setText(
+                        sharedGeneratorDataViewModel.getPassword()
+                );
+            }
+        });
     }
 }

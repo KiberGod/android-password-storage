@@ -1,6 +1,8 @@
 package com.example.passwordstorage.model.generator;
 
 
+import java.util.Random;
+
 public class PasswordGenerator {
 
     /*
@@ -141,25 +143,17 @@ public class PasswordGenerator {
     }
 
     /*
-     * Повертає набір символів, дозволених для генерації паролю
-     * шляхом відкидання неувімкнених сетів та окремо заборонених символів
+     * Повертає сет з лише дозволеними символами для генерації паролю
      */
-    private String getAllValidSymbols() {
-        String allSymbols = "";
-        for (SymbolSet symbolSet: symbolSets) {
-            if (symbolSet.isUsage()) {
-                allSymbols += symbolSet.getSymbols();
-            }
-        }
-
-        StringBuilder allValidSymbols = new StringBuilder();
-        for (char ch : allSymbols.toCharArray()) {
+    private String getValidSymbolsSet(String set) {
+        StringBuilder validSymbols = new StringBuilder();
+        for (char ch : set.toCharArray()) {
             if (notUseSymbols.indexOf(ch) == -1) {
-                allValidSymbols.append(ch);
+                validSymbols.append(ch);
             }
         }
 
-        return allValidSymbols.toString();
+        return validSymbols.toString();
     }
 
     /*
@@ -240,12 +234,55 @@ public class PasswordGenerator {
         return totalSetsLen;
     }
 
+    // Генерація випадкових довжин активних символьних сетів перед генерацією пароля
+    private void randomGenerateSymbolSetsLength() {
+        for (SymbolSet symbolSet: symbolSets) {
+            if (!symbolSet.isUsage() && symbolSet.isRandomLength()) {
+                symbolSet.setLength(generateRandomSetLength(length - getTotalLength()));
+            }
+        }
+        symbolSets[symbolSets.length-1].setLength(length - getTotalLength());
+    }
+
+    // Повертая випадкову довжину для символьного сету
+    private int generateRandomSetLength(int maxValue) {
+        Random random = new Random();
+        return random.nextInt(maxValue+1);
+    }
 
 
 
     /*
      * Генератор пароля
      */
-    //public String generatePassword(){}
+    public String generatePassword() {
+        randomGenerateSymbolSetsLength();
+
+        StringBuilder passwordBuilder = new StringBuilder();
+        Random random = new Random();
+
+        for (SymbolSet symbolSet : symbolSets) {
+            if (!symbolSet.isUsage()) {
+                String symbols = getValidSymbolsSet(symbolSet.getSymbols());
+
+                for (int i = 0; i < symbolSet.getLength(); i++) {
+                    passwordBuilder.append(symbols.charAt(random.nextInt(symbols.length())));
+                }
+            }
+        }
+
+        String password = passwordBuilder.toString();
+        char[] passwordChars = password.toCharArray();
+        for (int i = 0; i < passwordChars.length; i++) {
+            int randomIndex = random.nextInt(passwordChars.length);
+            char temp = passwordChars[i];
+            passwordChars[i] = passwordChars[randomIndex];
+            passwordChars[randomIndex] = temp;
+        }
+
+        password = new String(passwordChars);
+
+        return password;
+    }
 
 }
