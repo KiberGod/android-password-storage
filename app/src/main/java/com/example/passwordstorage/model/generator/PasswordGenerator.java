@@ -83,7 +83,7 @@ public class PasswordGenerator {
 
         public void setType(int type) { this.type = type; }
         public void inversionUsage() { usage = !usage; }
-        public void inversionRandomLength() { randomLength = !randomLength; }
+        public void inversionRandomLength() { randomLength = !randomLength; length = DEFAULT_LENGTH;}
         public void setLength(int length) { this.length = length; }
 
     }
@@ -152,7 +152,6 @@ public class PasswordGenerator {
                 validSymbols.append(ch);
             }
         }
-
         return validSymbols.toString();
     }
 
@@ -236,12 +235,24 @@ public class PasswordGenerator {
 
     // Генерація випадкових довжин активних символьних сетів перед генерацією пароля
     private void randomGenerateSymbolSetsLength() {
-        for (SymbolSet symbolSet: symbolSets) {
-            if (!symbolSet.isUsage() && symbolSet.isRandomLength()) {
-                symbolSet.setLength(generateRandomSetLength(length - getTotalLength()));
+        int totalRandLengths = 0, clearLen = length - getTotalLength();
+        for (int i = 0; i < symbolSets.length; i++) {
+            if (!symbolSets[i].isUsage() && symbolSets[i].isRandomLength()) {
+                int newLen = generateRandomSetLength(clearLen - totalRandLengths);
+                totalRandLengths = totalRandLengths + newLen;
+                symbolSets[i].setLength(newLen);
             }
         }
-        symbolSets[symbolSets.length-1].setLength(length - getTotalLength());
+        if (clearLen - totalRandLengths != 0) {
+            for (int i = 0; i < symbolSets.length; i++) {
+                if (!symbolSets[i].isUsage() && symbolSets[i].isRandomLength()) {
+                    symbolSets[i].setLength(
+                            symbolSets[i].getLength() + clearLen - totalRandLengths
+                    );
+                    break;
+                }
+            }
+        }
     }
 
     // Повертая випадкову довжину для символьного сету
@@ -250,7 +261,7 @@ public class PasswordGenerator {
         return random.nextInt(maxValue+1);
     }
 
-    
+
     /*
      * Генератор пароля
      */
@@ -263,7 +274,6 @@ public class PasswordGenerator {
         for (SymbolSet symbolSet : symbolSets) {
             if (!symbolSet.isUsage()) {
                 String symbols = getValidSymbolsSet(symbolSet.getSymbols());
-
                 if (symbols.length() > 0) {
                     for (int i = 0; i < symbolSet.getLength(); i++) {
                         passwordBuilder.append(symbols.charAt(random.nextInt(symbols.length())));
