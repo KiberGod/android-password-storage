@@ -250,8 +250,7 @@ public class PasswordGenerator {
         return random.nextInt(maxValue+1);
     }
 
-
-
+    
     /*
      * Генератор пароля
      */
@@ -265,8 +264,10 @@ public class PasswordGenerator {
             if (!symbolSet.isUsage()) {
                 String symbols = getValidSymbolsSet(symbolSet.getSymbols());
 
-                for (int i = 0; i < symbolSet.getLength(); i++) {
-                    passwordBuilder.append(symbols.charAt(random.nextInt(symbols.length())));
+                if (symbols.length() > 0) {
+                    for (int i = 0; i < symbolSet.getLength(); i++) {
+                        passwordBuilder.append(symbols.charAt(random.nextInt(symbols.length())));
+                    }
                 }
             }
         }
@@ -284,5 +285,4 @@ public class PasswordGenerator {
 
         return password;
     }
-
 }
