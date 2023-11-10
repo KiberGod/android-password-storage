@@ -53,16 +53,7 @@ public class PasswordGeneratorFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     hideAllKeyBoards(view);
-                    sharedGeneratorDataViewModel.editSymbolSetUsageByIndex(index);
-                    if (isChecked) {
-                        randomLengthSwitch.setVisibility(View.VISIBLE);
-                        if (randomLengthSwitch.isChecked()) {
-                            lengthEdit.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        randomLengthSwitch.setVisibility(View.GONE);
-                        lengthEdit.setVisibility(View.GONE);
-                    }
+                    sharedGeneratorDataViewModel.editSymbolSetUsageByIndex(index, usageSwitch.isChecked(), requireContext());
                 }
             });
         }
@@ -72,12 +63,10 @@ public class PasswordGeneratorFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     hideAllKeyBoards(view);
-                    sharedGeneratorDataViewModel.editSymbolSetRandomLengthByIndex(index);
+                    sharedGeneratorDataViewModel.editSymbolSetRandomLengthByIndex(index, randomLengthSwitch.isChecked(), requireContext());
                     if (isChecked) {
-                        lengthEdit.setVisibility(View.VISIBLE);
                         randomLengthSwitch.setText("Вручну");
                     } else {
-                        lengthEdit.setVisibility(View.GONE);
                         randomLengthSwitch.setText("Випадково");
                     }
                 }
@@ -99,7 +88,7 @@ public class PasswordGeneratorFragment extends Fragment {
                     if (text.equals("")) {
                         text = "0";
                     }
-                    sharedGeneratorDataViewModel.editSymbolSetLengthByIndex(index, Integer.parseInt(text));
+                    sharedGeneratorDataViewModel.editSymbolSetLengthByIndex(index, Integer.parseInt(text), requireContext());
                     printSetsLengths();
                     lengthEdit.setSelection(lengthEdit.getText().length());
                     addTextChangedListeners();
@@ -147,7 +136,7 @@ public class PasswordGeneratorFragment extends Fragment {
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
-        sharedGeneratorDataViewModel.testInit();
+        sharedGeneratorDataViewModel.setPasswordGenerator(requireContext());
 
         setSymbolsSetSettings(view);
         setSettingsToSeekBar(view);
@@ -183,7 +172,7 @@ public class PasswordGeneratorFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 hideAllKeyBoards(view);
-                sharedGeneratorDataViewModel.editPassLength(progress + sharedGeneratorDataViewModel.getMinPassLength());
+                sharedGeneratorDataViewModel.editPassLength(progress + sharedGeneratorDataViewModel.getMinPassLength(), requireContext());
                 setPassLengthToTextView(view);
                 printSetsLengths();
             }
@@ -210,7 +199,7 @@ public class PasswordGeneratorFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                sharedGeneratorDataViewModel.editNotUseSymbols(editable.toString());
+                sharedGeneratorDataViewModel.editNotUseSymbols(editable.toString(), requireContext());
             }
         });
     }
@@ -269,8 +258,9 @@ public class PasswordGeneratorFragment extends Fragment {
             public void onClick(View v) {
                 EditText passwordEdit = view.findViewById(R.id.passwordEdit);
                 passwordEdit.setText(
-                        sharedGeneratorDataViewModel.getPassword()
+                        sharedGeneratorDataViewModel.getPassword(requireContext())
                 );
+                printSetsLengths();
             }
         });
     }

@@ -33,6 +33,7 @@ import com.example.passwordstorage.MainActivity;
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.example.passwordstorage.data.SharedDigitalOwnerViewModel;
+import com.example.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.data.SharedSettingsDataViewModel;
 import com.example.passwordstorage.databinding.ActivityHomeBinding;

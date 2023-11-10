@@ -1,15 +1,26 @@
 package com.example.passwordstorage.model.generator;
 
 
+import android.content.Context;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
-public class PasswordGenerator {
+public class PasswordGenerator implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /*
      * Клас сету символів. Представляє собою набір налаштувань, які впливатимуть на генерацію пароля
      */
-    public class SymbolSet {
+    public class SymbolSet implements Serializable {
 
+        private static final long serialVersionUID = 1L;
 
         /*
         * Є 4 типи сетів символів:
@@ -82,8 +93,8 @@ public class PasswordGenerator {
 
 
         public void setType(int type) { this.type = type; }
-        public void inversionUsage() { usage = !usage; }
-        public void inversionRandomLength() { randomLength = !randomLength; length = DEFAULT_LENGTH;}
+        public void setUsage(boolean usage) { this.usage = usage; }
+        public void setRandomLength(boolean randomLength) { this.randomLength = randomLength; }
         public void setLength(int length) { this.length = length; }
 
     }
@@ -161,10 +172,7 @@ public class PasswordGenerator {
     public void reduceSymbolsSetLength() {
         int totalSetsLen = getTotalLength();
 
-        if (totalSetsLen < MIN_LENGTH) {
-            symbolSets[0].setLength(DEFAULT_LENGTH);
-            return;
-        } else if (totalSetsLen > length) {
+        if (totalSetsLen > length) {
             while (true) {
                 decrementMaxSymbolSetLength();
                 totalSetsLen--;
@@ -197,7 +205,7 @@ public class PasswordGenerator {
     private void decrementMaxSymbolSetLength() {
         int maxLength = MIN_LENGTH-1, index = -1;
         for (SymbolSet symbolSet: symbolSets) {
-            if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
+            if (symbolSet.isUsage() && symbolSet.isRandomLength()) {
                 if (maxLength < symbolSet.getLength()) {
                     maxLength = symbolSet.getLength();
                     index = symbolSet.getType();
@@ -210,7 +218,7 @@ public class PasswordGenerator {
     private void incrementMinSymbolSetLength() {
         int minLength = MAX_LENGTH+1, index = -1;
         for (SymbolSet symbolSet: symbolSets) {
-            if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
+            if (symbolSet.isUsage() && symbolSet.isRandomLength()) {
                 if (minLength > symbolSet.getLength() && symbolSet.getLength() != 0) {
                     minLength = symbolSet.getLength();
                     index = symbolSet.getType();
@@ -224,7 +232,7 @@ public class PasswordGenerator {
     private int getTotalLength() {
         int totalSetsLen = 0;
         for (SymbolSet symbolSet: symbolSets) {
-            if (!symbolSet.isUsage() && !symbolSet.isRandomLength()) {
+            if (symbolSet.isUsage() && symbolSet.isRandomLength()) {
                 totalSetsLen += symbolSet.getLength();
             } else {
                 symbolSet.setLength(SymbolSet.DEFAULT_LENGTH);
@@ -237,7 +245,7 @@ public class PasswordGenerator {
     private void randomGenerateSymbolSetsLength() {
         int totalRandLengths = 0, clearLen = length - getTotalLength();
         for (int i = 0; i < symbolSets.length; i++) {
-            if (!symbolSets[i].isUsage() && symbolSets[i].isRandomLength()) {
+            if (symbolSets[i].isUsage() && !symbolSets[i].isRandomLength()) {
                 int newLen = generateRandomSetLength(clearLen - totalRandLengths);
                 totalRandLengths = totalRandLengths + newLen;
                 symbolSets[i].setLength(newLen);
@@ -245,7 +253,7 @@ public class PasswordGenerator {
         }
         if (clearLen - totalRandLengths != 0) {
             for (int i = 0; i < symbolSets.length; i++) {
-                if (!symbolSets[i].isUsage() && symbolSets[i].isRandomLength()) {
+                if (symbolSets[i].isUsage() && !symbolSets[i].isRandomLength()) {
                     symbolSets[i].setLength(
                             symbolSets[i].getLength() + clearLen - totalRandLengths
                     );
@@ -272,7 +280,7 @@ public class PasswordGenerator {
         Random random = new Random();
 
         for (SymbolSet symbolSet : symbolSets) {
-            if (!symbolSet.isUsage()) {
+            if (symbolSet.isUsage()) {
                 String symbols = getValidSymbolsSet(symbolSet.getSymbols());
                 if (symbols.length() > 0) {
                     for (int i = 0; i < symbolSet.getLength(); i++) {
@@ -294,5 +302,31 @@ public class PasswordGenerator {
         password = new String(passwordChars);
 
         return password;
+    }
+
+    // Файл, що містить налаштування генератора
+    private static String FILE_PATH = "password_generator.ser";
+
+    // Збереження налаштуваннь до файла
+    public static void saveSettings(PasswordGenerator passwordGenerator, Context context) {
+        try (FileOutputStream fileOutputStream = context.openFileOutput(FILE_PATH, Context.MODE_PRIVATE);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+            objectOutputStream.writeObject(passwordGenerator);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Підкачка налаштувань з файла
+    public static PasswordGenerator initSettings(Context context) {
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(
+                context.openFileInput(FILE_PATH))) {
+            passwordGenerator = (PasswordGenerator) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return passwordGenerator;
     }
 }
