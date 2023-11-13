@@ -135,6 +135,12 @@
                     android:text="Видалити" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/generatePasswordButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Згенерувати випадковий пароль" />
+
         </LinearLayout>
     </ScrollView>
 

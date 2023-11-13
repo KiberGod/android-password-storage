@@ -136,7 +136,6 @@ public class PasswordGeneratorFragment extends Fragment {
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
-        sharedGeneratorDataViewModel.setPasswordGenerator(requireContext());
 
         setSymbolsSetSettings(view);
         setSettingsToSeekBar(view);

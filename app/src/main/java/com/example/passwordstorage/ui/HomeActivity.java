@@ -61,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
+    private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         sharedCategoriesDataViewModel = new ViewModelProvider(this).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(this).get(SharedRecordsDataViewModel.class);
         sharedDigitalOwnerViewModel = new ViewModelProvider(this).get(SharedDigitalOwnerViewModel.class);
+        sharedGeneratorDataViewModel = new ViewModelProvider(this).get(SharedGeneratorDataViewModel.class);
 
         setFragment(new StorageFragment());
         setSelectedFromBottomNavBar();
@@ -82,6 +84,7 @@ public class HomeActivity extends AppCompatActivity {
         sharedCategoriesDataViewModel.setCategories();
         sharedRecordsDataViewModel.setRecords();
         sharedDigitalOwnerViewModel.setDigitalOwner();
+        sharedGeneratorDataViewModel.setPasswordGenerator(this);
     }
 
     // Повертає користувача до калькулятора у разі втрати фокусу програмою

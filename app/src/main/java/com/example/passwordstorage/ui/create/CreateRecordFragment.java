@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.passwordstorage.R;
 import com.example.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.example.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.example.passwordstorage.data.SharedRecordsDataViewModel;
 import com.example.passwordstorage.model.Category;
 import com.example.passwordstorage.ui.HomeActivity;
@@ -39,6 +40,7 @@ public class CreateRecordFragment extends Fragment {
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
+    private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
     private HomeViewModel homeViewModel;
 
     private TextView textViewStatus;
@@ -50,6 +52,8 @@ public class CreateRecordFragment extends Fragment {
     private ArrayList<EditText> fieldNames = new ArrayList<>();
     private ArrayList<EditText> fieldValues = new ArrayList<>();
 
+    private EditText currentEditText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class CreateRecordFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
+        sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
@@ -70,6 +75,8 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
+        setOnClickToGenPassword(view);
+        setEditTextFocusChangeListener(view, R.id.editCreateRecordText);
         return view;
     }
 
@@ -182,6 +189,7 @@ public class CreateRecordFragment extends Fragment {
 
             fieldNames.add(editTextName);
             fieldValues.add(editTextValue);
+            editTextValue.setId(View.generateViewId());
 
             newLayout.addView(editTextName);
             newLayout.addView(editTextValue);
@@ -189,6 +197,8 @@ public class CreateRecordFragment extends Fragment {
 
             linearLayout.addView(newLayout, linearLayout.getChildCount() - 3);
             fieldCounter++;
+
+            setEditTextFocusChangeListener(view, editTextValue.getId());
         }
     }
 
@@ -202,10 +212,48 @@ public class CreateRecordFragment extends Fragment {
             public void onClick(View view) {
                 ((ViewGroup)linearLayout.getParent()).removeView(linearLayout);
                 fieldNames.remove(editTextName);
+                editTextValue.setOnFocusChangeListener(null);
                 fieldValues.remove(editTextValue);
                 fieldCounter--;
             }
         });
         return button;
+    }
+
+    // Автооновлення фокус-поля для подальшого використання функції генераціїї пароля
+    private void setEditTextFocusChangeListener(View view, int editTextId) {
+        final EditText editText = view.findViewById(editTextId);
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    currentEditText = editText;
+                } else if (editText == currentEditText){
+                    currentEditText = null;
+                }
+            }
+        });
+    }
+
+    // Функція встановлює подію натискання кнопки генерації пароля
+    private void setOnClickToGenPassword(View view) {
+        Button button = view.findViewById(R.id.generatePasswordButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentEditText != null) {
+                    String password = sharedGeneratorDataViewModel.getPassword(requireContext());
+                    if (currentEditText.getId() == R.id.editCreateRecordText) {
+                        int cursorPosition = currentEditText.getSelectionStart();
+                        String currentText = currentEditText.getText().toString();
+                        String newText = currentText.substring(0, cursorPosition) + password +
+                                currentText.substring(cursorPosition);
+                        currentEditText.setText(newText);
+                    } else {
+                        currentEditText.setText(password);
+                    }
+                }
+            }
+        });
     }
 }
