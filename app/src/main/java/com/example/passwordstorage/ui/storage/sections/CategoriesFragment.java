@@ -26,7 +26,6 @@ public class CategoriesFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
 
-        sharedCategoriesDataViewModel.printLogCategories();
         drawButtonList(view);
 
         return view;

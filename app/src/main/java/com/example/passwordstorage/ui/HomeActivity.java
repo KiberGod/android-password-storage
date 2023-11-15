@@ -210,20 +210,14 @@ public class HomeActivity extends AppCompatActivity {
         roundedRectangle.setCornerRadius(36);
         ViewCompat.setBackground(button, roundedRectangle);
 
-
-        //ImageView vectorImageView = new ImageView(context);
         if (icon_id == -1 ) {
             icon_id = R.drawable.vector_template_image;
         }
-        //Drawable vectorDrawable = ContextCompat.getDrawable(context, icon_id);
-        //vectorImageView.setImageDrawable(vectorDrawable);
 
         ImageView vectorImageView = getResizeIcon(context, icon_id);
 
         vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        //vectorImageView.setColorFilter(ContextCompat.getColor(context, R.color.gray_text));
-
 
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -265,7 +259,6 @@ public class HomeActivity extends AppCompatActivity {
         for (int i = 0; i < iconArray.length; i++) {
 
             int iconResourceId = getResources().getIdentifier(iconArray[i], "drawable", context.getPackageName());
-            System.out.println(iconResourceId);
 
             ImageView imageView = getResizeIcon(context, iconResourceId);
 
