@@ -70,23 +70,23 @@ std::vector<T> loadDataFromBinFile(const std::string& filename, std::vector<T>& 
 
 // Функція передає вектор records-об`єктів з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass);
 
 // Функція передає вектор categories-об`єктів з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass);
 
 // Функція передає об`єкт Settings з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass);
 
 // Функція передає об`єкт Calculator з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass);
 
 // Функція передає об`єкт DivitalOwner з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass);
 
 // Функція запису змін до бінарного файла
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize);
@@ -99,38 +99,38 @@ void copyFile(const std::string& mainFilePath, const std::string& copyFile);
 
 // Отримання нових даних категорій з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList);
+Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList);
 
 // Отримання нових даних записів з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList);
+Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList);
 
 // Отримання нових даних налаштувань з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject);
+Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject);
 
 // Отримання нових даних калькулятора з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject);
+Java_com_kibergod_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject);
 
 // Отримання нових даних "Цифрового власника" з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject);
+Java_com_kibergod_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject);
 
 // Знищує дані користувача (файли записів та категорій)
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass);
 
 // Приховує дані користувача (файли записів та категорій) шляхом створення копій та видалення основних файлів
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass);
 
 // Відновлення прихованих записів
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass);
 
 // Відновлення прихованих категорій
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass);
+Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H

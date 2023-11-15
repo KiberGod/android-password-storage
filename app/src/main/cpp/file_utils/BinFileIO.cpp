@@ -83,15 +83,15 @@ std::vector<T> loadDataFromBinFile(const std::string& filename, std::vector<T>& 
  * return vector (C++) --> ArrayList (Java)
  */
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass) {
+Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass) {
     // Створення класу ArrayList в Java
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
-    jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
-    jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
+    jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
+    jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
     jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
 
     std::vector<Record> records;
@@ -129,7 +129,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
                     jValueVisibility
             );
 
-            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/example/passwordstorage/model/Record$Field;");
+            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/kibergod/passwordstorage/model/Record$Field;");
             jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue, valueVisibility);
 
             env->DeleteLocalRef(jName);
@@ -138,7 +138,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
             env->SetObjectArrayElement(jFields, i, jField);
         }
 
-        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/example/passwordstorage/model/Record$Field;)V");
+        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/kibergod/passwordstorage/model/Record$Field;)V");
         env->CallVoidMethod(recordObject, setFieldsMethod, jFields);
 
         // Додавання об`єкта Record в ArrayList
@@ -161,14 +161,14 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
  * return vector (C++) --> ArrayList (Java)
  */
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass) {
+Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jclass) {
     // Створення класу ArrayList в Java
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
-    jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
+    jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
     jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;I)V");
 
     std::vector<Category> categories;
@@ -202,8 +202,8 @@ Java_com_example_passwordstorage_NativeController_getCategories(JNIEnv *env, jcl
  * return Settings obj (C++) --> Settings obj (Java)
  */
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
-    jclass settingsClass = env->FindClass("com/example/passwordstorage/model/Settings");
+Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
+    jclass settingsClass = env->FindClass("com/kibergod/passwordstorage/model/Settings");
     jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;Z)V");
 
     std::vector<Settings> settings;
@@ -231,8 +231,8 @@ Java_com_example_passwordstorage_NativeController_getSettings(JNIEnv *env, jclas
  * return Calculator obj (C++) --> Calculator obj (Java)
  */
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass) {
-    jclass calculatorClass = env->FindClass("com/example/passwordstorage/model/Calculator");
+Java_com_kibergod_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass) {
+    jclass calculatorClass = env->FindClass("com/kibergod/passwordstorage/model/Calculator");
     jmethodID calculatorConstructor = env->GetMethodID(calculatorClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Character;)V");
 
     std::vector<Calculator> calculator;
@@ -264,8 +264,8 @@ Java_com_example_passwordstorage_NativeController_getCalculator(JNIEnv *env, jcl
  * return DigitalOwner obj (C++) --> DigitalOwner obj (Java)
  */
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass) {
-    jclass digitalOwnerClass = env->FindClass("com/example/passwordstorage/model/DigitalOwner");
+Java_com_kibergod_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass) {
+    jclass digitalOwnerClass = env->FindClass("com/kibergod/passwordstorage/model/DigitalOwner");
     jmethodID digitalOwnerConstructor = env->GetMethodID(digitalOwnerClass, "<init>", "(IIII)V");
 
     std::vector<DigitalOwner> digitalOwner;
@@ -327,7 +327,7 @@ void copyFile(const std::string& mainFilePath, const std::string& copyFilePath) 
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList) {
+Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList) {
     jclass arrayListClass = env->GetObjectClass(categoriesList);
     jmethodID getMethod = env->GetMethodID(arrayListClass, "get", "(I)Ljava/lang/Object;");
     jmethodID sizeMethod = env->GetMethodID(arrayListClass, "size", "()I");
@@ -373,7 +373,7 @@ Java_com_example_passwordstorage_NativeController_saveCategories(JNIEnv* env, jc
 
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList) {
+Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList) {
     jclass arrayListClass = env->GetObjectClass(recordsList);
     jmethodID getMethod = env->GetMethodID(arrayListClass, "get", "(I)Ljava/lang/Object;");
     jmethodID sizeMethod = env->GetMethodID(arrayListClass, "size", "()I");
@@ -415,7 +415,7 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
             bookmark = env->CallBooleanMethod(bookmarkObj, booleanValueMethod);
         }
 
-        jfieldID fieldsField = env->GetFieldID(recordClass, "fields", "[Lcom/example/passwordstorage/model/Record$Field;");
+        jfieldID fieldsField = env->GetFieldID(recordClass, "fields", "[Lcom/kibergod/passwordstorage/model/Record$Field;");
         jobjectArray fieldsArray = reinterpret_cast<jobjectArray>(env->GetObjectField(recordObj, fieldsField));
 
         int fieldsCount = env->GetArrayLength(fieldsArray);
@@ -424,7 +424,7 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
         for (int j = 0; j < fieldsCount; ++j) {
             jobject fieldObj = env->GetObjectArrayElement(fieldsArray, j);
 
-            jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
+            jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
             jfieldID nameField = env->GetFieldID(fieldClass, "name", "Ljava/lang/String;");
             jfieldID valueField = env->GetFieldID(fieldClass, "value", "Ljava/lang/String;");
             jfieldID valueVisibilityField = env->GetFieldID(fieldClass, "valueVisibility", "Z");
@@ -458,7 +458,7 @@ Java_com_example_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclas
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject) {
+Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject) {
     dropFile(getSettingsFilePath());
 
     jclass settingsClass = env->GetObjectClass(settingsObject);
@@ -488,7 +488,7 @@ Java_com_example_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcla
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject) {
+Java_com_kibergod_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject) {
     dropFile(getCalculatorFilePath());
 
     jclass calculatorClass = env->GetObjectClass(calculatorObject);
@@ -522,7 +522,7 @@ Java_com_example_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jc
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject) {
+Java_com_kibergod_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, jclass, jobject digitalOwnerObject) {
     dropFile(getDigitalOwnerFilePath());
 
     jclass digitalOwnerClass = env->GetObjectClass(digitalOwnerObject);
@@ -553,13 +553,13 @@ Java_com_example_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env, 
 
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass) {
+Java_com_kibergod_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass) {
     dropFile(getRecordsFilePath());
     dropFile(getCategoriesFilePath());
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass) {
+Java_com_kibergod_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass) {
     copyFile(getRecordsFilePath(), getHiddenRecordsFilePath());
     copyFile(getCategoriesFilePath(), getHiddenCategoriesFilePath());
     dropFile(getRecordsFilePath());
@@ -567,7 +567,7 @@ Java_com_example_passwordstorage_NativeController_hideUserData(JNIEnv* env, jcla
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass) {
+Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass) {
     std::vector<Record> records;
     loadDataFromBinFile(getFilesPath() + RECORDS_FILE, records);
     loadDataFromBinFile(getFilesPath() + HIDDEN_RECORDS_FILE, records);
@@ -577,8 +577,8 @@ Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* 
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
-    jclass recordClass = env->FindClass("com/example/passwordstorage/model/Record");
-    jclass fieldClass = env->FindClass("com/example/passwordstorage/model/Record$Field");
+    jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
+    jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
     jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
 
     for (const auto& record : records) {
@@ -607,7 +607,7 @@ Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* 
                     jValueVisibility
             );
 
-            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/example/passwordstorage/model/Record$Field;");
+            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/kibergod/passwordstorage/model/Record$Field;");
             jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue, valueVisibility);
 
             env->DeleteLocalRef(jName);
@@ -616,7 +616,7 @@ Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* 
             env->SetObjectArrayElement(jFields, i, jField);
         }
 
-        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/example/passwordstorage/model/Record$Field;)V");
+        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/kibergod/passwordstorage/model/Record$Field;)V");
         env->CallVoidMethod(recordObject, setFieldsMethod, jFields);
 
         env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
@@ -629,17 +629,17 @@ Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* 
     }
 
     jmethodID saveRecordsMethod = env->GetStaticMethodID(
-            env->FindClass("com/example/passwordstorage/NativeController"),
+            env->FindClass("com/kibergod/passwordstorage/NativeController"),
             "saveRecords",
             "(Ljava/util/ArrayList;)V"
     );
-    env->CallStaticVoidMethod(env->FindClass("com/example/passwordstorage/NativeController"), saveRecordsMethod, arrayList);
+    env->CallStaticVoidMethod(env->FindClass("com/kibergod/passwordstorage/NativeController"), saveRecordsMethod, arrayList);
 
     env->DeleteLocalRef(arrayList);
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass) {
+Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass) {
     std::vector<Category> categories;
     loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, categories);
     loadDataFromBinFile(getFilesPath() + HIDDEN_CATEGORIES_FILE, categories);
@@ -649,7 +649,7 @@ Java_com_example_passwordstorage_NativeController_retrieveHiddenCategories(JNIEn
     jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
-    jclass categoryClass = env->FindClass("com/example/passwordstorage/model/Category");
+    jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
     jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;I)V");
 
     for (const auto& category : categories) {
@@ -668,11 +668,11 @@ Java_com_example_passwordstorage_NativeController_retrieveHiddenCategories(JNIEn
     }
 
     jmethodID saveCategoriesMethod = env->GetStaticMethodID(
-            env->FindClass("com/example/passwordstorage/NativeController"),
+            env->FindClass("com/kibergod/passwordstorage/NativeController"),
             "saveCategories",
             "(Ljava/util/ArrayList;)V"
     );
-    env->CallStaticVoidMethod(env->FindClass("com/example/passwordstorage/NativeController"), saveCategoriesMethod, arrayList);
+    env->CallStaticVoidMethod(env->FindClass("com/kibergod/passwordstorage/NativeController"), saveCategoriesMethod, arrayList);
 
     env->DeleteLocalRef(arrayList);
 }

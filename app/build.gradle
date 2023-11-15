@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.passwordstorage'
+    namespace 'com.kibergod.passwordstorage'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.passwordstorage"
+        applicationId "com.kibergod.passwordstorage"
         minSdk 24
         targetSdk 33
         versionCode 1
