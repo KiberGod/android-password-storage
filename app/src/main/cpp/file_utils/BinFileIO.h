@@ -16,25 +16,25 @@
 static std::string FILES_PATH;
 
 // Тестовий файл записів
-static const std::string TEST_RECORDS_FILE = "/example13.bin";
+static const std::string RECORDS_FILE = "/records.bin";
 
 // Прихована буферна копія файла записів
-static const std::string HIDDEN_RECORDS_FILE = "/hidden_example13.bin";
+static const std::string HIDDEN_RECORDS_FILE = "/hidden_records.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories_v2.bin";
+static const std::string CATEGORIES_FILE = "/categories.bin";
 
 // Прихована буферна копія файла категорій
-static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v2.bin";
+static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories.bin";
 
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings_v6.bin";
+static const std::string SETTINGS_FILE = "/settings.bin";
 
 // Файл даних калькулятора
-static const std::string CALCULATOR_FILE = "/calcData_v5";
+static const std::string CALCULATOR_FILE = "/calcData.bin";
 
 // Файл даних "Цифрового власника"
-static const std::string DIGITAL_OWNER_FILE = "/digitalOwner_v3";
+static const std::string DIGITAL_OWNER_FILE = "/digitalOwner.bin";
 
 
 // Повертає і`мя файла тестових записів

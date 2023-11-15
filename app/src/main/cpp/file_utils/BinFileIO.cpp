@@ -15,7 +15,7 @@
 #include "../model/DigitalOwner.h"
 
 
-std::string getRecordsFilePath() { return FILES_PATH + TEST_RECORDS_FILE; }
+std::string getRecordsFilePath() { return FILES_PATH + RECORDS_FILE; }
 
 std::string getHiddenRecordsFilePath() { return FILES_PATH + HIDDEN_RECORDS_FILE; }
 
@@ -97,7 +97,7 @@ Java_com_example_passwordstorage_NativeController_getRecords(JNIEnv *env, jclass
     std::vector<Record> records;
 
     // Упакування Record у ArrayList
-    for (const auto& record : loadDataFromBinFile(getFilesPath() + TEST_RECORDS_FILE, records)) {
+    for (const auto& record : loadDataFromBinFile(getFilesPath() + RECORDS_FILE, records)) {
         jstring jTitle = env->NewStringUTF(record.getTitle());
         jstring jText = env->NewStringUTF(record.getText());
 
@@ -569,7 +569,7 @@ Java_com_example_passwordstorage_NativeController_hideUserData(JNIEnv* env, jcla
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass) {
     std::vector<Record> records;
-    loadDataFromBinFile(getFilesPath() + TEST_RECORDS_FILE, records);
+    loadDataFromBinFile(getFilesPath() + RECORDS_FILE, records);
     loadDataFromBinFile(getFilesPath() + HIDDEN_RECORDS_FILE, records);
 
     jclass arrayListClass = env->FindClass("java/util/ArrayList");
