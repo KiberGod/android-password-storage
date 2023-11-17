@@ -7,10 +7,12 @@ import static com.kibergod.passwordstorage.model.Settings.MAX_PASSWORD_LENGTH;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -79,17 +82,30 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    // Встановлення кольору іконки налаштування
+    private void setColorToImg(View view, int imageId, boolean mode) {
+        int colorId = R.color.gray_text;
+        if (mode) {
+            colorId = R.color.purple;
+        }
+        ImageView imageView = view.findViewById(imageId);
+        imageView.setColorFilter(ContextCompat.getColor(requireContext(), colorId), PorterDuff.Mode.SRC_IN);
+    }
+
     // Функція виводить дані налаштуваннь на екран
     private void printSettingsData(View view) {
         Switch activityProtectionSwitch = view.findViewById(R.id.activityProtectionFlag);
         activityProtectionSwitch.setChecked(sharedSettingsDataViewModel.getActivityProtection());
+        setColorToImg(view, R.id.imgPhoneLock, activityProtectionSwitch.isChecked());
 
         Switch inputPassClearingSwitch = view.findViewById(R.id.inputCalcClearingFlag);
         inputPassClearingSwitch.setChecked(sharedSettingsDataViewModel.getInputCalcClearing());
+        setColorToImg(view, R.id.imgEraser, inputPassClearingSwitch.isChecked());
 
         Switch digitalOwnerSwitch = view.findViewById(R.id.digitalOwnerFlag);
         digitalOwnerSwitch.setChecked(sharedSettingsDataViewModel.getDigitalOwner());
         showOrHideDigitalOwnerSettings(view);
+        setColorToImg(view, R.id.imgRunningRabbit, digitalOwnerSwitch.isChecked());
 
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         inputPassword.setText(sharedSettingsDataViewModel.getPassword());
@@ -112,7 +128,7 @@ public class SettingsFragment extends Fragment {
         digitalOwnerMode.setChecked(sharedDigitalOwnerViewModel.getModeFlag(mode));
     }
 
-    // Встановлює обробник натискань на перемикач налаштування ActivityProtection
+    // Встановлює обробник натискань на перемикач налаштування
     private void setOnClickToSwitch(View view, int switch_id, Runnable onClickRunnable) {
         Switch settingSwitch = view.findViewById(switch_id);
 
@@ -121,6 +137,14 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 onClickRunnable.run();
                 hideAllKeyBoards(view);
+
+                if (switch_id == R.id.activityProtectionFlag) {
+                    setColorToImg(view, R.id.imgPhoneLock, settingSwitch.isChecked());
+                } else if (switch_id == R.id.inputCalcClearingFlag) {
+                    setColorToImg(view, R.id.imgEraser, settingSwitch.isChecked());
+                } else if (switch_id == R.id.digitalOwnerFlag) {
+                    setColorToImg(view, R.id.imgRunningRabbit, settingSwitch.isChecked());
+                }
             }
         });
     }
