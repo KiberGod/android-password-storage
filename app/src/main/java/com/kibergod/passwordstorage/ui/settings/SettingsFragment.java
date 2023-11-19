@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,12 +75,14 @@ public class SettingsFragment extends Fragment {
         setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
         setOnClickToSwitch(view, R.id.inputCalcClearingFlag, () -> sharedSettingsDataViewModel.editInputCalcClearing());
         setOnClickToSwitch(view, R.id.digitalOwnerFlag, () -> editDigitalOwnerSetting(view));
-        setOnClickToSwitch(view, R.id.digitalOwnerMode1Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode1Flag, DESCRIPTION_MOD1, HIDE_MODE));
-        setOnClickToSwitch(view, R.id.digitalOwnerMode2Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode2Flag, DESCRIPTION_MOD2, PROTECTED_MODE));
-        setOnClickToSwitch(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DESCRIPTION_MOD3, DATA_DELETION_MODE));
+        setOnClickToRadioButton(view, R.id.digitalOwnerMode1Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode1Flag, DESCRIPTION_MOD1, HIDE_MODE));
+        setOnClickToRadioButton(view, R.id.digitalOwnerMode2Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode2Flag, DESCRIPTION_MOD2, PROTECTED_MODE));
+        setOnClickToRadioButton(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DESCRIPTION_MOD3, DATA_DELETION_MODE));
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
         setOnChangeToCalendar(view);
+        setColorToImg(view, R.id.imgVerticalKey, true);
+        setOnClickToEditPassLayout(view);
 
         return view;
     }
@@ -124,7 +129,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void printDigitalOwnerMod(View view, int id, int mode) {
-        Switch digitalOwnerMode = view.findViewById(id);
+        RadioButton digitalOwnerMode = view.findViewById(id);
         digitalOwnerMode.setChecked(sharedDigitalOwnerViewModel.getModeFlag(mode));
     }
 
@@ -145,6 +150,18 @@ public class SettingsFragment extends Fragment {
                 } else if (switch_id == R.id.digitalOwnerFlag) {
                     setColorToImg(view, R.id.imgRunningRabbit, settingSwitch.isChecked());
                 }
+            }
+        });
+    }
+
+    private void setOnClickToRadioButton(View view, int radioButtonId, Runnable onClickRunnable) {
+        RadioButton settingsRadioButton = view.findViewById(radioButtonId);
+
+        settingsRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickRunnable.run();
+                hideAllKeyBoards(view);
             }
         });
     }
@@ -179,17 +196,42 @@ public class SettingsFragment extends Fragment {
     private void getEditPassword(View view) {
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         String newPassword = inputPassword.getText().toString();
+
+        TextView editPasswordStatus = view.findViewById(R.id.editPasswordStatus);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) editPasswordStatus.getLayoutParams();
         if (newPassword.length() != 0) {
             if (sharedSettingsDataViewModel.passwordValidation(newPassword)) {
                 textViewStatus.setText("");
                 sharedSettingsDataViewModel.editPassword(newPassword);
                 Toast.makeText(getActivity(), "Пароль успішно змінено", Toast.LENGTH_SHORT).show();
+                params = getParamsForValidLine(params, 0);
             } else {
-                textViewStatus.setText("Пароль може складатися лише з символів [0-9], '.', '-', '+' ");
+                textViewStatus.setText("* пароль може складатися лише з символів [0-9], '.', '-', '+' ");
+                params = getParamsForValidLine(params, 5);
             }
         } else {
             textViewStatus.setText("Пароль не може бути порожнім");
+            params = getParamsForValidLine(params, 5);
         }
+        editPasswordStatus.setLayoutParams(params);
+    }
+
+    private ViewGroup.MarginLayoutParams getParamsForValidLine(ViewGroup.MarginLayoutParams params, int dp) {
+        params.topMargin = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                getResources().getDisplayMetrics()
+        );
+        if (dp == 0) {
+            params.height = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    dp,
+                    getResources().getDisplayMetrics()
+            );
+        } else {
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+        return params;
     }
 
     // Логіка переключення налаштування DigitalOwner
@@ -209,10 +251,10 @@ public class SettingsFragment extends Fragment {
     }
 
     // Вікно з підтвердженням зміни режиму
-    private void showResetModeConfirmDialog(View rootView, int switchId, String text, int mode) {
-        Switch modeSwitch = rootView.findViewById(switchId);
+    private void showResetModeConfirmDialog(View rootView, int radioButtonId, String text, int mode) {
+        RadioButton modeRadioButton = rootView.findViewById(radioButtonId);
 
-        if (modeSwitch.isChecked()) {
+        if (modeRadioButton.isChecked()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setMessage(text);
             builder.setPositiveButton("Увімкнути", new DialogInterface.OnClickListener() {
@@ -224,7 +266,6 @@ public class SettingsFragment extends Fragment {
                         sharedCategoriesDataViewModel.dataDestroy();
                         sharedRecordsDataViewModel.dataDestroy();
                     }
-                    resetModeSwitches(rootView, switchId);
                     printCalendarData(rootView);
                 }
             });
@@ -232,14 +273,14 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     sharedDigitalOwnerViewModel.setPassiveMode();
-                    offAllModsSwitches(rootView);
+                    offDigitalOwnerMods(rootView);
                 }
             });
             builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     sharedDigitalOwnerViewModel.setPassiveMode();
-                    offAllModsSwitches(rootView);
+                    offDigitalOwnerMods(rootView);
                 }
             });
             builder.show();
@@ -249,22 +290,9 @@ public class SettingsFragment extends Fragment {
     }
 
     // Вимикає всі режими "Цифрового власника"
-    private void offAllModsSwitches(View view) {
-        Switch switch1 = view.findViewById(R.id.digitalOwnerMode1Flag);
-        Switch switch2 = view.findViewById(R.id.digitalOwnerMode2Flag);
-        Switch switch3 = view.findViewById(R.id.digitalOwnerMode3Flag);
-
-        switch1.setChecked(false);
-        switch2.setChecked(false);
-        switch3.setChecked(false);
-    }
-
-    // Оновлення перемикачів режиму "Цифрового власника"
-    private void resetModeSwitches(View view, int switchId) {
-        offAllModsSwitches(view);
-
-        Switch selectedSwitch = view.findViewById(switchId);
-        selectedSwitch.setChecked(true);
+    private void offDigitalOwnerMods(View view) {
+        RadioGroup radioGroup = view.findViewById(R.id.digitalOwnerModsRGroup);
+        radioGroup.clearCheck();
     }
 
 
@@ -298,5 +326,22 @@ public class SettingsFragment extends Fragment {
     private void hideKeyBoard(InputMethodManager inputMethodManager, View view, int id) {
         EditText editText = view.findViewById(id);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    // Встановлення логіки поведінки поля редагування паролю
+    private void setOnClickToEditPassLayout(View view) {
+        LinearLayout editPasswordLayoutHead = view.findViewById(R.id.editPasswordLayoutHead);
+        LinearLayout editPasswordLayoutBody = view.findViewById(R.id.editPasswordLayoutBody);
+        editPasswordLayoutBody.setVisibility(View.GONE);
+        editPasswordLayoutHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editPasswordLayoutBody.getVisibility() == View.VISIBLE) {
+                    editPasswordLayoutBody.setVisibility(View.GONE);
+                } else {
+                    editPasswordLayoutBody.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 }
