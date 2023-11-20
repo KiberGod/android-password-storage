@@ -5,13 +5,13 @@ import static com.kibergod.passwordstorage.model.DigitalOwner.HIDE_MODE;
 import static com.kibergod.passwordstorage.model.DigitalOwner.PROTECTED_MODE;
 import static com.kibergod.passwordstorage.model.Settings.MAX_PASSWORD_LENGTH;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.RabbitSupport;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
@@ -50,10 +51,6 @@ public class SettingsFragment extends Fragment {
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     private TextView textViewStatus;
-
-    private final String DESCRIPTION_MOD1 = "Копії ваших файлів даних (записи та категорії) будуть приховані до моменту їх відновлення. Оригінали будуть замінені порожніми, тимчасовими файлами. Для відновлення прихованих даних необідно ввести ваш пароль входу у калькуляторі задом наперед. Після відновлення тимчасові дані будуть об`єднані з відновленними.";
-    private final String DESCRIPTION_MOD2 = "У цьому режимі Цифровий власник через задану кількість днів заблокує можливість входити по стандартному паролю. Для входу буде необхідно ввести ваш пароль задом наперед. \n\nВідлік часу почнеться з поточної дати.";
-    private final String DESCRIPTION_MOD3 = "У цьому режимі Цифровий власник через задану кількість днів після першого успішного заходу одразу знищить усі дані записів та категорій. Дані буде неможливо відновити. Видалення відбудеться до того, як хтось при вході зможе побачити дані. \n\nВідлік часу почнеться з поточної дати.";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,14 +72,15 @@ public class SettingsFragment extends Fragment {
         setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
         setOnClickToSwitch(view, R.id.inputCalcClearingFlag, () -> sharedSettingsDataViewModel.editInputCalcClearing());
         setOnClickToSwitch(view, R.id.digitalOwnerFlag, () -> editDigitalOwnerSetting(view));
-        setOnClickToRadioButton(view, R.id.digitalOwnerMode1Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode1Flag, DESCRIPTION_MOD1, HIDE_MODE));
-        setOnClickToRadioButton(view, R.id.digitalOwnerMode2Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode2Flag, DESCRIPTION_MOD2, PROTECTED_MODE));
-        setOnClickToRadioButton(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DESCRIPTION_MOD3, DATA_DELETION_MODE));
+        setOnClickToRadioButton(view, R.id.digitalOwnerMode1Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode1Flag, HIDE_MODE));
+        setOnClickToRadioButton(view, R.id.digitalOwnerMode2Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode2Flag, PROTECTED_MODE));
+        setOnClickToRadioButton(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DATA_DELETION_MODE));
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
         setOnChangeToCalendar(view);
         setColorToImg(view, R.id.imgVerticalKey, true);
         setOnClickToEditPassLayout(view);
+        setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD);
 
         return view;
     }
@@ -251,15 +249,36 @@ public class SettingsFragment extends Fragment {
     }
 
     // Вікно з підтвердженням зміни режиму
-    private void showResetModeConfirmDialog(View rootView, int radioButtonId, String text, int mode) {
+    private void showResetModeConfirmDialog(View rootView, int radioButtonId, int mode) {
         RadioButton modeRadioButton = rootView.findViewById(radioButtonId);
 
+        View blurView = rootView.findViewById(R.id.blurViewInSettingsPage);
+        DialogInterface.OnDismissListener dismissListener = new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                blurView.setVisibility(View.GONE);
+                sharedDigitalOwnerViewModel.setPassiveMode();
+                offDigitalOwnerMods(rootView);
+            }
+        };
+
         if (modeRadioButton.isChecked()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setMessage(text);
-            builder.setPositiveButton("Увімкнути", new DialogInterface.OnClickListener() {
+            RabbitSupport.SupportDialogIDs ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_HIDE_MODE;
+            switch (mode) {
+                case PROTECTED_MODE:
+                    ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_PROTECTED_MODE;
+                    break;
+                case DATA_DELETION_MODE:
+                    ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_DATA_DELETION_MODE;
+                    break;
+            }
+            Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, R.id.blurViewInSettingsPage, true);
+
+
+            Button positiveButton = infoDialog.findViewById(R.id.positiveButton);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(View v) {
                     sharedDigitalOwnerViewModel.setMode(mode);
                     if (sharedDigitalOwnerViewModel.isHideMode(mode)) {
                         sharedDigitalOwnerViewModel.hideData();
@@ -267,23 +286,27 @@ public class SettingsFragment extends Fragment {
                         sharedRecordsDataViewModel.dataDestroy();
                     }
                     printCalendarData(rootView);
+                    infoDialog.setOnDismissListener(null);
+                    infoDialog.cancel();
+                    blurView.setVisibility(View.GONE);
+                    infoDialog.setOnDismissListener(dismissListener);
                 }
             });
-            builder.setNegativeButton("Відмінити", new DialogInterface.OnClickListener() {
+
+            Button negativeButton = infoDialog.findViewById(R.id.negativeButton);
+            negativeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(View v) {
                     sharedDigitalOwnerViewModel.setPassiveMode();
                     offDigitalOwnerMods(rootView);
+                    infoDialog.setOnDismissListener(null);
+                    infoDialog.cancel();
+                    blurView.setVisibility(View.GONE);
+                    infoDialog.setOnDismissListener(dismissListener);
                 }
             });
-            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    sharedDigitalOwnerViewModel.setPassiveMode();
-                    offDigitalOwnerMods(rootView);
-                }
-            });
-            builder.show();
+            infoDialog.setOnDismissListener(dismissListener);
+            infoDialog.show();
         } else {
             sharedDigitalOwnerViewModel.setPassiveMode();
         }
@@ -341,6 +364,19 @@ public class SettingsFragment extends Fragment {
                 } else {
                     editPasswordLayoutBody.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+    }
+
+    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport
+    private void setRabbitSupportDialogToIcon(View view, int iconId, RabbitSupport.SupportDialogIDs ID) {
+        ImageView imageView = view.findViewById(iconId);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, view, R.id.blurViewInSettingsPage);
+                infoDialog.show();
             }
         });
     }
