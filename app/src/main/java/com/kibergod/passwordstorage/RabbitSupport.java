@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,9 +84,21 @@ public class RabbitSupport {
             }
         });
 
+        Button cancelButton = rabbitSupportDialog.findViewById(R.id.cancelButton);
+
         if (!activeBlockFlag) {
             LinearLayout infoActiveBlock = rabbitSupportDialog.findViewById(R.id.infoActiveBlock);
             ((ViewGroup) infoActiveBlock.getParent()).removeView(infoActiveBlock);
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    blurView.setVisibility(View.GONE);
+                    rabbitSupportDialog.cancel();
+                }
+            });
+        } else {
+            ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
         }
 
         return rabbitSupportDialog;
