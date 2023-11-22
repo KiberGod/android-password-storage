@@ -81,7 +81,9 @@ public class SettingsFragment extends Fragment {
         setColorToImg(view, R.id.imgVerticalKey, true);
         setOnClickToEditPassLayout(view);
         setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD);
-
+        setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED);
+        setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.INP_CALC_CLEARING);
+        setRabbitSupportDialogToIcon(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER);
         return view;
     }
 
