@@ -89,8 +89,8 @@ public class HomeActivity extends AppCompatActivity {
 
     // Повертає користувача до калькулятора у разі втрати фокусу програмою
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onRestart() {
+        super.onRestart();
         if (sharedSettingsDataViewModel.getActivityProtection()) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
