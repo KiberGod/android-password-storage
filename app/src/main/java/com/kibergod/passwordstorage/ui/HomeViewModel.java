@@ -30,18 +30,22 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    editText.removeTextChangedListener(this);
-                    byte[] bytes = charSequence.toString().getBytes();
-                    if (bytes.length > max_value-1) {
-                        String newText = new String(bytes, 0, max_value-1);
-                        newText = newText.substring(0, newText.length() - 1);
-                        editText.setText(newText);
-                        editText.setSelection(newText.length());
+                    if (charSequence.toString().getBytes().length > max_value-1) {
+                        String originalString = charSequence.toString();
+                        byte[] bytes = originalString.getBytes();
+
+                        while (bytes.length > max_value - 1) {
+                            int lastCharIndex = originalString.length() - 1;
+                            originalString = originalString.substring(0, lastCharIndex);
+                            bytes = originalString.getBytes();
+                        }
+                        editText.removeTextChangedListener(this);
+                        editText.setText(originalString);
+                        editText.setSelection(originalString.length());
+                        editText.addTextChangedListener(this);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                } finally {
-                    editText.addTextChangedListener(this);
                 }
             }
 
