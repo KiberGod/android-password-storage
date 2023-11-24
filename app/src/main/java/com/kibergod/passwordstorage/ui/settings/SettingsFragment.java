@@ -38,6 +38,7 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
+import com.kibergod.passwordstorage.ui.HomeActivity;
 import com.kibergod.passwordstorage.ui.HomeViewModel;
 
 import java.util.Calendar;
@@ -80,10 +81,10 @@ public class SettingsFragment extends Fragment {
         setOnChangeToCalendar(view);
         setColorToImg(view, R.id.imgVerticalKey, true);
         setOnClickToEditPassLayout(view);
-        setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD);
-        setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED);
-        setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.INP_CALC_CLEARING);
-        setRabbitSupportDialogToIcon(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.INP_CALC_CLEARING, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER, requireContext(), R.id.blurViewInSettingsPage);
         return view;
     }
 
@@ -366,19 +367,6 @@ public class SettingsFragment extends Fragment {
                 } else {
                     editPasswordLayoutBody.setVisibility(View.VISIBLE);
                 }
-            }
-        });
-    }
-
-    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport
-    private void setRabbitSupportDialogToIcon(View view, int iconId, RabbitSupport.SupportDialogIDs ID) {
-        ImageView imageView = view.findViewById(iconId);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, view, R.id.blurViewInSettingsPage);
-                infoDialog.show();
             }
         });
     }

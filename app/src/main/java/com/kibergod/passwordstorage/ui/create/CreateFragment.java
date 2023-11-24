@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.RabbitSupport;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 
 public class CreateFragment extends Fragment {
@@ -30,6 +31,7 @@ public class CreateFragment extends Fragment {
         setOnClickToCreateButton(view, R.id.createRecordButton);
         setOnClickToCreateButton(view, R.id.createCategoryButton);
 
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.createPageImg, RabbitSupport.SupportDialogIDs.CREATE_PAGE, requireContext(), R.id.blurViewInCreatePage);
         return view;
     }
 

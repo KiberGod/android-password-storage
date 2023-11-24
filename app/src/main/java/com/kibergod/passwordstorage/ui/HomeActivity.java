@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 
 import com.kibergod.passwordstorage.MainActivity;
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.RabbitSupport;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
@@ -313,5 +315,18 @@ public class HomeActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport
+    public void setRabbitSupportDialogToIcon(View view, int iconId, RabbitSupport.SupportDialogIDs ID, Context context, int blurViewId) {
+        ImageView imageView = view.findViewById(iconId);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(context, ID, view, blurViewId);
+                infoDialog.show();
+            }
+        });
     }
 }
