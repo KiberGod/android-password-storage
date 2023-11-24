@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -102,6 +103,14 @@ public class RabbitSupport {
             });
         } else {
             ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
+        }
+
+        if (getMainText(dialogID.getValue()).length() > 400) {
+            ScrollView scrollView = rabbitSupportDialog.findViewById(R.id.scrollArea);
+
+            ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
+            layoutParams.height = (int) (300 * context.getResources().getDisplayMetrics().density + 0.5f);
+            scrollView.setLayoutParams(layoutParams);
         }
 
         return rabbitSupportDialog;
