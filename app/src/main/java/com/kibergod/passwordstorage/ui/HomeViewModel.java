@@ -3,7 +3,9 @@ package com.kibergod.passwordstorage.ui;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.core.content.ContextCompat;
@@ -79,5 +81,23 @@ public class HomeViewModel extends ViewModel {
         setMaxLengthForInput(editText, maxLength);
 
         return editText;
+    }
+
+    public ViewGroup.MarginLayoutParams getParamsForValidLine(Context context, ViewGroup.MarginLayoutParams params, int dp) {
+        params.topMargin = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                context.getResources().getDisplayMetrics()
+        );
+        if (dp == 0) {
+            params.height = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    dp,
+                    context.getResources().getDisplayMetrics()
+            );
+        } else {
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+        return params;
     }
 }

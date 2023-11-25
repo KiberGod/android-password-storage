@@ -205,34 +205,16 @@ public class SettingsFragment extends Fragment {
                 textViewStatus.setText("");
                 sharedSettingsDataViewModel.editPassword(newPassword);
                 Toast.makeText(getActivity(), "Пароль успішно змінено", Toast.LENGTH_SHORT).show();
-                params = getParamsForValidLine(params, 0);
+                params = homeViewModel.getParamsForValidLine(requireContext(), params, 0);
             } else {
                 textViewStatus.setText("* пароль може складатися лише з символів [0-9], '.', '-', '+' ");
-                params = getParamsForValidLine(params, 5);
+                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
             }
         } else {
             textViewStatus.setText("Пароль не може бути порожнім");
-            params = getParamsForValidLine(params, 5);
+            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
         }
         editPasswordStatus.setLayoutParams(params);
-    }
-
-    private ViewGroup.MarginLayoutParams getParamsForValidLine(ViewGroup.MarginLayoutParams params, int dp) {
-        params.topMargin = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                getResources().getDisplayMetrics()
-        );
-        if (dp == 0) {
-            params.height = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    dp,
-                    getResources().getDisplayMetrics()
-            );
-        } else {
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        }
-        return params;
     }
 
     // Логіка переключення налаштування DigitalOwner

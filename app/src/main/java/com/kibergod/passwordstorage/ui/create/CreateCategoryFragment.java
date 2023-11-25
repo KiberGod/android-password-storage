@@ -64,6 +64,7 @@ public class CreateCategoryFragment extends Fragment {
     private void getNewCategory(View view) {
         EditText editText = view.findViewById(R.id.editCreateCategoryName);
         String categoryName = editText.getText().toString();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (categoryName.length() != 0) {
             if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
                 textViewStatus.setText("");
@@ -71,11 +72,14 @@ public class CreateCategoryFragment extends Fragment {
                 Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
-                textViewStatus.setText("Категорія з таким іменем вже існує");
+                textViewStatus.setText("Категорія з такою назвою вже існує");
+                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
             }
         } else {
-            textViewStatus.setText("І`мя не може бути порожнім");
+            textViewStatus.setText("Назва не може бути порожньою");
+            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
         }
+        textViewStatus.setLayoutParams(params);
     }
 
     // Встановлення обробника події натиснення на іконку
