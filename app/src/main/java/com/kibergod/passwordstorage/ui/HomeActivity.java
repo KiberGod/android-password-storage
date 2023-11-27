@@ -257,6 +257,7 @@ public class HomeActivity extends AppCompatActivity {
         rootLayout.setRowCount(numRows);
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         for (int i = 0; i < iconArray.length; i++) {
 
