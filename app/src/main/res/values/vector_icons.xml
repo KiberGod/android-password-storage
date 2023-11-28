@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="vector_icons_array">
+        <item>"vector_template_image"</item>
         <item>"vector_icon_aliexpress"</item>
         <item>"vector_icon_auchan"</item>
         <item>"vector_icon_citrus"</item>

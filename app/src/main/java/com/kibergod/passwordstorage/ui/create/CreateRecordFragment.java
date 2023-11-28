@@ -44,7 +44,7 @@ public class CreateRecordFragment extends Fragment {
 
     private TextView textViewStatus;
 
-    private int tempIconId = -1;
+    private int tempIconId;
 
     private int fieldCounter = 0;
 
@@ -67,6 +67,7 @@ public class CreateRecordFragment extends Fragment {
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
 
+        tempIconId = getResources().getIdentifier("vector_template_image", "drawable", requireContext().getPackageName());
         textViewStatus = view.findViewById(R.id.createRecordStatus);
 
         setCategoriesToDropdownButton(view);
