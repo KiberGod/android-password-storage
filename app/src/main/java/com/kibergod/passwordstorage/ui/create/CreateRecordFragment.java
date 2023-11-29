@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kibergod.passwordstorage.CategorySelectionDialog;
+import com.kibergod.passwordstorage.ui.CategorySelectionDialog;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;

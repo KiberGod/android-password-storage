@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage;
+package com.kibergod.passwordstorage.ui;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.model.Category;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 
 public class CategorySelectionDialog {
 
+    // Відображення вікна вибору категорії
     public static void showCategorySelectionDialog(Context context, ArrayList<Category> categories, Consumer<Integer> func) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -53,6 +55,7 @@ public class CategorySelectionDialog {
         alertDialog.show();
     }
 
+    // Створення блоків "зображення + назва" категорій
     private static View createCategoryBlock(Category category, Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View categoryBlock = inflater.inflate(R.layout.dialog_category_selection_item, null);
