@@ -6,17 +6,14 @@ import static com.kibergod.passwordstorage.model.Record.MAX_TITLE_LENGTH;
 import static com.kibergod.passwordstorage.model.Record.getMaxFieldNameLength;
 import static com.kibergod.passwordstorage.model.Record.getMaxFieldValueLength;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kibergod.passwordstorage.CategorySelectionDialog;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
@@ -84,32 +82,30 @@ public class CreateRecordFragment extends Fragment {
     private void setCategoriesToDropdownButton(View view) {
         Button dropdownButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
 
-        dropdownButton.setText(homeViewModel.setEmptyCategoryText());
+        dropdownButton.setText(homeViewModel.getEmptyCategoryText());
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(null, homeViewModel.setEmptyCategoryText()));
+        categories.add(0, new Category(null, homeViewModel.getEmptyCategoryText()));
 
-        ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         dropdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDropdownMenu(dropdownButton, adapter, categories);
+                showDropdownMenu(dropdownButton, categories);
             }
         });
     }
 
     // Функція, що спрацьовуватиме при обранні категорій з списку
-    private void showDropdownMenu(Button dropdownButton, ArrayAdapter<Category> adapter, ArrayList<Category> categories) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Category selectedCategory = categories.get(which);
-                dropdownButton.setText(selectedCategory.getName());
-                dialog.dismiss();
+    private void showDropdownMenu(Button dropdownButton, ArrayList<Category> categories) {
+        ((HomeActivity) requireActivity()).hideKeyboard();
+        CategorySelectionDialog.showCategorySelectionDialog(requireContext(), categories, categoryId -> {
+            String categoryName = sharedCategoriesDataViewModel.getCategoryNameById(categoryId);
+            if (categoryName.equals("")) {
+                dropdownButton.setText(homeViewModel.getEmptyCategoryText());
+            } else {
+                dropdownButton.setText(categoryName);
             }
         });
-        builder.show();
     }
 
     // Функція встановлює подію натискання кнопки збереження введених змін

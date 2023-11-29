@@ -1,5 +1,7 @@
 package com.kibergod.passwordstorage.model;
 
+import com.kibergod.passwordstorage.R;
+
 import java.util.ArrayList;
 
 /*
@@ -75,6 +77,7 @@ public class Record {
 
 
     public static final int NULL_ICON_ID_VALUE = -1;
+    public static final Integer MAIN_ICON_ID_VALUE = R.drawable.vector_template_image;
     public static final Integer NULL_CATEGORY_VALUE = -1;
     public static final boolean NULL_BOOKMARK_VALUE = false;
 

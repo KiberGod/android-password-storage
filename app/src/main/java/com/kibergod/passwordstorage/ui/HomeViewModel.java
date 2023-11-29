@@ -59,7 +59,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     // Повертає текст відсутності категорії для кнопки з списком категорій
-    public String setEmptyCategoryText() { return "Відсутня"; }
+    public String getEmptyCategoryText() { return "Відсутня"; }
 
     // Функція парсить текстові значення з полів вводу
     public ArrayList<String> getStringsArray(ArrayList<EditText> editsArray) {

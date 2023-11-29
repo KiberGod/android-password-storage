@@ -136,7 +136,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Перевірка на наявність іконки запису
     public boolean isEmptyIconId(int index) {
-        if (records.get(index).getIconId() == Record.NULL_ICON_ID_VALUE) {
+        if (records.get(index).getIconId() == Record.NULL_ICON_ID_VALUE || records.get(index).getIconId() == Record.MAIN_ICON_ID_VALUE) {
             return true;
         } else {
             return false;

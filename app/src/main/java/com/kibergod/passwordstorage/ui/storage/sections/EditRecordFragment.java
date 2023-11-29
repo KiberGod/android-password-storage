@@ -153,13 +153,13 @@ public class EditRecordFragment extends Fragment {
                 sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)
         );
         if (buttonText.equals("")) {
-            buttonText = homeViewModel.setEmptyCategoryText();
+            buttonText = homeViewModel.getEmptyCategoryText();
         }
         Button dropdownButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
         dropdownButton.setText(buttonText);
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(null, homeViewModel.setEmptyCategoryText()));
+        categories.add(0, new Category(null, homeViewModel.getEmptyCategoryText()));
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         dropdownButton.setOnClickListener(new View.OnClickListener() {

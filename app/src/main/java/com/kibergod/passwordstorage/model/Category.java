@@ -38,4 +38,11 @@ public class Category {
         this.name = name;
         this.icon_id = icon_id;
     }
+
+    public boolean hasIcon() {
+        if (icon_id == NULL_ICON_ID_VALUE) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -309,7 +309,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція приховує клавіатуру вводу, якщо та відкрита
-    private void hideKeyboard() {
+    public void hideKeyboard() {
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
