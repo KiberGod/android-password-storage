@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage;
+package com.kibergod.passwordstorage.ui;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+
+import com.kibergod.passwordstorage.R;
 
 /*
  *  Даний клас є реалізацією системи довідок RSS (Rabbit Support System)

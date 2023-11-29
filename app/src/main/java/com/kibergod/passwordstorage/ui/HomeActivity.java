@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 
 import com.kibergod.passwordstorage.MainActivity;
 import com.kibergod.passwordstorage.R;
-import com.kibergod.passwordstorage.RabbitSupport;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.kibergod.passwordstorage.R;
-import com.kibergod.passwordstorage.RabbitSupport;
+import com.kibergod.passwordstorage.ui.RabbitSupport;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 
 public class CreateFragment extends Fragment {
