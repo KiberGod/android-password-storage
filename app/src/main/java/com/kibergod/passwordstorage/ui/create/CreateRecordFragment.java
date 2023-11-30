@@ -90,15 +90,19 @@ public class CreateRecordFragment extends Fragment {
         dropdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDropdownMenu(dropdownButton, categories);
+                showDropdownMenu(dropdownButton, categories, view);
             }
         });
     }
 
     // Функція, що спрацьовуватиме при обранні категорій з списку
-    private void showDropdownMenu(Button dropdownButton, ArrayList<Category> categories) {
+    private void showDropdownMenu(Button dropdownButton, ArrayList<Category> categories, View view) {
         ((HomeActivity) requireActivity()).hideKeyboard();
-        CategorySelectionDialog.showCategorySelectionDialog(requireContext(), categories, categoryId -> {
+        CategorySelectionDialog.showCategorySelectionDialog(
+                requireContext(),
+                categories,
+                getSelectedCategoryName(view),
+                categoryId -> {
             String categoryName = sharedCategoriesDataViewModel.getCategoryNameById(categoryId);
             if (categoryName.equals("")) {
                 dropdownButton.setText(homeViewModel.getEmptyCategoryText());
@@ -127,8 +131,7 @@ public class CreateRecordFragment extends Fragment {
         if (recordTitle.length() != 0) {
             if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
                 textViewStatus.setText("");
-                Button categoryButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
-                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(categoryButton.getText().toString());
+                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(getSelectedCategoryName(view));
                 sharedRecordsDataViewModel.addRecord(
                         recordTitle,
                         textInput.getText().toString(),
@@ -144,6 +147,12 @@ public class CreateRecordFragment extends Fragment {
         } else {
             textViewStatus.setText("Заголовок запису не може бути порожнім");
         }
+    }
+
+    // Повертає обрану категорію
+    private String getSelectedCategoryName(View view) {
+        Button categoryButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
+        return categoryButton.getText().toString();
     }
 
     // Встановлення обробника події натиснення на іконку
