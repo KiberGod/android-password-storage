@@ -50,7 +50,6 @@ public class CreateRecordFragment extends Fragment {
     private ArrayList<EditText> fieldValues = new ArrayList<>();
 
     private EditText currentEditTextForGenerator;
-    private EditText currentEditTextTotal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,21 +73,13 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
-        setOnClickToBackButton(view);
+        ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
         setOnClickToGenPassword(view);
-        setOnClickToEraseInput(view);
+        ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
         setEditTextFocusChangeListener(view, R.id.editCreateRecordText);
         setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, true);
-        setStartIconColors(view);
+        ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
         return view;
-    }
-
-    // Функція встановлює початкові кольори іконок
-    private void setStartIconColors(View view) {
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgLeftArrow, R.color.white);
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.gray_text);
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgTick, R.color.white);
     }
 
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
@@ -255,14 +246,14 @@ public class CreateRecordFragment extends Fragment {
                         currentEditTextForGenerator = editText;
                         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.purple);
                     }
-                    currentEditTextTotal = editText;
+                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(editText);
                     ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.white);
                 } else if (editText == currentEditTextForGenerator){
                     if (!isTotal) {
                         currentEditTextForGenerator = null;
                         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.gray_text);
                     }
-                    currentEditTextTotal = null;
+                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(null);
                     ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
                 }
             }
@@ -290,29 +281,4 @@ public class CreateRecordFragment extends Fragment {
             }
         });
     }
-
-    // Натиснення на кнопку стертя вводу у полі
-    private void setOnClickToEraseInput(View view) {
-        ImageView eraseButton = view.findViewById(R.id.imgEraser);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentEditTextTotal != null) {
-                    currentEditTextTotal.setText("");
-                }
-            }
-        });
-    }
-
-    // Кнопка повернення на попередню сторінку
-    private void setOnClickToBackButton(View view) {
-        ImageView eraseButton = view.findViewById(R.id.imgLeftArrow);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-    }
-
 }

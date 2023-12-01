@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,6 +65,8 @@ public class HomeActivity extends AppCompatActivity {
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
+
+    private EditText currentEditTextTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -334,6 +337,45 @@ public class HomeActivity extends AppCompatActivity {
     // Встановлення кольору іконки
     public void setColorToImg(Context context, View view, int imageId, int colorId) {
         ImageView imageView = view.findViewById(imageId);
-        imageView.setColorFilter(ContextCompat.getColor(context, colorId), PorterDuff.Mode.SRC_IN);
+        if (imageView != null) {
+            imageView.setColorFilter(ContextCompat.getColor(context, colorId), PorterDuff.Mode.SRC_IN);
+        }
+    }
+
+    // Функція встановлює початкові кольори іконок
+    public void setIconColorsToToolbar(View view, Context context) {
+        setColorToImg(context, view, R.id.imgLeftArrow, R.color.white);
+        setColorToImg(context, view, R.id.imgEraser, R.color.gray_text);
+        setColorToImg(context, view, R.id.imgGears, R.color.gray_text);
+        setColorToImg(context, view, R.id.imgTick, R.color.white);
+    }
+
+    // Кнопка повернення на попередню сторінку (панель інструментів)
+    public void setOnClickToBackButton(View view) {
+        ImageView eraseButton = view.findViewById(R.id.imgLeftArrow);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    // Натиснення на кнопку стертя вводу у полі (панель інструментів)
+    public void setOnClickToEraseInput(View view) {
+        ImageView eraseButton = view.findViewById(R.id.imgEraser);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentEditTextTotal != null) {
+                    currentEditTextTotal.setText("");
+                }
+            }
+        });
+    }
+
+    // Заміна поля з фокусом (для панелі інструментів)
+    public void setCurrentEditTextTotal(EditText editText) {
+        currentEditTextTotal = editText;
     }
 }

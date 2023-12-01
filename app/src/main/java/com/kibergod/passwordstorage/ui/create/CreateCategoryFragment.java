@@ -46,14 +46,18 @@ public class CreateCategoryFragment extends Fragment {
 
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
+        ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
+        ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
+        ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
+        setEditTextFocusChangeListener(view, R.id.editCreateCategoryName);
         return view;
     }
 
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        Button button = view.findViewById(R.id.saveNewCategoryButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageView saveButton = view.findViewById(R.id.imgTick);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getNewCategory(view);
@@ -94,6 +98,23 @@ public class CreateCategoryFragment extends Fragment {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(iconResourceId);
                 });
+            }
+        });
+    }
+
+    // Автооновлення фокус-поля для
+    private void setEditTextFocusChangeListener(View view, int editTextId) {
+        final EditText editText = view.findViewById(editTextId);
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(editText);
+                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.white);
+                } else {
+                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(null);
+                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
+                }
             }
         });
     }
