@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -328,5 +329,11 @@ public class HomeActivity extends AppCompatActivity {
                 infoDialog.show();
             }
         });
+    }
+
+    // Встановлення кольору іконки
+    public void setColorToImg(Context context, View view, int imageId, int colorId) {
+        ImageView imageView = view.findViewById(imageId);
+        imageView.setColorFilter(ContextCompat.getColor(context, colorId), PorterDuff.Mode.SRC_IN);
     }
 }

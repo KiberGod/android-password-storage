@@ -49,7 +49,8 @@ public class CreateRecordFragment extends Fragment {
     private ArrayList<EditText> fieldNames = new ArrayList<>();
     private ArrayList<EditText> fieldValues = new ArrayList<>();
 
-    private EditText currentEditText;
+    private EditText currentEditTextForGenerator;
+    private EditText currentEditTextTotal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,9 +74,21 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
+        setOnClickToBackButton(view);
         setOnClickToGenPassword(view);
+        setOnClickToEraseInput(view);
         setEditTextFocusChangeListener(view, R.id.editCreateRecordText);
+        setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, true);
+        setStartIconColors(view);
         return view;
+    }
+
+    // Функція встановлює початкові кольори іконок
+    private void setStartIconColors(View view) {
+        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgLeftArrow, R.color.white);
+        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
+        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.gray_text);
+        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgTick, R.color.white);
     }
 
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
@@ -114,8 +127,8 @@ public class CreateRecordFragment extends Fragment {
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        Button button = view.findViewById(R.id.saveNewRecordButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageView saveButton = view.findViewById(R.id.imgTick);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getNewRecord(view);
@@ -194,6 +207,7 @@ public class CreateRecordFragment extends Fragment {
 
             fieldNames.add(editTextName);
             fieldValues.add(editTextValue);
+            editTextName.setId(View.generateViewId());
             editTextValue.setId(View.generateViewId());
 
             newLayout.addView(editTextName);
@@ -204,6 +218,7 @@ public class CreateRecordFragment extends Fragment {
             fieldCounter++;
 
             setEditTextFocusChangeListener(view, editTextValue.getId());
+            setEditTextFocusChangeListener(view, editTextName.getId(), true);
         }
     }
 
@@ -225,16 +240,30 @@ public class CreateRecordFragment extends Fragment {
         return button;
     }
 
-    // Автооновлення фокус-поля для подальшого використання функції генераціїї пароля
     private void setEditTextFocusChangeListener(View view, int editTextId) {
+        setEditTextFocusChangeListener(view, editTextId, false);
+    }
+
+    // Автооновлення фокус-поля для подальшого використання функції генераціїї пароля
+    private void setEditTextFocusChangeListener(View view, int editTextId, boolean isTotal) {
         final EditText editText = view.findViewById(editTextId);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View view, boolean hasFocus) {
+            public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    currentEditText = editText;
-                } else if (editText == currentEditText){
-                    currentEditText = null;
+                    if (!isTotal) {
+                        currentEditTextForGenerator = editText;
+                        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.purple);
+                    }
+                    currentEditTextTotal = editText;
+                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.white);
+                } else if (editText == currentEditTextForGenerator){
+                    if (!isTotal) {
+                        currentEditTextForGenerator = null;
+                        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.gray_text);
+                    }
+                    currentEditTextTotal = null;
+                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
                 }
             }
         });
@@ -242,23 +271,48 @@ public class CreateRecordFragment extends Fragment {
 
     // Функція встановлює подію натискання кнопки генерації пароля
     private void setOnClickToGenPassword(View view) {
-        Button button = view.findViewById(R.id.generatePasswordButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageView generateButton = view.findViewById(R.id.imgGears);
+        generateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentEditText != null) {
+                if (currentEditTextForGenerator != null) {
                     String password = sharedGeneratorDataViewModel.getPassword(requireContext());
-                    if (currentEditText.getId() == R.id.editCreateRecordText) {
-                        int cursorPosition = currentEditText.getSelectionStart();
-                        String currentText = currentEditText.getText().toString();
+                    if (currentEditTextForGenerator.getId() == R.id.editCreateRecordText) {
+                        int cursorPosition = currentEditTextForGenerator.getSelectionStart();
+                        String currentText = currentEditTextForGenerator.getText().toString();
                         String newText = currentText.substring(0, cursorPosition) + password +
                                 currentText.substring(cursorPosition);
-                        currentEditText.setText(newText);
+                        currentEditTextForGenerator.setText(newText);
                     } else {
-                        currentEditText.setText(password);
+                        currentEditTextForGenerator.setText(password);
                     }
                 }
             }
         });
     }
+
+    // Натиснення на кнопку стертя вводу у полі
+    private void setOnClickToEraseInput(View view) {
+        ImageView eraseButton = view.findViewById(R.id.imgEraser);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentEditTextTotal != null) {
+                    currentEditTextTotal.setText("");
+                }
+            }
+        });
+    }
+
+    // Кнопка повернення на попередню сторінку
+    private void setOnClickToBackButton(View view) {
+        ImageView eraseButton = view.findViewById(R.id.imgLeftArrow);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+    }
+
 }

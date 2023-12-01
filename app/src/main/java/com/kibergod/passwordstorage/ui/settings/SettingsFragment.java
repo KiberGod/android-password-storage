@@ -78,7 +78,7 @@ public class SettingsFragment extends Fragment {
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
         setOnChangeToCalendar(view);
-        setColorToImg(view, R.id.imgVerticalKey, true);
+        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
         setOnClickToEditPassLayout(view);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED, requireContext(), R.id.blurViewInSettingsPage);
