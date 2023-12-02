@@ -105,12 +105,19 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="3dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/background_modern_card">
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     app:cardBackgroundColor="@color/gray"
-                    app:cardCornerRadius="20dp">
+                    app:cardCornerRadius="12dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -131,15 +138,16 @@
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/createCategoryStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:text=""
-                    android:textColor="#FFFF0000"
-                    android:gravity="center"
-                    android:textSize="16dp" />
+            <TextView
+                android:id="@+id/createCategoryStatus"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text=""
+                android:textColor="#FFFF0000"
+                android:gravity="center"
+                android:textSize="16dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

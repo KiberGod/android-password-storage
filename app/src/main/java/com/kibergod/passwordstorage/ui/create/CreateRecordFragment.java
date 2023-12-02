@@ -188,7 +188,7 @@ public class CreateRecordFragment extends Fragment {
 
     // Встановлення обробника події натиснення на додавання полей
     private void setOnClickToAddField(View rootView) {
-        Button addFieldButton = rootView.findViewById(R.id.addFieldButton);
+        LinearLayout addFieldButton = rootView.findViewById(R.id.addFieldButton);
         addFieldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,18 +200,13 @@ public class CreateRecordFragment extends Fragment {
     // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
     private void createNewField(View view) {
         if (fieldCounter < MAX_FIELDS_LENGTH) {
-
             LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
             View fieldView = getLayoutInflater().inflate(R.layout.fragment_edit_field, null);
-
-            Button addFieldButton = view.findViewById(R.id.addFieldButton);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(0, ((HomeActivity) requireActivity()).convertDPtoPX(20), 0, 0);
-
-
 
             EditText editTextName = fieldView.findViewById(R.id.titleField);
             EditText editTextValue = fieldView.findViewById(R.id.valueField);
@@ -222,9 +217,11 @@ public class CreateRecordFragment extends Fragment {
             editTextName.setId(View.generateViewId());
             editTextValue.setId(View.generateViewId());
             fieldCounter++;
+            updateTextInAddFieldButton(view);
 
-            setOnClickToDeleteFieldButton(parentContainer, fieldView, editTextName, editTextValue);
+            setOnClickToDeleteFieldButton(parentContainer, fieldView, editTextName, editTextValue, view);
 
+            LinearLayout addFieldButton = view.findViewById(R.id.addFieldButton);
             parentContainer.addView(fieldView, parentContainer.indexOfChild(addFieldButton), layoutParams);
             setEditTextFocusChangeListener(view, editTextValue.getId());
             setEditTextFocusChangeListener(view, editTextName.getId(), true);
@@ -241,7 +238,7 @@ public class CreateRecordFragment extends Fragment {
     }
 
     // Функція обробки натиснення на кнопку видалення поля
-    private void setOnClickToDeleteFieldButton(LinearLayout parentContainer, View fieldView, EditText editTextName, EditText editTextValue) {
+    private void setOnClickToDeleteFieldButton(LinearLayout parentContainer, View fieldView, EditText editTextName, EditText editTextValue, View rootView) {
         LinearLayout deleteFieldButton = fieldView.findViewById(R.id.deleteFieldButton);
         deleteFieldButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,8 +248,15 @@ public class CreateRecordFragment extends Fragment {
                 editTextValue.setOnFocusChangeListener(null);
                 fieldValues.remove(editTextValue);
                 fieldCounter--;
+                updateTextInAddFieldButton(rootView);
             }
         });
+    }
+
+    // Оновлення тексту кнопки додавання полей
+    private void updateTextInAddFieldButton(View view) {
+        TextView addFieldButtonText = view.findViewById(R.id.addFieldButtonText);
+        addFieldButtonText.setText("Додати поле (" + Integer.toString(fieldCounter) + "/10)");
     }
 
     private void setEditTextFocusChangeListener(View view, int editTextId) {
