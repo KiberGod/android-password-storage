@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
+    android:orientation="vertical"
     tools:context=".ui.create.CreateRecordFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,10 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/gray_2"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imgLeftArrow"
@@ -61,10 +59,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/createRecordsScrollArea"
@@ -90,6 +85,7 @@
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
+                    android:id="@+id/mainContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -123,7 +119,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:paddingLeft="10dp"
+                            android:paddingLeft="20dp"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -257,36 +253,28 @@
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+                    <Button
+                        android:id="@+id/addFieldButton"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:text="Додати поле" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/addFieldButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:text="Додати поле" />
-
-            </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

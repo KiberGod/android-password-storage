@@ -21,6 +21,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -377,5 +378,10 @@ public class HomeActivity extends AppCompatActivity {
     // Заміна поля з фокусом (для панелі інструментів)
     public void setCurrentEditTextTotal(EditText editText) {
         currentEditTextTotal = editText;
+    }
+
+    // Конвертація dp у px
+    public int convertDPtoPX (int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 }

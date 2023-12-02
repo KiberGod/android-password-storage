@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -136,6 +137,7 @@ public class CreateRecordFragment extends Fragment {
         EditText textInput = view.findViewById(R.id.editCreateRecordText);
         EditText titleInput = view.findViewById(R.id.editCreateRecordTitle);
         String recordTitle = titleInput.getText().toString();
+        ScrollView scrollView = view.findViewById(R.id.scrollView2);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (recordTitle.length() != 0) {
             if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
@@ -153,10 +155,12 @@ public class CreateRecordFragment extends Fragment {
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
                 params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                scrollView.smoothScrollTo(0, 0);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
             params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+            scrollView.smoothScrollTo(0, 0);
         }
         textViewStatus.setLayoutParams(params);
     }
@@ -196,47 +200,59 @@ public class CreateRecordFragment extends Fragment {
     // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
     private void createNewField(View view) {
         if (fieldCounter < MAX_FIELDS_LENGTH) {
-            LinearLayout linearLayout = view.findViewById(R.id.createRecordsScrollArea);
 
-            LinearLayout newLayout = new LinearLayout(requireContext());
-            newLayout.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
+            View fieldView = getLayoutInflater().inflate(R.layout.fragment_edit_field, null);
 
-            EditText editTextName = homeViewModel.getEditText(requireContext(), "Назва", getMaxFieldNameLength());
-            EditText editTextValue = homeViewModel.getEditText(requireContext(), "Значення", getMaxFieldValueLength());
+            Button addFieldButton = view.findViewById(R.id.addFieldButton);
 
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, ((HomeActivity) requireActivity()).convertDPtoPX(20), 0, 0);
+
+
+
+            EditText editTextName = fieldView.findViewById(R.id.titleField);
+            EditText editTextValue = fieldView.findViewById(R.id.valueField);
+            homeViewModel.setMaxLengthForInput(editTextName, getMaxFieldNameLength());
+            homeViewModel.setMaxLengthForInput(editTextValue, getMaxFieldValueLength());
             fieldNames.add(editTextName);
             fieldValues.add(editTextValue);
             editTextName.setId(View.generateViewId());
             editTextValue.setId(View.generateViewId());
-
-            newLayout.addView(editTextName);
-            newLayout.addView(editTextValue);
-            newLayout.addView(getButton(newLayout, editTextName, editTextValue));
-
-            linearLayout.addView(newLayout, linearLayout.getChildCount() - 3);
             fieldCounter++;
 
+            setOnClickToDeleteFieldButton(parentContainer, fieldView, editTextName, editTextValue);
+
+            parentContainer.addView(fieldView, parentContainer.indexOfChild(addFieldButton), layoutParams);
             setEditTextFocusChangeListener(view, editTextValue.getId());
             setEditTextFocusChangeListener(view, editTextName.getId(), true);
+
+
+            ScrollView scrollView = view.findViewById(R.id.scrollView2);
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
         }
     }
 
-    // Створює кнопку видалення поля
-    private Button getButton(LinearLayout linearLayout, EditText editTextName, EditText editTextValue) {
-        Button button = new Button(requireContext());
-        button.setText("-");
-
-        button.setOnClickListener(new View.OnClickListener() {
+    // Функція обробки натиснення на кнопку видалення поля
+    private void setOnClickToDeleteFieldButton(LinearLayout parentContainer, View fieldView, EditText editTextName, EditText editTextValue) {
+        LinearLayout deleteFieldButton = fieldView.findViewById(R.id.deleteFieldButton);
+        deleteFieldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ViewGroup)linearLayout.getParent()).removeView(linearLayout);
+                parentContainer.removeView(fieldView);
                 fieldNames.remove(editTextName);
                 editTextValue.setOnFocusChangeListener(null);
                 fieldValues.remove(editTextValue);
                 fieldCounter--;
             }
         });
-        return button;
     }
 
     private void setEditTextFocusChangeListener(View view, int editTextId) {
