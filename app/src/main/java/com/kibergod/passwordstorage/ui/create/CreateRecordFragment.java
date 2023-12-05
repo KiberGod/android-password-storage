@@ -43,7 +43,7 @@ public class CreateRecordFragment extends Fragment {
 
     private TextView textViewStatus;
 
-    private int tempIconId;
+    private String tempIconId;
 
     private int fieldCounter = 0;
 
@@ -66,7 +66,7 @@ public class CreateRecordFragment extends Fragment {
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
 
-        tempIconId = getResources().getIdentifier("vector_template_image", "drawable", requireContext().getPackageName());
+        tempIconId = "vector_template_image";
         textViewStatus = view.findViewById(R.id.createRecordStatus);
 
         setCategoriesToDropdownButton(view);
@@ -116,7 +116,9 @@ public class CreateRecordFragment extends Fragment {
                 selectedCategoryIcon.setImageResource(R.drawable.vector_template_image);
             } else {
                 selectedCategoryTextView.setText(categoryName);
-                selectedCategoryIcon.setImageResource(sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId));
+                selectedCategoryIcon.setImageResource(
+                        getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId), "drawable", requireContext().getPackageName())
+                );
             }
         });
     }
@@ -180,7 +182,7 @@ public class CreateRecordFragment extends Fragment {
             public void onClick(View view) {
                 ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
-                    imageView.setImageResource(iconResourceId);
+                    imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
             }
         });

@@ -39,7 +39,7 @@ public class BookmarksFragment extends Fragment {
     private void drawButtonList(View view) {
         for (int i=0; i<sharedRecordsDataViewModel.getRecordsCount(); i++) {
             if (sharedRecordsDataViewModel.getBookmarkByIndex(i)) {
-                int icon_id;
+                String icon_id;
                 if (sharedRecordsDataViewModel.needSetCategoryIconByIndex(i)) {
                     icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
                             sharedRecordsDataViewModel.getRecordCategory_idByIndex(i)

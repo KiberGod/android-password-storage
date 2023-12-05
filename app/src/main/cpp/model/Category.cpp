@@ -7,11 +7,14 @@
 
 
 // Конструктор, що використовується для створення тестових записів
-Category::Category(const int id, const char* name, const int icon_id) {
+Category::Category(const int id, const char* name, const char* icon_id) {
     strncpy(this->name, name, MAX_NAME_LENGTH - 1);
     this->name[MAX_NAME_LENGTH - 1] = '\0';
+
     this->id = id;
-    this->icon_id = icon_id;
+
+    strncpy(this->icon_id, icon_id, MAX_ICON_ID_LENGTH - 1);
+    this->icon_id[MAX_ICON_ID_LENGTH - 1] = '\0';
 }
 
 // Друк запису у лог
@@ -27,6 +30,6 @@ const char* Category::getName() const {
     return name;
 }
 
-const int Category::getIconId() const {
+const char* Category::getIconId() const {
     return icon_id;
 }

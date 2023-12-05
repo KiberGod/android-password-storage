@@ -34,7 +34,7 @@ public class EditCategoryFragment extends Fragment {
 
     private int categoryIndex;
 
-    private int tempIconId;
+    private String tempIconId;
 
     private TextView textViewStatus;
 
@@ -72,7 +72,7 @@ public class EditCategoryFragment extends Fragment {
 
         homeViewModel.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
 
-        tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex);
+        tempIconId = "vector_template_image";
 
         printCategoryData(view);
         setOnClickToCancelEditCategoryButton(view);
@@ -88,11 +88,10 @@ public class EditCategoryFragment extends Fragment {
         TextView categoryName = view.findViewById(R.id.editEditCategoryName);
         categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameByIndex(categoryIndex));
 
-        if (!sharedCategoriesDataViewModel.isEmptyIconId(categoryIndex))
-        {
-            ImageView categoryIcon = view.findViewById(R.id.editCategoryIcon);
-            categoryIcon.setImageResource(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex));
-        }
+        ImageView categoryIcon = view.findViewById(R.id.editCategoryIcon);
+        categoryIcon.setImageResource(
+                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex), "drawable", requireContext().getPackageName())
+        );
     }
 
     // Функція встановлює подію переходу на попередню сторінку (з переглядом категорії)
@@ -178,7 +177,7 @@ public class EditCategoryFragment extends Fragment {
             public void onClick(View view) {
                 ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
-                    imageView.setImageResource(iconResourceId);
+                    imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
             }
         });

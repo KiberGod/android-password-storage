@@ -37,7 +37,7 @@ public class RecordsFragment extends Fragment {
     // Функція виводить весь список записів
     private void drawButtonList(View view) {
         for (int i=0; i<sharedRecordsDataViewModel.getRecordsCount(); i++) {
-            int icon_id;
+            String icon_id;
             if (sharedRecordsDataViewModel.needSetCategoryIconByIndex(i)) {
                 icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
                         sharedRecordsDataViewModel.getRecordCategory_idByIndex(i)

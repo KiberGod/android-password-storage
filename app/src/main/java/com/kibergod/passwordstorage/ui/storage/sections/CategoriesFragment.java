@@ -31,7 +31,7 @@ public class CategoriesFragment extends Fragment {
         return view;
     }
 
-    // Функція виводить весь список категорый
+    // Функція виводить весь список категорій
     private void drawButtonList(View view) {
         for (int i=0; i<sharedCategoriesDataViewModel.getCategoriesCount(); i++) {
             Button button = ((HomeActivity) requireActivity()).drawButton(

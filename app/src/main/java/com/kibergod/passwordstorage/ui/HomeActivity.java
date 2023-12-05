@@ -206,7 +206,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція додає кнопку запису або категорії
-    public Button drawButton(View view, Context context, String title, int id_scrollArea, int icon_id) {
+    public Button drawButton(View view, Context context, String title, int id_scrollArea, String icon_id) {
         Button button = new Button(context);
         button.setText(title);
         button.setTextColor(ContextCompat.getColor(context, R.color.gray_text));
@@ -216,11 +216,8 @@ public class HomeActivity extends AppCompatActivity {
         roundedRectangle.setCornerRadius(36);
         ViewCompat.setBackground(button, roundedRectangle);
 
-        if (icon_id == -1 ) {
-            icon_id = R.drawable.vector_template_image;
-        }
-
-        ImageView vectorImageView = getResizeIcon(context, icon_id);
+        int iconResourceId = getResources().getIdentifier(icon_id, "drawable", context.getPackageName());
+        ImageView vectorImageView = getResizeIcon(context, iconResourceId);
 
         vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -243,7 +240,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція відмальовує вспливаюче вікно вибору іконки
-    public void showIconSelectionDialog(Context context, Consumer<Integer> func) {
+    public void showIconSelectionDialog(Context context, Consumer<String> func) {
         hideKeyboard();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -278,7 +275,7 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (func != null) {
-                        func.accept(iconResourceId);
+                        func.accept(getResources().getResourceEntryName(iconResourceId));
                     }
                     alertDialog.dismiss();
                 }

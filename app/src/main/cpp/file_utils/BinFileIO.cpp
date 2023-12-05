@@ -92,7 +92,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;)V");
 
     std::vector<Record> records;
 
@@ -100,6 +100,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
     for (const auto& record : loadDataFromBinFile(getFilesPath() + RECORDS_FILE, records)) {
         jstring jTitle = env->NewStringUTF(record.getTitle());
         jstring jText = env->NewStringUTF(record.getText());
+        jstring jIconId = env->NewStringUTF(record.getIconId());
 
         // Створення об`єкта Integer
         jclass integerClass = env->FindClass("java/lang/Integer");
@@ -111,7 +112,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
         jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
 
         // Створення об`єкта Record в Java
-        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, record.getIconId());
+        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, jIconId);
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
         // Заповнюємо массив об`єктів Field в Java
@@ -146,6 +147,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
 
         env->DeleteLocalRef(jTitle);
         env->DeleteLocalRef(jText);
+        env->DeleteLocalRef(jIconId);
         env->DeleteLocalRef(jCategory);
         env->DeleteLocalRef(jBookmark);
         env->DeleteLocalRef(recordObject);
@@ -169,7 +171,7 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;I)V");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;)V");
 
     std::vector<Category> categories;
 
@@ -182,14 +184,16 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
         jobject jId = env->NewObject(integerClass, integerConstructor, category.getId());
 
         jstring jName = env->NewStringUTF(category.getName());
+        jstring jIconId = env->NewStringUTF(category.getIconId());
 
         // Створення об`єкта Category в Java
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, category.getIconId());
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId);
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
 
         env->DeleteLocalRef(jName);
+        env->DeleteLocalRef(jIconId);
         env->DeleteLocalRef(categoryObject);
     }
 
@@ -342,13 +346,14 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
 
         jfieldID idField = env->GetFieldID(categoryClass, "id", "Ljava/lang/Integer;");
         jfieldID nameField = env->GetFieldID(categoryClass, "name", "Ljava/lang/String;");
-        jfieldID iconIdField = env->GetFieldID(categoryClass, "icon_id", "I");
+        jfieldID iconIdField = env->GetFieldID(categoryClass, "icon_id", "Ljava/lang/String;");
 
         jobject idObj = env->GetObjectField(categoryObj, idField);
         jstring name = static_cast<jstring>(env->GetObjectField(categoryObj, nameField));
-        jint icon_id = env->GetIntField(categoryObj, iconIdField);
+        jstring icon_id = static_cast<jstring>(env->GetObjectField(categoryObj, iconIdField));
 
         const char* nameStr = env->GetStringUTFChars(name, nullptr);
+        const char* icon_idStr = env->GetStringUTFChars(icon_id, nullptr);
 
         jint id = 0;
         if (idObj != nullptr) {
@@ -357,7 +362,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
             id = env->CallIntMethod(idObj, intValueMethod);
         }
 
-        Category category{id, nameStr, icon_id};
+        Category category{id, nameStr, icon_idStr};
 
         writeToBinFile(getCategoriesFilePath(),
                        reinterpret_cast<char*>(&category),
@@ -366,6 +371,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
         );
 
         env->ReleaseStringUTFChars(name, nameStr);
+        env->ReleaseStringUTFChars(icon_id, icon_idStr);
         env->DeleteLocalRef(categoryObj);
     }
 
@@ -390,16 +396,17 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
         jfieldID textField = env->GetFieldID(recordClass, "text", "Ljava/lang/String;");
         jfieldID categoryIdField = env->GetFieldID(recordClass, "category_id", "Ljava/lang/Integer;");
         jfieldID bookmarkField = env->GetFieldID(recordClass, "bookmark", "Ljava/lang/Boolean;");
-        jfieldID iconIdField = env->GetFieldID(recordClass, "icon_id", "I");
+        jfieldID iconIdField = env->GetFieldID(recordClass, "icon_id", "Ljava/lang/String;");
 
         jstring title = static_cast<jstring>(env->GetObjectField(recordObj, titleField));
         jstring text = static_cast<jstring>(env->GetObjectField(recordObj, textField));
         jobject category_idObj = env->GetObjectField(recordObj, categoryIdField);
         jobject bookmarkObj = env->GetObjectField(recordObj, bookmarkField);
-        jint icon_id = env->GetIntField(recordObj, iconIdField);
+        jstring icon_id = static_cast<jstring>(env->GetObjectField(recordObj, iconIdField));
 
         const char* titleStr = env->GetStringUTFChars(title, nullptr);
         const char* textStr = env->GetStringUTFChars(text, nullptr);
+        const char* icon_idStr = env->GetStringUTFChars(icon_id, nullptr);
 
         jint category_id = Record::NULL_CATEGORY_VALUE;
         if (category_idObj != nullptr) {
@@ -443,7 +450,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
             env->ReleaseStringUTFChars(jValue, valueStr);
         }
 
-        Record record{titleStr, textStr, category_id, bookmark, icon_id, cppFields.data()};
+        Record record{titleStr, textStr, category_id, bookmark, icon_idStr, cppFields.data()};
 
         writeToBinFile(getRecordsFilePath(),
                        reinterpret_cast<char*>(&record),
@@ -453,6 +460,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
 
         env->ReleaseStringUTFChars(title, titleStr);
         env->ReleaseStringUTFChars(text, textStr);
+        env->ReleaseStringUTFChars(icon_id, icon_idStr);
         env->DeleteLocalRef(recordObj);
     }
 }
@@ -579,11 +587,12 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;I)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;)V");
 
     for (const auto& record : records) {
         jstring jTitle = env->NewStringUTF(record.getTitle());
         jstring jText = env->NewStringUTF(record.getText());
+        jstring jIconId = env->NewStringUTF(record.getIconId());
         jclass integerClass = env->FindClass("java/lang/Integer");
         jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
         jobject jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
@@ -591,7 +600,7 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
         jmethodID booleanConstructor = env->GetMethodID(booleanClass, "<init>", "(Z)V");
         jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
 
-        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, record.getIconId());
+        jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, jIconId);
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
 
@@ -625,6 +634,7 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
         env->DeleteLocalRef(jText);
         env->DeleteLocalRef(jCategory);
         env->DeleteLocalRef(jBookmark);
+        env->DeleteLocalRef(jIconId);
         env->DeleteLocalRef(recordObject);
     }
 
@@ -650,7 +660,7 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIE
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;I)V");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;)V");
 
     for (const auto& category : categories) {
         jclass integerClass = env->FindClass("java/lang/Integer");
@@ -658,12 +668,14 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIE
         jobject jId = env->NewObject(integerClass, integerConstructor, category.getId());
 
         jstring jName = env->NewStringUTF(category.getName());
+        jstring jIconId = env->NewStringUTF(category.getIconId());
 
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, category.getIconId());
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId);
 
         env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
 
         env->DeleteLocalRef(jName);
+        env->DeleteLocalRef(jIconId);
         env->DeleteLocalRef(categoryObject);
     }
 

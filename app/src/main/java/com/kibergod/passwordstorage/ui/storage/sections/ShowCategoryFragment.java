@@ -73,11 +73,10 @@ public class ShowCategoryFragment extends Fragment {
                         )
         );
 
-        if (!sharedCategoriesDataViewModel.isEmptyIconId(categoryIndex))
-        {
-            ImageView categoryIcon = view.findViewById(R.id.categoryIcon);
-            categoryIcon.setImageResource(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex));
-        }
+        ImageView categoryIcon = view.findViewById(R.id.categoryIcon);
+        categoryIcon.setImageResource(
+                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex), "drawable", requireContext().getPackageName())
+        );
     }
 
     // Функція встановлює подію переходу на сторінку редагувння категорії по натисненню кнопки

@@ -47,7 +47,7 @@ public class EditRecordFragment extends Fragment {
 
     private int recordIndex;
 
-    private int tempIconId;
+    private String tempIconId;
 
     private int fieldCounter = 0;
 
@@ -115,11 +115,8 @@ public class EditRecordFragment extends Fragment {
         setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
         setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
 
-        if (!sharedRecordsDataViewModel.isEmptyIconId(recordIndex))
-        {
-            ImageView recordIcon = view.findViewById(R.id.editRecordIcon);
-            recordIcon.setImageResource(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex));
-        }
+        ImageView recordIcon = view.findViewById(R.id.editRecordIcon);
+        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
 
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
             createNewField(
@@ -262,7 +259,7 @@ public class EditRecordFragment extends Fragment {
             public void onClick(View view) {
                 ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
-                    imageView.setImageResource(iconResourceId);
+                    imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
             }
         });

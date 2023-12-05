@@ -84,7 +84,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Створення нового запису да додавання його до списку
-    public void addRecord(String title, String text,  Integer category_id, int icon_id, ArrayList<String> fieldNames, ArrayList<String> fieldValues) {
+    public void addRecord(String title, String text,  Integer category_id, String icon_id, ArrayList<String> fieldNames, ArrayList<String> fieldValues) {
         Record record = new Record(title, text, category_id, icon_id);
         record.setFields(fieldNames, fieldValues);
         records.add(record);
@@ -92,7 +92,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Редагування запису
-    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, int newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
+    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, String newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
         records.get(index).update(newTitle, newText, newCategory_id, newIcon_id, newFieldNames, newFieldValues);
         saveRecords(records);
     }
@@ -130,17 +130,8 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Повертає id іконки запису за індексом
-    public int getRecordIconIdByIndex(int index) {
+    public String getRecordIconIdByIndex(int index) {
         return records.get(index).getIconId();
-    }
-
-    // Перевірка на наявність іконки запису
-    public boolean isEmptyIconId(int index) {
-        if (records.get(index).getIconId() == Record.NULL_ICON_ID_VALUE || records.get(index).getIconId() == Record.MAIN_ICON_ID_VALUE) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /* Перевіряє, чи треба заміняти порожню іконку запису іконкою категорії (якщо така є)
@@ -148,11 +139,10 @@ public class SharedRecordsDataViewModel extends ViewModel {
      * false - іконку заміняти не треба або нічим
      */
     public boolean needSetCategoryIconByIndex(int index) {
-        if (isEmptyIconId(index) && !records.get(index).getCategoryId().equals(Record.NULL_CATEGORY_VALUE)) {
+        if (records.get(index).getIconId().equals(Record.NULL_ICON_ID_VALUE) && !records.get(index).getCategoryId().equals(Record.NULL_CATEGORY_VALUE)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     // Повертає ім`я поля запису за ідентифікатором поля та записа

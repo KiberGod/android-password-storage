@@ -82,11 +82,7 @@ public class CategorySelectionDialog {
         ImageView imageView = categoryBlock.findViewById(R.id.imgCategoryItem);
         TextView textView = categoryBlock.findViewById(R.id.textCategoryItem);
 
-        if (category.hasIcon()) {
-            imageView.setImageResource(category.getIconId());
-        } else {
-            imageView.setImageResource(R.drawable.vector_template_image);
-        }
+        imageView.setImageResource(context.getResources().getIdentifier(category.getIconId(), "drawable", context.getPackageName()));
         textView.setText(category.getName());
 
         if (category.getName().equals(activeCategoryName)) {

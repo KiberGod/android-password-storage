@@ -84,11 +84,8 @@ public class ShowRecordFragment extends Fragment {
         bookmarkButton = view.findViewById(R.id.bookmarkButton);
         resetBookmarkButtonColor();
 
-        if (!sharedRecordsDataViewModel.isEmptyIconId(recordIndex))
-        {
-            ImageView recordIcon = view.findViewById(R.id.recordIcon);
-            recordIcon.setImageResource(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex));
-        }
+        ImageView recordIcon = view.findViewById(R.id.recordIcon);
+        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
 
         LinearLayout linearLayout = view.findViewById(R.id.showFieldsScrollArea);
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {

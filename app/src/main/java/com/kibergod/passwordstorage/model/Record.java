@@ -71,13 +71,12 @@ public class Record {
      */
     private Boolean bookmark;
 
-    private int icon_id;
+    private String icon_id;
 
     private Field[] fields;
 
 
-    public static final int NULL_ICON_ID_VALUE = -1;
-    public static final Integer MAIN_ICON_ID_VALUE = R.drawable.vector_template_image;
+    public static final String NULL_ICON_ID_VALUE = "vector_template_image";
     public static final Integer NULL_CATEGORY_VALUE = -1;
     public static final boolean NULL_BOOKMARK_VALUE = false;
 
@@ -85,7 +84,7 @@ public class Record {
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
-    private void init(String title, String text, Integer category_id, Boolean bookmark, int icon_id, Field[] fields) {
+    private void init(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields) {
         this.title = title;
         this.text = text;
         this.category_id = category_id;
@@ -94,15 +93,15 @@ public class Record {
         this.fields = fields;
     }
 
-    public Record(String title, String text, Integer category_id, int icon_id) {
+    public Record(String title, String text, Integer category_id, String icon_id) {
         init(title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields());
     }
 
-    public Record(String title, String text, Integer category_id, Boolean bookmark, int icon_id, Field[] fields) {
+    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields) {
         init(title, text, category_id, bookmark, icon_id, fields);
     }
 
-    public Record(String title, String text, Integer category_id, Boolean bookmark, int icon_id) {
+    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id) {
         init(title, text, category_id, bookmark, icon_id, getEmptyFields());
     }
 
@@ -126,7 +125,7 @@ public class Record {
         return bookmark;
     }
 
-    public int getIconId() { return icon_id; }
+    public String getIconId() { return icon_id; }
 
     public Field[] getFields() { return fields; }
 
@@ -151,7 +150,7 @@ public class Record {
 
     public Field createField(String name, String value, Boolean valueVisibility) { return new Field(name, value, valueVisibility); }
 
-    public void update(String newTitle, String newText, Integer newCategory_id, int newIcon_id, ArrayList<String> newNames, ArrayList<String> newValues) {
+    public void update(String newTitle, String newText, Integer newCategory_id, String newIcon_id, ArrayList<String> newNames, ArrayList<String> newValues) {
         this.title = newTitle;
         this.text = newText;
         this.category_id = newCategory_id;

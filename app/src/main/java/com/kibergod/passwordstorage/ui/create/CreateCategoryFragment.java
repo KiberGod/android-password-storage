@@ -28,7 +28,7 @@ public class CreateCategoryFragment extends Fragment {
 
     private TextView textViewStatus;
 
-    private int tempIconId;
+    private String tempIconId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +39,7 @@ public class CreateCategoryFragment extends Fragment {
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
-        tempIconId = getResources().getIdentifier("vector_template_image", "drawable", requireContext().getPackageName());
+        tempIconId = "vector_template_image";
         textViewStatus = view.findViewById(R.id.createCategoryStatus);
 
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
@@ -96,7 +96,7 @@ public class CreateCategoryFragment extends Fragment {
             public void onClick(View view) {
                 ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
-                    imageView.setImageResource(iconResourceId);
+                    imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
             }
         });
