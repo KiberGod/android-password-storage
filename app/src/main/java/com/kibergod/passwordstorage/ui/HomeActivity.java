@@ -345,6 +345,7 @@ public class HomeActivity extends AppCompatActivity {
         setColorToImg(context, view, R.id.imgLeftArrow, R.color.white);
         setColorToImg(context, view, R.id.imgEraser, R.color.gray_text);
         setColorToImg(context, view, R.id.imgGears, R.color.gray_text);
+        setColorToImg(context, view, R.id.imgTrash, R.color.white);
         setColorToImg(context, view, R.id.imgTick, R.color.white);
     }
 
@@ -380,5 +381,22 @@ public class HomeActivity extends AppCompatActivity {
     // Конвертація dp у px
     public int convertDPtoPX (int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+    // Автооновлення фокус-поля
+    public void setEditTextFocusChangeListener(View view, int editTextId, Context context) {
+        final EditText editText = view.findViewById(editTextId);
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    setCurrentEditTextTotal(editText);
+                    setColorToImg(context, view, R.id.imgEraser, R.color.white);
+                } else {
+                    setCurrentEditTextTotal(null);
+                    setColorToImg(context, view, R.id.imgEraser, R.color.gray_text);
+                }
+            }
+        });
     }
 }

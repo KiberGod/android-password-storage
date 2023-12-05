@@ -75,11 +75,14 @@ public class EditCategoryFragment extends Fragment {
         tempIconId = "vector_template_image";
 
         printCategoryData(view);
-        setOnClickToCancelEditCategoryButton(view);
+
         setOnClickToSaveButton(view);
         setOnClickToDeleteButton(view);
         setOnClickToIconSelectWindow(view);
-
+        ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
+        ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
+        ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
+        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editEditCategoryName, requireContext());
         return view;
     }
 
@@ -94,21 +97,10 @@ public class EditCategoryFragment extends Fragment {
         );
     }
 
-    // Функція встановлює подію переходу на попередню сторінку (з переглядом категорії)
-    private void setOnClickToCancelEditCategoryButton(View view) {
-        Button button = view.findViewById(R.id.cancelEditCategoryButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-    }
-
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        Button button = view.findViewById(R.id.saveEditCategoryButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageView saveButton = view.findViewById(R.id.imgTick);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getEditCategory(view);
@@ -120,6 +112,7 @@ public class EditCategoryFragment extends Fragment {
     private void getEditCategory(View view) {
         EditText nameInput = view.findViewById(R.id.editEditCategoryName);
         String categoryName = nameInput.getText().toString();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (categoryName.length() != 0) {
             if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryIndex)) {
                 textViewStatus.setText("");
@@ -127,17 +120,20 @@ public class EditCategoryFragment extends Fragment {
                 Toast.makeText(getActivity(), "Змінено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
-                textViewStatus.setText("Категорія з таким іменем вже існує");
+                textViewStatus.setText("Категорія з такою назвою вже існує");
+                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
             }
         } else {
-            textViewStatus.setText("І`мя не може бути порожнім");
+            textViewStatus.setText("Назва не може бути порожньою");
+            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
         }
+        textViewStatus.setLayoutParams(params);
     }
 
     // Функція встановлює подію натискання кнопки видалення категорії
     private void setOnClickToDeleteButton(View view) {
-        Button button = view.findViewById(R.id.deleteCategoryButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageView deleteButton = view.findViewById(R.id.imgTrash);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDeleteConfirmationDialog();

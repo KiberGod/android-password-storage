@@ -49,7 +49,7 @@ public class CreateCategoryFragment extends Fragment {
         ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
         ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
         ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
-        setEditTextFocusChangeListener(view, R.id.editCreateCategoryName);
+        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editCreateCategoryName, requireContext());
         return view;
     }
 
@@ -98,23 +98,6 @@ public class CreateCategoryFragment extends Fragment {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
-            }
-        });
-    }
-
-    // Автооновлення фокус-поля для
-    private void setEditTextFocusChangeListener(View view, int editTextId) {
-        final EditText editText = view.findViewById(editTextId);
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(editText);
-                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.white);
-                } else {
-                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(null);
-                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
-                }
             }
         });
     }
