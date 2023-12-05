@@ -121,6 +121,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
                 record.setEmptyCategoryId();
             }
         }
+        saveRecords(records);
     }
 
     // Редагування статусу закладки у записі
