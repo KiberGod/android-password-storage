@@ -80,6 +80,7 @@ public class CreateRecordFragment extends Fragment {
         setEditTextFocusChangeListener(view, R.id.editCreateRecordText);
         setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, true);
         ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
+        ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
     }
 

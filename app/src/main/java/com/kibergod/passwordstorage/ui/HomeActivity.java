@@ -21,6 +21,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -69,6 +70,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private EditText currentEditTextTotal;
 
+    private int screenWidth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
         sharedRecordsDataViewModel.setRecords();
         sharedDigitalOwnerViewModel.setDigitalOwner();
         sharedGeneratorDataViewModel.setPasswordGenerator(this);
+
+        setScreenWidth();
     }
 
     // Повертає користувача до калькулятора у разі втрати фокусу програмою
@@ -398,5 +403,30 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Встановлює (значення змінної, а не сам екран) ширину екрана у px
+    private void setScreenWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenWidth = displayMetrics.widthPixels;
+    }
+
+    // Повертає ширину екрана у px
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public void setImageViewSize (View view, int imgId, int sizePX) {
+        setImageViewSize(view, imgId, sizePX, sizePX);
+    }
+
+    //
+    public void setImageViewSize (View view, int imgId, int widthPX, int heightPX) {
+        ImageView imageView = view.findViewById(imgId);
+        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+        layoutParams.width = widthPX;
+        layoutParams.height = heightPX;
+        imageView.setLayoutParams(layoutParams);
     }
 }

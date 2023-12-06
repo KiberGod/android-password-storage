@@ -16,10 +16,10 @@
 static std::string FILES_PATH;
 
 // Тестовий файл записів
-static const std::string RECORDS_FILE = "/records_v2.bin";
+static const std::string RECORDS_FILE = "/records_v3.bin";
 
 // Прихована буферна копія файла записів
-static const std::string HIDDEN_RECORDS_FILE = "/hidden_records_2.bin";
+static const std::string HIDDEN_RECORDS_FILE = "/hidden_records_3.bin";
 
 // Файл категорій
 static const std::string CATEGORIES_FILE = "/categories_v2.bin";
