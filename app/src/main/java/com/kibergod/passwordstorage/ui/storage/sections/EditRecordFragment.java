@@ -108,6 +108,7 @@ public class EditRecordFragment extends Fragment {
         ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editEditRecordTitle, requireContext(),true);
         ((HomeActivity) requireActivity()).setOnClickToGenPassword(view, requireContext(), R.id.editEditRecordText);
         ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
+        ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.editRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
     }
 
