@@ -33,6 +33,8 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.kibergod.passwordstorage.MainActivity;
 import com.kibergod.passwordstorage.R;
@@ -42,6 +44,7 @@ import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.databinding.ActivityHomeBinding;
+import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.create.CreateCategoryFragment;
 import com.kibergod.passwordstorage.ui.create.CreateFragment;
 import com.kibergod.passwordstorage.ui.create.CreateRecordFragment;
@@ -55,6 +58,7 @@ import com.kibergod.passwordstorage.ui.storage.sections.ShowCategoryFragment;
 import com.kibergod.passwordstorage.ui.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 
@@ -62,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 
+    private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
@@ -69,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
 
     private EditText currentEditTextTotal;
+    private EditText currentEditTextForGenerator;
 
     private int screenWidth;
 
@@ -78,6 +84,7 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(this).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(this).get(SharedRecordsDataViewModel.class);
@@ -388,21 +395,38 @@ public class HomeActivity extends AppCompatActivity {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
-    // Автооновлення фокус-поля
     public void setEditTextFocusChangeListener(View view, int editTextId, Context context) {
+        setEditTextFocusChangeListener(view, editTextId, context, false);
+    }
+
+    // Автооновлення фокус-поля
+    public void setEditTextFocusChangeListener(View view, int editTextId, Context context, boolean isTotal) {
         final EditText editText = view.findViewById(editTextId);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    if (!isTotal) {
+                        currentEditTextForGenerator = editText;
+                        setColorToImg(context, view, R.id.imgGears, R.color.purple);
+                    }
                     setCurrentEditTextTotal(editText);
                     setColorToImg(context, view, R.id.imgEraser, R.color.white);
                 } else {
+                    if (!isTotal) {
+                        currentEditTextForGenerator = null;
+                        setColorToImg(context, view, R.id.imgGears, R.color.gray_text);
+                    }
                     setCurrentEditTextTotal(null);
                     setColorToImg(context, view, R.id.imgEraser, R.color.gray_text);
                 }
             }
         });
+    }
+
+    // Повертає поле, в якому доступна функція генерації
+    public EditText getCurrentEditTextForGenerator() {
+        return currentEditTextForGenerator;
     }
 
     // Встановлює (значення змінної, а не сам екран) ширину екрана у px
@@ -421,12 +445,74 @@ public class HomeActivity extends AppCompatActivity {
         setImageViewSize(view, imgId, sizePX, sizePX);
     }
 
-    //
+    // Автозменшення картинки запису
     public void setImageViewSize (View view, int imgId, int widthPX, int heightPX) {
         ImageView imageView = view.findViewById(imgId);
         ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
         layoutParams.width = widthPX;
         layoutParams.height = heightPX;
         imageView.setLayoutParams(layoutParams);
+    }
+
+    // Функція встановлює подію натискання кнопки генерації пароля
+    public void setOnClickToGenPassword(View view, Context context, int textViewId) {
+        ImageView generateButton = view.findViewById(R.id.imgGears);
+        generateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentEditTextForGenerator != null) {
+                    String password = sharedGeneratorDataViewModel.getPassword(context);
+                    if (currentEditTextForGenerator.getId() == textViewId) {
+                        int cursorPosition = currentEditTextForGenerator.getSelectionStart();
+                        String currentText = currentEditTextForGenerator.getText().toString();
+                        String newText = currentText.substring(0, cursorPosition) + password +
+                                currentText.substring(cursorPosition);
+                        currentEditTextForGenerator.setText(newText);
+                    } else {
+                        currentEditTextForGenerator.setText(password);
+                    }
+                }
+            }
+        });
+    }
+
+    // Оновлення тексту кнопки додавання полей
+    public void updateTextInAddFieldButton(View view, int fieldCounter) {
+        TextView addFieldButtonText = view.findViewById(R.id.addFieldButtonText);
+        addFieldButtonText.setText("Додати поле (" + Integer.toString(fieldCounter) + "/10)");
+    }
+
+    // Повертає обрану категорію
+    public String getSelectedCategoryName(View view) {
+        TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
+        return selectedCategoryTextView.getText().toString();
+    }
+
+    // Функція, що спрацьовуватиме при обранні категорій з списку
+    public void showDropdownMenu(TextView selectedCategoryTextView, ArrayList<Category> categories, View view, Context context) {
+        hideKeyboard();
+        ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
+        CategorySelectionDialog.showCategorySelectionDialog(
+                context,
+                categories,
+                getSelectedCategoryName(view),
+                categoryId -> {
+                    String categoryName = sharedCategoriesDataViewModel.getCategoryNameById(categoryId);
+                    if (categoryName.equals("")) {
+                        selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
+                        selectedCategoryIcon.setImageResource(R.drawable.vector_template_image);
+                    } else {
+                        selectedCategoryTextView.setText(categoryName);
+                        selectedCategoryIcon.setImageResource(
+                                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId), "drawable", context.getPackageName())
+                        );
+                    }
+                });
+    }
+
+    // Автоскролл на початок (верх) сторінки
+    public void setScrollToTop(View view, int scrollId) {
+        ScrollView scrollView = view.findViewById(scrollId);
+        scrollView.smoothScrollTo(0, 0);
     }
 }

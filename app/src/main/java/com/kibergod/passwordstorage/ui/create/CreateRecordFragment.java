@@ -50,8 +50,6 @@ public class CreateRecordFragment extends Fragment {
     private ArrayList<EditText> fieldNames = new ArrayList<>();
     private ArrayList<EditText> fieldValues = new ArrayList<>();
 
-    private EditText currentEditTextForGenerator;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,15 +68,14 @@ public class CreateRecordFragment extends Fragment {
         textViewStatus = view.findViewById(R.id.createRecordStatus);
 
         setCategoriesToDropdownButton(view);
-
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
         ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
-        setOnClickToGenPassword(view);
+        ((HomeActivity) requireActivity()).setOnClickToGenPassword(view, requireContext(), R.id.editCreateRecordText);
         ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
-        setEditTextFocusChangeListener(view, R.id.editCreateRecordText);
-        setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, true);
+        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
+        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
         ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
         ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
@@ -97,29 +94,7 @@ public class CreateRecordFragment extends Fragment {
         dropdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDropdownMenu(selectedCategoryTextView, categories, view);
-            }
-        });
-    }
-
-    // Функція, що спрацьовуватиме при обранні категорій з списку
-    private void showDropdownMenu(TextView selectedCategoryTextView, ArrayList<Category> categories, View view) {
-        ((HomeActivity) requireActivity()).hideKeyboard();
-        ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
-        CategorySelectionDialog.showCategorySelectionDialog(
-                requireContext(),
-                categories,
-                getSelectedCategoryName(view),
-                categoryId -> {
-            String categoryName = sharedCategoriesDataViewModel.getCategoryNameById(categoryId);
-            if (categoryName.equals("")) {
-                selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
-                selectedCategoryIcon.setImageResource(R.drawable.vector_template_image);
-            } else {
-                selectedCategoryTextView.setText(categoryName);
-                selectedCategoryIcon.setImageResource(
-                        getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId), "drawable", requireContext().getPackageName())
-                );
+                ((HomeActivity) requireActivity()).showDropdownMenu(selectedCategoryTextView, categories, view, requireContext());
             }
         });
     }
@@ -140,12 +115,11 @@ public class CreateRecordFragment extends Fragment {
         EditText textInput = view.findViewById(R.id.editCreateRecordText);
         EditText titleInput = view.findViewById(R.id.editCreateRecordTitle);
         String recordTitle = titleInput.getText().toString();
-        ScrollView scrollView = view.findViewById(R.id.scrollView2);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (recordTitle.length() != 0) {
             if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
                 textViewStatus.setText("");
-                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(getSelectedCategoryName(view));
+                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(((HomeActivity) requireActivity()).getSelectedCategoryName(view));
                 sharedRecordsDataViewModel.addRecord(
                         recordTitle,
                         textInput.getText().toString(),
@@ -158,20 +132,14 @@ public class CreateRecordFragment extends Fragment {
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
                 params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-                scrollView.smoothScrollTo(0, 0);
+                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView2);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
             params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-            scrollView.smoothScrollTo(0, 0);
+            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView2);
         }
         textViewStatus.setLayoutParams(params);
-    }
-
-    // Повертає обрану категорію
-    private String getSelectedCategoryName(View view) {
-        TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
-        return selectedCategoryTextView.getText().toString();
     }
 
     // Встановлення обробника події натиснення на іконку
@@ -220,14 +188,14 @@ public class CreateRecordFragment extends Fragment {
             editTextName.setId(View.generateViewId());
             editTextValue.setId(View.generateViewId());
             fieldCounter++;
-            updateTextInAddFieldButton(view);
+            ((HomeActivity) requireActivity()).updateTextInAddFieldButton(view, fieldCounter);
 
             setOnClickToDeleteFieldButton(parentContainer, fieldView, editTextName, editTextValue, view);
 
             LinearLayout addFieldButton = view.findViewById(R.id.addFieldButton);
             parentContainer.addView(fieldView, parentContainer.indexOfChild(addFieldButton), layoutParams);
-            setEditTextFocusChangeListener(view, editTextValue.getId());
-            setEditTextFocusChangeListener(view, editTextName.getId(), true);
+            ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
+            ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
 
             ScrollView scrollView = view.findViewById(R.id.scrollView2);
@@ -251,64 +219,7 @@ public class CreateRecordFragment extends Fragment {
                 editTextValue.setOnFocusChangeListener(null);
                 fieldValues.remove(editTextValue);
                 fieldCounter--;
-                updateTextInAddFieldButton(rootView);
-            }
-        });
-    }
-
-    // Оновлення тексту кнопки додавання полей
-    private void updateTextInAddFieldButton(View view) {
-        TextView addFieldButtonText = view.findViewById(R.id.addFieldButtonText);
-        addFieldButtonText.setText("Додати поле (" + Integer.toString(fieldCounter) + "/10)");
-    }
-
-    private void setEditTextFocusChangeListener(View view, int editTextId) {
-        setEditTextFocusChangeListener(view, editTextId, false);
-    }
-
-    // Автооновлення фокус-поля для подальшого використання функції генераціїї пароля
-    private void setEditTextFocusChangeListener(View view, int editTextId, boolean isTotal) {
-        final EditText editText = view.findViewById(editTextId);
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    if (!isTotal) {
-                        currentEditTextForGenerator = editText;
-                        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.purple);
-                    }
-                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(editText);
-                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.white);
-                } else if (editText == currentEditTextForGenerator){
-                    if (!isTotal) {
-                        currentEditTextForGenerator = null;
-                        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgGears, R.color.gray_text);
-                    }
-                    ((HomeActivity) requireActivity()).setCurrentEditTextTotal(null);
-                    ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgEraser, R.color.gray_text);
-                }
-            }
-        });
-    }
-
-    // Функція встановлює подію натискання кнопки генерації пароля
-    private void setOnClickToGenPassword(View view) {
-        ImageView generateButton = view.findViewById(R.id.imgGears);
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentEditTextForGenerator != null) {
-                    String password = sharedGeneratorDataViewModel.getPassword(requireContext());
-                    if (currentEditTextForGenerator.getId() == R.id.editCreateRecordText) {
-                        int cursorPosition = currentEditTextForGenerator.getSelectionStart();
-                        String currentText = currentEditTextForGenerator.getText().toString();
-                        String newText = currentText.substring(0, cursorPosition) + password +
-                                currentText.substring(cursorPosition);
-                        currentEditTextForGenerator.setText(newText);
-                    } else {
-                        currentEditTextForGenerator.setText(password);
-                    }
-                }
+                ((HomeActivity) requireActivity()).updateTextInAddFieldButton(rootView, fieldCounter);
             }
         });
     }
