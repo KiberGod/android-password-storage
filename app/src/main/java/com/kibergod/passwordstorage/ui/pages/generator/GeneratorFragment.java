@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.generator;
+package com.kibergod.passwordstorage.ui.pages.generator;
 
 import android.os.Bundle;
 
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.kibergod.passwordstorage.R;
-import com.kibergod.passwordstorage.ui.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 
 public class GeneratorFragment extends Fragment {

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.kibergod.passwordstorage.data.SharedCalculatorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
-import com.kibergod.passwordstorage.ui.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 
 public class MainActivity extends AppCompatActivity {

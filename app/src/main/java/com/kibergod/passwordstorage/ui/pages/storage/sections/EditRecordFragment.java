@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.create;
+package com.kibergod.passwordstorage.ui.pages.storage.sections;
 
 import static com.kibergod.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 import static com.kibergod.passwordstorage.model.Record.MAX_TEXT_LENGTH;
@@ -6,8 +6,11 @@ import static com.kibergod.passwordstorage.model.Record.MAX_TITLE_LENGTH;
 import static com.kibergod.passwordstorage.model.Record.getMaxFieldNameLength;
 import static com.kibergod.passwordstorage.model.Record.getMaxFieldValueLength;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,21 +29,23 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
-import com.kibergod.passwordstorage.ui.HomeActivity;
-import com.kibergod.passwordstorage.ui.HomeViewModel;
-import com.kibergod.passwordstorage.ui.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 import java.util.ArrayList;
 
+public class EditRecordFragment extends Fragment {
 
-public class CreateRecordFragment extends Fragment {
+    private HomeViewModel homeViewModel;
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
-    private HomeViewModel homeViewModel;
 
-    private TextView textViewStatus;
+    private static final String RECORD_INDEX = "record_index";
+
+    private int recordIndex;
 
     private String tempIconId;
 
@@ -49,46 +54,107 @@ public class CreateRecordFragment extends Fragment {
     private ArrayList<EditText> fieldNames = new ArrayList<>();
     private ArrayList<EditText> fieldValues = new ArrayList<>();
 
+    private TextView textViewStatus;
+
+    public EditRecordFragment() {
+        // Required empty public constructor
+    }
+
+    public static EditRecordFragment newInstance(int recordIndex) {
+        EditRecordFragment fragment = new EditRecordFragment();
+        Bundle args = new Bundle();
+        args.putInt(RECORD_INDEX, recordIndex);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            recordIndex = getArguments().getInt(RECORD_INDEX);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_record, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_record, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
-        homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordTitle, MAX_TITLE_LENGTH);
-        homeViewModel.setMaxLengthForInput(view, R.id.editCreateRecordText, MAX_TEXT_LENGTH);
+        homeViewModel.setMaxLengthForInput(view, R.id.editEditRecordTitle, MAX_TITLE_LENGTH);
+        homeViewModel.setMaxLengthForInput(view, R.id.editEditRecordText, MAX_TEXT_LENGTH);
 
-        tempIconId = "vector_template_image";
-        textViewStatus = view.findViewById(R.id.createRecordStatus);
+        textViewStatus = view.findViewById(R.id.editRecordStatus);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, false,true);
+        tempIconId = sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex);
 
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, true,true);
+
+        printRecordData(view);
         setCategoriesToDropdownButton(view);
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
-        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()));
-        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
-        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
-        ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
+        setOnClickToDeleteButton(view);
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordText, requireContext());
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordTitle, requireContext(),true);
+        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editEditRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()));
+        ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.editRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
+    }
+
+    // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
+    private void printRecordData(View view) {
+        setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
+        setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+
+        ImageView recordIcon = view.findViewById(R.id.editRecordIcon);
+        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
+
+        for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
+            String fieldName = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
+            String fieldValue = sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i);
+            if (!fieldName.equals("") || !fieldValue.equals("")) {
+                createNewField(
+                        view,
+                        fieldName,
+                        fieldValue,
+                        false
+                );
+            }
+        }
+    }
+
+    // Функція встановлення тексту до UI-компонентів
+    private void setTextViewText(@NonNull View view, int textViewId, String text) {
+        EditText editText = view.findViewById(textViewId);
+        editText.setText(text);
     }
 
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
     private void setCategoriesToDropdownButton(View view) {
         TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
 
-        selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
+        selectedCategoryTextView.setText(sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)));
+        if (selectedCategoryTextView.getText().toString().equals("")) {
+            selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
+        } else {
+            ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
+            selectedCategoryIcon.setImageResource(
+                    getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)), "drawable", requireContext().getPackageName())
+            );
+        }
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
         categories.add(0, new Category(null, homeViewModel.getEmptyCategoryText()));
 
-        LinearLayout dropdownButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
+        LinearLayout dropdownButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
         dropdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,47 +169,78 @@ public class CreateRecordFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNewRecord(view);
+                getEditRecord(view);
             }
         });
     }
 
-    // Обробка створення нового запису
-    private void getNewRecord(View view) {
-        EditText textInput = view.findViewById(R.id.editCreateRecordText);
-        EditText titleInput = view.findViewById(R.id.editCreateRecordTitle);
+    // Функція встановлює подію натискання кнопки видалення запису
+    private void setOnClickToDeleteButton(View view) {
+        ImageView deleteButton = view.findViewById(R.id.imgTrash);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteConfirmationDialog();
+            }
+        });
+    }
+
+    // Обробка редагування запису
+    private void getEditRecord(View view) {
+        EditText textInput = view.findViewById(R.id.editEditRecordText);
+        EditText titleInput = view.findViewById(R.id.editEditRecordTitle);
         String recordTitle = titleInput.getText().toString();
+
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (recordTitle.length() != 0) {
-            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
+            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordIndex)) {
                 textViewStatus.setText("");
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(((HomeActivity) requireActivity()).getSelectedCategoryName(view));
-                sharedRecordsDataViewModel.addRecord(
+                sharedRecordsDataViewModel.editRecord(
+                        recordIndex,
                         recordTitle,
                         textInput.getText().toString(),
-                        category_id,
-                        tempIconId,
+                        category_id, tempIconId,
                         homeViewModel.getStringsArray(fieldNames),
                         homeViewModel.getStringsArray(fieldValues));
-                Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Запис змінено " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
                 params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView2);
+                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
             params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView2);
+            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
         }
         textViewStatus.setLayoutParams(params);
     }
 
+    // Вікно з підтвердженням видалення запису
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Ви впевнені, що хочете видалити запис? Цю дію буде неможливо відмінити.");
+        builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteRecord();
+            }
+        });
+        builder.setNegativeButton("Відмінити", null);
+        builder.show();
+    }
+
+    // Оброка видалення запису
+    private void deleteRecord() {
+        sharedRecordsDataViewModel.deleteRecord(recordIndex);
+        ((HomeActivity) requireActivity()).setStorageFragment();
+    }
+
     // Встановлення обробника події натиснення на іконку
     private void setOnClickToIconSelectWindow(View view) {
-        ImageView imageView = view.findViewById(R.id.createRecordIcon);
-
+        ImageView imageView = view.findViewById(R.id.editRecordIcon);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,13 +258,13 @@ public class CreateRecordFragment extends Fragment {
         addFieldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewField(rootView);
+                createNewField(rootView, "", "", true);
             }
         });
     }
 
     // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
-    private void createNewField(View view) {
+    private void createNewField(View view, String fieldName, String fieldValue, boolean needScroll) {
         if (fieldCounter < MAX_FIELDS_LENGTH) {
             LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
             View fieldView = getLayoutInflater().inflate(R.layout.fragment_edit_field, null);
@@ -183,6 +280,8 @@ public class CreateRecordFragment extends Fragment {
             homeViewModel.setMaxLengthForInput(editTextValue, getMaxFieldValueLength());
             fieldNames.add(editTextName);
             fieldValues.add(editTextValue);
+            editTextName.setText(fieldName);
+            editTextValue.setText(fieldValue);
             editTextName.setId(View.generateViewId());
             editTextValue.setId(View.generateViewId());
             fieldCounter++;
@@ -195,13 +294,15 @@ public class CreateRecordFragment extends Fragment {
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
-            ScrollView scrollView = view.findViewById(R.id.scrollView2);
-            scrollView.post(new Runnable() {
-                @Override
-                public void run() {
-                    scrollView.fullScroll(View.FOCUS_DOWN);
-                }
-            });
+            if (needScroll) {
+                ScrollView scrollView = view.findViewById(R.id.scrollView);
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.create;
+package com.kibergod.passwordstorage.ui.pages.create;
 
 import android.os.Bundle;
 
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.kibergod.passwordstorage.R;
-import com.kibergod.passwordstorage.ui.RabbitSupport;
-import com.kibergod.passwordstorage.ui.HomeActivity;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 public class CreateFragment extends Fragment {
 

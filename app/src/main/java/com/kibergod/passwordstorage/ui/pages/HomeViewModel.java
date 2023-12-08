@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui;
+package com.kibergod.passwordstorage.ui.pages;
 
 import android.content.Context;
 import android.text.Editable;

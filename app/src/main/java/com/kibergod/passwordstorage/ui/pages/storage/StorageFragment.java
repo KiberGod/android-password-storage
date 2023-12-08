@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.storage;
+package com.kibergod.passwordstorage.ui.pages.storage;
 
 import androidx.appcompat.widget.TooltipCompat;
 
@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kibergod.passwordstorage.R;
-import com.kibergod.passwordstorage.ui.storage.sections.BookmarksFragment;
-import com.kibergod.passwordstorage.ui.storage.sections.CategoriesFragment;
-import com.kibergod.passwordstorage.ui.storage.sections.RecordsFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.BookmarksFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.CategoriesFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.RecordsFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class StorageFragment extends Fragment {

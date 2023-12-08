@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".ui.storage.sections.EditCategoryFragment">
+    tools:context=".ui.pages.storage.sections.EditCategoryFragment">
 
     <LinearLayout
         android:id="@+id/placeForToolbar"

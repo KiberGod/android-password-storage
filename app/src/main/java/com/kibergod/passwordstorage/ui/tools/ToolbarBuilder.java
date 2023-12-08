@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui;
+package com.kibergod.passwordstorage.ui.tools;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.storage.sections;
+package com.kibergod.passwordstorage.ui.pages.storage.sections;
 
 import static com.kibergod.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 
@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
-import com.kibergod.passwordstorage.ui.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 public class ShowRecordFragment extends Fragment {
 

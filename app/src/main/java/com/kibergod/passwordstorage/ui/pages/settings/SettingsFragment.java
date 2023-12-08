@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.settings;
+package com.kibergod.passwordstorage.ui.pages.settings;
 
 import static com.kibergod.passwordstorage.model.DigitalOwner.DATA_DELETION_MODE;
 import static com.kibergod.passwordstorage.model.DigitalOwner.HIDE_MODE;
@@ -32,13 +32,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kibergod.passwordstorage.R;
-import com.kibergod.passwordstorage.ui.RabbitSupport;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
-import com.kibergod.passwordstorage.ui.HomeActivity;
-import com.kibergod.passwordstorage.ui.HomeViewModel;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 
 import java.util.Calendar;
 

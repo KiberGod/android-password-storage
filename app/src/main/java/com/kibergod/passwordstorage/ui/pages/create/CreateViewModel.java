@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.create;
+package com.kibergod.passwordstorage.ui.pages.create;
 
 import androidx.lifecycle.ViewModel;
 

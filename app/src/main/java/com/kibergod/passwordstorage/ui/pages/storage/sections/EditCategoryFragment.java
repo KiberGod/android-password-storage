@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.storage.sections;
+package com.kibergod.passwordstorage.ui.pages.storage.sections;
 
 import static com.kibergod.passwordstorage.model.Category.MAX_NAME_LENGTH;
 
@@ -20,9 +20,9 @@ import android.widget.Toast;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
-import com.kibergod.passwordstorage.ui.HomeActivity;
-import com.kibergod.passwordstorage.ui.HomeViewModel;
-import com.kibergod.passwordstorage.ui.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 public class EditCategoryFragment extends Fragment {
 

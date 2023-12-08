@@ -7,7 +7,7 @@
     android:background="#000000"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    tools:context=".ui.create.CreateFragment" >
+    tools:context=".ui.pages.create.CreateFragment" >
 
     <LinearLayout
         android:layout_width="match_parent"

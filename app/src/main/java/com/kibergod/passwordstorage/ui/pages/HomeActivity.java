@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui;
+package com.kibergod.passwordstorage.ui.pages;
 
 
 import androidx.appcompat.app.AlertDialog;
@@ -44,17 +44,19 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.databinding.ActivityHomeBinding;
 import com.kibergod.passwordstorage.model.Category;
-import com.kibergod.passwordstorage.ui.create.CreateCategoryFragment;
-import com.kibergod.passwordstorage.ui.create.CreateFragment;
-import com.kibergod.passwordstorage.ui.create.CreateRecordFragment;
-import com.kibergod.passwordstorage.ui.generator.GeneratorFragment;
-import com.kibergod.passwordstorage.ui.generator.PasswordGeneratorFragment;
-import com.kibergod.passwordstorage.ui.settings.SettingsFragment;
-import com.kibergod.passwordstorage.ui.storage.StorageFragment;
-import com.kibergod.passwordstorage.ui.storage.sections.EditCategoryFragment;
-import com.kibergod.passwordstorage.ui.storage.sections.EditRecordFragment;
-import com.kibergod.passwordstorage.ui.storage.sections.ShowCategoryFragment;
-import com.kibergod.passwordstorage.ui.storage.sections.ShowRecordFragment;
+import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.pages.create.CreateCategoryFragment;
+import com.kibergod.passwordstorage.ui.pages.create.CreateFragment;
+import com.kibergod.passwordstorage.ui.pages.create.CreateRecordFragment;
+import com.kibergod.passwordstorage.ui.pages.generator.GeneratorFragment;
+import com.kibergod.passwordstorage.ui.pages.generator.PasswordGeneratorFragment;
+import com.kibergod.passwordstorage.ui.pages.settings.SettingsFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.StorageFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.EditCategoryFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.EditRecordFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowCategoryFragment;
+import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
