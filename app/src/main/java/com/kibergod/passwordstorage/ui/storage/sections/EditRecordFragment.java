@@ -17,8 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +29,6 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
-import com.kibergod.passwordstorage.ui.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 import com.kibergod.passwordstorage.ui.HomeViewModel;
 import com.kibergod.passwordstorage.ui.ToolbarBuilder;
@@ -105,12 +102,9 @@ public class EditRecordFragment extends Fragment {
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
         setOnClickToDeleteButton(view);
-        ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
-        ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
-        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editEditRecordText, requireContext());
-        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editEditRecordTitle, requireContext(),true);
-        ((HomeActivity) requireActivity()).setOnClickToGenPassword(view, requireContext(), R.id.editEditRecordText);
-        ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordText, requireContext());
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordTitle, requireContext(),true);
+        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editEditRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()));
         ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.editRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
     }
@@ -297,8 +291,8 @@ public class EditRecordFragment extends Fragment {
 
             LinearLayout addFieldButton = view.findViewById(R.id.addFieldButton);
             parentContainer.addView(fieldView, parentContainer.indexOfChild(addFieldButton), layoutParams);
-            ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
-            ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
+            ToolbarBuilder.setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
+            ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
             if (needScroll) {
                 ScrollView scrollView = view.findViewById(R.id.scrollView);

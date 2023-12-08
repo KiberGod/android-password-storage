@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,8 +72,8 @@ public class HomeActivity extends AppCompatActivity {
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
 
-    private EditText currentEditTextTotal;
-    private EditText currentEditTextForGenerator;
+    //private EditText currentEditTextTotal;
+    //private EditText currentEditTextForGenerator;
 
     private int screenWidth;
 
@@ -352,81 +351,9 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    // Функція встановлює початкові кольори іконок
-    public void setIconColorsToToolbar(View view, Context context) {
-        setColorToImg(context, view, R.id.imgLeftArrow, R.color.white);
-        setColorToImg(context, view, R.id.imgEraser, R.color.gray_text);
-        setColorToImg(context, view, R.id.imgGears, R.color.gray_text);
-        setColorToImg(context, view, R.id.imgTrash, R.color.white);
-        setColorToImg(context, view, R.id.imgTick, R.color.white);
-    }
-
-    // Кнопка повернення на попередню сторінку (панель інструментів)
-    public void setOnClickToBackButton(View view) {
-        ImageView eraseButton = view.findViewById(R.id.imgLeftArrow);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-    }
-
-    // Натиснення на кнопку стертя вводу у полі (панель інструментів)
-    public void setOnClickToEraseInput(View view) {
-        ImageView eraseButton = view.findViewById(R.id.imgEraser);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentEditTextTotal != null) {
-                    currentEditTextTotal.setText("");
-                }
-            }
-        });
-    }
-
-    // Заміна поля з фокусом (для панелі інструментів)
-    public void setCurrentEditTextTotal(EditText editText) {
-        currentEditTextTotal = editText;
-    }
-
     // Конвертація dp у px
     public int convertDPtoPX (int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
-
-    public void setEditTextFocusChangeListener(View view, int editTextId, Context context) {
-        setEditTextFocusChangeListener(view, editTextId, context, false);
-    }
-
-    // Автооновлення фокус-поля
-    public void setEditTextFocusChangeListener(View view, int editTextId, Context context, boolean isTotal) {
-        final EditText editText = view.findViewById(editTextId);
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    if (!isTotal) {
-                        currentEditTextForGenerator = editText;
-                        setColorToImg(context, view, R.id.imgGears, R.color.purple);
-                    }
-                    setCurrentEditTextTotal(editText);
-                    setColorToImg(context, view, R.id.imgEraser, R.color.white);
-                } else {
-                    if (!isTotal) {
-                        currentEditTextForGenerator = null;
-                        setColorToImg(context, view, R.id.imgGears, R.color.gray_text);
-                    }
-                    setCurrentEditTextTotal(null);
-                    setColorToImg(context, view, R.id.imgEraser, R.color.gray_text);
-                }
-            }
-        });
-    }
-
-    // Повертає поле, в якому доступна функція генерації
-    public EditText getCurrentEditTextForGenerator() {
-        return currentEditTextForGenerator;
     }
 
     // Встановлює (значення змінної, а не сам екран) ширину екрана у px
@@ -452,28 +379,6 @@ public class HomeActivity extends AppCompatActivity {
         layoutParams.width = widthPX;
         layoutParams.height = heightPX;
         imageView.setLayoutParams(layoutParams);
-    }
-
-    // Функція встановлює подію натискання кнопки генерації пароля
-    public void setOnClickToGenPassword(View view, Context context, int textViewId) {
-        ImageView generateButton = view.findViewById(R.id.imgGears);
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentEditTextForGenerator != null) {
-                    String password = sharedGeneratorDataViewModel.getPassword(context);
-                    if (currentEditTextForGenerator.getId() == textViewId) {
-                        int cursorPosition = currentEditTextForGenerator.getSelectionStart();
-                        String currentText = currentEditTextForGenerator.getText().toString();
-                        String newText = currentText.substring(0, cursorPosition) + password +
-                                currentText.substring(cursorPosition);
-                        currentEditTextForGenerator.setText(newText);
-                    } else {
-                        currentEditTextForGenerator.setText(password);
-                    }
-                }
-            }
-        });
     }
 
     // Оновлення тексту кнопки додавання полей

@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +21,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kibergod.passwordstorage.ui.CategorySelectionDialog;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
@@ -74,12 +72,9 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
-        ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
-        ((HomeActivity) requireActivity()).setOnClickToGenPassword(view, requireContext(), R.id.editCreateRecordText);
-        ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
-        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
-        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
-        ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
+        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()));
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
         ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
     }
@@ -197,9 +192,8 @@ public class CreateRecordFragment extends Fragment {
 
             LinearLayout addFieldButton = view.findViewById(R.id.addFieldButton);
             parentContainer.addView(fieldView, parentContainer.indexOfChild(addFieldButton), layoutParams);
-            ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
-            ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
-
+            ToolbarBuilder.setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
+            ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
             ScrollView scrollView = view.findViewById(R.id.scrollView2);
             scrollView.post(new Runnable() {

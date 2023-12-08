@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -82,10 +81,7 @@ public class EditCategoryFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToDeleteButton(view);
         setOnClickToIconSelectWindow(view);
-        ((HomeActivity) requireActivity()).setIconColorsToToolbar(view, requireContext());
-        ((HomeActivity) requireActivity()).setOnClickToBackButton(view);
-        ((HomeActivity) requireActivity()).setOnClickToEraseInput(view);
-        ((HomeActivity) requireActivity()).setEditTextFocusChangeListener(view, R.id.editEditCategoryName, requireContext());
+        ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditCategoryName, requireContext());
         return view;
     }
 
