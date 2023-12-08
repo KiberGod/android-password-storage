@@ -30,6 +30,7 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 import com.kibergod.passwordstorage.ui.HomeViewModel;
+import com.kibergod.passwordstorage.ui.ToolbarBuilder;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,8 @@ public class CreateRecordFragment extends Fragment {
 
         tempIconId = "vector_template_image";
         textViewStatus = view.findViewById(R.id.createRecordStatus);
+
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, false,true);
 
         setCategoriesToDropdownButton(view);
         setOnClickToSaveButton(view);

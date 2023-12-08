@@ -23,6 +23,7 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 import com.kibergod.passwordstorage.ui.HomeViewModel;
+import com.kibergod.passwordstorage.ui.ToolbarBuilder;
 
 public class EditCategoryFragment extends Fragment {
 
@@ -73,6 +74,8 @@ public class EditCategoryFragment extends Fragment {
         homeViewModel.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
 
         tempIconId = "vector_template_image";
+
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true, false, true,true);
 
         printCategoryData(view);
 

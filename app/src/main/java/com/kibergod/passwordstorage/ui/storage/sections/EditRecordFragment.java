@@ -34,6 +34,7 @@ import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 import com.kibergod.passwordstorage.ui.HomeViewModel;
+import com.kibergod.passwordstorage.ui.ToolbarBuilder;
 
 import java.util.ArrayList;
 
@@ -95,6 +96,8 @@ public class EditRecordFragment extends Fragment {
         textViewStatus = view.findViewById(R.id.editRecordStatus);
 
         tempIconId = sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex);
+
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, true,true);
 
         printRecordData(view);
         setCategoriesToDropdownButton(view);

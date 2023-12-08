@@ -20,6 +20,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.ui.HomeActivity;
 import com.kibergod.passwordstorage.ui.HomeViewModel;
+import com.kibergod.passwordstorage.ui.ToolbarBuilder;
 
 public class CreateCategoryFragment extends Fragment {
 
@@ -43,6 +44,8 @@ public class CreateCategoryFragment extends Fragment {
         textViewStatus = view.findViewById(R.id.createCategoryStatus);
 
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
+
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true, false, false,true);
 
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
