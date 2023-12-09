@@ -74,7 +74,7 @@ public class EditCategoryFragment extends Fragment {
 
         tempIconId = "vector_template_image";
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), true, false, true,true);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,true, false, true,true);
 
         printCategoryData(view);
 

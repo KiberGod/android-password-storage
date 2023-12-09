@@ -26,6 +26,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 public class ShowRecordFragment extends Fragment {
 
@@ -35,8 +36,6 @@ public class ShowRecordFragment extends Fragment {
     private static final String RECORD_INDEX = "record_index";
 
     private int recordIndex;
-
-    ImageView bookmarkButton;
 
     public ShowRecordFragment() {
         // Required empty public constructor
@@ -66,10 +65,11 @@ public class ShowRecordFragment extends Fragment {
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
-        printRecordData(view);
-        setOnClickToEditRecordButton(view);
-        setOnClickToEditBookmarkButton(view);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, false,false,false,false);
+        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex));
+        ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> sharedRecordsDataViewModel.editBookmarkInRecordByIndex(recordIndex));
 
+        printRecordData(view);
         return view;
     }
 
@@ -81,8 +81,7 @@ public class ShowRecordFragment extends Fragment {
         );
         setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
 
-        bookmarkButton = view.findViewById(R.id.bookmarkButton);
-        resetBookmarkButtonColor();
+        ToolbarBuilder.setBookmarkStatus(view, requireContext(), sharedRecordsDataViewModel.getBookmarkByIndex(recordIndex));
 
         ImageView recordIcon = view.findViewById(R.id.recordIcon);
         recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
@@ -101,37 +100,6 @@ public class ShowRecordFragment extends Fragment {
     private void setTextViewText(@NonNull View view, int textViewId, String text) {
         TextView textView = view.findViewById(textViewId);
         textView.setText(text);
-    }
-
-    // Функція встановлює подію переходу на сторінку редагувння запису по натисненню кнопки
-    private void setOnClickToEditRecordButton(View view) {
-        Button button = view.findViewById(R.id.openEditRecordPageButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex);
-            }
-        });
-    }
-
-    // Функція змінює забарвлення кнопки закладки
-    private void resetBookmarkButtonColor() {
-        if (sharedRecordsDataViewModel.getBookmarkByIndex(recordIndex)) {
-            bookmarkButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.purple));
-        } else {
-            bookmarkButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white_2));
-        }
-    }
-
-    // Функція встановлює подію зміни статусу закладки по натисненню кнопки
-    private void setOnClickToEditBookmarkButton(View view) {
-        bookmarkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedRecordsDataViewModel.editBookmarkInRecordByIndex(recordIndex);
-                resetBookmarkButtonColor();
-            }
-        });
     }
 
     // Створює поле запису

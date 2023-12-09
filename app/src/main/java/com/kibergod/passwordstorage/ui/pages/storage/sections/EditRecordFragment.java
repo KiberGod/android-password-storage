@@ -94,7 +94,7 @@ public class EditRecordFragment extends Fragment {
 
         tempIconId = sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, true,true);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,true, true, true,true);
 
         printRecordData(view);
         setCategoriesToDropdownButton(view);

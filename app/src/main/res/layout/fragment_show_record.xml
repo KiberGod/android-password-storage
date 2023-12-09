@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.pages.storage.sections.ShowRecordFragment">
 
-    <TextView
-        android:id="@+id/mainRecordText"
+    <LinearLayout
+        android:id="@+id/placeForToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
-        android:text="txt"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recordCategory" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/recordTitle"
@@ -24,7 +23,7 @@
         android:text="tit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/placeForToolbar" />
 
     <TextView
         android:id="@+id/recordCategory"
@@ -36,26 +35,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recordTitle" />
 
-    <Button
-        android:id="@+id/openEditRecordPageButton"
-        android:layout_width="179dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="232dp"
-        android:text="Редагувати"
+    <TextView
+        android:id="@+id/mainRecordText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:text="txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
+        app:layout_constraintTop_toBottomOf="@+id/recordCategory" />
 
-    <ImageView
-        android:id="@+id/bookmarkButton"
-        android:layout_width="54dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="36dp"
-        android:src="@drawable/vector_bookmark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.915"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
 
     <ImageView
         android:id="@+id/recordIcon"
@@ -65,7 +54,6 @@
         android:layout_marginTop="52dp"
         android:background="@color/gray_text"
         android:src="@drawable/vector_template_image"
-        app:layout_constraintEnd_toStartOf="@+id/bookmarkButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainRecordText" />
@@ -77,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/openEditRecordPageButton">
+        app:layout_constraintTop_toBottomOf="@+id/recordIcon">
 
         <LinearLayout
             android:id="@+id/showFieldsScrollArea"

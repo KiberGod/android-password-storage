@@ -21,6 +21,8 @@ public class ToolbarBuilder {
      *  Даний клас відповідає за подубову панелі інструментів для сторінок взаємодій з категоріями та записами
      */
 
+    private static final int BOOKMARK_ID = R.id.imgBookmark;
+    private static final int EDIT_BUTTON_ID = R.id.imgModerPencil;
     private static final int BACK_BUTTON_ID = R.id.imgLeftArrow;
     private static final int ERASER_ID = R.id.imgEraser;
     private static final int GENERATOR_ID = R.id.imgGears;
@@ -34,13 +36,20 @@ public class ToolbarBuilder {
 
     private static EditText currentEditTextTotal;
     private static EditText currentEditTextForGenerator;
+    private static boolean bookmarkStatus;
 
     /*
     * Вбудова панелі інструментів у UI.
     *
     * Для використання надана view обов`язково має містити <LinearLayout> з android:id="@+id/placeForToolbar"
     */
-    public static void addToolbarToView(View view, Context context, boolean useEraser, boolean useGenerator, boolean useTrash, boolean useSaveButton) {
+    public static void addToolbarToView(View view, Context context,
+                                        boolean useBookmark,
+                                        boolean useEditButton,
+                                        boolean useEraser,
+                                        boolean useGenerator,
+                                        boolean useTrash,
+                                        boolean useSaveButton) {
         LinearLayout placeForToolbar = view.findViewById(PLACE_FOR_TOOLBAR_ID);
 
         if (placeForToolbar != null) {
@@ -48,7 +57,7 @@ public class ToolbarBuilder {
 
             placeForToolbar.addView(toolbarLayout);
 
-            deleteUnusedTools(view, useEraser, useGenerator, useTrash, useSaveButton);
+            deleteUnusedTools(view, useBookmark, useEditButton, useEraser, useGenerator, useTrash, useSaveButton);
 
             setOnClickToBackButton(view, context);
             setIconColorsToToolbar(view, context);
@@ -56,7 +65,18 @@ public class ToolbarBuilder {
     }
 
     // Загальне видалення непотрібних інструментів
-    private static void deleteUnusedTools(View view, boolean useEraser, boolean useGenerator, boolean useTrash, boolean useSaveButton) {
+    private static void deleteUnusedTools(View view, boolean useBookmark, boolean useEditButton,
+                                          boolean useEraser, boolean useGenerator, boolean useTrash, boolean useSaveButton) {
+        if (!useBookmark) {
+            deleteTool(view, BOOKMARK_ID);
+        } else {
+            bookmarkStatus = false;
+        }
+
+        if (!useEditButton) {
+            deleteTool(view, EDIT_BUTTON_ID);
+        }
+
         if (!useEraser) {
             deleteTool(view, ERASER_ID);
         } else {
@@ -83,19 +103,22 @@ public class ToolbarBuilder {
         parentGroup.removeView(tool);
     }
 
-    // Кнопка повернення на попередню сторінку
-    private static void setOnClickToBackButton(View view, Context context) {
-        ImageView backButton = view.findViewById(BACK_BUTTON_ID);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((Activity) context).onBackPressed();;
-            }
-        });
+    // Загальна функція встановлення обровника події натиснення кнопки
+    private static void setOnClickToButton(View view, int buttonId, Runnable action) {
+        ImageView button = view.findViewById(buttonId);
+        if (button != null) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    action.run();
+                }
+            });
+        }
     }
 
     // Функція встановлює початкові кольори іконок
     private static void setIconColorsToToolbar(View view, Context context) {
+        setColorToImg(context, view, BOOKMARK_ID, R.color.white);
         setColorToImg(context, view, BACK_BUTTON_ID, R.color.white);
         setColorToImg(context, view, ERASER_ID, R.color.gray_text);
         setColorToImg(context, view, GENERATOR_ID, R.color.gray_text);
@@ -141,37 +164,63 @@ public class ToolbarBuilder {
         });
     }
 
+    // Кнопка повернення на попередню сторінку
+    private static void setOnClickToBackButton(View view, Context context) {
+        setOnClickToButton(view, BACK_BUTTON_ID, () -> ((Activity) context).onBackPressed());
+    }
+
     // Натиснення на кнопку стертя вводу у полі
     private static void setOnClickToEraseButton(View view) {
-        ImageView eraseButton = view.findViewById(ERASER_ID);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentEditTextTotal != null) {
-                    currentEditTextTotal.setText("");
-                }
+        setOnClickToButton(view, ERASER_ID, () -> {
+            if (currentEditTextTotal != null) {
+                currentEditTextTotal.setText("");
             }
         });
     }
 
     // Функція встановлює подію натискання кнопки генерації пароля
     public static void setOnClickToGenPassword(View view, int textViewId, String password) {
-        ImageView generateButton = view.findViewById(R.id.imgGears);
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentEditTextForGenerator != null) {
-                    if (currentEditTextForGenerator.getId() == textViewId) {
-                        int cursorPosition = currentEditTextForGenerator.getSelectionStart();
-                        String currentText = currentEditTextForGenerator.getText().toString();
-                        String newText = currentText.substring(0, cursorPosition) + password +
-                                currentText.substring(cursorPosition);
-                        currentEditTextForGenerator.setText(newText);
-                    } else {
-                        currentEditTextForGenerator.setText(password);
-                    }
+        setOnClickToButton(view, GENERATOR_ID, () -> {
+            if (currentEditTextForGenerator != null) {
+                if (currentEditTextForGenerator.getId() == textViewId) {
+                    int cursorPosition = currentEditTextForGenerator.getSelectionStart();
+                    String currentText = currentEditTextForGenerator.getText().toString();
+                    String newText = currentText.substring(0, cursorPosition) + password +
+                            currentText.substring(cursorPosition);
+                    currentEditTextForGenerator.setText(newText);
+                } else {
+                    currentEditTextForGenerator.setText(password);
                 }
             }
         });
+    }
+
+    // Функція встановлює подію натиснення кнопки редагування
+    public static void setOnClickToEditButton(View view, Runnable action) {
+        setOnClickToButton(view, EDIT_BUTTON_ID, action);
+    }
+
+    // Функція встановлює подію натиснення закладки
+    public static void setOnClickToBookmark(View view, Context context, Runnable action) {
+        setOnClickToButton(view, BOOKMARK_ID, () -> {
+            action.run();
+            bookmarkStatus = !bookmarkStatus;
+            resetBookmarkButtonColor(view, context);
+        });
+    }
+
+    // Функція автозміни кольору інструменту "Закладка"
+    public static void resetBookmarkButtonColor(View view, Context context) {
+        if (bookmarkStatus) {
+            setColorToImg(context, view, BOOKMARK_ID, R.color.purple);
+        } else {
+            setColorToImg(context, view, BOOKMARK_ID, R.color.white);
+        }
+    }
+
+    // Встановлення значення закладки для автозміни кольору
+    public static void setBookmarkStatus(View view, Context context, boolean bookmarkStatus) {
+        ToolbarBuilder.bookmarkStatus = bookmarkStatus;
+        resetBookmarkButtonColor(view, context);
     }
 }
