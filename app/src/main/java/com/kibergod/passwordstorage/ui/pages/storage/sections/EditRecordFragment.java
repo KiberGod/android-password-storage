@@ -105,7 +105,7 @@ public class EditRecordFragment extends Fragment {
         setOnClickToDeleteButton(view);
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordText, requireContext());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordTitle, requireContext(),true);
-        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editEditRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
+        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editEditRecordText, res -> sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
             Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
             if (vibrator != null) {
                 vibrator.vibrate(100);

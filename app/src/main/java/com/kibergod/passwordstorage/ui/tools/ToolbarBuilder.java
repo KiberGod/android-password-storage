@@ -15,6 +15,9 @@ import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 public class ToolbarBuilder {
 
     /*
@@ -179,17 +182,17 @@ public class ToolbarBuilder {
     }
 
     // Функція встановлює подію натискання кнопки генерації пароля
-    public static void setOnClickToGenPassword(View view, int textViewId, String password, Runnable action) {
+    public static void setOnClickToGenPassword(View view, int textViewId, Function<Void, String> generatePassFunc, Runnable action) {
         setOnClickToButton(view, GENERATOR_ID, () -> {
             if (currentEditTextForGenerator != null) {
                 if (currentEditTextForGenerator.getId() == textViewId) {
                     int cursorPosition = currentEditTextForGenerator.getSelectionStart();
                     String currentText = currentEditTextForGenerator.getText().toString();
-                    String newText = currentText.substring(0, cursorPosition) + password +
+                    String newText = currentText.substring(0, cursorPosition) + generatePassFunc.apply(null) +
                             currentText.substring(cursorPosition);
                     currentEditTextForGenerator.setText(newText);
                 } else {
-                    currentEditTextForGenerator.setText(password);
+                    currentEditTextForGenerator.setText(generatePassFunc.apply(null));
                 }
                 action.run();
             }

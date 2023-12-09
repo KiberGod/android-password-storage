@@ -73,7 +73,7 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
-        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
+        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, res -> sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
             Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
             if (vibrator != null) {
                 vibrator.vibrate(100);
