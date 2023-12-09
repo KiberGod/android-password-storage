@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,12 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
-        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()));
+        ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
+            Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
+            if (vibrator != null) {
+                vibrator.vibrate(100);
+            }
+        });
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
         ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);

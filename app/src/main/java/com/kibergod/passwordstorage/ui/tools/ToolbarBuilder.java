@@ -179,7 +179,7 @@ public class ToolbarBuilder {
     }
 
     // Функція встановлює подію натискання кнопки генерації пароля
-    public static void setOnClickToGenPassword(View view, int textViewId, String password) {
+    public static void setOnClickToGenPassword(View view, int textViewId, String password, Runnable action) {
         setOnClickToButton(view, GENERATOR_ID, () -> {
             if (currentEditTextForGenerator != null) {
                 if (currentEditTextForGenerator.getId() == textViewId) {
@@ -191,6 +191,7 @@ public class ToolbarBuilder {
                 } else {
                     currentEditTextForGenerator.setText(password);
                 }
+                action.run();
             }
         });
     }

@@ -11,9 +11,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,6 +23,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -73,9 +76,6 @@ public class HomeActivity extends AppCompatActivity {
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
-
-    //private EditText currentEditTextTotal;
-    //private EditText currentEditTextForGenerator;
 
     private int screenWidth;
 
@@ -421,5 +421,13 @@ public class HomeActivity extends AppCompatActivity {
     public void setScrollToTop(View view, int scrollId) {
         ScrollView scrollView = view.findViewById(scrollId);
         scrollView.smoothScrollTo(0, 0);
+    }
+
+    // Повертає об`єкт вібратора
+    public Vibrator getVibrator() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
+            return (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        }
+        return null;
     }
 }

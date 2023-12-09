@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,14 @@ public class ShowRecordFragment extends Fragment {
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, false,false,false,false);
         ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex));
-        ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> sharedRecordsDataViewModel.editBookmarkInRecordByIndex(recordIndex));
+
+        ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> {
+            sharedRecordsDataViewModel.editBookmarkInRecordByIndex(recordIndex);
+            Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
+            if (vibrator != null) {
+                vibrator.vibrate(100);
+            }
+        });
 
         printRecordData(view);
         return view;
