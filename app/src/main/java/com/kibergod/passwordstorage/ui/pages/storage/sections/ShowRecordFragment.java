@@ -30,10 +30,12 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 public class ShowRecordFragment extends Fragment {
 
+    private HomeViewModel homeViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
@@ -68,6 +70,7 @@ public class ShowRecordFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, false,false,false,false);
         ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex));
@@ -87,10 +90,20 @@ public class ShowRecordFragment extends Fragment {
     // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
     private void printRecordData(View view) {
         setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
-        setTextViewText(view, R.id.recordCategory,
-                sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex))
-        );
+        String category = sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex));
+        if (category.equals("")) {
+            category = homeViewModel.getEmptyCategoryText();
+        }
+        setTextViewText(view, R.id.recordCategory, category);
         setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+
+        if (!sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)).equals("")) {
+            ImageView categoryIcon = view.findViewById(R.id.recordCategoryIcon);
+            categoryIcon.setImageResource(getResources().getIdentifier(
+                    sharedCategoriesDataViewModel.getCategoryIconIdById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)),
+                    "drawable", requireContext().getPackageName())
+            );
+        }
 
         ToolbarBuilder.setBookmarkStatus(view, requireContext(), sharedRecordsDataViewModel.getBookmarkByIndex(recordIndex));
 
@@ -134,77 +147,15 @@ public class ShowRecordFragment extends Fragment {
 
         updateFieldValueBlock(textViewValue, imageView, fieldIndex);
         setOnClickToHideValueButton(fieldView, imageView.getId(), fieldIndex, textViewValue.getId());
+        setOnClickToCopyValueButton(fieldView, sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
 
         LinearLayout placeForFields = view.findViewById(R.id.placeForFields);
         parentContainer.addView(fieldView, parentContainer.indexOfChild(placeForFields), layoutParams);
-
-
-
-
-
-        /*
-        LinearLayout newLayout = new LinearLayout(requireContext());
-        newLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        TextView textViewName = new TextView(requireContext());
-        textViewName.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_2));
-
-        textViewName.setText(name);
-
-        LinearLayout.LayoutParams paramsName = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        paramsName.rightMargin = 16;
-        textViewName.setLayoutParams(paramsName);
-
-        TextView textViewValue = new TextView(requireContext());
-        textViewValue.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-        textViewValue.setText(value);
-
-        newLayout.addView(textViewName);
-        newLayout.addView(textViewValue);
-        if (!value.equals("")) {
-            newLayout.addView(getButton(value));
-        }
-
-        Switch switchView = new Switch(requireContext());
-        switchView.setChecked(sharedRecordsDataViewModel.getRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex));
-        newLayout.addView(switchView);
-
-        switchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedRecordsDataViewModel.setRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex);
-                textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
-            }
-        });
-
-        linearLayout.addView(newLayout);*/
     }
 
-    // Створює кнопку швидкого копіювання
-    private Button getButton(String value) {
-        Button button = new Button(requireContext());
-        button.setText("Скопіювати");
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
 
-                if (clipboard != null) {
-                    ClipData clip = ClipData.newPlainText("label", value);
-                    clipboard.setPrimaryClip(clip);
-                }
-
-                Toast.makeText(getActivity(), "Скопійовано у буфер обміну", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return button;
-    }
-
-    //
+    // Встановлення події натиснення на кнопку приховання значення поля
     private void setOnClickToHideValueButton(View fieldView, int imageId, int fieldIndex, int textViewValueId) {
         LinearLayout hideValueButton = fieldView.findViewById(R.id.hideValueButton);
         ImageView imageView = fieldView.findViewById(imageId);
@@ -228,5 +179,27 @@ public class ShowRecordFragment extends Fragment {
             imageView.setImageResource(R.drawable.vector__close_eye);
             textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
         }
+    }
+
+    // Встановлення події натиснення на кнопку копіювання значення поля
+    private void setOnClickToCopyValueButton(View fieldView, String value) {
+        ImageView copyButton = fieldView.findViewById(R.id.copyButton);
+        copyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
+                if (vibrator != null) {
+                    vibrator.vibrate(100);
+                }
+
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboard != null) {
+                    ClipData clip = ClipData.newPlainText("label", value);
+                    clipboard.setPrimaryClip(clip);
+                }
+
+                Toast.makeText(getActivity(), "Скопійовано у буфер обміну", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
