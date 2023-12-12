@@ -131,9 +131,9 @@ public class ShowRecordFragment extends Fragment {
         ImageView imageView = fieldView.findViewById(R.id.hideButtonIcon);
         imageView.setId(View.generateViewId());
         textViewValue.setId(View.generateViewId());
-        TextView buttonStatus = fieldView.findViewById(R.id.hideButtonStatus);
-        buttonStatus.setId(View.generateViewId());
-        setOnClickToHideValueButton(fieldView, imageView.getId(), fieldIndex, textViewValue.getId(), buttonStatus.getId());
+
+        updateFieldValueBlock(textViewValue, imageView, fieldIndex);
+        setOnClickToHideValueButton(fieldView, imageView.getId(), fieldIndex, textViewValue.getId());
 
         LinearLayout placeForFields = view.findViewById(R.id.placeForFields);
         parentContainer.addView(fieldView, parentContainer.indexOfChild(placeForFields), layoutParams);
@@ -205,24 +205,28 @@ public class ShowRecordFragment extends Fragment {
     }
 
     //
-    private void setOnClickToHideValueButton(View fieldView, int imageId, int fieldIndex, int textViewValueId, int fieldStatusId) {
+    private void setOnClickToHideValueButton(View fieldView, int imageId, int fieldIndex, int textViewValueId) {
         LinearLayout hideValueButton = fieldView.findViewById(R.id.hideValueButton);
         ImageView imageView = fieldView.findViewById(imageId);
         TextView textViewValue = fieldView.findViewById(textViewValueId);
-        TextView fieldStatus = fieldView.findViewById(fieldStatusId);
+
         hideValueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fieldStatus.getText().equals("0")) {
-                    imageView.setImageResource(R.drawable.vector__open_eye);
-                    textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
-                    fieldStatus.setText("1");
-                } else {
-                    imageView.setImageResource(R.drawable.vector__close_eye);
-                    textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
-                    fieldStatus.setText("0");
-                }
+                sharedRecordsDataViewModel.setRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex);
+                updateFieldValueBlock(textViewValue, imageView, fieldIndex);
             }
         });
+    }
+
+    // Оновлення блоку значення поля
+    private void updateFieldValueBlock(TextView textViewValue, ImageView imageView, int fieldIndex) {
+        if (sharedRecordsDataViewModel.getRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex)) {
+            imageView.setImageResource(R.drawable.vector__open_eye);
+            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
+        } else {
+            imageView.setImageResource(R.drawable.vector__close_eye);
+            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
+        }
     }
 }
