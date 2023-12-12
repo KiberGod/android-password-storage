@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ToolbarBuilder {

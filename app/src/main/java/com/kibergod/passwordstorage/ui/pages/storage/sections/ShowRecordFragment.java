@@ -5,10 +5,12 @@ import static com.kibergod.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -94,12 +97,11 @@ public class ShowRecordFragment extends Fragment {
         ImageView recordIcon = view.findViewById(R.id.recordIcon);
         recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
 
-        LinearLayout linearLayout = view.findViewById(R.id.showFieldsScrollArea);
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
-            String name = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
-            String value = sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, i);
-            if (!name.equals("")) {
-                createField(view, linearLayout, name, value, i);
+            String fieldName = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
+            String fieldValue = sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, i);
+            if (!fieldName.equals("") || !fieldValue.equals("")) {
+                createField(view, fieldName, fieldValue, i);
             }
         }
     }
@@ -111,7 +113,36 @@ public class ShowRecordFragment extends Fragment {
     }
 
     // Створює поле запису
-    private void createField(View rootView, LinearLayout linearLayout, String name, String value, int fieldIndex) {
+    private void createField(View view, String fieldName, String fieldValue, int fieldIndex) {
+        LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
+        View fieldView = getLayoutInflater().inflate(R.layout.fragment_show_field, null);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, ((HomeActivity) requireActivity()).convertDPtoPX(20), 0, 0);
+
+        TextView textViewName = fieldView.findViewById(R.id.titleField);
+        TextView textViewValue = fieldView.findViewById(R.id.valueField);
+
+        textViewName.setText(fieldName);
+        textViewValue.setText(fieldValue);
+
+        ImageView imageView = fieldView.findViewById(R.id.hideButtonIcon);
+        imageView.setId(View.generateViewId());
+        textViewValue.setId(View.generateViewId());
+        TextView buttonStatus = fieldView.findViewById(R.id.hideButtonStatus);
+        buttonStatus.setId(View.generateViewId());
+        setOnClickToHideValueButton(fieldView, imageView.getId(), fieldIndex, textViewValue.getId(), buttonStatus.getId());
+
+        LinearLayout placeForFields = view.findViewById(R.id.placeForFields);
+        parentContainer.addView(fieldView, parentContainer.indexOfChild(placeForFields), layoutParams);
+
+
+
+
+
+        /*
         LinearLayout newLayout = new LinearLayout(requireContext());
         newLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -149,7 +180,7 @@ public class ShowRecordFragment extends Fragment {
             }
         });
 
-        linearLayout.addView(newLayout);
+        linearLayout.addView(newLayout);*/
     }
 
     // Створює кнопку швидкого копіювання
@@ -171,5 +202,27 @@ public class ShowRecordFragment extends Fragment {
             }
         });
         return button;
+    }
+
+    //
+    private void setOnClickToHideValueButton(View fieldView, int imageId, int fieldIndex, int textViewValueId, int fieldStatusId) {
+        LinearLayout hideValueButton = fieldView.findViewById(R.id.hideValueButton);
+        ImageView imageView = fieldView.findViewById(imageId);
+        TextView textViewValue = fieldView.findViewById(textViewValueId);
+        TextView fieldStatus = fieldView.findViewById(fieldStatusId);
+        hideValueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (fieldStatus.getText().equals("0")) {
+                    imageView.setImageResource(R.drawable.vector__open_eye);
+                    textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
+                    fieldStatus.setText("1");
+                } else {
+                    imageView.setImageResource(R.drawable.vector__close_eye);
+                    textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
+                    fieldStatus.setText("0");
+                }
+            }
+        });
     }
 }
