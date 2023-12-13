@@ -11,6 +11,7 @@
 #define PASSWORD_STORAGE_BINFILEIO_H
 
 #include <jni.h>
+#include "../model/Category.h"
 
 // Шлях до внутрішнього файлового сховища програми
 static std::string FILES_PATH;
@@ -132,5 +133,12 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
 // Відновлення прихованих категорій
 extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass);
+
+// Повертає об`єкт DataTime на основі данних Rcord або Category
+template<typename T>
+jobject getDateTimeObj(JNIEnv* env, T dataObject);
+
+// Повертає об`єкт DataTime на основы данних Rcord або Category
+DateTime getDateTimeObj(JNIEnv* env, jclass dataClass, jobject dataObj);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H
