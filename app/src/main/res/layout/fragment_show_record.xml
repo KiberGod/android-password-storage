@@ -195,6 +195,28 @@
                         android:orientation="vertical"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/purple"
+                android:layout_marginTop="10dp"
+                android:id="@+id/recordCreated_at"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/purple"
+                android:layout_marginTop="10dp"
+                android:id="@+id/recordUpdated_at"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/purple"
+                android:layout_marginTop="10dp"
+                android:id="@+id/recordViewed_at"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

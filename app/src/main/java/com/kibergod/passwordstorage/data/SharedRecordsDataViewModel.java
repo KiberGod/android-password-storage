@@ -1,6 +1,7 @@
 package com.kibergod.passwordstorage.data;
 
 import static com.kibergod.passwordstorage.NativeController.getRecords;
+import static com.kibergod.passwordstorage.NativeController.saveCategories;
 import static com.kibergod.passwordstorage.NativeController.saveRecords;
 
 import androidx.lifecycle.ViewModel;
@@ -94,6 +95,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
     // Редагування запису
     public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, String newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
         records.get(index).update(newTitle, newText, newCategory_id, newIcon_id, newFieldNames, newFieldValues);
+        records.get(index).setUpdated_at();
         saveRecords(records);
     }
 
@@ -131,8 +133,21 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Повертає id іконки запису за індексом
-    public String getRecordIconIdByIndex(int index) {
-        return records.get(index).getIconId();
+    public String getRecordIconIdByIndex(int index) { return records.get(index).getIconId(); }
+
+    // Повертає дату створення запису за індексом
+    public String getRecordCreated_atByIndex(int index) { return records.get(index).getCreated_at();}
+
+    // Повертає останню дату оновлення запису за індексом
+    public String getRecordUpdated_atByIndex(int index) { return records.get(index).getUpdated_at(); }
+
+    // Повертає останню дату перегляду запису за індексом
+    public String getRecordViewed_atByIndex(int index) { return records.get(index).getViewed_at(); }
+
+    // Оновлює останню дату перегляду запису за індексом
+    public void updateRecordViewed_atByIndex(int index) {
+        records.get(index).setViewed_at();
+        saveRecords(records);
     }
 
     /* Перевіряє, чи треба заміняти порожню іконку запису іконкою категорії (якщо така є)

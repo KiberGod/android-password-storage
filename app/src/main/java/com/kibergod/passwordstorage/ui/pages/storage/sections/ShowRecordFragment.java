@@ -84,6 +84,7 @@ public class ShowRecordFragment extends Fragment {
         });
 
         printRecordData(view);
+        sharedRecordsDataViewModel.updateRecordViewed_atByIndex(recordIndex);
         return view;
     }
 
@@ -117,6 +118,15 @@ public class ShowRecordFragment extends Fragment {
                 createField(view, fieldName, fieldValue, i);
             }
         }
+
+        TextView recordCreated_at = view.findViewById(R.id.recordCreated_at);
+        recordCreated_at.setText("Дата створення: " + sharedRecordsDataViewModel.getRecordCreated_atByIndex(recordIndex));
+
+        TextView recordUpdated_at = view.findViewById(R.id.recordUpdated_at);
+        recordUpdated_at.setText("Останнє оновлення: " + sharedRecordsDataViewModel.getRecordUpdated_atByIndex(recordIndex));
+
+        TextView recordViewed_at = view.findViewById(R.id.recordViewed_at);
+        recordViewed_at.setText("Дата попреденього перегляду: " + sharedRecordsDataViewModel.getRecordViewed_atByIndex(recordIndex));
     }
 
     // Функція встановлення тексту до UI-компонентів

@@ -5,6 +5,8 @@
 #ifndef PASSWORD_STORAGE_RECORD_H
 #define PASSWORD_STORAGE_RECORD_H
 
+#include "DateTime.h"
+
 /*
  * Клас, що зберігає структуру записів сховища на стороні С++
  */
@@ -54,13 +56,16 @@ private:
      */
     bool bookmark;
     char icon_id[MAX_ICON_ID_LENGTH];
+    DateTime created_at;
+    DateTime updated_at;
+    DateTime viewed_at;
 
 public:
     static const int NULL_CATEGORY_VALUE = -1;
     static const bool NULL_BOOKMARK_VALUE = false;
 
     Record();
-    Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields);
+    Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at);
     void printLog();
     const Field* getFields() const;
     const char* getTitle() const;
@@ -68,6 +73,9 @@ public:
     const int getCategoryId() const;
     const bool getBookmark() const;
     const char* getIconId() const;
+    const DateTime getCreated_at() const;
+    const DateTime getUpdated_at() const;
+    const DateTime getViewed_at() const;
 
     static const int getMaxFields();
 };

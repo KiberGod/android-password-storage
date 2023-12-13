@@ -44,10 +44,14 @@ Record::Record() {
     for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
         fields[i] = Field();
     }
+
+    created_at = DateTime();
+    updated_at = DateTime();
+    viewed_at = DateTime();
 }
 
 // Конструктор, що використовується для створення тестових записів
-Record::Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields) {
+Record::Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at) {
 
     strncpy(this->title, title, MAX_TITLE_LENGTH - 1);
     this->title[MAX_TITLE_LENGTH - 1] = '\0';
@@ -64,6 +68,10 @@ Record::Record(const char* title, const char* text, const int category_id, const
     for (int i = 0; i < MAX_FIELDS_LENGTH; i++) {
         this->fields[i] = fields[i];
     }
+
+    this->created_at = created_at;
+    this->updated_at = updated_at;
+    this->viewed_at = viewed_at;
 }
 
 // Друк запису у лог
@@ -96,6 +104,17 @@ const bool Record::getBookmark() const {
 
 const char* Record::getIconId() const {
     return icon_id;
+}
+const DateTime Record::getCreated_at() const {
+    return created_at;
+}
+
+const DateTime Record::getUpdated_at() const {
+    return updated_at;
+}
+
+const DateTime Record::getViewed_at() const {
+    return viewed_at;
 }
 
 const int Record::getMaxFields() {

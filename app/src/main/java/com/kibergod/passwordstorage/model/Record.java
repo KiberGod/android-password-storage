@@ -75,6 +75,10 @@ public class Record {
 
     private Field[] fields;
 
+    private DateTime created_at;
+    private DateTime updated_at;
+    private DateTime viewed_at;
+
 
     public static final String NULL_ICON_ID_VALUE = "vector_template_image";
     public static final Integer NULL_CATEGORY_VALUE = -1;
@@ -84,25 +88,24 @@ public class Record {
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
-    private void init(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields) {
+    private void init(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at) {
         this.title = title;
         this.text = text;
         this.category_id = category_id;
         this.bookmark = bookmark;
         this.icon_id = icon_id;
         this.fields = fields;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.viewed_at = viewed_at;
     }
 
     public Record(String title, String text, Integer category_id, String icon_id) {
-        init(title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields());
+        init(title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime());
     }
 
-    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields) {
-        init(title, text, category_id, bookmark, icon_id, fields);
-    }
-
-    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id) {
-        init(title, text, category_id, bookmark, icon_id, getEmptyFields());
+    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at) {
+        init(title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at);
     }
 
 
@@ -136,6 +139,13 @@ public class Record {
         }
         return fields;
     }
+
+    public String getCreated_at() {return created_at.getTimestamp(); }
+    public String getUpdated_at() {return updated_at.getTimestamp(); }
+    public String getViewed_at() {return viewed_at.getTimestamp(); }
+
+    public void setUpdated_at() { updated_at.update(); }
+    public void setViewed_at() { viewed_at.update(); }
 
 
     public void setEmptyCategoryId() {
