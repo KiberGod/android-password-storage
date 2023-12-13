@@ -7,7 +7,7 @@
 
 
 // Конструктор, що використовується для створення тестових записів
-Category::Category(const int id, const char* name, const char* icon_id, const DateTime created_at) {
+Category::Category(const int id, const char* name, const char* icon_id, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at) {
     strncpy(this->name, name, MAX_NAME_LENGTH - 1);
     this->name[MAX_NAME_LENGTH - 1] = '\0';
 
@@ -17,6 +17,8 @@ Category::Category(const int id, const char* name, const char* icon_id, const Da
     this->icon_id[MAX_ICON_ID_LENGTH - 1] = '\0';
 
     this->created_at = created_at;
+    this->updated_at = updated_at;
+    this->viewed_at = viewed_at;
 }
 
 // Друк запису у лог
@@ -38,4 +40,12 @@ const char* Category::getIconId() const {
 
 const DateTime Category::getCreated_at() const {
     return created_at;
+}
+
+const DateTime Category::getUpdated_at() const {
+    return updated_at;
+}
+
+const DateTime Category::getViewed_at() const {
+    return viewed_at;
 }

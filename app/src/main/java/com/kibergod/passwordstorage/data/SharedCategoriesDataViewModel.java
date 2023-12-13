@@ -62,8 +62,18 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     }
 
     // Повертає дату створення категорії за індексом
-    public String getCategoryCreated_atByIndex(int index) {
-        return categories.get(index).getCreated_at();
+    public String getCategoryCreated_atByIndex(int index) { return categories.get(index).getCreated_at();}
+
+    // Повертає останню дату оновлення категорії за індексом
+    public String getCategoryUpdated_atByIndex(int index) { return categories.get(index).getUpdated_at(); }
+
+    // Повертає останню дату перегляду категорії за індексом
+    public String getCategoryViewed_atByIndex(int index) { return categories.get(index).getViewed_at(); }
+
+    // Оновлює останню дату перегляду категорії за індексом
+    public void updateCategoryViewed_atByIndex(int index) {
+        categories.get(index).setViewed_at();
+        saveCategories(categories);
     }
 
     // Повертає id по індексу
@@ -121,8 +131,7 @@ public class SharedCategoriesDataViewModel extends ViewModel {
 
     // Створення новогої категорії да додавання її до списку
     public void addCategory(String name, String icon_id) {
-        DateTime created_at = new DateTime();
-        Category category = new Category(generateNewId(), name, icon_id, created_at);
+        Category category = new Category(generateNewId(), name, icon_id, new DateTime(), new DateTime(), new DateTime());
         categories.add(category);
         saveCategories(categories);
     }
@@ -130,6 +139,7 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     // Редагування категорії
     public void editCategory(int index, String name, String icon_id) {
         categories.get(index).update(name, icon_id);
+        categories.get(index).setUpdated_at();
         saveCategories(categories);
     }
 

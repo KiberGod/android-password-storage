@@ -23,10 +23,10 @@ static const std::string RECORDS_FILE = "/records_v4.bin";
 static const std::string HIDDEN_RECORDS_FILE = "/hidden_records_v4.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories_v3.bin";
+static const std::string CATEGORIES_FILE = "/categories_v4.bin";
 
 // Прихована буферна копія файла категорій
-static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v3.bin";
+static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v4.bin";
 
 // Файл налаштуваннь
 static const std::string SETTINGS_FILE = "/settings.bin";
@@ -135,10 +135,9 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass);
 
 // Повертає об`єкт DataTime на основі данних Rcord або Category
-template<typename T>
-jobject getDateTimeObj(JNIEnv* env, T dataObject);
+jobject getDateTimeObj(JNIEnv* env, const DateTime& dateTime);
 
-// Повертає об`єкт DataTime на основы данних Rcord або Category
-DateTime getDateTimeObj(JNIEnv* env, jclass dataClass, jobject dataObj);
+// Повертає об`єкт DataTime
+DateTime getDateTimeObj(JNIEnv* env, jclass dataClass, jobject dataObj, const char *name);
 
 #endif //PASSWORD_STORAGE_BINFILEIO_H

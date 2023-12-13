@@ -31,7 +31,7 @@
         android:id="@+id/categoryCreated_at"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:text=""
         android:textSize="16dp"
         android:textColor="@color/purple"
@@ -39,15 +39,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryRecordCounter" />
 
+    <TextView
+        android:id="@+id/categoryUpdated_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text=""
+        android:textSize="16dp"
+        android:textColor="@color/purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryCreated_at" />
+
+    <TextView
+        android:id="@+id/categoryViewed_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text=""
+        android:textSize="16dp"
+        android:textColor="@color/purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryUpdated_at" />
+
     <Button
         android:id="@+id/openEditCategoryPageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="20dp"
         android:text="Редагувати"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryCreated_at" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryViewed_at" />
 
     <ImageView
         android:id="@+id/categoryIcon"

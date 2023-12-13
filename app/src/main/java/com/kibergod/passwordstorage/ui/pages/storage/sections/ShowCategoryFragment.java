@@ -58,6 +58,7 @@ public class ShowCategoryFragment extends Fragment {
         printCategoryData(view);
         setOnClickToEditCategoryButton(view);
 
+        sharedCategoriesDataViewModel.updateCategoryViewed_atByIndex(categoryIndex);
         return view;
     }
 
@@ -80,6 +81,12 @@ public class ShowCategoryFragment extends Fragment {
 
         TextView categoryCreated_at = view.findViewById(R.id.categoryCreated_at);
         categoryCreated_at.setText("Дата створення: " + sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(categoryIndex));
+
+        TextView categoryUpdated_at = view.findViewById(R.id.categoryUpdated_at);
+        categoryUpdated_at.setText("Останнє оновлення: " + sharedCategoriesDataViewModel.getCategoryUpdated_atByIndex(categoryIndex));
+
+        TextView categoryViewed_at = view.findViewById(R.id.categoryViewed_at);
+        categoryViewed_at.setText("Дата попреденього перегляду: " + sharedCategoriesDataViewModel.getCategoryViewed_atByIndex(categoryIndex));
     }
 
     // Функція встановлює подію переходу на сторінку редагувння категорії по натисненню кнопки
