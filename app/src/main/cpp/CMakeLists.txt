@@ -25,6 +25,7 @@ add_library( # Sets the name of the library.
         model/Settings.cpp
         model/Calculator.cpp
         model/DigitalOwner.cpp
+        model/DateTime.cpp
         model/Category.cpp
         model/Record.cpp
         crypto_core.cpp

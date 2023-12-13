@@ -77,6 +77,9 @@ public class ShowCategoryFragment extends Fragment {
         categoryIcon.setImageResource(
                 getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex), "drawable", requireContext().getPackageName())
         );
+
+        TextView categoryCreated_at = view.findViewById(R.id.categoryCreated_at);
+        categoryCreated_at.setText("Дата створення: " + sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(categoryIndex));
     }
 
     // Функція встановлює подію переходу на сторінку редагувння категорії по натисненню кнопки

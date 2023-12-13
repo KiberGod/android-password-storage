@@ -171,7 +171,7 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;)V");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;)V");
 
     std::vector<Category> categories;
 
@@ -186,14 +186,24 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
         jstring jName = env->NewStringUTF(category.getName());
         jstring jIconId = env->NewStringUTF(category.getIconId());
 
+        jclass dateTimeClass = env->FindClass("com/kibergod/passwordstorage/model/DateTime");
+        jmethodID dateTimeConstructor = env->GetMethodID(dateTimeClass, "<init>", "(IIIII)V");
+        int year = category.getCreated_at().getYear();
+        int month = category.getCreated_at().getMonth();
+        int day = category.getCreated_at().getDay();
+        int hour = category.getCreated_at().getHours();
+        int minutes = category.getCreated_at().getMinutes();
+        jobject jcreated_at = env->NewObject(dateTimeClass, dateTimeConstructor, year,month,day,hour,minutes);
+
         // Створення об`єкта Category в Java
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId);
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId, jcreated_at);
 
         // Додавання об`єкта Record в ArrayList
         env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
 
         env->DeleteLocalRef(jName);
         env->DeleteLocalRef(jIconId);
+        env->DeleteLocalRef(jcreated_at);
         env->DeleteLocalRef(categoryObject);
     }
 
@@ -347,10 +357,12 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
         jfieldID idField = env->GetFieldID(categoryClass, "id", "Ljava/lang/Integer;");
         jfieldID nameField = env->GetFieldID(categoryClass, "name", "Ljava/lang/String;");
         jfieldID iconIdField = env->GetFieldID(categoryClass, "icon_id", "Ljava/lang/String;");
+        jfieldID created_atField = env->GetFieldID(categoryClass, "created_at", "Lcom/kibergod/passwordstorage/model/DateTime;");
 
         jobject idObj = env->GetObjectField(categoryObj, idField);
         jstring name = static_cast<jstring>(env->GetObjectField(categoryObj, nameField));
         jstring icon_id = static_cast<jstring>(env->GetObjectField(categoryObj, iconIdField));
+        jobject created_atObj = env->GetObjectField(categoryObj, created_atField);
 
         const char* nameStr = env->GetStringUTFChars(name, nullptr);
         const char* icon_idStr = env->GetStringUTFChars(icon_id, nullptr);
@@ -362,7 +374,20 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
             id = env->CallIntMethod(idObj, intValueMethod);
         }
 
-        Category category{id, nameStr, icon_idStr};
+        jclass dateTimeClass = env->FindClass("com/kibergod/passwordstorage/model/DateTime");
+        jfieldID yearField = env->GetFieldID(dateTimeClass, "year", "I");
+        jfieldID monthField = env->GetFieldID(dateTimeClass, "month", "I");
+        jfieldID dayField = env->GetFieldID(dateTimeClass, "day", "I");
+        jfieldID hoursField = env->GetFieldID(dateTimeClass, "hours", "I");
+        jfieldID minutesField = env->GetFieldID(dateTimeClass, "minutes", "I");
+        jint year = env->GetIntField(created_atObj, yearField);
+        jint month = env->GetIntField(created_atObj, monthField);
+        jint day = env->GetIntField(created_atObj, dayField);
+        jint hours = env->GetIntField(created_atObj, hoursField);
+        jint minutes = env->GetIntField(created_atObj, minutesField);
+        DateTime created_at(year, month, day, hours, minutes);
+
+        Category category{id, nameStr, icon_idStr, created_at};
 
         writeToBinFile(getCategoriesFilePath(),
                        reinterpret_cast<char*>(&category),
@@ -373,6 +398,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
         env->ReleaseStringUTFChars(name, nameStr);
         env->ReleaseStringUTFChars(icon_id, icon_idStr);
         env->DeleteLocalRef(categoryObj);
+        env->DeleteLocalRef(created_atObj);
     }
 
 }
@@ -660,7 +686,7 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIE
     jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
 
     jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;)V");
+    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;)V");
 
     for (const auto& category : categories) {
         jclass integerClass = env->FindClass("java/lang/Integer");
@@ -670,7 +696,16 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIE
         jstring jName = env->NewStringUTF(category.getName());
         jstring jIconId = env->NewStringUTF(category.getIconId());
 
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId);
+        jclass dateTimeClass = env->FindClass("com/kibergod/passwordstorage/model/DateTime");
+        jmethodID dateTimeConstructor = env->GetMethodID(dateTimeClass, "<init>", "(IIIII)V");
+        int year = category.getCreated_at().getYear();
+        int month = category.getCreated_at().getMonth();
+        int day = category.getCreated_at().getDay();
+        int hour = category.getCreated_at().getHours();
+        int minutes = category.getCreated_at().getMinutes();
+        jobject jcreated_at = env->NewObject(dateTimeClass, dateTimeConstructor, year,month,day,hour,minutes);
+
+        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId, jcreated_at);
 
         env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
 

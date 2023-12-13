@@ -27,6 +27,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryName" />
 
+    <TextView
+        android:id="@+id/categoryCreated_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text=""
+        android:textSize="16dp"
+        android:textColor="@color/purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryRecordCounter" />
+
     <Button
         android:id="@+id/openEditCategoryPageButton"
         android:layout_width="wrap_content"
@@ -35,7 +47,7 @@
         android:text="Редагувати"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryRecordCounter" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryCreated_at" />
 
     <ImageView
         android:id="@+id/categoryIcon"

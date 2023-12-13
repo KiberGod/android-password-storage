@@ -6,6 +6,7 @@ import static com.kibergod.passwordstorage.NativeController.saveCategories;
 import androidx.lifecycle.ViewModel;
 
 import com.kibergod.passwordstorage.model.Category;
+import com.kibergod.passwordstorage.model.DateTime;
 
 import java.util.ArrayList;
 
@@ -58,6 +59,11 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     // Повертає id іконки категорії за індексом
     public String getCategoryIconIdByIndex(int index) {
         return categories.get(index).getIconId();
+    }
+
+    // Повертає дату створення категорії за індексом
+    public String getCategoryCreated_atByIndex(int index) {
+        return categories.get(index).getCreated_at();
     }
 
     // Повертає id по індексу
@@ -115,7 +121,8 @@ public class SharedCategoriesDataViewModel extends ViewModel {
 
     // Створення новогої категорії да додавання її до списку
     public void addCategory(String name, String icon_id) {
-        Category category = new Category(generateNewId(), name, icon_id);
+        DateTime created_at = new DateTime();
+        Category category = new Category(generateNewId(), name, icon_id, created_at);
         categories.add(category);
         saveCategories(categories);
     }
