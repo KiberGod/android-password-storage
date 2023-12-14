@@ -33,6 +33,8 @@ import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
+import java.util.ArrayList;
+
 public class ShowRecordFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
@@ -42,6 +44,9 @@ public class ShowRecordFragment extends Fragment {
     private static final String RECORD_INDEX = "record_index";
 
     private int recordIndex;
+
+    private ArrayList<TextView> protectedTextViews;
+    private ArrayList<Integer> protectedTextViewsIds;
 
     public ShowRecordFragment() {
         // Required empty public constructor
@@ -72,7 +77,10 @@ public class ShowRecordFragment extends Fragment {
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), true, true, false,false,false,false);
+        protectedTextViews = new ArrayList<>();
+        protectedTextViewsIds = new ArrayList<>();
+
+        ToolbarBuilder.addToolbarToView(view, requireContext(), true,true, true, false,false,false,false);
         ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex));
 
         ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> {
@@ -82,6 +90,13 @@ public class ShowRecordFragment extends Fragment {
                 vibrator.vibrate(100);
             }
         });
+
+        ToolbarBuilder.setOnClickToVisibilitySwitchButton(view,
+                res -> sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex),
+                () -> {
+                    sharedRecordsDataViewModel.editToTalValueVisibilityInRecordByIndex(recordIndex);
+                    updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex));
+                });
 
         printRecordData(view);
         sharedRecordsDataViewModel.updateRecordViewed_atByIndex(recordIndex);
@@ -127,6 +142,8 @@ public class ShowRecordFragment extends Fragment {
 
         TextView recordViewed_at = view.findViewById(R.id.recordViewed_at);
         recordViewed_at.setText("Дата попреденього перегляду: " + sharedRecordsDataViewModel.getRecordViewed_atByIndex(recordIndex));
+
+        updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex));
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -154,6 +171,8 @@ public class ShowRecordFragment extends Fragment {
         ImageView imageView = fieldView.findViewById(R.id.hideButtonIcon);
         imageView.setId(View.generateViewId());
         textViewValue.setId(View.generateViewId());
+        protectedTextViews.add(textViewValue);
+        protectedTextViewsIds.add(fieldIndex);
 
         updateFieldValueBlock(textViewValue, imageView, fieldIndex);
         setOnClickToHideValueButton(fieldView, imageView.getId(), fieldIndex, textViewValue.getId());
@@ -184,7 +203,9 @@ public class ShowRecordFragment extends Fragment {
     private void updateFieldValueBlock(TextView textViewValue, ImageView imageView, int fieldIndex) {
         if (sharedRecordsDataViewModel.getRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex)) {
             imageView.setImageResource(R.drawable.vector__open_eye);
-            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
+            if (!sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex)) {
+                textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
+            }
         } else {
             imageView.setImageResource(R.drawable.vector__close_eye);
             textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
@@ -212,4 +233,32 @@ public class ShowRecordFragment extends Fragment {
             }
         });
     }
+
+    // Оновлення сторінки після переключення глобальної кнопки захисту перегляду
+    private void updateProtectedTextViews(View view, boolean totalVisibilityValue) {
+        if (totalVisibilityValue) {
+            setParamsToProtectedTextView(view,
+                    sharedRecordsDataViewModel.getRecordProtectedValueByIndex(
+                            sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex)
+                    ), R.color.purple);
+        } else {
+            setParamsToProtectedTextView(view, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex), R.color.white);
+        }
+    }
+
+    // Встановлення параметрів до полів, на яких розповсюджується захист перегляду
+    private void setParamsToProtectedTextView(View view, String mainTextValue, int textColorId) {
+        TextView mainText = view.findViewById(R.id.mainRecordText);
+        mainText.setText(mainTextValue);
+        mainText.setTextColor(requireContext().getColor(textColorId));
+
+        for (int i=0; i<protectedTextViews.size(); i++) {
+            protectedTextViews.get(i).setTextColor(requireContext().getColor(textColorId));
+
+            protectedTextViews.get(i).setText(
+                    sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, protectedTextViewsIds.get(i))
+            );
+        }
+    }
+
 }

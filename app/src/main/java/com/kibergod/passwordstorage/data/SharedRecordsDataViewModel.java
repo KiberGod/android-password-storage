@@ -182,7 +182,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Повертає захищене значення поля запису за ідентифікатором поля та записа
     public String getRecordFieldProtectedValueByIndex(int recordIndex, int fieldIndex) {
-        return records.get(recordIndex).getFields()[fieldIndex].getProtectedgetValue();
+        return records.get(recordIndex).getFields()[fieldIndex].getProtectedFieldValue();
     }
 
     // Повертає налаштування значення поля запису за ідентифікатором поля та записа
@@ -199,5 +199,10 @@ public class SharedRecordsDataViewModel extends ViewModel {
     // Видалення активних даних
     public void dataDestroy() {
         records.clear();
+    }
+
+    // Безумовно конвертує отриману змінну у захищену форму
+    public String getRecordProtectedValueByIndex(String value) {
+        return Record.getProtectedValue(value);
     }
 }

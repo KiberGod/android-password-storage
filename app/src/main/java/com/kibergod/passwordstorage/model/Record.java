@@ -38,15 +38,11 @@ public class Record {
 
         public String getValue() { return value; }
 
-        public String getProtectedgetValue() {
-            if (this.valueVisibility == true) {
+        public String getProtectedFieldValue() {
+            if (this.valueVisibility && !totalValueVisibility) {
                 return value;
             } else {
-                StringBuilder protectedStr = new StringBuilder();
-                for (int i = 0; i < value.length(); i++) {
-                    protectedStr.append('*');
-                }
-                return protectedStr.toString();
+                return getProtectedValue(value);
             }
         }
 
@@ -178,4 +174,12 @@ public class Record {
     }
 
     public void inversionTotalValueVisibility() { totalValueVisibility = !totalValueVisibility; }
+
+    public static String getProtectedValue(String value) {
+        StringBuilder protectedStr = new StringBuilder();
+        for (int i = 0; i < value.length(); i++) {
+            protectedStr.append('*');
+        }
+        return protectedStr.toString();
+    }
 }

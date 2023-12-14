@@ -23,6 +23,7 @@ public class ToolbarBuilder {
      *  Даний клас відповідає за подубову панелі інструментів для сторінок взаємодій з категоріями та записами
      */
 
+    private static final int VISIBILITY_SWITCH_ID = R.id.imgGodEye;
     private static final int BOOKMARK_ID = R.id.imgBookmark;
     private static final int EDIT_BUTTON_ID = R.id.imgModerPencil;
     private static final int BACK_BUTTON_ID = R.id.imgLeftArrow;
@@ -46,6 +47,7 @@ public class ToolbarBuilder {
     * Для використання надана view обов`язково має містити <LinearLayout> з android:id="@+id/placeForToolbar"
     */
     public static void addToolbarToView(View view, Context context,
+                                        boolean useVisibilitySwitch,
                                         boolean useBookmark,
                                         boolean useEditButton,
                                         boolean useEraser,
@@ -59,7 +61,7 @@ public class ToolbarBuilder {
 
             placeForToolbar.addView(toolbarLayout);
 
-            deleteUnusedTools(view, useBookmark, useEditButton, useEraser, useGenerator, useTrash, useSaveButton);
+            deleteUnusedTools(view, useVisibilitySwitch, useBookmark, useEditButton, useEraser, useGenerator, useTrash, useSaveButton);
 
             setOnClickToBackButton(view, context);
             setIconColorsToToolbar(view, context);
@@ -67,7 +69,7 @@ public class ToolbarBuilder {
     }
 
     // Загальне видалення непотрібних інструментів
-    private static void deleteUnusedTools(View view, boolean useBookmark, boolean useEditButton,
+    private static void deleteUnusedTools(View view, boolean useVisibilitySwitch, boolean useBookmark, boolean useEditButton,
                                           boolean useEraser, boolean useGenerator, boolean useTrash, boolean useSaveButton) {
         if (!useBookmark) {
             deleteTool(view, BOOKMARK_ID);
@@ -95,6 +97,10 @@ public class ToolbarBuilder {
 
         if (!useSaveButton) {
             deleteTool(view, SAVE_BUTTON_ID);
+        }
+
+        if (!useVisibilitySwitch) {
+            deleteTool(view, VISIBILITY_SWITCH_ID);
         }
     }
 
@@ -225,5 +231,24 @@ public class ToolbarBuilder {
     public static void setBookmarkStatus(View view, Context context, boolean bookmarkStatus) {
         ToolbarBuilder.bookmarkStatus = bookmarkStatus;
         resetBookmarkButtonColor(view, context);
+    }
+
+    // Функція оновлення асету перемикача глобального захисту перегляду
+    private static void resetVisibilitySwitchIcon(ImageView switchIcon, boolean switchStatus) {
+        if (switchStatus) {
+            switchIcon.setImageResource(R.drawable.vector__close_god_eye);
+        } else {
+            switchIcon.setImageResource(R.drawable.vector__open_god_eye);
+        }
+    }
+
+    // Встановлення події натиснення на кнопку перемикача глобального захисту перегляду
+    public static void setOnClickToVisibilitySwitchButton(View view, Function<Void, Boolean> getSwitchStatus, Runnable action) {
+        ImageView switchIcon = view.findViewById(VISIBILITY_SWITCH_ID);
+        resetVisibilitySwitchIcon(switchIcon, getSwitchStatus.apply(null));
+        setOnClickToButton(view, VISIBILITY_SWITCH_ID, () -> {
+            action.run();
+            resetVisibilitySwitchIcon(switchIcon, getSwitchStatus.apply(null));
+        });
     }
 }
