@@ -48,10 +48,11 @@ Record::Record() {
     created_at = DateTime();
     updated_at = DateTime();
     viewed_at = DateTime();
+    totalValueVisibility = DEFAULT_TOTAL_VALUE_VISIBILITY;
 }
 
 // Конструктор, що використовується для створення тестових записів
-Record::Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at) {
+Record::Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility) {
 
     strncpy(this->title, title, MAX_TITLE_LENGTH - 1);
     this->title[MAX_TITLE_LENGTH - 1] = '\0';
@@ -72,6 +73,7 @@ Record::Record(const char* title, const char* text, const int category_id, const
     this->created_at = created_at;
     this->updated_at = updated_at;
     this->viewed_at = viewed_at;
+    this->totalValueVisibility = totalValueVisibility;
 }
 
 // Друк запису у лог
@@ -115,6 +117,10 @@ const DateTime Record::getUpdated_at() const {
 
 const DateTime Record::getViewed_at() const {
     return viewed_at;
+}
+
+const bool Record::getTotalValueVisibility() const {
+    return totalValueVisibility;
 }
 
 const int Record::getMaxFields() {

@@ -92,7 +92,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Z)V");
 
     std::vector<Record> records;
 
@@ -115,7 +115,8 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
         jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, jIconId,
                                               getDateTimeObj(env, record.getCreated_at()),
                                               getDateTimeObj(env, record.getUpdated_at()),
-                                              getDateTimeObj(env, record.getViewed_at()));
+                                              getDateTimeObj(env, record.getViewed_at()),
+                                              (bool)record.getTotalValueVisibility());
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
         // Заповнюємо массив об`єктів Field в Java
@@ -405,12 +406,14 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
         jfieldID categoryIdField = env->GetFieldID(recordClass, "category_id", "Ljava/lang/Integer;");
         jfieldID bookmarkField = env->GetFieldID(recordClass, "bookmark", "Ljava/lang/Boolean;");
         jfieldID iconIdField = env->GetFieldID(recordClass, "icon_id", "Ljava/lang/String;");
+        jfieldID TotalValueVisibilityField = env->GetFieldID(recordClass, "totalValueVisibility", "Z");
 
         jstring title = static_cast<jstring>(env->GetObjectField(recordObj, titleField));
         jstring text = static_cast<jstring>(env->GetObjectField(recordObj, textField));
         jobject category_idObj = env->GetObjectField(recordObj, categoryIdField);
         jobject bookmarkObj = env->GetObjectField(recordObj, bookmarkField);
         jstring icon_id = static_cast<jstring>(env->GetObjectField(recordObj, iconIdField));
+        jboolean jTotalValueVisibility = env->GetBooleanField(recordObj, TotalValueVisibilityField);
 
         const char* titleStr = env->GetStringUTFChars(title, nullptr);
         const char* textStr = env->GetStringUTFChars(text, nullptr);
@@ -435,6 +438,8 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
 
         int fieldsCount = env->GetArrayLength(fieldsArray);
         std::vector<Record::Field> cppFields;
+
+        bool totalValueVisibility = static_cast<bool>(jTotalValueVisibility);
 
         for (int j = 0; j < fieldsCount; ++j) {
             jobject fieldObj = env->GetObjectArrayElement(fieldsArray, j);
@@ -461,7 +466,8 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
         Record record{titleStr, textStr, category_id, bookmark, icon_idStr, cppFields.data(),
                       getDateTimeObj(env, recordClass, recordObj, "created_at"),
                       getDateTimeObj(env, recordClass, recordObj, "updated_at"),
-                      getDateTimeObj(env, recordClass, recordObj, "viewed_at")};
+                      getDateTimeObj(env, recordClass, recordObj, "viewed_at"),
+                      totalValueVisibility};
 
         writeToBinFile(getRecordsFilePath(),
                        reinterpret_cast<char*>(&record),
@@ -598,7 +604,7 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Z)V");
 
     for (const auto& record : records) {
         jstring jTitle = env->NewStringUTF(record.getTitle());
@@ -614,7 +620,8 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
         jobject recordObject = env->NewObject(recordClass, recordConstructor, jTitle, jText, jCategory, jBookmark, jIconId,
                                               getDateTimeObj(env, record.getCreated_at()),
                                               getDateTimeObj(env, record.getUpdated_at()),
-                                              getDateTimeObj(env, record.getViewed_at()));
+                                              getDateTimeObj(env, record.getViewed_at()),
+                                              (bool)record.getTotalValueVisibility());
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
 

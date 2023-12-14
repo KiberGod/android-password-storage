@@ -17,16 +17,16 @@
 static std::string FILES_PATH;
 
 // Тестовий файл записів
-static const std::string RECORDS_FILE = "/records_v5.bin";
+static const std::string RECORDS_FILE = "/records_v6.bin";
 
 // Прихована буферна копія файла записів
-static const std::string HIDDEN_RECORDS_FILE = "/hidden_records_v5.bin";
+static const std::string HIDDEN_RECORDS_FILE = "/hidden_records_v6.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories_v5.bin";
+static const std::string CATEGORIES_FILE = "/categories_v6.bin";
 
 // Прихована буферна копія файла категорій
-static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v5.bin";
+static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v6.bin";
 
 // Файл налаштуваннь
 static const std::string SETTINGS_FILE = "/settings.bin";

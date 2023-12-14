@@ -132,6 +132,12 @@ public class SharedRecordsDataViewModel extends ViewModel {
         saveRecords(records);
     }
 
+    // Редагування глобального значення захисту запису
+    public void editToTalValueVisibilityInRecordByIndex(int index) {
+        records.get(index).inversionTotalValueVisibility();
+        saveRecords(records);
+    }
+
     // Повертає id іконки запису за індексом
     public String getRecordIconIdByIndex(int index) { return records.get(index).getIconId(); }
 
@@ -143,6 +149,9 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Повертає останню дату перегляду запису за індексом
     public String getRecordViewed_atByIndex(int index) { return records.get(index).getViewed_at(); }
+
+    // Повертає глобальне значення захисту запису за індексом
+    public boolean getRecordToTalValueVisibilityByIndex(int index) { return records.get(index).getTotalValueVisibility(); }
 
     // Оновлює останню дату перегляду запису за індексом
     public void updateRecordViewed_atByIndex(int index) {

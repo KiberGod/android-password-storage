@@ -59,13 +59,15 @@ private:
     DateTime created_at;
     DateTime updated_at;
     DateTime viewed_at;
+    bool totalValueVisibility;
 
 public:
     static const int NULL_CATEGORY_VALUE = -1;
     static const bool NULL_BOOKMARK_VALUE = false;
+    static const bool DEFAULT_TOTAL_VALUE_VISIBILITY = false;
 
     Record();
-    Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at);
+    Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility);
     void printLog();
     const Field* getFields() const;
     const char* getTitle() const;
@@ -76,6 +78,7 @@ public:
     const DateTime getCreated_at() const;
     const DateTime getUpdated_at() const;
     const DateTime getViewed_at() const;
+    const bool getTotalValueVisibility() const;
 
     static const int getMaxFields();
 };

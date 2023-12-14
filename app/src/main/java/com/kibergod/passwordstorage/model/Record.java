@@ -79,16 +79,18 @@ public class Record {
     private DateTime updated_at;
     private DateTime viewed_at;
 
+    private boolean totalValueVisibility;
 
     public static final String NULL_ICON_ID_VALUE = "vector_template_image";
     public static final Integer NULL_CATEGORY_VALUE = -1;
     public static final boolean NULL_BOOKMARK_VALUE = false;
+    public static  final boolean DEFAULT_TOTAL_VALUE_VISIBILITY = false;
 
     public static final Integer MAX_FIELDS_LENGTH = 10;
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
-    private void init(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at) {
+    private void init(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
         this.title = title;
         this.text = text;
         this.category_id = category_id;
@@ -98,14 +100,15 @@ public class Record {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.viewed_at = viewed_at;
+        this.totalValueVisibility = totalValueVisibility;
     }
 
     public Record(String title, String text, Integer category_id, String icon_id) {
-        init(title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime());
+        init(title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY);
     }
 
-    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at) {
-        init(title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at);
+    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
+        init(title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility);
     }
 
 
@@ -143,6 +146,7 @@ public class Record {
     public String getCreated_at() {return created_at.getTimestamp(); }
     public String getUpdated_at() {return updated_at.getTimestamp(); }
     public String getViewed_at() {return viewed_at.getTimestamp(); }
+    public boolean getTotalValueVisibility() { return totalValueVisibility; }
 
     public void setUpdated_at() { updated_at.update(); }
     public void setViewed_at() { viewed_at.update(); }
@@ -173,4 +177,5 @@ public class Record {
         bookmark = !bookmark;
     }
 
+    public void inversionTotalValueVisibility() { totalValueVisibility = !totalValueVisibility; }
 }
