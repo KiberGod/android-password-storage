@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/black"
     android:orientation="vertical"
     tools:context=".ui.pages.storage.sections.EditRecordFragment">
 
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Редагування запису"
-                android:textColor="@color/gray_text"
+                android:textColor="@color/purple"
                 android:textSize="20sp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp" />

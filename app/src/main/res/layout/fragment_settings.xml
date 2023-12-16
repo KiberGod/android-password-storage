@@ -27,7 +27,7 @@
                 android:layout_height="30dp"
                 android:text="Налаштування"
                 android:textSize="18dp"
-                android:textColor="@color/gray_text" />
+                android:textColor="@color/purple" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

@@ -171,7 +171,7 @@ public class RabbitSupport {
                 R.drawable.vector__phone_lock,
                 R.drawable.vector__eraser,
                 R.drawable.vector__running_rabbit,
-                R.drawable.vector_hopping_rabbit
+                R.drawable.vector__hopping_rabbit
         }[id];
     }
 

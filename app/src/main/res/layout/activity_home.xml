@@ -8,55 +8,77 @@
     android:background="#000000"
     tools:context=".ui.pages.HomeActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <LinearLayout
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="77dp"
-        android:background="@color/gray"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="3dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Rabbit Hole"
-        app:titleMargin="0dp"
-        app:titleMarginStart="85dp"
-        app:titleTextColor="#FFFFFF" />
+        android:background="@drawable/background_modern_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:background="@drawable/background_rounded_toolbar">
+
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="60dp"
+                android:src="@drawable/vector_logo_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:text="Rabbit Hole"
+                android:textColor="@color/white"
+                android:textSize="20dp"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationViewContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
     </FrameLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <LinearLayout
+        android:id="@+id/bottomNavigationViewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray"
-        app:itemActiveIndicatorStyle="@null"
-        app:itemIconSize="37dp"
-        app:itemIconTint="@drawable/colors_bottom_nav_menu_button"
-        app:itemTextColor="@drawable/colors_bottom_nav_menu_text"
+        android:orientation="vertical"
+        android:paddingTop="3dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        android:background="@drawable/background_modern_card">
 
-    <ImageView
-        android:layout_width="85dp"
-        android:layout_height="60dp"
-        android:src="@drawable/vector_logo_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.411" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_rounded_navbar"
+            app:itemActiveIndicatorStyle="@null"
+            app:itemIconSize="37dp"
+            app:itemIconTint="@drawable/colors_bottom_nav_menu_button"
+            app:itemTextColor="@drawable/colors_bottom_nav_menu_text"
+            app:menu="@menu/bottom_nav_menu" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

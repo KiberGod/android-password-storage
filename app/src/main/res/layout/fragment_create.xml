@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Створення нової хованки"
-            android:textColor="@color/gray_text"
+            android:textColor="@color/purple"
             android:textSize="20sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
@@ -46,7 +46,7 @@
                     android:id="@+id/createPageImg"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:src="@drawable/vector_hopping_rabbit"
+                    android:src="@drawable/vector__hopping_rabbit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

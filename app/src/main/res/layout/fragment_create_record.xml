@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Створення нового запису"
-                android:textColor="@color/gray_text"
+                android:textColor="@color/purple"
                 android:textSize="20sp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp" />
