@@ -238,7 +238,7 @@ public class ToolbarBuilder {
         if (switchStatus) {
             switchIcon.setImageResource(R.drawable.vector__close_god_eye);
         } else {
-            switchIcon.setImageResource(R.drawable.vector__open_god_eye);
+            switchIcon.setImageResource(R.drawable.vector__focused_eye);
         }
     }
 
