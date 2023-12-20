@@ -135,13 +135,13 @@ public class ShowRecordFragment extends Fragment {
         }
 
         TextView recordCreated_at = view.findViewById(R.id.recordCreated_at);
-        recordCreated_at.setText("Дата створення: " + sharedRecordsDataViewModel.getRecordCreated_atByIndex(recordIndex));
+        recordCreated_at.setText(sharedRecordsDataViewModel.getRecordCreated_atByIndex(recordIndex));
 
         TextView recordUpdated_at = view.findViewById(R.id.recordUpdated_at);
-        recordUpdated_at.setText("Останнє оновлення: " + sharedRecordsDataViewModel.getRecordUpdated_atByIndex(recordIndex));
+        recordUpdated_at.setText(sharedRecordsDataViewModel.getRecordUpdated_atByIndex(recordIndex));
 
         TextView recordViewed_at = view.findViewById(R.id.recordViewed_at);
-        recordViewed_at.setText("Дата попреденього перегляду: " + sharedRecordsDataViewModel.getRecordViewed_atByIndex(recordIndex));
+        recordViewed_at.setText(sharedRecordsDataViewModel.getRecordViewed_atByIndex(recordIndex));
 
         updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex));
     }
