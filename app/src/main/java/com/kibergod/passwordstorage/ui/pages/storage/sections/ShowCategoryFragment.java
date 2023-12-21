@@ -16,6 +16,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 public class ShowCategoryFragment extends Fragment {
 
@@ -55,8 +56,10 @@ public class ShowCategoryFragment extends Fragment {
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false, true, false,false,false,false);
+        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryIndex));
+
         printCategoryData(view);
-        setOnClickToEditCategoryButton(view);
 
         sharedCategoriesDataViewModel.updateCategoryViewed_atByIndex(categoryIndex);
         return view;
@@ -68,7 +71,7 @@ public class ShowCategoryFragment extends Fragment {
         categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameByIndex(categoryIndex));
         TextView categoryRecordCounter = view.findViewById(R.id.categoryRecordCounter);
         categoryRecordCounter.setText(
-                "Кількість записів з даною категорією: " +
+                "Знайдено записів з даною категорією: " +
                         sharedRecordsDataViewModel.getRecordCountByCategoryId(
                                 sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
                         )
@@ -80,23 +83,12 @@ public class ShowCategoryFragment extends Fragment {
         );
 
         TextView categoryCreated_at = view.findViewById(R.id.categoryCreated_at);
-        categoryCreated_at.setText("Дата створення: " + sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(categoryIndex));
+        categoryCreated_at.setText(sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(categoryIndex));
 
         TextView categoryUpdated_at = view.findViewById(R.id.categoryUpdated_at);
-        categoryUpdated_at.setText("Останнє оновлення: " + sharedCategoriesDataViewModel.getCategoryUpdated_atByIndex(categoryIndex));
+        categoryUpdated_at.setText(sharedCategoriesDataViewModel.getCategoryUpdated_atByIndex(categoryIndex));
 
         TextView categoryViewed_at = view.findViewById(R.id.categoryViewed_at);
-        categoryViewed_at.setText("Дата попреденього перегляду: " + sharedCategoriesDataViewModel.getCategoryViewed_atByIndex(categoryIndex));
-    }
-
-    // Функція встановлює подію переходу на сторінку редагувння категорії по натисненню кнопки
-    private void setOnClickToEditCategoryButton(View view) {
-        Button button = view.findViewById(R.id.openEditCategoryPageButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryIndex);
-            }
-        });
+        categoryViewed_at.setText(sharedCategoriesDataViewModel.getCategoryViewed_atByIndex(categoryIndex));
     }
 }

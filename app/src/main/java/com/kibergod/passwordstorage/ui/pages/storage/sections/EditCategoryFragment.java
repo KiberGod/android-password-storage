@@ -72,7 +72,7 @@ public class EditCategoryFragment extends Fragment {
 
         homeViewModel.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
 
-        tempIconId = "vector_template_image";
+        tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdById(categoryIndex);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, false, true,true);
 
