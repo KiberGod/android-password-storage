@@ -430,4 +430,21 @@ public class HomeActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    // Згорнути / розгорнути картку-випадаюче меню
+    public void setOnClickToDropdownLayout(View view, int idLayoutHead, int idLayoutBody) {
+        LinearLayout editLayoutHead = view.findViewById(idLayoutHead);
+        LinearLayout editLayoutBody = view.findViewById(idLayoutBody);
+        editLayoutBody.setVisibility(View.GONE);
+        editLayoutHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editLayoutBody.getVisibility() == View.VISIBLE) {
+                    editLayoutBody.setVisibility(View.GONE);
+                } else {
+                    editLayoutBody.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
 }

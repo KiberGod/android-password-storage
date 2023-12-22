@@ -105,6 +105,17 @@ public class SharedRecordsDataViewModel extends ViewModel {
         saveRecords(records);
     }
 
+    // Повертає список записів, що мають задану категорію
+    public ArrayList<Record> getRecordsByCategoryId(Integer category_id) {
+        ArrayList<Record> dependentRecords = new ArrayList<>();
+        for (Record record: records) {
+            if (record.getCategoryId().equals(category_id)) {
+                dependentRecords.add(record);
+            }
+        }
+        return dependentRecords;
+    }
+
     // Повертає кількість записів, що мають задану категорію
     public int getRecordCountByCategoryId(Integer category_id) {
         int recordCounter = 0;
@@ -204,5 +215,15 @@ public class SharedRecordsDataViewModel extends ViewModel {
     // Безумовно конвертує отриману змінну у захищену форму
     public String getRecordProtectedValueByIndex(String value) {
         return Record.getProtectedValue(value);
+    }
+
+    // Повертає ідентифікатор запису за єкземпляром об`єкта запису
+    public int getRecordIndexByRecordObj(Record record) {
+        for (int i=0; i<records.size(); i++) {
+            if (records.get(i).equals(record)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

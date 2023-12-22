@@ -79,7 +79,7 @@ public class SettingsFragment extends Fragment {
         setOnClickToSavePasswordButton(view);
         setOnChangeToCalendar(view);
         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
-        setOnClickToEditPassLayout(view);
+        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED, requireContext(), R.id.blurViewInSettingsPage);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.INP_CALC_CLEARING, requireContext(), R.id.blurViewInSettingsPage);
@@ -333,22 +333,5 @@ public class SettingsFragment extends Fragment {
     private void hideKeyBoard(InputMethodManager inputMethodManager, View view, int id) {
         EditText editText = view.findViewById(id);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
-
-    // Встановлення логіки поведінки поля редагування паролю
-    private void setOnClickToEditPassLayout(View view) {
-        LinearLayout editPasswordLayoutHead = view.findViewById(R.id.editPasswordLayoutHead);
-        LinearLayout editPasswordLayoutBody = view.findViewById(R.id.editPasswordLayoutBody);
-        editPasswordLayoutBody.setVisibility(View.GONE);
-        editPasswordLayoutHead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editPasswordLayoutBody.getVisibility() == View.VISIBLE) {
-                    editPasswordLayoutBody.setVisibility(View.GONE);
-                } else {
-                    editPasswordLayoutBody.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 }

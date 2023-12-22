@@ -99,6 +99,7 @@ public class ShowRecordFragment extends Fragment {
                 });
 
         printRecordData(view);
+        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody);
         sharedRecordsDataViewModel.updateRecordViewed_atByIndex(recordIndex);
         return view;
     }
@@ -134,13 +135,13 @@ public class ShowRecordFragment extends Fragment {
             }
         }
 
-        TextView recordCreated_at = view.findViewById(R.id.recordCreated_at);
+        TextView recordCreated_at = view.findViewById(R.id.created_at);
         recordCreated_at.setText(sharedRecordsDataViewModel.getRecordCreated_atByIndex(recordIndex));
 
-        TextView recordUpdated_at = view.findViewById(R.id.recordUpdated_at);
+        TextView recordUpdated_at = view.findViewById(R.id.updated_at);
         recordUpdated_at.setText(sharedRecordsDataViewModel.getRecordUpdated_atByIndex(recordIndex));
 
-        TextView recordViewed_at = view.findViewById(R.id.recordViewed_at);
+        TextView recordViewed_at = view.findViewById(R.id.viewed_at);
         recordViewed_at.setText(sharedRecordsDataViewModel.getRecordViewed_atByIndex(recordIndex));
 
         updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex));
