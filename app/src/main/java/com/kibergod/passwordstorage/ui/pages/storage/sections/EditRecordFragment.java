@@ -301,13 +301,7 @@ public class EditRecordFragment extends Fragment {
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
             if (needScroll) {
-                ScrollView scrollView = view.findViewById(R.id.scrollView);
-                scrollView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
+                ((HomeActivity) requireActivity()).setScrollToBottom(view, R.id.scrollView);
             }
         }
     }

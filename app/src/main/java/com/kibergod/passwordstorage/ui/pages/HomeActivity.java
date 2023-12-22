@@ -423,6 +423,17 @@ public class HomeActivity extends AppCompatActivity {
         scrollView.smoothScrollTo(0, 0);
     }
 
+    // Автоскролл у самий низ сторінки
+    public void setScrollToBottom(View view, int scrollId) {
+        ScrollView scrollView = view.findViewById(scrollId);
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+    }
+
     // Повертає об`єкт вібратора
     public Vibrator getVibrator() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
@@ -443,6 +454,7 @@ public class HomeActivity extends AppCompatActivity {
                     editLayoutBody.setVisibility(View.GONE);
                 } else {
                     editLayoutBody.setVisibility(View.VISIBLE);
+                    setScrollToBottom(view, R.id.scrollView);
                 }
             }
         });

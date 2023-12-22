@@ -136,12 +136,12 @@ public class CreateRecordFragment extends Fragment {
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
                 params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView2);
+                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
             params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView2);
+            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
         }
         textViewStatus.setLayoutParams(params);
     }
@@ -201,13 +201,7 @@ public class CreateRecordFragment extends Fragment {
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
-            ScrollView scrollView = view.findViewById(R.id.scrollView2);
-            scrollView.post(new Runnable() {
-                @Override
-                public void run() {
-                    scrollView.fullScroll(View.FOCUS_DOWN);
-                }
-            });
+            ((HomeActivity) requireActivity()).setScrollToBottom(view, R.id.scrollView);
         }
     }
 
