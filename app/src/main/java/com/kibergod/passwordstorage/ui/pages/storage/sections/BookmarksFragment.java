@@ -37,7 +37,7 @@ public class BookmarksFragment extends Fragment {
 
     // Функція виводить весь список закладок
     private void drawButtonList(View view) {
-        for (int i=0; i<sharedRecordsDataViewModel.getRecordsCount(); i++) {
+        for (int i=sharedRecordsDataViewModel.getRecordsCount()-1; i != -1; i--) {
             if (sharedRecordsDataViewModel.getBookmarkByIndex(i)) {
                 String icon_id;
                 if (sharedRecordsDataViewModel.needSetCategoryIconByIndex(i)) {
@@ -48,22 +48,17 @@ public class BookmarksFragment extends Fragment {
                     icon_id = sharedRecordsDataViewModel.getRecordIconIdByIndex(i);
                 }
 
-                Button button = ((HomeActivity) requireActivity()).drawButton(
+                final int index = i;
+                ((HomeActivity) requireActivity()).drawButton(
                         view,
                         requireContext(),
                         sharedRecordsDataViewModel.getRecordTitleByIndex(i),
                         R.id.bookmarksScrollArea,
-                        icon_id
+                        icon_id,
+                        sharedRecordsDataViewModel.getRecordCreated_atByIndex(i),
+                        () -> ((HomeActivity) requireActivity()).setShowRecordFragment(index)
                 );
-                final int index = i;
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((HomeActivity) requireActivity()).setShowRecordFragment(index);
-                    }
-                });
             }
         }
     }
-
 }

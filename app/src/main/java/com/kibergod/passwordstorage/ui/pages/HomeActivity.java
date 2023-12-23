@@ -218,38 +218,33 @@ public class HomeActivity extends AppCompatActivity {
         navigateToFragment(passwordGeneratorFragment, null);
     }
 
-    // Функція додає кнопку запису або категорії
-    public Button drawButton(View view, Context context, String title, int id_scrollArea, String icon_id) {
-        Button button = new Button(context);
-        button.setText(title);
-        button.setTextColor(ContextCompat.getColor(context, R.color.gray_text));
+    // Функція додає картку запису або категорії
+    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String created_at, Runnable action) {
+        LinearLayout parentContainer = view.findViewById(id_scrollArea);
+        View itemView = getLayoutInflater().inflate(R.layout.fragment_show_item, null);
 
-        GradientDrawable roundedRectangle = new GradientDrawable();
-        roundedRectangle.setColor(ContextCompat.getColor(context, R.color.gray_2));
-        roundedRectangle.setCornerRadius(36);
-        ViewCompat.setBackground(button, roundedRectangle);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, convertDPtoPX(15), 0, 0);
 
-        int iconResourceId = getResources().getIdentifier(icon_id, "drawable", context.getPackageName());
-        ImageView vectorImageView = getResizeIcon(context, iconResourceId);
+        TextView itemName = itemView.findViewById(R.id.itemName);
+        itemName.setText(title);
 
-        vectorImageView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        TextView itemCreated_at = itemView.findViewById(R.id.itemCreated_at);
+        itemCreated_at.setText(created_at);
 
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        buttonParams.gravity = Gravity.CENTER;
-        buttonParams.bottomMargin = 20;
-        buttonParams.topMargin = 20;
-        buttonParams.rightMargin = 40;
-        buttonParams.leftMargin = 40;
-        button.setLayoutParams(buttonParams);
+        ImageView itemIcon = itemView.findViewById(R.id.itemIcon);
+        itemIcon.setImageResource(getResources().getIdentifier(icon_id, "drawable", context.getPackageName()));
 
-        button.setCompoundDrawablesWithIntrinsicBounds(vectorImageView.getDrawable(), null, null, null);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                action.run();
+            }
+        });
 
-        LinearLayout rootLayout = view.findViewById(id_scrollArea);
-        rootLayout.addView(button);
-
-        return button;
+        parentContainer.addView(itemView, layoutParams);
     }
 
     // Функція відмальовує вспливаюче вікно вибору іконки

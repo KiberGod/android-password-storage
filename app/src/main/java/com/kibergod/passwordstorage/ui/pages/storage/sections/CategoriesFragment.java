@@ -33,21 +33,17 @@ public class CategoriesFragment extends Fragment {
 
     // Функція виводить весь список категорій
     private void drawButtonList(View view) {
-        for (int i=0; i<sharedCategoriesDataViewModel.getCategoriesCount(); i++) {
-            Button button = ((HomeActivity) requireActivity()).drawButton(
+        for (int i=sharedCategoriesDataViewModel.getCategoriesCount()-1; i != -1; i--) {
+            final int index = i;
+            ((HomeActivity) requireActivity()).drawButton(
                     view,
                     requireContext(),
                     sharedCategoriesDataViewModel.getCategoryNameByIndex(i),
                     R.id.categoriesScrollArea,
-                    sharedCategoriesDataViewModel.getCategoryIconIdByIndex(i)
+                    sharedCategoriesDataViewModel.getCategoryIconIdByIndex(i),
+                    sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(i),
+                    () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(index)
             );
-            final int index = i;
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((HomeActivity) requireActivity()).setShowCategoryFragment(index);
-                }
-            });
         }
     }
 }
