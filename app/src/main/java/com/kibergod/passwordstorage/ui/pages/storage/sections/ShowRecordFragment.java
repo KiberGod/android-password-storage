@@ -99,7 +99,7 @@ public class ShowRecordFragment extends Fragment {
                 });
 
         printRecordData(view);
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody);
+        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
         sharedRecordsDataViewModel.updateRecordViewed_atByIndex(recordIndex);
         return view;
     }

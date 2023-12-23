@@ -79,7 +79,7 @@ public class SettingsFragment extends Fragment {
         setOnClickToSavePasswordButton(view);
         setOnChangeToCalendar(view);
         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody);
+        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody, false);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED, requireContext(), R.id.blurViewInSettingsPage);
         ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.INP_CALC_CLEARING, requireContext(), R.id.blurViewInSettingsPage);

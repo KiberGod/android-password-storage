@@ -66,8 +66,8 @@ public class ShowCategoryFragment extends Fragment {
 
         printCategoryData(view);
 
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.categoryStatisticHead, R.id.categoryStatisticBody);
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody);
+        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.categoryStatisticHead, R.id.categoryStatisticBody, false);
+        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
         sharedCategoriesDataViewModel.updateCategoryViewed_atByIndex(categoryIndex);
         return view;
     }

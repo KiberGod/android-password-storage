@@ -438,7 +438,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Згорнути / розгорнути картку-випадаюче меню
-    public void setOnClickToDropdownLayout(View view, int idLayoutHead, int idLayoutBody) {
+    public void setOnClickToDropdownLayout(View view, int idLayoutHead, int idLayoutBody, boolean needScroll) {
         LinearLayout editLayoutHead = view.findViewById(idLayoutHead);
         LinearLayout editLayoutBody = view.findViewById(idLayoutBody);
         editLayoutBody.setVisibility(View.GONE);
@@ -449,7 +449,9 @@ public class HomeActivity extends AppCompatActivity {
                     editLayoutBody.setVisibility(View.GONE);
                 } else {
                     editLayoutBody.setVisibility(View.VISIBLE);
-                    setScrollToBottom(view, R.id.scrollView);
+                    if (needScroll) {
+                        setScrollToBottom(view, R.id.scrollView);
+                    }
                 }
             }
         });
