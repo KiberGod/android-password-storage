@@ -112,7 +112,14 @@ public class ShowRecordFragment extends Fragment {
             category = homeViewModel.getEmptyCategoryText();
         }
         setTextViewText(view, R.id.recordCategory, category);
-        setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+
+        if (sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex).equals("")) {
+            LinearLayout linearLayout = view.findViewById(R.id.recordMainTextLayout);
+            ViewGroup parentLayout = (ViewGroup) linearLayout.getParent();
+            parentLayout.removeView(linearLayout);
+        } else {
+            setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+        }
 
         if (!sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)).equals("")) {
             ImageView categoryIcon = view.findViewById(R.id.recordCategoryIcon);
@@ -250,8 +257,10 @@ public class ShowRecordFragment extends Fragment {
     // Встановлення параметрів до полів, на яких розповсюджується захист перегляду
     private void setParamsToProtectedTextView(View view, String mainTextValue, int textColorId) {
         TextView mainText = view.findViewById(R.id.mainRecordText);
-        mainText.setText(mainTextValue);
-        mainText.setTextColor(requireContext().getColor(textColorId));
+        if (mainText != null) {
+            mainText.setText(mainTextValue);
+            mainText.setTextColor(requireContext().getColor(textColorId));
+        }
 
         for (int i=0; i<protectedTextViews.size(); i++) {
             protectedTextViews.get(i).setTextColor(requireContext().getColor(textColorId));
