@@ -35,6 +35,7 @@ const bool Record::Field::getValueVisibility() const {
 
 // Конструктор, що використовується програмою під час парсингу бінарного файлу даних
 Record::Record() {
+    id = 0;
     title[0] = '\0';
     text[0] = '\0';
     category_id = NULL_CATEGORY_VALUE;
@@ -52,7 +53,9 @@ Record::Record() {
 }
 
 // Конструктор, що використовується для створення тестових записів
-Record::Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility) {
+Record::Record(const int id, const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility) {
+
+    this->id = id;
 
     strncpy(this->title, title, MAX_TITLE_LENGTH - 1);
     this->title[MAX_TITLE_LENGTH - 1] = '\0';
@@ -86,6 +89,10 @@ void Record::printLog() {
 
 const Record::Field* Record::getFields() const {
     return fields;
+}
+
+const int Record::getId() const {
+    return id;
 }
 
 const char* Record::getTitle() const {

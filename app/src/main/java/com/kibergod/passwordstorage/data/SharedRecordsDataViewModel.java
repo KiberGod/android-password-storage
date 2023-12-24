@@ -86,7 +86,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Створення нового запису да додавання його до списку
     public void addRecord(String title, String text,  Integer category_id, String icon_id, ArrayList<String> fieldNames, ArrayList<String> fieldValues) {
-        Record record = new Record(title, text, category_id, icon_id);
+        Record record = new Record(generateNewId(), title, text, category_id, icon_id);
         record.setFields(fieldNames, fieldValues);
         records.add(record);
         saveRecords(records);
@@ -225,5 +225,14 @@ public class SharedRecordsDataViewModel extends ViewModel {
             }
         }
         return -1;
+    }
+
+    // Функція створює новий ідентифікатор на основі існуючого найстаршого
+    private int generateNewId() {
+        if (records.size() != 0) {
+            return records.get(records.size() - 1).getId() +1;
+        } else {
+            return 0;
+        }
     }
 }

@@ -53,6 +53,7 @@ public class Record {
         }
     }
 
+    private int id;
     private String title;
     private String text;
 
@@ -86,7 +87,8 @@ public class Record {
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
-    private void init(String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
+    private void init(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
+        this.id = id;
         this.title = title;
         this.text = text;
         this.category_id = category_id;
@@ -99,17 +101,19 @@ public class Record {
         this.totalValueVisibility = totalValueVisibility;
     }
 
-    public Record(String title, String text, Integer category_id, String icon_id) {
-        init(title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY);
+    public Record(int id, String title, String text, Integer category_id, String icon_id) {
+        init(id, title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY);
     }
 
-    public Record(String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
-        init(title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility);
+    public Record(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
+        init(id, title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility);
     }
 
 
     public static int getMaxFieldNameLength() { return Field.MAX_NAME_LENGTH; }
     public static int getMaxFieldValueLength() { return Field.MAX_VALUE_LENGTH; }
+
+    public int getId() { return id; }
 
     public String getTitle() {
         return title;

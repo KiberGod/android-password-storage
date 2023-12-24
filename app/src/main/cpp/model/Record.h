@@ -42,6 +42,7 @@ private:
     static const int MAX_ICON_ID_LENGTH = 35;
 
     Field fields[MAX_FIELDS_LENGTH];
+    int id;
     char title[MAX_TITLE_LENGTH];
     char text[MAX_TEXT_LENGTH];
 
@@ -67,9 +68,10 @@ public:
     static const bool DEFAULT_TOTAL_VALUE_VISIBILITY = false;
 
     Record();
-    Record(const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility);
+    Record(const int id, const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility);
     void printLog();
     const Field* getFields() const;
+    const int getId() const;
     const char* getTitle() const;
     const char* getText() const;
     const int getCategoryId() const;
