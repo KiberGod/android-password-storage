@@ -1,11 +1,11 @@
 package com.kibergod.passwordstorage.data;
 
-import static com.kibergod.passwordstorage.NativeController.getRecords;
 import static com.kibergod.passwordstorage.NativeController.saveCategories;
 import static com.kibergod.passwordstorage.NativeController.saveRecords;
 
 import androidx.lifecycle.ViewModel;
 
+import com.kibergod.passwordstorage.NativeController;
 import com.kibergod.passwordstorage.model.Record;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Ініціалізація списку записів
     public void setRecords() {
-        records = getRecords();
+        records = NativeController.getRecords();
     }
 
     // Повертає індекс запису за ідентифікатором
@@ -36,11 +36,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
             }
         }
         return -1;
-    }
-
-    // Повертає ідентифікатор за індексом (повинно бути вирізано у наступних етапах)
-    public int getRecordIdByIndex(int index) {
-        return records.get(index).getId();
     }
 
     // Повертає назву запису за ідентифікатором у списку
@@ -249,5 +244,25 @@ public class SharedRecordsDataViewModel extends ViewModel {
         } else {
             return 0;
         }
+    }
+
+    // Безумовно повертає всі існуючі записи
+    public ArrayList<Record> getRecords() {
+        return records;
+    }
+
+    // Повертає всі записи, що містять заданий пошуковий параметр у назві (з ігноруванням регістру)
+    public ArrayList<Record> getRecords(String searchPram) {
+        if (searchPram.equals("")) {
+            return getRecords();
+        }
+
+        ArrayList<Record> foundRecords = new ArrayList<>();
+        for (Record record: records) {
+            if (record.getTitle().toLowerCase().contains(searchPram.toLowerCase())) {
+                foundRecords.add(record);
+            }
+        }
+        return foundRecords;
     }
 }

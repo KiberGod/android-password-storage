@@ -24,6 +24,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -32,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -455,5 +458,32 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Встановлення слухача змін для поля пошуку
+    public void setTextChangedListenerToSearchBar(View view, int idClearLinear, Runnable action) {
+        EditText searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                clearObjects(view, idClearLinear);
+                action.run();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+    }
+
+    // Очищення поля з записами / картегоріями / закладками
+    private void clearObjects(View view, int idClearLinear) {
+        LinearLayout linearLayout = view.findViewById(idClearLinear);
+        if (linearLayout != null) {
+            linearLayout.removeAllViews();
+        }
     }
 }

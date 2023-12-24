@@ -9,11 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+
+import java.util.ArrayList;
 
 
 public class BookmarksFragment extends Fragment {
@@ -29,7 +33,7 @@ public class BookmarksFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
-
+        ((HomeActivity) requireActivity()).setTextChangedListenerToSearchBar(view, R.id.bookmarksScrollArea, () -> drawButtonList(view));
         drawButtonList(view);
 
         return view;
@@ -37,8 +41,11 @@ public class BookmarksFragment extends Fragment {
 
     // Функція виводить весь список закладок
     private void drawButtonList(View view) {
-        for (int i=sharedRecordsDataViewModel.getRecordsCount()-1; i != -1; i--) {
-            final int id = sharedRecordsDataViewModel.getRecordIdByIndex(i);
+        EditText searchEditText = getActivity().findViewById(R.id.searchEditText);
+        ArrayList<Record> foundRecords = sharedRecordsDataViewModel.getRecords(searchEditText.getText().toString());
+
+        for (int i=foundRecords.size()-1; i != -1; i--) {
+            final int id = foundRecords.get(i).getId();
             if (sharedRecordsDataViewModel.getBookmarkById(id)) {
                 String icon_id;
                 if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
