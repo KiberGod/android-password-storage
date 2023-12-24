@@ -104,12 +104,12 @@ public class ShowCategoryFragment extends Fragment {
         );
 
         for (int i =0; i<records.size(); i++) {
-            createRecordItem(view,i+1+ ". " + records.get(i).getTitle(), sharedRecordsDataViewModel.getRecordIndexByRecordObj(records.get(i)));
+            createRecordItem(view,i+1+ ". " + records.get(i).getTitle(), sharedRecordsDataViewModel.getRecordIdByRecordObj(records.get(i)));
         }
     }
 
     // Створення поля запису категорії
-    private void createRecordItem(View view, String recordName, int recordIndex) {
+    private void createRecordItem(View view, String recordName, int recordId) {
         LinearLayout parentContainer = view.findViewById(R.id.categoryStatisticBody);
         View recordItemView = getLayoutInflater().inflate(R.layout.fragment_show_category_record, null);
 
@@ -126,7 +126,7 @@ public class ShowCategoryFragment extends Fragment {
         recordItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) requireActivity()).setShowRecordFragment(recordIndex);
+                ((HomeActivity) requireActivity()).setShowRecordFragment(recordId);
             }
         });
         parentContainer.addView(recordItemView, parentContainer.indexOfChild(placeForRecordList), layoutParams);

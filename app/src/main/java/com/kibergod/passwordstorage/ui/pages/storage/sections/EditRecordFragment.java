@@ -44,9 +44,9 @@ public class EditRecordFragment extends Fragment {
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
 
-    private static final String RECORD_INDEX = "record_index";
+    private static final String RECORD_ID = "record_id";
 
-    private int recordIndex;
+    private int recordId;
 
     private String tempIconId;
 
@@ -61,10 +61,10 @@ public class EditRecordFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static EditRecordFragment newInstance(int recordIndex) {
+    public static EditRecordFragment newInstance(int recordId) {
         EditRecordFragment fragment = new EditRecordFragment();
         Bundle args = new Bundle();
-        args.putInt(RECORD_INDEX, recordIndex);
+        args.putInt(RECORD_ID, recordId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +73,7 @@ public class EditRecordFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            recordIndex = getArguments().getInt(RECORD_INDEX);
+            recordId = getArguments().getInt(RECORD_ID);
         }
     }
 
@@ -93,7 +93,7 @@ public class EditRecordFragment extends Fragment {
 
         textViewStatus = view.findViewById(R.id.editRecordStatus);
 
-        tempIconId = sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex);
+        tempIconId = sharedRecordsDataViewModel.getRecordIconIdById(recordId);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,false,true, true, true,true);
 
@@ -117,15 +117,15 @@ public class EditRecordFragment extends Fragment {
 
     // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
     private void printRecordData(View view) {
-        setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
-        setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+        setTextViewText(view, R.id.editEditRecordTitle, sharedRecordsDataViewModel.getRecordTitleById(recordId));
+        setTextViewText(view, R.id.editEditRecordText, sharedRecordsDataViewModel.getRecordTextById(recordId));
 
         ImageView recordIcon = view.findViewById(R.id.editRecordIcon);
-        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
+        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdById(recordId), "drawable", requireContext().getPackageName()));
 
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
-            String fieldName = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
-            String fieldValue = sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, i);
+            String fieldName = sharedRecordsDataViewModel.getRecordFieldNameById(recordId, i);
+            String fieldValue = sharedRecordsDataViewModel.getRecordFieldValueById(recordId, i);
             if (!fieldName.equals("") || !fieldValue.equals("")) {
                 createNewField(
                         view,
@@ -147,13 +147,13 @@ public class EditRecordFragment extends Fragment {
     private void setCategoriesToDropdownButton(View view) {
         TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
 
-        selectedCategoryTextView.setText(sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)));
+        selectedCategoryTextView.setText(sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId)));
         if (selectedCategoryTextView.getText().toString().equals("")) {
             selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
         } else {
             ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
             selectedCategoryIcon.setImageResource(
-                    getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)), "drawable", requireContext().getPackageName())
+                    getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId)), "drawable", requireContext().getPackageName())
             );
         }
 
@@ -199,11 +199,11 @@ public class EditRecordFragment extends Fragment {
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (recordTitle.length() != 0) {
-            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordIndex)) {
+            if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordId)) {
                 textViewStatus.setText("");
                 int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(((HomeActivity) requireActivity()).getSelectedCategoryName(view));
                 sharedRecordsDataViewModel.editRecord(
-                        recordIndex,
+                        recordId,
                         recordTitle,
                         textInput.getText().toString(),
                         category_id, tempIconId,
@@ -240,7 +240,7 @@ public class EditRecordFragment extends Fragment {
 
     // Оброка видалення запису
     private void deleteRecord() {
-        sharedRecordsDataViewModel.deleteRecord(recordIndex);
+        sharedRecordsDataViewModel.deleteRecord(recordId);
         ((HomeActivity) requireActivity()).setStorageFragment();
     }
 

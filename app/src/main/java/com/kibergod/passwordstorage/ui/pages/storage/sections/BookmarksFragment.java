@@ -38,25 +38,25 @@ public class BookmarksFragment extends Fragment {
     // Функція виводить весь список закладок
     private void drawButtonList(View view) {
         for (int i=sharedRecordsDataViewModel.getRecordsCount()-1; i != -1; i--) {
-            if (sharedRecordsDataViewModel.getBookmarkByIndex(i)) {
+            final int id = sharedRecordsDataViewModel.getRecordIdByIndex(i);
+            if (sharedRecordsDataViewModel.getBookmarkById(id)) {
                 String icon_id;
-                if (sharedRecordsDataViewModel.needSetCategoryIconByIndex(i)) {
+                if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
                     icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
-                            sharedRecordsDataViewModel.getRecordCategory_idByIndex(i)
+                            sharedRecordsDataViewModel.getRecordCategory_idById(id)
                     );
                 } else {
-                    icon_id = sharedRecordsDataViewModel.getRecordIconIdByIndex(i);
+                    icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
                 }
 
-                final int index = i;
                 ((HomeActivity) requireActivity()).drawButton(
                         view,
                         requireContext(),
-                        sharedRecordsDataViewModel.getRecordTitleByIndex(i),
+                        sharedRecordsDataViewModel.getRecordTitleById(id),
                         R.id.bookmarksScrollArea,
                         icon_id,
-                        sharedRecordsDataViewModel.getRecordCreated_atByIndex(i),
-                        () -> ((HomeActivity) requireActivity()).setShowRecordFragment(index)
+                        sharedRecordsDataViewModel.getRecordCreated_atById(id),
+                        () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                 );
             }
         }

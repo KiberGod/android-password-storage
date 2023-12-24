@@ -41,9 +41,9 @@ public class ShowRecordFragment extends Fragment {
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
-    private static final String RECORD_INDEX = "record_index";
+    private static final String RECORD_ID = "record_id";
 
-    private int recordIndex;
+    private int recordId;
 
     private ArrayList<TextView> protectedTextViews;
     private ArrayList<Integer> protectedTextViewsIds;
@@ -52,10 +52,10 @@ public class ShowRecordFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ShowRecordFragment newInstance(int recordIndex) {
+    public static ShowRecordFragment newInstance(int recordId) {
         ShowRecordFragment fragment = new ShowRecordFragment();
         Bundle args = new Bundle();
-        args.putInt(RECORD_INDEX, recordIndex);
+        args.putInt(RECORD_ID, recordId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +64,7 @@ public class ShowRecordFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            recordIndex = getArguments().getInt(RECORD_INDEX);
+            recordId = getArguments().getInt(RECORD_ID);
         }
     }
 
@@ -81,10 +81,10 @@ public class ShowRecordFragment extends Fragment {
         protectedTextViewsIds = new ArrayList<>();
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), true,true, true, false,false,false,false);
-        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordIndex));
+        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordId));
 
         ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> {
-            sharedRecordsDataViewModel.editBookmarkInRecordByIndex(recordIndex);
+            sharedRecordsDataViewModel.editBookmarkInRecordById(recordId);
             Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
             if (vibrator != null) {
                 vibrator.vibrate(100);
@@ -92,66 +92,66 @@ public class ShowRecordFragment extends Fragment {
         });
 
         ToolbarBuilder.setOnClickToVisibilitySwitchButton(view,
-                res -> sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex),
+                res -> sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId),
                 () -> {
-                    sharedRecordsDataViewModel.editToTalValueVisibilityInRecordByIndex(recordIndex);
-                    updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex));
+                    sharedRecordsDataViewModel.editToTalValueVisibilityInRecordById(recordId);
+                    updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId));
                 });
 
         printRecordData(view);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
-        sharedRecordsDataViewModel.updateRecordViewed_atByIndex(recordIndex);
+        sharedRecordsDataViewModel.updateRecordViewed_atById(recordId);
         return view;
     }
 
     // Функція почергово викликає функцію для встановлення даних запису до UI-компонентів
     private void printRecordData(View view) {
-        setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleByIndex(recordIndex));
-        String category = sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex));
+        setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleById(recordId));
+        String category = sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId));
         if (category.equals("")) {
             category = homeViewModel.getEmptyCategoryText();
         }
         setTextViewText(view, R.id.recordCategory, category);
 
-        if (sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex).equals("")) {
+        if (sharedRecordsDataViewModel.getRecordTextById(recordId).equals("")) {
             LinearLayout linearLayout = view.findViewById(R.id.recordMainTextLayout);
             ViewGroup parentLayout = (ViewGroup) linearLayout.getParent();
             parentLayout.removeView(linearLayout);
         } else {
-            setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex));
+            setTextViewText(view, R.id.mainRecordText, sharedRecordsDataViewModel.getRecordTextById(recordId));
         }
 
-        if (!sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)).equals("")) {
+        if (!sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId)).equals("")) {
             ImageView categoryIcon = view.findViewById(R.id.recordCategoryIcon);
             categoryIcon.setImageResource(getResources().getIdentifier(
-                    sharedCategoriesDataViewModel.getCategoryIconIdById(sharedRecordsDataViewModel.getRecordCategory_idByIndex(recordIndex)),
+                    sharedCategoriesDataViewModel.getCategoryIconIdById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId)),
                     "drawable", requireContext().getPackageName())
             );
         }
 
-        ToolbarBuilder.setBookmarkStatus(view, requireContext(), sharedRecordsDataViewModel.getBookmarkByIndex(recordIndex));
+        ToolbarBuilder.setBookmarkStatus(view, requireContext(), sharedRecordsDataViewModel.getBookmarkById(recordId));
 
         ImageView recordIcon = view.findViewById(R.id.recordIcon);
-        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdByIndex(recordIndex), "drawable", requireContext().getPackageName()));
+        recordIcon.setImageResource(getResources().getIdentifier(sharedRecordsDataViewModel.getRecordIconIdById(recordId), "drawable", requireContext().getPackageName()));
 
         for (int i=0; i<MAX_FIELDS_LENGTH; i++) {
-            String fieldName = sharedRecordsDataViewModel.getRecordFieldNameByIndex(recordIndex, i);
-            String fieldValue = sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, i);
+            String fieldName = sharedRecordsDataViewModel.getRecordFieldNameById(recordId, i);
+            String fieldValue = sharedRecordsDataViewModel.getRecordFieldProtectedValueById(recordId, i);
             if (!fieldName.equals("") || !fieldValue.equals("")) {
                 createField(view, fieldName, fieldValue, i);
             }
         }
 
         TextView recordCreated_at = view.findViewById(R.id.created_at);
-        recordCreated_at.setText(sharedRecordsDataViewModel.getRecordCreated_atByIndex(recordIndex));
+        recordCreated_at.setText(sharedRecordsDataViewModel.getRecordCreated_atById(recordId));
 
         TextView recordUpdated_at = view.findViewById(R.id.updated_at);
-        recordUpdated_at.setText(sharedRecordsDataViewModel.getRecordUpdated_atByIndex(recordIndex));
+        recordUpdated_at.setText(sharedRecordsDataViewModel.getRecordUpdated_atById(recordId));
 
         TextView recordViewed_at = view.findViewById(R.id.viewed_at);
-        recordViewed_at.setText(sharedRecordsDataViewModel.getRecordViewed_atByIndex(recordIndex));
+        recordViewed_at.setText(sharedRecordsDataViewModel.getRecordViewed_atById(recordId));
 
-        updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex));
+        updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId));
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -184,7 +184,7 @@ public class ShowRecordFragment extends Fragment {
 
         updateFieldValueBlock(textViewValue, imageView, fieldIndex);
         setOnClickToHideValueButton(fieldView, imageView.getId(), fieldIndex, textViewValue.getId());
-        setOnClickToCopyValueButton(fieldView, sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
+        setOnClickToCopyValueButton(fieldView, sharedRecordsDataViewModel.getRecordFieldValueById(recordId, fieldIndex));
 
         LinearLayout placeForFields = view.findViewById(R.id.placeForFields);
         parentContainer.addView(fieldView, parentContainer.indexOfChild(placeForFields), layoutParams);
@@ -201,7 +201,7 @@ public class ShowRecordFragment extends Fragment {
         hideValueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedRecordsDataViewModel.setRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex);
+                sharedRecordsDataViewModel.setRecordFieldValueVisibilityById(recordId, fieldIndex);
                 updateFieldValueBlock(textViewValue, imageView, fieldIndex);
             }
         });
@@ -209,14 +209,14 @@ public class ShowRecordFragment extends Fragment {
 
     // Оновлення блоку значення поля
     private void updateFieldValueBlock(TextView textViewValue, ImageView imageView, int fieldIndex) {
-        if (sharedRecordsDataViewModel.getRecordFieldValueVisibilityByIndex(recordIndex, fieldIndex)) {
+        if (sharedRecordsDataViewModel.getRecordFieldValueVisibilityById(recordId, fieldIndex)) {
             imageView.setImageResource(R.drawable.vector__open_eye);
-            if (!sharedRecordsDataViewModel.getRecordToTalValueVisibilityByIndex(recordIndex)) {
-                textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueByIndex(recordIndex, fieldIndex));
+            if (!sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId)) {
+                textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldValueById(recordId, fieldIndex));
             }
         } else {
             imageView.setImageResource(R.drawable.vector__close_eye);
-            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, fieldIndex));
+            textViewValue.setText(sharedRecordsDataViewModel.getRecordFieldProtectedValueById(recordId, fieldIndex));
         }
     }
 
@@ -246,11 +246,11 @@ public class ShowRecordFragment extends Fragment {
     private void updateProtectedTextViews(View view, boolean totalVisibilityValue) {
         if (totalVisibilityValue) {
             setParamsToProtectedTextView(view,
-                    sharedRecordsDataViewModel.getRecordProtectedValueByIndex(
-                            sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex)
+                    sharedRecordsDataViewModel.getRecordProtectedValue(
+                            sharedRecordsDataViewModel.getRecordTextById(recordId)
                     ), R.color.purple);
         } else {
-            setParamsToProtectedTextView(view, sharedRecordsDataViewModel.getRecordTextByIndex(recordIndex), R.color.white);
+            setParamsToProtectedTextView(view, sharedRecordsDataViewModel.getRecordTextById(recordId), R.color.white);
         }
     }
 
@@ -266,7 +266,7 @@ public class ShowRecordFragment extends Fragment {
             protectedTextViews.get(i).setTextColor(requireContext().getColor(textColorId));
 
             protectedTextViews.get(i).setText(
-                    sharedRecordsDataViewModel.getRecordFieldProtectedValueByIndex(recordIndex, protectedTextViewsIds.get(i))
+                    sharedRecordsDataViewModel.getRecordFieldProtectedValueById(recordId, protectedTextViewsIds.get(i))
             );
         }
     }

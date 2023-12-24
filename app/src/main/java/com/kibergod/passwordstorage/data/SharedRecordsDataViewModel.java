@@ -28,14 +28,29 @@ public class SharedRecordsDataViewModel extends ViewModel {
         records = getRecords();
     }
 
-    // Повертає назву запису за індексом у списку
-    public String getRecordTitleByIndex(int index) { return records.get(index).getTitle(); }
+    // Повертає індекс запису за ідентифікатором
+    private int getRecordIndexById(int id) {
+        for (int index = 0; index < records.size(); index++) {
+            if (records.get(index).getId() == id) {
+                return index;
+            }
+        }
+        return -1;
+    }
 
-    // Повертає текст запису за індексом у списку
-    public String getRecordTextByIndex(int index) { return records.get(index).getText(); }
+    // Повертає ідентифікатор за індексом (повинно бути вирізано у наступних етапах)
+    public int getRecordIdByIndex(int index) {
+        return records.get(index).getId();
+    }
 
-    // Повертає id категорії запису за індексом у списку
-    public Integer getRecordCategory_idByIndex(int index) { return records.get(index).getCategoryId(); }
+    // Повертає назву запису за ідентифікатором у списку
+    public String getRecordTitleById(int id) { return records.get(getRecordIndexById(id)).getTitle(); }
+
+    // Повертає текст запису за ідентифікатором у списку
+    public String getRecordTextById(int id) { return records.get(getRecordIndexById(id)).getText(); }
+
+    // Повертає id категорії запису за ідентифікатором у списку
+    public Integer getRecordCategory_idById(int id) { return records.get(getRecordIndexById(id)).getCategoryId(); }
 
     // Повертає загальну кількість записів
     public int getRecordsCount() {
@@ -43,8 +58,8 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Повертає інформацію про закладку у заданого запису
-    public boolean getBookmarkByIndex(int index) {
-        return records.get(index).getBookmark();
+    public boolean getBookmarkById(int id) {
+        return records.get(getRecordIndexById(id)).getBookmark();
     }
 
     // Логування записів, отриманих з С++
@@ -74,8 +89,8 @@ public class SharedRecordsDataViewModel extends ViewModel {
      *  Перевірка нового запису на унікальність (за полем заголовку) з використанням параметру для ігнорування
      *  певного рядка під час перевірки
      */
-    public boolean checkRecordTitleUnique(String title, int index) {
-        Record selfRecord = records.get(index);
+    public boolean checkRecordTitleUnique(String title, int id) {
+        Record selfRecord = records.get(getRecordIndexById(id));
         for (Record record : records) {
             if (!record.equals(selfRecord) && record.getTitle().equals(title)) {
                 return false;
@@ -93,15 +108,15 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Редагування запису
-    public void editRecord(int index, String newTitle, String newText,  Integer newCategory_id, String newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
-        records.get(index).update(newTitle, newText, newCategory_id, newIcon_id, newFieldNames, newFieldValues);
-        records.get(index).setUpdated_at();
+    public void editRecord(int id, String newTitle, String newText,  Integer newCategory_id, String newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
+        records.get(getRecordIndexById(id)).update(newTitle, newText, newCategory_id, newIcon_id, newFieldNames, newFieldValues);
+        records.get(getRecordIndexById(id)).setUpdated_at();
         saveRecords(records);
     }
 
     // Видалення запису
-    public void deleteRecord(int index) {
-        records.remove(index);
+    public void deleteRecord(int id) {
+        records.remove(getRecordIndexById(id));
         saveRecords(records);
     }
 
@@ -138,35 +153,35 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Редагування статусу закладки у записі
-    public void editBookmarkInRecordByIndex(int index) {
-        records.get(index).inversionBookmark();
+    public void editBookmarkInRecordById(int id) {
+        records.get(getRecordIndexById(id)).inversionBookmark();
         saveRecords(records);
     }
 
     // Редагування глобального значення захисту запису
-    public void editToTalValueVisibilityInRecordByIndex(int index) {
-        records.get(index).inversionTotalValueVisibility();
+    public void editToTalValueVisibilityInRecordById(int id) {
+        records.get(getRecordIndexById(id)).inversionTotalValueVisibility();
         saveRecords(records);
     }
 
-    // Повертає id іконки запису за індексом
-    public String getRecordIconIdByIndex(int index) { return records.get(index).getIconId(); }
+    // Повертає id іконки запису за ідентифікатором
+    public String getRecordIconIdById(int id) { return records.get(getRecordIndexById(id)).getIconId(); }
 
-    // Повертає дату створення запису за індексом
-    public String getRecordCreated_atByIndex(int index) { return records.get(index).getCreated_at();}
+    // Повертає дату створення запису за ідентифікатором
+    public String getRecordCreated_atById(int id) { return records.get(getRecordIndexById(id)).getCreated_at();}
 
-    // Повертає останню дату оновлення запису за індексом
-    public String getRecordUpdated_atByIndex(int index) { return records.get(index).getUpdated_at(); }
+    // Повертає останню дату оновлення запису за ідентифікатором
+    public String getRecordUpdated_atById(int id) { return records.get(getRecordIndexById(id)).getUpdated_at(); }
 
-    // Повертає останню дату перегляду запису за індексом
-    public String getRecordViewed_atByIndex(int index) { return records.get(index).getViewed_at(); }
+    // Повертає останню дату перегляду запису за ідентифікатором
+    public String getRecordViewed_atById(int id) { return records.get(getRecordIndexById(id)).getViewed_at(); }
 
-    // Повертає глобальне значення захисту запису за індексом
-    public boolean getRecordToTalValueVisibilityByIndex(int index) { return records.get(index).getTotalValueVisibility(); }
+    // Повертає глобальне значення захисту запису за ідентифікатором
+    public boolean getRecordToTalValueVisibilityById(int id) { return records.get(getRecordIndexById(id)).getTotalValueVisibility(); }
 
-    // Оновлює останню дату перегляду запису за індексом
-    public void updateRecordViewed_atByIndex(int index) {
-        records.get(index).setViewed_at();
+    // Оновлює останню дату перегляду запису за ідентифікатором
+    public void updateRecordViewed_atById(int id) {
+        records.get(getRecordIndexById(id)).setViewed_at();
         saveRecords(records);
     }
 
@@ -174,36 +189,36 @@ public class SharedRecordsDataViewModel extends ViewModel {
      * true - іконка повинна бути замінена
      * false - іконку заміняти не треба або нічим
      */
-    public boolean needSetCategoryIconByIndex(int index) {
-        if (records.get(index).getIconId().equals(Record.NULL_ICON_ID_VALUE) && !records.get(index).getCategoryId().equals(Record.NULL_CATEGORY_VALUE)) {
+    public boolean needSetCategoryIconById(int id) {
+        if (records.get(getRecordIndexById(id)).getIconId().equals(Record.NULL_ICON_ID_VALUE) && !records.get(getRecordIndexById(id)).getCategoryId().equals(Record.NULL_CATEGORY_VALUE)) {
             return true;
         }
         return false;
     }
 
     // Повертає ім`я поля запису за ідентифікатором поля та записа
-    public String getRecordFieldNameByIndex(int recordIndex, int fieldIndex) {
-        return records.get(recordIndex).getFields()[fieldIndex].getName();
+    public String getRecordFieldNameById(int id, int fieldIndex) {
+        return records.get(getRecordIndexById(id)).getFields()[fieldIndex].getName();
     }
 
     // Повертає значення поля запису за ідентифікатором поля та записа
-    public String getRecordFieldValueByIndex(int recordIndex, int fieldIndex) {
-        return records.get(recordIndex).getFields()[fieldIndex].getValue();
+    public String getRecordFieldValueById(int id, int fieldIndex) {
+        return records.get(getRecordIndexById(id)).getFields()[fieldIndex].getValue();
     }
 
     // Повертає захищене значення поля запису за ідентифікатором поля та записа
-    public String getRecordFieldProtectedValueByIndex(int recordIndex, int fieldIndex) {
-        return records.get(recordIndex).getFields()[fieldIndex].getProtectedFieldValue();
+    public String getRecordFieldProtectedValueById(int id, int fieldIndex) {
+        return records.get(getRecordIndexById(id)).getFields()[fieldIndex].getProtectedFieldValue();
     }
 
     // Повертає налаштування значення поля запису за ідентифікатором поля та записа
-    public boolean getRecordFieldValueVisibilityByIndex(int recordIndex, int fieldIndex) {
-        return records.get(recordIndex).getFields()[fieldIndex].getValueVisibility();
+    public boolean getRecordFieldValueVisibilityById(int id, int fieldIndex) {
+        return records.get(getRecordIndexById(id)).getFields()[fieldIndex].getValueVisibility();
     }
 
     // Редагування налаштування значення поля запису за ідентифікатором поля та записа
-    public void setRecordFieldValueVisibilityByIndex(int recordIndex, int fieldIndex) {
-        records.get(recordIndex).getFields()[fieldIndex].inversionValueVisibility();
+    public void setRecordFieldValueVisibilityById(int id, int fieldIndex) {
+        records.get(getRecordIndexById(id)).getFields()[fieldIndex].inversionValueVisibility();
         saveRecords(records);
     }
 
@@ -213,15 +228,15 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Безумовно конвертує отриману змінну у захищену форму
-    public String getRecordProtectedValueByIndex(String value) {
+    public String getRecordProtectedValue(String value) {
         return Record.getProtectedValue(value);
     }
 
     // Повертає ідентифікатор запису за єкземпляром об`єкта запису
-    public int getRecordIndexByRecordObj(Record record) {
+    public int getRecordIdByRecordObj(Record record) {
         for (int i=0; i<records.size(); i++) {
             if (records.get(i).equals(record)) {
-                return i;
+                return records.get(i).getId();
             }
         }
         return -1;
