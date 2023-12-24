@@ -182,18 +182,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Перехід на сторінку перегляду категорії
-    public void setShowCategoryFragment(int categoryIndex) {
+    public void setShowCategoryFragment(int categoryId) {
         ShowCategoryFragment showCategoryFragment = new ShowCategoryFragment();
         Bundle args = new Bundle();
-        args.putInt("category_index", categoryIndex);
+        args.putInt("category_id", categoryId);
         navigateToFragment(showCategoryFragment, args);
     }
 
     // Перехід на сторінку редагування категорії
-    public void setEditCategoryFragment(int categoryIndex) {
+    public void setEditCategoryFragment(int categoryId) {
         EditCategoryFragment editCategoryFragment = new EditCategoryFragment();
         Bundle args = new Bundle();
-        args.putInt("category_index", categoryIndex);
+        args.putInt("category_id", categoryId);
         navigateToFragment(editCategoryFragment, args);
     }
 

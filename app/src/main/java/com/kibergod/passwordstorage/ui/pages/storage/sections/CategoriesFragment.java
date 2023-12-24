@@ -9,10 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+
+import java.util.ArrayList;
 
 public class CategoriesFragment extends Fragment {
 
@@ -25,7 +29,7 @@ public class CategoriesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
-
+        ((HomeActivity) requireActivity()).setTextChangedListenerToSearchBar(view, R.id.categoriesScrollArea, () -> drawButtonList(view));
         drawButtonList(view);
 
         return view;
@@ -33,16 +37,19 @@ public class CategoriesFragment extends Fragment {
 
     // Функція виводить весь список категорій
     private void drawButtonList(View view) {
-        for (int i=sharedCategoriesDataViewModel.getCategoriesCount()-1; i != -1; i--) {
-            final int index = i;
+        EditText searchEditText = getActivity().findViewById(R.id.searchEditText);
+        ArrayList<Category> foundCategories = sharedCategoriesDataViewModel.getCategories(searchEditText.getText().toString());
+
+        for (int i=foundCategories.size()-1; i != -1; i--) {
+            final int id = foundCategories.get(i).getId();
             ((HomeActivity) requireActivity()).drawButton(
                     view,
                     requireContext(),
-                    sharedCategoriesDataViewModel.getCategoryNameByIndex(i),
+                    sharedCategoriesDataViewModel.getCategoryNameById(id),
                     R.id.categoriesScrollArea,
-                    sharedCategoriesDataViewModel.getCategoryIconIdByIndex(i),
-                    sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(i),
-                    () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(index)
+                    sharedCategoriesDataViewModel.getCategoryIconIdById(id),
+                    sharedCategoriesDataViewModel.getCategoryCreated_atById(id),
+                    () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(id)
             );
         }
     }

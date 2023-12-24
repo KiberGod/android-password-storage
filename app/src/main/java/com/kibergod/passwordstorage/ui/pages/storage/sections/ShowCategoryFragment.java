@@ -28,18 +28,18 @@ public class ShowCategoryFragment extends Fragment {
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
-    private static final String CATEGORY_INDEX = "category_index";
+    private static final String CATEGORY_ID = "category_id";
 
-    private int categoryIndex;
+    private int categoryId;
 
     public ShowCategoryFragment() {
         // Required empty public constructor
     }
 
-    public static ShowCategoryFragment newInstance(int categoryIndex) {
+    public static ShowCategoryFragment newInstance(int categoryId) {
         ShowCategoryFragment fragment = new ShowCategoryFragment();
         Bundle args = new Bundle();
-        args.putInt(CATEGORY_INDEX, categoryIndex);
+        args.putInt(CATEGORY_ID, categoryId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +48,7 @@ public class ShowCategoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            categoryIndex = getArguments().getInt(CATEGORY_INDEX);
+            categoryId = getArguments().getInt(CATEGORY_ID);
         }
     }
 
@@ -62,46 +62,44 @@ public class ShowCategoryFragment extends Fragment {
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), false,false, true, false,false,false,false);
-        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryIndex));
+        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryId));
 
         printCategoryData(view);
 
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.categoryStatisticHead, R.id.categoryStatisticBody, false);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
-        sharedCategoriesDataViewModel.updateCategoryViewed_atByIndex(categoryIndex);
+        sharedCategoriesDataViewModel.updateCategoryViewed_atById(categoryId);
         return view;
     }
 
     // Функція встановлення тексту до UI-компонентів
     private void printCategoryData(View view) {
         TextView categoryName = view.findViewById(R.id.categoryName);
-        categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameByIndex(categoryIndex));
+        categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameById(categoryId));
         TextView categoryRecordCounter = view.findViewById(R.id.categoryRecordCounter);
         categoryRecordCounter.setText(
                 "Знайдено записів з даною категорією: " +
                         sharedRecordsDataViewModel.getRecordCountByCategoryId(
-                                sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
+                                categoryId
                         )
         );
 
         ImageView categoryIcon = view.findViewById(R.id.categoryIcon);
         categoryIcon.setImageResource(
-                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex), "drawable", requireContext().getPackageName())
+                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId), "drawable", requireContext().getPackageName())
         );
 
         TextView categoryCreated_at = view.findViewById(R.id.created_at);
-        categoryCreated_at.setText(sharedCategoriesDataViewModel.getCategoryCreated_atByIndex(categoryIndex));
+        categoryCreated_at.setText(sharedCategoriesDataViewModel.getCategoryCreated_atById(categoryId));
 
         TextView categoryUpdated_at = view.findViewById(R.id.updated_at);
-        categoryUpdated_at.setText(sharedCategoriesDataViewModel.getCategoryUpdated_atByIndex(categoryIndex));
+        categoryUpdated_at.setText(sharedCategoriesDataViewModel.getCategoryUpdated_atById(categoryId));
 
         TextView categoryViewed_at = view.findViewById(R.id.viewed_at);
-        categoryViewed_at.setText(sharedCategoriesDataViewModel.getCategoryViewed_atByIndex(categoryIndex));
+        categoryViewed_at.setText(sharedCategoriesDataViewModel.getCategoryViewed_atById(categoryId));
 
 
-        ArrayList<Record> records = sharedRecordsDataViewModel.getRecordsByCategoryId(
-                sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
-        );
+        ArrayList<Record> records = sharedRecordsDataViewModel.getRecordsByCategoryId(categoryId);
 
         for (int i =0; i<records.size(); i++) {
             createRecordItem(view,i+1+ ". " + records.get(i).getTitle(), sharedRecordsDataViewModel.getRecordIdByRecordObj(records.get(i)));

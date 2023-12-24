@@ -30,9 +30,9 @@ public class EditCategoryFragment extends Fragment {
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
-    private static final String CATEGORY_INDEX = "category_index";
+    private static final String CATEGORY_ID = "category_id";
 
-    private int categoryIndex;
+    private int categoryId;
 
     private String tempIconId;
 
@@ -42,10 +42,10 @@ public class EditCategoryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static EditCategoryFragment newInstance(int categoryIndex) {
+    public static EditCategoryFragment newInstance(int categoryId) {
         EditCategoryFragment fragment = new EditCategoryFragment();
         Bundle args = new Bundle();
-        args.putInt(CATEGORY_INDEX, categoryIndex);
+        args.putInt(CATEGORY_ID, categoryId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,7 +54,7 @@ public class EditCategoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            categoryIndex = getArguments().getInt(CATEGORY_INDEX);
+            categoryId = getArguments().getInt(CATEGORY_ID);
         }
     }
 
@@ -72,7 +72,7 @@ public class EditCategoryFragment extends Fragment {
 
         homeViewModel.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
 
-        tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdById(categoryIndex);
+        tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, false, true,true);
 
@@ -88,11 +88,11 @@ public class EditCategoryFragment extends Fragment {
     // Функція встановлення тексту до UI-компонентів
     private void printCategoryData(View view) {
         TextView categoryName = view.findViewById(R.id.editEditCategoryName);
-        categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameByIndex(categoryIndex));
+        categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameById(categoryId));
 
         ImageView categoryIcon = view.findViewById(R.id.editCategoryIcon);
         categoryIcon.setImageResource(
-                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdByIndex(categoryIndex), "drawable", requireContext().getPackageName())
+                getResources().getIdentifier(sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId), "drawable", requireContext().getPackageName())
         );
     }
 
@@ -113,9 +113,9 @@ public class EditCategoryFragment extends Fragment {
         String categoryName = nameInput.getText().toString();
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) textViewStatus.getLayoutParams();
         if (categoryName.length() != 0) {
-            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryIndex)) {
+            if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryId)) {
                 textViewStatus.setText("");
-                sharedCategoriesDataViewModel.editCategory(categoryIndex, categoryName, tempIconId);
+                sharedCategoriesDataViewModel.editCategory(categoryId, categoryName, tempIconId);
                 Toast.makeText(getActivity(), "Змінено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {
@@ -157,9 +157,9 @@ public class EditCategoryFragment extends Fragment {
     // Оброка видалення запису
     private void deleteCategory() {
         sharedRecordsDataViewModel.detachCategory(
-                sharedCategoriesDataViewModel.getCategoryIdByIndex(categoryIndex)
+                categoryId
         );
-        sharedCategoriesDataViewModel.deleteCategory(categoryIndex);
+        sharedCategoriesDataViewModel.deleteCategory(categoryId);
         ((HomeActivity) requireActivity()).setStorageFragment();
     }
 

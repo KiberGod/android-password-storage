@@ -1,10 +1,10 @@
 package com.kibergod.passwordstorage.data;
 
-import static com.kibergod.passwordstorage.NativeController.getCategories;
 import static com.kibergod.passwordstorage.NativeController.saveCategories;
 
 import androidx.lifecycle.ViewModel;
 
+import com.kibergod.passwordstorage.NativeController;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.model.DateTime;
 
@@ -25,7 +25,7 @@ public class SharedCategoriesDataViewModel extends ViewModel {
 
     // Ініціалізація списку категорій
     public void setCategories() {
-        categories = getCategories();
+        categories = NativeController.getCategories();
     }
 
     // Повертає весь список категорій
@@ -41,6 +41,16 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         return null;
     }
 
+    // Повертає індекс категорії за ідентифікатором
+    private int getCategoryIndexById(int id) {
+        for (int index = 0; index < categories.size(); index++) {
+            if (categories.get(index).getId().equals(id)) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
     // Повертає назву категорії за ідентифікатором (або попрожнє значення, якщо такої категорії немає)
     public String getCategoryNameById(Integer id) {
         Category category = getCategoryById(id);
@@ -51,33 +61,23 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         }
     }
 
-    // Повертає назву категорії за індексом
-    public String getCategoryNameByIndex(int index) {
-        return categories.get(index).getName();
-    }
+    // Повертає назву категорії за ідентифікатором
+    public String getCategoryNameById(int id) { return categories.get(getCategoryIndexById(id)).getName(); }
 
-    // Повертає id іконки категорії за індексом
-    public String getCategoryIconIdByIndex(int index) {
-        return categories.get(index).getIconId();
-    }
+    // Повертає дату створення категорії за ідентифікатором
+    public String getCategoryCreated_atById(int id) { return categories.get(getCategoryIndexById(id)).getCreated_at();}
 
-    // Повертає дату створення категорії за індексом
-    public String getCategoryCreated_atByIndex(int index) { return categories.get(index).getCreated_at();}
+    // Повертає останню дату оновлення категорії за ідентифікатором
+    public String getCategoryUpdated_atById(int id) { return categories.get(getCategoryIndexById(id)).getUpdated_at(); }
 
-    // Повертає останню дату оновлення категорії за індексом
-    public String getCategoryUpdated_atByIndex(int index) { return categories.get(index).getUpdated_at(); }
+    // Повертає останню дату перегляду категорії за ідентифікатором
+    public String getCategoryViewed_atById(int id) { return categories.get(getCategoryIndexById(id)).getViewed_at(); }
 
-    // Повертає останню дату перегляду категорії за індексом
-    public String getCategoryViewed_atByIndex(int index) { return categories.get(index).getViewed_at(); }
-
-    // Оновлює останню дату перегляду категорії за індексом
-    public void updateCategoryViewed_atByIndex(int index) {
-        categories.get(index).setViewed_at();
+    // Оновлює останню дату перегляду категорії за ідентифікатором
+    public void updateCategoryViewed_atById(int id) {
+        categories.get(getCategoryIndexById(id)).setViewed_at();
         saveCategories(categories);
     }
-
-    // Повертає id по індексу
-    public Integer getCategoryIdByIndex(int index) {return categories.get(index).getId(); }
 
     // Пошук id категорії за назвою
     public int getCategoryIdByName(String categoryName) {
@@ -119,8 +119,8 @@ public class SharedCategoriesDataViewModel extends ViewModel {
      *  Перевірка нової категорії на унікальність (за полем імені) з використанням параметру для ігнорування
      *  певного рядка під час перевірки
      */
-    public boolean checkCategoryNameUnique(String name, int index) {
-        Category selfCategory = categories.get(index);
+    public boolean checkCategoryNameUnique(String name, int id) {
+        Category selfCategory = categories.get(getCategoryIndexById(id));
         for (Category category : categories) {
             if (!category.equals(selfCategory) && category.getName().equals(name)) {
                 return false;
@@ -137,15 +137,15 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     }
 
     // Редагування категорії
-    public void editCategory(int index, String name, String icon_id) {
-        categories.get(index).update(name, icon_id);
-        categories.get(index).setUpdated_at();
+    public void editCategory(int id, String name, String icon_id) {
+        categories.get(getCategoryIndexById(id)).update(name, icon_id);
+        categories.get(getCategoryIndexById(id)).setUpdated_at();
         saveCategories(categories);
     }
 
     // Видалення категорії
-    public void deleteCategory(int index) {
-        categories.remove(index);
+    public void deleteCategory(int id) {
+        categories.remove(getCategoryIndexById(id));
         saveCategories(categories);
     }
 
@@ -166,5 +166,25 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     // Видалення активних даних
     public void dataDestroy() {
         categories.clear();
+    }
+
+    // Безумовно повертає всі існуючі категорії
+    public ArrayList<Category> getCategories() {
+        return categories;
+    }
+
+    // Повертає всі категорії, що містять заданий пошуковий параметр у назві (з ігноруванням регістру)
+    public ArrayList<Category> getCategories(String searchPram) {
+        if (searchPram.equals("")) {
+            return getCategories();
+        }
+
+        ArrayList<Category> foundCategories = new ArrayList<>();
+        for (Category category: categories) {
+            if (category.getName().toLowerCase().contains(searchPram.toLowerCase())) {
+                foundCategories.add(category);
+            }
+        }
+        return foundCategories;
     }
 }
