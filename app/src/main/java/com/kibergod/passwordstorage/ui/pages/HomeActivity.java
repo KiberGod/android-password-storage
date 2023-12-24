@@ -66,6 +66,7 @@ import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowRecordFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.function.Consumer;
 
 
@@ -485,5 +486,57 @@ public class HomeActivity extends AppCompatActivity {
         if (linearLayout != null) {
             linearLayout.removeAllViews();
         }
+    }
+
+    // Друк повідомлення про відсутність записів / категорій / закладок
+    public void printNotFoundPage(View view, int idScrollArea, String searchParam, String notFoundMessage) {
+        LinearLayout scrollArea = view.findViewById(idScrollArea);
+        View fragmentView = getLayoutInflater().inflate(R.layout.fragment_not_found_page, null);
+        scrollArea.addView(fragmentView);
+        TextView notFoundMessageView = view.findViewById(R.id.notFoundMessage);
+        if (!searchParam.equals("")) {
+            Random random = new Random();
+
+            int randomNumber = random.nextInt(12) + 1;
+            switch (randomNumber) {
+                case 1:
+                    notFoundMessage = "За запитом нічого не знайдено";
+                    break;
+                case 2:
+                    notFoundMessage = "Я не буду це шукати";
+                    break;
+                case 3:
+                    notFoundMessage = "Можливо щось таке є, але шукай сам";
+                    break;
+                case 4:
+                    notFoundMessage = "Як я повинен це знайти?";
+                    break;
+                case 5:
+                    notFoundMessage = "Я нічого не знайшов, чесно";
+                    break;
+                case 6:
+                    notFoundMessage = "І як це шукати?";
+                    break;
+                case 7:
+                    notFoundMessage = "О ні, це я шукати точно не буду";
+                    break;
+                case 8:
+                    notFoundMessage = "Порожньо, спробуй згадати хоч частину назви";
+                    break;
+                case 9:
+                    notFoundMessage = "Введи будь-яку частинку назви. Якщо щось таке є - я обов'язково це знайду";
+                    break;
+                case 10:
+                    notFoundMessage = "Можеш не використовувати CAPSLOCK, я і так знайду";
+                    break;
+                case 11:
+                    notFoundMessage = "Спробуй ще :)";
+                    break;
+                case 12:
+                    notFoundMessage = "Вибач, але 404, not found :)";
+                    break;
+            }
+        }
+        notFoundMessageView.setText(notFoundMessage);
     }
 }

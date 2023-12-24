@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:textColor="@color/white"
-                android:hint="почніть щось шукати... "
+                android:hint="почніть щось шукати ..."
                 android:inputType="text"
                 android:textColorHint="@color/gray_hint"
                 android:background="@android:color/transparent"/>

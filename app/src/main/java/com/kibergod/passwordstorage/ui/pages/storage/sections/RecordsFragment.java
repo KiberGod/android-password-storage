@@ -46,27 +46,31 @@ public class RecordsFragment extends Fragment {
         EditText searchEditText = getActivity().findViewById(R.id.searchEditText);
         ArrayList<Record> foundRecords = sharedRecordsDataViewModel.getRecords(searchEditText.getText().toString());
 
-        for (int i=foundRecords.size()-1; i != -1; i--) {
-            String icon_id;
-            final int id = foundRecords.get(i).getId();
+        if (foundRecords.size() > 0) {
+            for (int i=foundRecords.size()-1; i != -1; i--) {
+                String icon_id;
+                final int id = foundRecords.get(i).getId();
 
-            if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
-                icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
-                        sharedRecordsDataViewModel.getRecordCategory_idById(id)
+                if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
+                    icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
+                            sharedRecordsDataViewModel.getRecordCategory_idById(id)
+                    );
+                } else {
+                    icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
+                }
+
+                ((HomeActivity) requireActivity()).drawButton(
+                        view,
+                        requireContext(),
+                        sharedRecordsDataViewModel.getRecordTitleById(id),
+                        R.id.recordsScrollArea,
+                        icon_id,
+                        sharedRecordsDataViewModel.getRecordCreated_atById(id),
+                        () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                 );
-            } else {
-                icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
             }
-
-            ((HomeActivity) requireActivity()).drawButton(
-                    view,
-                    requireContext(),
-                    sharedRecordsDataViewModel.getRecordTitleById(id),
-                    R.id.recordsScrollArea,
-                    icon_id,
-                    sharedRecordsDataViewModel.getRecordCreated_atById(id),
-                    () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
-            );
+        } else {
+            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.recordsScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис");
         }
     }
 }

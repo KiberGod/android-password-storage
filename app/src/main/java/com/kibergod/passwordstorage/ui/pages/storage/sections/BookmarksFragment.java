@@ -43,10 +43,12 @@ public class BookmarksFragment extends Fragment {
     private void drawButtonList(View view) {
         EditText searchEditText = getActivity().findViewById(R.id.searchEditText);
         ArrayList<Record> foundRecords = sharedRecordsDataViewModel.getRecords(searchEditText.getText().toString());
+        boolean isEmptyBookmarkList = true;
 
         for (int i=foundRecords.size()-1; i != -1; i--) {
             final int id = foundRecords.get(i).getId();
             if (sharedRecordsDataViewModel.getBookmarkById(id)) {
+                isEmptyBookmarkList = false;
                 String icon_id;
                 if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
                     icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
@@ -66,6 +68,9 @@ public class BookmarksFragment extends Fragment {
                         () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                 );
             }
+        }
+        if (isEmptyBookmarkList) {
+            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.bookmarksScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис та додайте його до закладок");
         }
     }
 }

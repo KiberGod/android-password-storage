@@ -40,17 +40,21 @@ public class CategoriesFragment extends Fragment {
         EditText searchEditText = getActivity().findViewById(R.id.searchEditText);
         ArrayList<Category> foundCategories = sharedCategoriesDataViewModel.getCategories(searchEditText.getText().toString());
 
-        for (int i=foundCategories.size()-1; i != -1; i--) {
-            final int id = foundCategories.get(i).getId();
-            ((HomeActivity) requireActivity()).drawButton(
-                    view,
-                    requireContext(),
-                    sharedCategoriesDataViewModel.getCategoryNameById(id),
-                    R.id.categoriesScrollArea,
-                    sharedCategoriesDataViewModel.getCategoryIconIdById(id),
-                    sharedCategoriesDataViewModel.getCategoryCreated_atById(id),
-                    () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(id)
-            );
+        if (foundCategories.size() > 0) {
+            for (int i=foundCategories.size()-1; i != -1; i--) {
+                final int id = foundCategories.get(i).getId();
+                ((HomeActivity) requireActivity()).drawButton(
+                        view,
+                        requireContext(),
+                        sharedCategoriesDataViewModel.getCategoryNameById(id),
+                        R.id.categoriesScrollArea,
+                        sharedCategoriesDataViewModel.getCategoryIconIdById(id),
+                        sharedCategoriesDataViewModel.getCategoryCreated_atById(id),
+                        () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(id)
+                );
+            }
+        } else {
+            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.categoriesScrollArea, searchEditText.getText().toString(), "Створіть свою першу категорію");
         }
     }
 }
