@@ -6,14 +6,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.BookmarksFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.CategoriesFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.RecordsFragment;
@@ -23,6 +27,8 @@ public class StorageFragment extends Fragment {
 
     TabLayout tabLayout;
     ViewPager viewPager;
+
+    private boolean isShowFilters = false;
 
     public static StorageFragment newInstance() {
         return new StorageFragment();
@@ -34,6 +40,7 @@ public class StorageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_storage, container, false);
         addFragment(view);
         hideHintForTabLayout();
+        setOnClickToFiltersButton(view);
         return view;
     }
 
@@ -62,4 +69,23 @@ public class StorageFragment extends Fragment {
         }
     }
 
+    // Згорнути / розгорнути картку-випадаюче меню фільтрів
+    public void setOnClickToFiltersButton(View view) {
+        ImageView filtersButton = view.findViewById(R.id.filtersButton);
+        LinearLayout editLayoutBody = view.findViewById(R.id.searchBarBody);
+        editLayoutBody.setVisibility(View.GONE);
+        filtersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isShowFilters = !isShowFilters;
+                if (isShowFilters) {
+                    editLayoutBody.setVisibility(View.VISIBLE);
+                    filtersButton.setImageResource(R.drawable.vector__mirror_filters);
+                } else {
+                    editLayoutBody.setVisibility(View.GONE);
+                    filtersButton.setImageResource(R.drawable.vector__filters);
+                }
+            }
+        });
+    }
 }

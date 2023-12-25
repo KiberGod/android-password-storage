@@ -7,64 +7,199 @@
     android:background="@color/black"
     tools:context=".ui.pages.storage.StorageFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="10dp"
+        android:orientation="vertical"
         android:background="@drawable/background_home_app_bar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/searchButton"
-            android:layout_margin="10dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/vector__search"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/searchBarHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/searchButton"
+                android:layout_margin="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/vector__search"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:padding="10dp"
+                android:background="@drawable/background_search_place"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/searchButton"
+                app:layout_constraintEnd_toStartOf="@id/filtersButton">
+
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:textColor="@color/white"
+                    android:hint="почніть щось шукати ..."
+                    android:inputType="text"
+                    android:textColorHint="@color/gray_hint"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/filtersButton"
+                android:layout_margin="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/vector__filters"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:padding="10dp"
-            android:background="@drawable/background_search_place"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/searchButton"
-            app:layout_constraintEnd_toStartOf="@id/filtersButton">
+            android:id="@+id/searchBarBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/searchEditText"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:textColor="@color/white"
-                android:hint="почніть щось шукати ..."
-                android:inputType="text"
-                android:textColorHint="@color/gray_hint"
-                android:background="@android:color/transparent"/>
-        </LinearLayout>
+                android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/filtersButton"
-            android:layout_margin="10dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/vector__filters"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/gray_text"
+                        android:text="сортування"
+                        android:layout_gravity="center"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_text" />
+
+                    <RadioGroup
+                        android:id="@+id/filtersSorting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checkedButton="@id/filtersSortingMode1"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/filtersSortingMode1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_text"
+                            android:thumbTint="@drawable/colors_settings_switch_thumb"
+                            android:trackTint="@drawable/colors_settings_switch_track"
+                            android:textSize="16dp"
+                            android:text="за спаданням" />
+
+                        <RadioButton
+                            android:id="@+id/filtersSortingMode2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_text"
+                            android:thumbTint="@drawable/colors_settings_switch_thumb"
+                            android:trackTint="@drawable/colors_settings_switch_track"
+                            android:textSize="16dp"
+                            android:text="за зростанням" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/gray_text"
+                        android:text="критерій"
+                        android:layout_gravity="center"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_text" />
+
+                    <RadioGroup
+                        android:id="@+id/filtersParam"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checkedButton="@id/filtersParamMode3"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/filtersParamMode1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_text"
+                            android:thumbTint="@drawable/colors_settings_switch_thumb"
+                            android:trackTint="@drawable/colors_settings_switch_track"
+                            android:textSize="16dp"
+                            android:text="дата оновлення" />
+
+                        <RadioButton
+                            android:id="@+id/filtersParamMode2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_text"
+                            android:thumbTint="@drawable/colors_settings_switch_thumb"
+                            android:trackTint="@drawable/colors_settings_switch_track"
+                            android:textSize="16dp"
+                            android:text="дата перегляду" />
+
+                        <RadioButton
+                            android:id="@+id/filtersParamMode3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_text"
+                            android:thumbTint="@drawable/colors_settings_switch_thumb"
+                            android:trackTint="@drawable/colors_settings_switch_track"
+                            android:textSize="16dp"
+                            android:text="дата створення" />
+                    </RadioGroup>
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
