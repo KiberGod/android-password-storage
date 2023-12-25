@@ -70,7 +70,7 @@ public class BookmarksFragment extends Fragment {
             }
         }
         if (isEmptyBookmarkList) {
-            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.bookmarksScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис та додайте його до закладок");
+            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.bookmarksScrollArea, searchEditText.getText().toString(), "Оберіть будь-який запис та додайте його до закладок");
         }
     }
 }

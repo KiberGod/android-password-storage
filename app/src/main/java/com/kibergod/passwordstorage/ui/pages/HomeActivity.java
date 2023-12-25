@@ -83,6 +83,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private int screenWidth;
 
+    private boolean rabbitFounderMode = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -538,5 +540,36 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
         notFoundMessageView.setText(notFoundMessage);
+        setOnLongClickToRabbitImg(view);
+        resetRabbitImg(view);
+    }
+
+    // Встановлення довгого натиску на зображення кролика
+    private void setOnLongClickToRabbitImg(View view) {
+        ImageView rabbitImg = view.findViewById(R.id.rabbitFounder);
+        rabbitImg.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Vibrator vibrator = getVibrator();
+                if (vibrator != null) {
+                    vibrator.vibrate(100);
+                }
+
+                rabbitFounderMode = !rabbitFounderMode;
+                resetRabbitImg(view);
+                return true;
+            }
+        });
+    }
+
+    // Превстановлення зображення кролика (при пошуку)
+    private void resetRabbitImg(View view) {
+        ImageView rabbitImg = view.findViewById(R.id.rabbitFounder);
+
+        if (rabbitFounderMode) {
+            rabbitImg.setImageResource(R.drawable.vector__rabbit_with_carrots);
+        } else {
+            rabbitImg.setImageResource(R.drawable.vector__rabbit_without_carrots);
+        }
     }
 }
