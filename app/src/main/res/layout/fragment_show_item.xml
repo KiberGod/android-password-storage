@@ -56,13 +56,27 @@
                         android:textSize="18dp"
                         android:textColor="@color/white" />
 
-                    <TextView
-                        android:id="@+id/itemCreated_at"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:textColor="@color/gray_text" />
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/itemAction_atIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/vector__add_circle_24"/>
+
+                        <TextView
+                            android:id="@+id/itemAction_at"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:textSize="14dp"
+                            android:textColor="@color/gray_text" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

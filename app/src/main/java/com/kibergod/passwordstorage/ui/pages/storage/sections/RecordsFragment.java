@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
@@ -26,6 +27,7 @@ public class RecordsFragment extends Fragment {
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +37,7 @@ public class RecordsFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         ((HomeActivity) requireActivity()).setTextChangedListenerToSearchBar(view, R.id.recordsScrollArea, () -> drawButtonList(view));
         drawButtonList(view);
 
@@ -47,7 +50,7 @@ public class RecordsFragment extends Fragment {
         ArrayList<Record> foundRecords = sharedRecordsDataViewModel.getRecords(searchEditText.getText().toString());
 
         if (foundRecords.size() > 0) {
-            for (int i=foundRecords.size()-1; i != -1; i--) {
+            for (int i=0; i<foundRecords.size(); i++) {
                 String icon_id;
                 final int id = foundRecords.get(i).getId();
 
@@ -65,7 +68,8 @@ public class RecordsFragment extends Fragment {
                         sharedRecordsDataViewModel.getRecordTitleById(id),
                         R.id.recordsScrollArea,
                         icon_id,
-                        sharedRecordsDataViewModel.getRecordCreated_atById(id),
+                        sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
+                        ((HomeActivity) requireActivity()).getAction_atIconId(),
                         () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                 );
             }

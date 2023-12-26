@@ -216,7 +216,7 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
     jclass settingsClass = env->FindClass("com/kibergod/passwordstorage/model/Settings");
-    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;Z)V");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;ZZI)V");
 
     std::vector<Settings> settings;
 
@@ -229,10 +229,12 @@ Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jcla
     bool inputCalcClearing = settings[0].getInputCalcClearing();
     const char* password = settings[0].getPassword();
     bool digitalOwner = settings[0].getDigitalOwner();
+    bool filtersSortMode = settings[0].getFiltersSortMode();
+    int filtersSortParam = settings[0].getFiltersSortParam();
 
     jstring jPassword = env->NewStringUTF(password);
 
-    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing, jPassword, digitalOwner);
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing, jPassword, digitalOwner, filtersSortMode, filtersSortParam);
 
     return settingsObject;
 }
@@ -495,15 +497,19 @@ Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcl
     jfieldID inputCalcClearingField = env->GetFieldID(settingsClass, "inputCalcClearing", "Z");
     jfieldID passwordField = env->GetFieldID(settingsClass, "password", "Ljava/lang/String;");
     jfieldID digitalOwnerField = env->GetFieldID(settingsClass, "digitalOwner", "Z");
+    jfieldID filtersSortModeField = env->GetFieldID(settingsClass, "filtersSortMode", "Z");
+    jfieldID filtersSortParamField = env->GetFieldID(settingsClass, "filtersSortParam", "I");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
     jboolean inputCalcClearing = env->GetBooleanField(settingsObject, inputCalcClearingField);
     jstring jPassword = (jstring)env->GetObjectField(settingsObject, passwordField);
     jboolean digitalOwner = env->GetBooleanField(settingsObject, digitalOwnerField);
+    jboolean filtersSortMode = env->GetBooleanField(settingsObject, filtersSortModeField);
+    jint filtersSortParam = env->GetIntField(settingsObject, filtersSortParamField);
 
     const char* password = env->GetStringUTFChars(jPassword, nullptr);
 
-    Settings settings(activityProtection, inputCalcClearing, password, digitalOwner);
+    Settings settings(activityProtection, inputCalcClearing, password, digitalOwner, filtersSortMode, filtersSortParam);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),

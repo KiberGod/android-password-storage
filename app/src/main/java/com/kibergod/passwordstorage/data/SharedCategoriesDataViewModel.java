@@ -9,6 +9,8 @@ import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.model.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /*
     Дана Вью-модель є спільною для всіх компонентів. Зберігає в собі дані про категорії та функції роботи з ними
@@ -74,8 +76,9 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     public String getCategoryViewed_atById(int id) { return categories.get(getCategoryIndexById(id)).getViewed_at(); }
 
     // Оновлює останню дату перегляду категорії за ідентифікатором
-    public void updateCategoryViewed_atById(int id) {
+    public void updateCategoryViewed_atById(int id, int filtersParam, boolean filtersSorting) {
         categories.get(getCategoryIndexById(id)).setViewed_at();
+        sortCategories(filtersParam, filtersSorting);
         saveCategories(categories);
     }
 
@@ -130,16 +133,18 @@ public class SharedCategoriesDataViewModel extends ViewModel {
     }
 
     // Створення новогої категорії да додавання її до списку
-    public void addCategory(String name, String icon_id) {
+    public void addCategory(String name, String icon_id, int filtersParam, boolean filtersSorting) {
         Category category = new Category(generateNewId(), name, icon_id, new DateTime(), new DateTime(), new DateTime());
         categories.add(category);
+        sortCategories(filtersParam, filtersSorting);
         saveCategories(categories);
     }
 
     // Редагування категорії
-    public void editCategory(int id, String name, String icon_id) {
+    public void editCategory(int id, String name, String icon_id, int filtersParam, boolean filtersSorting) {
         categories.get(getCategoryIndexById(id)).update(name, icon_id);
         categories.get(getCategoryIndexById(id)).setUpdated_at();
+        sortCategories(filtersParam, filtersSorting);
         saveCategories(categories);
     }
 
@@ -151,11 +156,13 @@ public class SharedCategoriesDataViewModel extends ViewModel {
 
     // Функція створює новий ідентифікатор на основі існуючого найстаршого
     private Integer generateNewId() {
-        if (categories.size() != 0) {
-            return categories.get(categories.size() - 1).getId() +1;
-        } else {
-            return 0;
+        int newId = -1;
+        for (Category category: categories) {
+            if (category.getId() > newId) {
+                newId = category.getId();
+            }
         }
+        return newId + 1;
     }
 
     // Повертає id іконки за id категорії
@@ -186,5 +193,61 @@ public class SharedCategoriesDataViewModel extends ViewModel {
             }
         }
         return foundCategories;
+    }
+
+    /*
+     * Сортування категорій
+     *
+     * filtersParam - критерій сортування
+     *      1 - за датою редагування
+     *      2 - за датою перегляду
+     *      3 - за датою створення
+     *
+     *  filtersSorting - порядок сортування
+     *      true  - від найстаріших
+     *      false - від найновіших
+     */
+    public void sortCategories(int filtersParam, boolean filtersSorting) {
+        Collections.sort(categories, new Comparator<Category>() {
+            @Override
+            public int compare(Category category1, Category category2) {
+                long value1, value2;
+                switch (filtersParam) {
+                    case 1:
+                        value1 = category1.getUpdated_atInMillis();
+                        value2 = category2.getUpdated_atInMillis();
+                        break;
+                    case 2:
+                        value1 = category1.getViewed_atInMillis();
+                        value2 = category2.getViewed_atInMillis();
+                        break;
+                    case 3:
+                        value1 = category1.getCreated_atInMillis();
+                        value2 = category2.getCreated_atInMillis();
+                        break;
+                    default:
+                        value1 = category1.getCreated_atInMillis();
+                        value2 = category2.getCreated_atInMillis();
+                        break;
+                }
+
+                int result = Long.compare(value1, value2);
+                return filtersSorting ? result : -result;
+            }
+        });
+    }
+
+    // Отримання часової мітки з урахуванням параметру фільтрації
+    public String getCategoryAction_atById(int id, int filtersParam) {
+        switch (filtersParam) {
+            case 1:
+                return categories.get(getCategoryIndexById(id)).getUpdated_at();
+            case 2:
+                return categories.get(getCategoryIndexById(id)).getViewed_at();
+            case 3:
+                return categories.get(getCategoryIndexById(id)).getCreated_at();
+            default:
+                return categories.get(getCategoryIndexById(id)).getCreated_at();
+        }
     }
 }

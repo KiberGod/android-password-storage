@@ -146,6 +146,9 @@ public class Record {
     public String getCreated_at() {return created_at.getTimestamp(); }
     public String getUpdated_at() {return updated_at.getTimestamp(); }
     public String getViewed_at() {return viewed_at.getTimestamp(); }
+    public long getCreated_atInMillis() {return created_at.getDateTimeInMilliseconds(); }
+    public long getUpdated_atInMillis() {return updated_at.getDateTimeInMilliseconds(); }
+    public long getViewed_atInMillis() {return viewed_at.getDateTimeInMilliseconds(); }
     public boolean getTotalValueVisibility() { return totalValueVisibility; }
 
     public void setUpdated_at() { updated_at.update(); }

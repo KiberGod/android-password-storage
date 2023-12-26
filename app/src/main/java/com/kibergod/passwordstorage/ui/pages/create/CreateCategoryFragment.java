@@ -17,12 +17,14 @@ import android.widget.Toast;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 public class CreateCategoryFragment extends Fragment {
 
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private HomeViewModel homeViewModel;
 
@@ -36,6 +38,7 @@ public class CreateCategoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_category, container, false);
 
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
@@ -72,7 +75,7 @@ public class CreateCategoryFragment extends Fragment {
         if (categoryName.length() != 0) {
             if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName)) {
                 textViewStatus.setText("");
-                sharedCategoriesDataViewModel.addCategory(categoryName, tempIconId);
+                sharedCategoriesDataViewModel.addCategory(categoryName, tempIconId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
                 Toast.makeText(getActivity(), "Створено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {

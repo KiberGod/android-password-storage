@@ -29,7 +29,7 @@ static const std::string CATEGORIES_FILE = "/categories_v7.bin";
 static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v7.bin";
 
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings.bin";
+static const std::string SETTINGS_FILE = "/settings_v1.bin";
 
 // Файл даних калькулятора
 static const std::string CALCULATOR_FILE = "/calcData.bin";

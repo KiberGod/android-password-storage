@@ -48,4 +48,10 @@ public class DateTime {
                 correctedShortValue(hours) + ":" +
                 correctedShortValue(minutes);
     }
+
+    public long getDateTimeInMilliseconds() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day, hours, minutes);
+        return calendar.getTimeInMillis();
+    }
 }

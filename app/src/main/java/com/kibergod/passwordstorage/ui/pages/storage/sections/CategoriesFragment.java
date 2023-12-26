@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 public class CategoriesFragment extends Fragment {
 
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +31,7 @@ public class CategoriesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         ((HomeActivity) requireActivity()).setTextChangedListenerToSearchBar(view, R.id.categoriesScrollArea, () -> drawButtonList(view));
         drawButtonList(view);
 
@@ -41,7 +44,7 @@ public class CategoriesFragment extends Fragment {
         ArrayList<Category> foundCategories = sharedCategoriesDataViewModel.getCategories(searchEditText.getText().toString());
 
         if (foundCategories.size() > 0) {
-            for (int i=foundCategories.size()-1; i != -1; i--) {
+            for (int i=0; i<foundCategories.size(); i++) {
                 final int id = foundCategories.get(i).getId();
                 ((HomeActivity) requireActivity()).drawButton(
                         view,
@@ -49,7 +52,8 @@ public class CategoriesFragment extends Fragment {
                         sharedCategoriesDataViewModel.getCategoryNameById(id),
                         R.id.categoriesScrollArea,
                         sharedCategoriesDataViewModel.getCategoryIconIdById(id),
-                        sharedCategoriesDataViewModel.getCategoryCreated_atById(id),
+                        sharedCategoriesDataViewModel.getCategoryAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
+                        ((HomeActivity) requireActivity()).getAction_atIconId(),
                         () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(id)
                 );
             }

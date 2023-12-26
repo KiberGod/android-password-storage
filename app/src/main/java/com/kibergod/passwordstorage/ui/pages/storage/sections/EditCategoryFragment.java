@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
@@ -29,6 +30,7 @@ public class EditCategoryFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
     private static final String CATEGORY_ID = "category_id";
 
@@ -66,6 +68,7 @@ public class EditCategoryFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editCategoryStatus);
@@ -115,7 +118,7 @@ public class EditCategoryFragment extends Fragment {
         if (categoryName.length() != 0) {
             if (sharedCategoriesDataViewModel.checkCategoryNameUnique(categoryName, categoryId)) {
                 textViewStatus.setText("");
-                sharedCategoriesDataViewModel.editCategory(categoryId, categoryName, tempIconId);
+                sharedCategoriesDataViewModel.editCategory(categoryId, categoryName, tempIconId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
                 Toast.makeText(getActivity(), "Змінено категорію " + categoryName, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {

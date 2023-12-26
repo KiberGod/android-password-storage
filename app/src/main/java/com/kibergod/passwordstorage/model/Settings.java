@@ -37,6 +37,23 @@ public class Settings {
     private boolean digitalOwner;
 
     /*
+     * Змінна зберігає стан фільтру порядку сортування
+     *
+     *      true    -   від найстаріших
+     *      false   -   від найновіших
+     */
+    private boolean filtersSortMode;
+
+    /*
+     * Змінна зберігає стан фільтру критерію сортування
+     *
+     *      1 - за датою редагування
+     *      2 - за датою перегляду
+     *      3 - за датою створення
+     */
+    private int filtersSortParam;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     private static  final boolean DEFAULT_ACTIVITY_PROTECTION = true;
@@ -44,24 +61,30 @@ public class Settings {
     private static final boolean DEFAULT_DIGITAL_OWNER = false;
 
 
-    public Settings(String password) {
+    public Settings(String password, boolean filtersSortMode, int filtersSortParam) {
         activityProtection = DEFAULT_ACTIVITY_PROTECTION;
         inputCalcClearing = DEFAULT_INPUT_CALC_CLEARING;
         this.password = password;
         digitalOwner = DEFAULT_DIGITAL_OWNER;
+        this.filtersSortMode = filtersSortMode;
+        this.filtersSortParam = filtersSortParam;
     }
 
-    public Settings(boolean activityProtection, boolean inputPassClearing, String password, boolean digitalOwner) {
+    public Settings(boolean activityProtection, boolean inputPassClearing, String password, boolean digitalOwner, boolean filtersSortMode, int filtersSortParam) {
         this.activityProtection = activityProtection;
         this.inputCalcClearing = inputPassClearing;
         this.password = password;
         this.digitalOwner = digitalOwner;
+        this.filtersSortMode = filtersSortMode;
+        this.filtersSortParam = filtersSortParam;
     }
 
     public boolean getActivityProtection() { return activityProtection; }
     public boolean getInputCalcClearing() { return inputCalcClearing; }
     public String getPassword() { return password; }
     public boolean getDigitalOwner() { return digitalOwner; }
+    public boolean getFiltersSortMode() { return  filtersSortMode; }
+    public int getFiltersSortParam() { return filtersSortParam; }
 
     public void resetActivityProtection() {
         activityProtection = !activityProtection;
@@ -72,4 +95,6 @@ public class Settings {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setFiltersSortMode(boolean filtersSortMode) { this.filtersSortMode = filtersSortMode; }
+    public void setFiltersSortParam(int filtersSortParam) { this.filtersSortParam = filtersSortParam; }
 }

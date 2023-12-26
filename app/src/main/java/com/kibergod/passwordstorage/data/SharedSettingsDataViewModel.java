@@ -32,6 +32,12 @@ public class SharedSettingsDataViewModel extends ViewModel {
     // Повертає значення налаштування digitalOwner
     public boolean getDigitalOwner() { return settings.getDigitalOwner(); }
 
+    // Повертає значення стану фільтру порядку сортування
+    public boolean getFiltersSortMode() { return settings.getFiltersSortMode(); }
+
+    // Повертає значення стану фільтру критерію сортування
+    public int getFiltersSortParam() { return settings.getFiltersSortParam(); }
+
     // Переключення опції activityProtection
     public void editActivityProtection() {
         settings.resetActivityProtection();
@@ -52,7 +58,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
 
     // Встановити налаштування за замовченням
     public void setDefaultSettings() {
-        Settings newSettings = new Settings(settings.getPassword());
+        Settings newSettings = new Settings(settings.getPassword(), settings.getFiltersSortMode(), settings.getFiltersSortParam());
         settings = newSettings;
         saveSettings(settings);
     }
@@ -73,6 +79,18 @@ public class SharedSettingsDataViewModel extends ViewModel {
     // Зміна пароля
     public void editPassword(String newPassword) {
         settings.setPassword(newPassword);
+        saveSettings(settings);
+    }
+
+    // Переключення опції filtersSortMode
+    public void editFiltersSortMode(boolean filtersSortMode) {
+        settings.setFiltersSortMode(filtersSortMode);
+        saveSettings(settings);
+    }
+
+    // Переключення опції filtersSortParam
+    public void editFiltersSortParam(int filtersSortParam) {
+        settings.setFiltersSortParam(filtersSortParam);
         saveSettings(settings);
     }
 }

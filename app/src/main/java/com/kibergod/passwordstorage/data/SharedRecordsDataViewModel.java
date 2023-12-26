@@ -9,6 +9,8 @@ import com.kibergod.passwordstorage.NativeController;
 import com.kibergod.passwordstorage.model.Record;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /*
     Дана Вью-модель є спільною для всіх компонентів. Зберігає в собі дані про записи та функції роботи з ними
@@ -95,17 +97,19 @@ public class SharedRecordsDataViewModel extends ViewModel {
     }
 
     // Створення нового запису да додавання його до списку
-    public void addRecord(String title, String text,  Integer category_id, String icon_id, ArrayList<String> fieldNames, ArrayList<String> fieldValues) {
+    public void addRecord(String title, String text,  Integer category_id, String icon_id, ArrayList<String> fieldNames, ArrayList<String> fieldValues, int filtersParam, boolean filtersSorting) {
         Record record = new Record(generateNewId(), title, text, category_id, icon_id);
         record.setFields(fieldNames, fieldValues);
         records.add(record);
+        sortRecords(filtersParam, filtersSorting);
         saveRecords(records);
     }
 
     // Редагування запису
-    public void editRecord(int id, String newTitle, String newText,  Integer newCategory_id, String newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues) {
+    public void editRecord(int id, String newTitle, String newText,  Integer newCategory_id, String newIcon_id, ArrayList<String> newFieldNames, ArrayList<String> newFieldValues, int filtersParam, boolean filtersSorting) {
         records.get(getRecordIndexById(id)).update(newTitle, newText, newCategory_id, newIcon_id, newFieldNames, newFieldValues);
         records.get(getRecordIndexById(id)).setUpdated_at();
+        sortRecords(filtersParam, filtersSorting);
         saveRecords(records);
     }
 
@@ -175,8 +179,9 @@ public class SharedRecordsDataViewModel extends ViewModel {
     public boolean getRecordToTalValueVisibilityById(int id) { return records.get(getRecordIndexById(id)).getTotalValueVisibility(); }
 
     // Оновлює останню дату перегляду запису за ідентифікатором
-    public void updateRecordViewed_atById(int id) {
+    public void updateRecordViewed_atById(int id, int filtersParam, boolean filtersSorting) {
         records.get(getRecordIndexById(id)).setViewed_at();
+        sortRecords(filtersParam, filtersSorting);
         saveRecords(records);
     }
 
@@ -239,11 +244,13 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
     // Функція створює новий ідентифікатор на основі існуючого найстаршого
     private int generateNewId() {
-        if (records.size() != 0) {
-            return records.get(records.size() - 1).getId() +1;
-        } else {
-            return 0;
+        int newId = -1;
+        for (Record record: records) {
+            if (record.getId() > newId) {
+                newId = record.getId();
+            }
         }
+        return newId + 1;
     }
 
     // Безумовно повертає всі існуючі записи
@@ -265,4 +272,61 @@ public class SharedRecordsDataViewModel extends ViewModel {
         }
         return foundRecords;
     }
+
+    /*
+     * Сортування записів
+     *
+     * filtersParam - критерій сортування
+     *      1 - за датою редагування
+     *      2 - за датою перегляду
+     *      3 - за датою створення
+     *
+     *  filtersSorting - порядок сортування
+     *      true  - від найстаріших
+     *      false - від найновіших
+     */
+    public void sortRecords(int filtersParam, boolean filtersSorting) {
+        Collections.sort(records, new Comparator<Record>() {
+            @Override
+            public int compare(Record record1, Record record2) {
+                long value1, value2;
+                switch (filtersParam) {
+                    case 1:
+                        value1 = record1.getUpdated_atInMillis();
+                        value2 = record2.getUpdated_atInMillis();
+                        break;
+                    case 2:
+                        value1 = record1.getViewed_atInMillis();
+                        value2 = record2.getViewed_atInMillis();
+                        break;
+                    case 3:
+                        value1 = record1.getCreated_atInMillis();
+                        value2 = record2.getCreated_atInMillis();
+                        break;
+                    default:
+                        value1 = record1.getCreated_atInMillis();
+                        value2 = record2.getCreated_atInMillis();
+                        break;
+                }
+
+                int result = Long.compare(value1, value2);
+                return filtersSorting ? result : -result;
+            }
+        });
+    }
+
+    // Отримання часової мітки з урахуванням параметру фільтрації
+    public String getRecordAction_atById(int id, int filtersParam) {
+        switch (filtersParam) {
+            case 1:
+                return records.get(getRecordIndexById(id)).getUpdated_at();
+            case 2:
+                return records.get(getRecordIndexById(id)).getViewed_at();
+            case 3:
+                return records.get(getRecordIndexById(id)).getCreated_at();
+            default:
+                return records.get(getRecordIndexById(id)).getCreated_at();
+        }
+    }
+
 }

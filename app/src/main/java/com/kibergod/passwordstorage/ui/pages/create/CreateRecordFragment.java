@@ -26,6 +26,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 
 public class CreateRecordFragment extends Fragment {
 
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
@@ -56,6 +58,7 @@ public class CreateRecordFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_record, container, false);
 
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
@@ -130,7 +133,9 @@ public class CreateRecordFragment extends Fragment {
                         category_id,
                         tempIconId,
                         homeViewModel.getStringsArray(fieldNames),
-                        homeViewModel.getStringsArray(fieldValues));
+                        homeViewModel.getStringsArray(fieldValues),
+                        sharedSettingsDataViewModel.getFiltersSortParam(),
+                        sharedSettingsDataViewModel.getFiltersSortMode());
                 Toast.makeText(getActivity(), "Створено запис " + recordTitle, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             } else {

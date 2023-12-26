@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 public class ShowRecordFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
@@ -75,6 +77,7 @@ public class ShowRecordFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         protectedTextViews = new ArrayList<>();
@@ -100,7 +103,7 @@ public class ShowRecordFragment extends Fragment {
 
         printRecordData(view);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
-        sharedRecordsDataViewModel.updateRecordViewed_atById(recordId);
+        sharedRecordsDataViewModel.updateRecordViewed_atById(recordId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
         return view;
     }
 

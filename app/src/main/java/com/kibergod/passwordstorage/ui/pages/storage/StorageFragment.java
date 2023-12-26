@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -15,9 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.BookmarksFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.CategoriesFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.RecordsFragment;
@@ -28,6 +32,7 @@ public class StorageFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
 
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private boolean isShowFilters = false;
 
     public static StorageFragment newInstance() {
@@ -38,15 +43,28 @@ public class StorageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_storage, container, false);
+
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
+
         addFragment(view);
         hideHintForTabLayout();
         setOnClickToFiltersButton(view);
+        setFiltersSortMode(view);
+        setFiltersParam(view);
+        ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersSorting);
+        ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersParam);
         return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onPause() {
+        isShowFilters = false;
+        super.onPause();
     }
 
     private void addFragment(View view) {
@@ -87,5 +105,31 @@ public class StorageFragment extends Fragment {
                 }
             }
         });
+    }
+
+    // Встановлення значення фільтру порядку сортування
+    private void setFiltersSortMode(View view) {
+        RadioGroup radioGroup = view.findViewById(R.id.filtersSorting);
+        if (sharedSettingsDataViewModel.getFiltersSortMode()) {
+            radioGroup.check(R.id.filtersSortingMode2);
+        } else {
+            radioGroup.check(R.id.filtersSortingMode1);
+        }
+    }
+
+    // Встановлення значення фільтру критерію сортування
+    private void setFiltersParam(View view) {
+        RadioGroup radioGroup = view.findViewById(R.id.filtersParam);
+        switch (sharedSettingsDataViewModel.getFiltersSortParam()) {
+            case 1:
+                radioGroup.check(R.id.filtersParamMode1);
+                break;
+            case 2:
+                radioGroup.check(R.id.filtersParamMode2);
+                break;
+            case 3:
+                radioGroup.check(R.id.filtersParamMode3);
+                break;
+        }
     }
 }

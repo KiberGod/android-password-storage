@@ -38,6 +38,8 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -225,7 +227,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція додає картку запису або категорії
-    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String created_at, Runnable action) {
+    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String action_at, int action_atIconId, Runnable action) {
         LinearLayout parentContainer = view.findViewById(id_scrollArea);
         View itemView = getLayoutInflater().inflate(R.layout.fragment_show_item, null);
 
@@ -237,8 +239,11 @@ public class HomeActivity extends AppCompatActivity {
         TextView itemName = itemView.findViewById(R.id.itemName);
         itemName.setText(title);
 
-        TextView itemCreated_at = itemView.findViewById(R.id.itemCreated_at);
-        itemCreated_at.setText(created_at);
+        TextView itemAction_at = itemView.findViewById(R.id.itemAction_at);
+        itemAction_at.setText(action_at);
+
+        ImageView itemAction_atIcon = itemView.findViewById(R.id.itemAction_atIcon);
+        itemAction_atIcon.setImageResource(action_atIconId);
 
         ImageView itemIcon = itemView.findViewById(R.id.itemIcon);
         itemIcon.setImageResource(getResources().getIdentifier(icon_id, "drawable", context.getPackageName()));
@@ -570,6 +575,66 @@ public class HomeActivity extends AppCompatActivity {
             rabbitImg.setImageResource(R.drawable.vector__rabbit_with_carrots);
         } else {
             rabbitImg.setImageResource(R.drawable.vector__rabbit_without_carrots);
+        }
+    }
+
+    // Повертає фільтр упорядкування (від настаріших або від найновіших)
+    public boolean getFiltersSortMode() {
+        RadioGroup radioGroup = findViewById(R.id.filtersSorting);
+        RadioButton selectedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
+        if (selectedRadioButton.getId() == R.id.filtersSortingMode1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // Повертає фільтр критерію сортування (за якою саме датою, створення/редагування/перегляду)
+    public int getFiltersParam() {
+        RadioGroup radioGroup = findViewById(R.id.filtersParam);
+        RadioButton selectedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
+        if (selectedRadioButton.getId() == R.id.filtersParamMode1) {
+            return 1;
+        } else if (selectedRadioButton.getId() == R.id.filtersParamMode2) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    // Встановлення слухача змін фільтрів
+    public void setOnCheckedToRadioGroup(View view, int idGroup) {
+        RadioGroup radioGroup = view.findViewById(idGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (idGroup == R.id.filtersSorting) {
+                    sharedSettingsDataViewModel.editFiltersSortMode(getFiltersSortMode());
+                } else {
+                    sharedSettingsDataViewModel.editFiltersSortParam(getFiltersParam());
+                }
+                sharedRecordsDataViewModel.sortRecords(sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
+                sharedCategoriesDataViewModel.sortCategories(sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
+                EditText searchEditText = findViewById(R.id.searchEditText);
+                String searchText = searchEditText.getText().toString();
+                searchEditText.setText( searchText + " ");
+                searchEditText.setText(searchText);
+                searchEditText.setSelection(searchText.length());
+            }
+        });
+    }
+
+    // Повертає міні-іконку параметру фільтра
+    public int getAction_atIconId() {
+        switch (sharedSettingsDataViewModel.getFiltersSortParam()) {
+            case 1:
+                return R.drawable.vector__modern_pencil;
+            case 2:
+                return R.drawable.vector__open_eye;
+            case 3:
+                return R.drawable.vector__add_circle_24;
+            default:
+                return R.drawable.vector__add_circle_24;
         }
     }
 }

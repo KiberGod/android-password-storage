@@ -43,21 +43,42 @@ private:
     bool digitalOwner;
 
     /*
+     * Змінна зберігає стан фільтру порядку сортування
+     *
+     *      true    -   від найстаріших
+     *      false   -   від найновіших
+     */
+    bool filtersSortMode;
+
+    /*
+     * Змінна зберігає стан фільтру критерію сортування
+     *
+     *      1 - за датою редагування
+     *      2 - за датою перегляду
+     *      3 - за датою створення
+     */
+    int filtersSortParam;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     static const bool DEFAULT_ACTIVITY_PROTECTION = true;
     static const bool DEFAULT_INPUT_CALC_CLEARING = false;
     static const std::string DEFAULT_PASSWORD;
     static const bool DEFAULT_DIGITAL_OWNER = false;
+    static const bool DEFAULT_FILTERS_SORT_MODE = false;
+    static const int DEFAULT_FILTERS_SORT_PARAM = 3;
 
 
 public:
     Settings();
-    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password, const bool digitalOwner);
+    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password, const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam);
     const bool getActivityProtection() const;
     const bool getInputCalcClearing() const;
     const char* getPassword() const;
     const bool getDigitalOwner() const;
+    const bool getFiltersSortMode() const;
+    const int getFiltersSortParam() const;
 };
 
 

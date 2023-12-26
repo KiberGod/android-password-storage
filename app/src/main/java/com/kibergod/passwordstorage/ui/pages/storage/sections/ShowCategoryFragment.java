@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 public class ShowCategoryFragment extends Fragment {
 
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
@@ -60,6 +62,7 @@ public class ShowCategoryFragment extends Fragment {
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), false,false, true, false,false,false,false);
         ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryId));
@@ -68,7 +71,7 @@ public class ShowCategoryFragment extends Fragment {
 
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.categoryStatisticHead, R.id.categoryStatisticBody, false);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
-        sharedCategoriesDataViewModel.updateCategoryViewed_atById(categoryId);
+        sharedCategoriesDataViewModel.updateCategoryViewed_atById(categoryId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
         return view;
     }
 

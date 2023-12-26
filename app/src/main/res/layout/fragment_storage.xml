@@ -111,7 +111,6 @@
                         android:id="@+id/filtersSorting"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:checkedButton="@id/filtersSortingMode1"
                         android:orientation="vertical">
 
                         <RadioButton
@@ -122,7 +121,7 @@
                             android:thumbTint="@drawable/colors_settings_switch_thumb"
                             android:trackTint="@drawable/colors_settings_switch_track"
                             android:textSize="16dp"
-                            android:text="за спаданням" />
+                            android:text="від найновіших" />
 
                         <RadioButton
                             android:id="@+id/filtersSortingMode2"
@@ -132,7 +131,7 @@
                             android:thumbTint="@drawable/colors_settings_switch_thumb"
                             android:trackTint="@drawable/colors_settings_switch_track"
                             android:textSize="16dp"
-                            android:text="за зростанням" />
+                            android:text="від найстаріших" />
                     </RadioGroup>
                 </LinearLayout>
 
@@ -161,7 +160,6 @@
                         android:id="@+id/filtersParam"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:checkedButton="@id/filtersParamMode3"
                         android:orientation="vertical">
 
                         <RadioButton
