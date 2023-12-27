@@ -18,17 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Створення нової хованки"
-            android:textColor="@color/purple"
-            android:textSize="20sp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp" />
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,9 +27,32 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:paddingBottom="30dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp">
+
+                <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Створення нової хованки"
+                    android:textSize="18dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/purple"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <View
+                    android:id="@+id/lineView"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/titleTextView"/>
 
                 <ImageView
                     android:id="@+id/createPageImg"
@@ -49,7 +61,7 @@
                     android:src="@drawable/vector__hopping_rabbit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/lineView" />
 
                 <Button
                     android:id="@+id/createRecordButton"

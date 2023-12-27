@@ -28,20 +28,11 @@
             android:paddingRight="20dp"
             android:paddingBottom="20dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Створення нового запису"
-                android:textColor="@color/purple"
-                android:textSize="20sp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp" />
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/gray_2"
+                android:layout_marginTop="20dp"
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
@@ -49,11 +40,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Створення нового запису"
+                        android:textSize="18dp"
+                        android:paddingBottom="10dp"
+                        android:gravity="center"
+                        android:textColor="@color/purple" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_text" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
