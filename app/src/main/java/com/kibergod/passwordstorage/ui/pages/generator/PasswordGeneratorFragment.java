@@ -3,6 +3,7 @@ package com.kibergod.passwordstorage.ui.pages.generator;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,12 +16,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
+import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 
 public class PasswordGeneratorFragment extends Fragment {
@@ -29,33 +32,48 @@ public class PasswordGeneratorFragment extends Fragment {
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
 
     public class SymbolSetSettings {
-        public Switch usageSwitch;
-        public Switch randomLengthSwitch;
-        public EditText lengthEdit;
+        private Switch usageSwitch;
+        private Switch randomLengthSwitch;
+        private EditText lengthEdit;
+        private TextView signItemLen;
 
         private TextWatcher watcher;
 
-        public SymbolSetSettings(View view, int idUsageSwitch, int idRandomLengthSwitch, int idLengthEdit, int index) {
-            this.usageSwitch = view.findViewById(idUsageSwitch);
-            this.randomLengthSwitch = view.findViewById(idRandomLengthSwitch);
-            this.lengthEdit = view.findViewById(idLengthEdit);
+        public SymbolSetSettings(View view, int index, String symbolSetName, String sign, int idSignBarItem, int idSignItemLen) {
+            signItemLen = view.findViewById(idSignItemLen);
 
-            setOnCheckedToUsageSwitch(view, index);
+            printSymbolSetBlock(view, symbolSetName, sign);
+
+            setOnCheckedToUsageSwitch(view, index, idSignBarItem);
             setOnCheckedToRandomLengthSwitch(view, index);
             homeViewModel.setMaxLengthForInput(this.lengthEdit, 4);
             setOnChangedToEditText(index);
             setOnFocusToEditText();
-            setOnClickToGeneratePassButton(view);
+            ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.generatorButtonIcon, R.color.white);
         }
 
-        private void setOnCheckedToUsageSwitch(View view, int index) {
+        private int getEditTextId() {
+            return lengthEdit.getId();
+        }
+
+        private void setOnCheckedToUsageSwitch(View view, int index, int idSignBarItem) {
+            ConstraintLayout signItemLayout = view.findViewById(idSignBarItem);
             usageSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     hideAllKeyBoards(view);
                     sharedGeneratorDataViewModel.editSymbolSetUsageByIndex(index, usageSwitch.isChecked(), requireContext());
+                    updateSignBar(signItemLayout, isChecked);
                 }
             });
+        }
+
+        private void updateSignBar(ConstraintLayout signItemLayout, boolean usageFlag) {
+            if (usageFlag) {
+                signItemLayout.setVisibility(View.VISIBLE);
+            } else {
+                signItemLayout.setVisibility(View.GONE);
+            }
         }
 
         private void setOnCheckedToRandomLengthSwitch(View view, int index) {
@@ -123,6 +141,33 @@ public class PasswordGeneratorFragment extends Fragment {
 
         public void printLength(int index) {
             lengthEdit.setText(Integer.toString(sharedGeneratorDataViewModel.getSymbolsSetLengthByIndex(index)));
+            signItemLen.setText(Integer.toString(sharedGeneratorDataViewModel.getSymbolsSetLengthByIndex(index)));
+        }
+
+        public void printSymbolSetBlock(View view, String symbolSetName, String sign) {
+            LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
+            View settingsItem = getLayoutInflater().inflate(R.layout.fragment_password_generator_item, null);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, ((HomeActivity) requireActivity()).convertDPtoPX(20), 0, 0);
+
+            usageSwitch = settingsItem.findViewById(R.id.typeSwitch);
+            randomLengthSwitch = settingsItem.findViewById(R.id.randomLenSwitch);
+            lengthEdit = settingsItem.findViewById(R.id.editLength);
+
+            usageSwitch.setId(View.generateViewId());
+            randomLengthSwitch.setId(View.generateViewId());
+            lengthEdit.setId(View.generateViewId());
+
+            usageSwitch.setText(symbolSetName);
+
+            TextView symbolSetSign = settingsItem.findViewById(R.id.symbolSetSign);
+            symbolSetSign.setText(sign);
+
+            LinearLayout placeForItems = view.findViewById(R.id.placeForGeneratorSettings);
+            parentContainer.addView(settingsItem, parentContainer.indexOfChild(placeForItems), layoutParams);
         }
     }
 
@@ -138,6 +183,7 @@ public class PasswordGeneratorFragment extends Fragment {
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
 
         setSymbolsSetSettings(view);
+        setOnClickToGeneratePassButton(view);
         setSettingsToSeekBar(view);
         setSettingsToEditText(view);
         printData(view);
@@ -206,10 +252,10 @@ public class PasswordGeneratorFragment extends Fragment {
     private void setSymbolsSetSettings(View view) {
         symbolSetSettings = new SymbolSetSettings[sharedGeneratorDataViewModel.getNumberTypes()];
 
-        symbolSetSettings[0] = new SymbolSetSettings(view, R.id.typeSwitch1, R.id.randomLenSwitch1, R.id.editLength1, 0);
-        symbolSetSettings[1] = new SymbolSetSettings(view, R.id.typeSwitch2, R.id.randomLenSwitch2, R.id.editLength2, 1);
-        symbolSetSettings[2] = new SymbolSetSettings(view, R.id.typeSwitch3, R.id.randomLenSwitch3, R.id.editLength3, 2);
-        symbolSetSettings[3] = new SymbolSetSettings(view, R.id.typeSwitch4, R.id.randomLenSwitch4, R.id.editLength4, 3);
+        symbolSetSettings[0] = new SymbolSetSettings(view, 0, "Цифри", "0-9", R.id.signItem1, R.id.signItemLen1);
+        symbolSetSettings[1] = new SymbolSetSettings(view, 1, "Маленькі літери", "a-z", R.id.signItem2, R.id.signItemLen2);
+        symbolSetSettings[2] = new SymbolSetSettings(view, 2, "Великі літери", "A-Z", R.id.signItem3, R.id.signItemLen3);
+        symbolSetSettings[3] = new SymbolSetSettings(view, 3, "Спец. символи", "#.&", R.id.signItem4, R.id.signItemLen4);
     }
 
     // Функція приховання клавіатур
@@ -218,10 +264,10 @@ public class PasswordGeneratorFragment extends Fragment {
 
         hideKeyBoard(inputMethodManager, view, R.id.passwordEdit);
 
-        hideKeyBoard(inputMethodManager, view, R.id.editLength1);
-        hideKeyBoard(inputMethodManager, view, R.id.editLength2);
-        hideKeyBoard(inputMethodManager, view, R.id.editLength3);
-        hideKeyBoard(inputMethodManager, view, R.id.editLength4);
+        hideKeyBoard(inputMethodManager, view, symbolSetSettings[0].getEditTextId());
+        hideKeyBoard(inputMethodManager, view, symbolSetSettings[1].getEditTextId());
+        hideKeyBoard(inputMethodManager, view, symbolSetSettings[2].getEditTextId());
+        hideKeyBoard(inputMethodManager, view, symbolSetSettings[3].getEditTextId());
 
         hideKeyBoard(inputMethodManager, view, R.id.notUseSymbolsEdit);
     }
@@ -251,7 +297,7 @@ public class PasswordGeneratorFragment extends Fragment {
     }
 
     private void setOnClickToGeneratePassButton(View view) {
-        Button button = view.findViewById(R.id.createPassword);
+        LinearLayout button = view.findViewById(R.id.createPassword);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
