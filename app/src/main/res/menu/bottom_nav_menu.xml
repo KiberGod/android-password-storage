@@ -7,9 +7,9 @@
     <item android:title="Додати"
         android:icon="@drawable/vector__add_circle_24"
         android:id="@+id/create" />
-    <item android:title="Генератор"
+    <item android:title="Інструменти"
         android:icon="@drawable/vector__generator"
-        android:id="@+id/generator" />
+        android:id="@+id/tools" />
     <item android:title="Налаштування"
         android:icon="@drawable/vector__settings_24"
         android:id="@+id/settings" />

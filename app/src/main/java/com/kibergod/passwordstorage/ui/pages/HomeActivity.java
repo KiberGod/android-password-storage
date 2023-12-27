@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,14 +20,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +54,8 @@ import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.pages.create.CreateCategoryFragment;
 import com.kibergod.passwordstorage.ui.pages.create.CreateFragment;
 import com.kibergod.passwordstorage.ui.pages.create.CreateRecordFragment;
-import com.kibergod.passwordstorage.ui.pages.generator.GeneratorFragment;
-import com.kibergod.passwordstorage.ui.pages.generator.PasswordGeneratorFragment;
+import com.kibergod.passwordstorage.ui.pages.tools.ToolsFragment;
+import com.kibergod.passwordstorage.ui.pages.tools.PasswordGeneratorFragment;
 import com.kibergod.passwordstorage.ui.pages.settings.SettingsFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.StorageFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.EditCategoryFragment;
@@ -132,8 +129,8 @@ public class HomeActivity extends AppCompatActivity {
                 setFragment(new StorageFragment());
             } else if (item.getItemId() == R.id.create) {
                 setFragment(new CreateFragment());
-            } else if (item.getItemId() == R.id.generator) {
-                setFragment(new GeneratorFragment());
+            } else if (item.getItemId() == R.id.tools) {
+                setFragment(new ToolsFragment());
             } else if (item.getItemId() == R.id.settings) {
                 setFragment(new SettingsFragment());
             }

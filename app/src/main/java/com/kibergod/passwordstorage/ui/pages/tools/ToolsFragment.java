@@ -1,4 +1,4 @@
-package com.kibergod.passwordstorage.ui.pages.generator;
+package com.kibergod.passwordstorage.ui.pages.tools;
 
 import android.os.Bundle;
 
@@ -13,12 +13,12 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 
-public class GeneratorFragment extends Fragment {
+public class ToolsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_generator, container, false);
+        View view =  inflater.inflate(R.layout.fragment_tools, container, false);
 
         setOnClickToPasswordGeneratorButton(view, R.id.passwordGeneratorButton);
 
