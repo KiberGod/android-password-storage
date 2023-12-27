@@ -114,6 +114,7 @@ public class EditRecordFragment extends Fragment {
                 vibrator.vibrate(100);
             }
         });
+        ToolbarBuilder.setOnLongClickToGenerator(view, () -> ((HomeActivity) requireActivity()).setPasswordGeneratorFragment());
         ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.editRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
         return view;
     }

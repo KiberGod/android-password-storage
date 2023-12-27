@@ -124,6 +124,20 @@ public class ToolbarBuilder {
         }
     }
 
+    // Загальна функція встановлення обровника події довгого натиснення кнопки
+    private static void setOnLongClickToButton(View view, int buttonId, Runnable action) {
+        ImageView button = view.findViewById(buttonId);
+        if (button != null) {
+            button.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    action.run();
+                    return true;
+                }
+            });
+        }
+    }
+
     // Функція встановлює початкові кольори іконок
     private static void setIconColorsToToolbar(View view, Context context) {
         setColorToImg(context, view, BOOKMARK_ID, R.color.white);
@@ -249,6 +263,13 @@ public class ToolbarBuilder {
         setOnClickToButton(view, VISIBILITY_SWITCH_ID, () -> {
             action.run();
             resetVisibilitySwitchIcon(switchIcon, getSwitchStatus.apply(null));
+        });
+    }
+
+    // Функція встановлює подію довгого натиснення кнопки генератора
+    public static void setOnLongClickToGenerator(View view, Runnable action) {
+        setOnLongClickToButton(view, GENERATOR_ID, () -> {
+            action.run();
         });
     }
 }

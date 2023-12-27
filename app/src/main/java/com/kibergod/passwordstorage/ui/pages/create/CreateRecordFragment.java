@@ -82,6 +82,7 @@ public class CreateRecordFragment extends Fragment {
                 vibrator.vibrate(100);
             }
         });
+        ToolbarBuilder.setOnLongClickToGenerator(view, () -> ((HomeActivity) requireActivity()).setPasswordGeneratorFragment());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
         ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
