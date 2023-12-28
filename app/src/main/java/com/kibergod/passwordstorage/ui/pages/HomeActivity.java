@@ -49,6 +49,7 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.databinding.ActivityHomeBinding;
 import com.kibergod.passwordstorage.model.Category;
+import com.kibergod.passwordstorage.ui.pages.tools.ArchiveFragment;
 import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.pages.create.CreateCategoryFragment;
@@ -221,6 +222,12 @@ public class HomeActivity extends AppCompatActivity {
     public void setPasswordGeneratorFragment() {
         PasswordGeneratorFragment passwordGeneratorFragment = new PasswordGeneratorFragment();
         navigateToFragment(passwordGeneratorFragment, null);
+    }
+
+    // Перехід на сторінку архіву
+    public void setArchiveFragment() {
+        ArchiveFragment archiveFragment = new ArchiveFragment();
+        navigateToFragment(archiveFragment, null);
     }
 
     // Функція додає картку запису або категорії

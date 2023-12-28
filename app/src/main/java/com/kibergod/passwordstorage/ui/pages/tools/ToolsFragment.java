@@ -21,7 +21,7 @@ public class ToolsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_tools, container, false);
 
         setOnClickToPasswordGeneratorButton(view, R.id.passwordGeneratorButton);
-
+        setOnClickToArchiveButton(view, R.id.archiveButton);
         return view;
     }
 
@@ -32,6 +32,17 @@ public class ToolsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((HomeActivity) requireActivity()).setPasswordGeneratorFragment();
+            }
+        });
+    }
+
+    // Функція встановлює подію переходу на архіву по натисненню кнопки
+    private void setOnClickToArchiveButton(View view, int button_id) {
+        Button button = view.findViewById(button_id);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) requireActivity()).setArchiveFragment();
             }
         });
     }
