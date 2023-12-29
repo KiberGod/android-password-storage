@@ -92,7 +92,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Z)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;ZLcom/kibergod/passwordstorage/model/DateTime;)V");
 
     std::vector<Record> records;
 
@@ -117,7 +117,8 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
                                               getDateTimeObj(env, record.getCreated_at()),
                                               getDateTimeObj(env, record.getUpdated_at()),
                                               getDateTimeObj(env, record.getViewed_at()),
-                                              (bool)record.getTotalValueVisibility());
+                                              (bool)record.getTotalValueVisibility(),
+                                              getDateTimeObj(env, record.getDeleted_at()));
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
         // Заповнюємо массив об`єктів Field в Java
@@ -472,7 +473,8 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
                       getDateTimeObj(env, recordClass, recordObj, "created_at"),
                       getDateTimeObj(env, recordClass, recordObj, "updated_at"),
                       getDateTimeObj(env, recordClass, recordObj, "viewed_at"),
-                      totalValueVisibility};
+                      totalValueVisibility,
+                      getDateTimeObj(env, recordClass, recordObj, "deleted_at"),};
 
         writeToBinFile(getRecordsFilePath(),
                        reinterpret_cast<char*>(&record),
@@ -613,7 +615,7 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Z)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;ZLcom/kibergod/passwordstorage/model/DateTime;)V");
 
     for (const auto& record : records) {
         int id = record.getId();
@@ -631,7 +633,8 @@ Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv*
                                               getDateTimeObj(env, record.getCreated_at()),
                                               getDateTimeObj(env, record.getUpdated_at()),
                                               getDateTimeObj(env, record.getViewed_at()),
-                                              (bool)record.getTotalValueVisibility());
+                                              (bool)record.getTotalValueVisibility(),
+                                              getDateTimeObj(env, record.getDeleted_at()));
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
 

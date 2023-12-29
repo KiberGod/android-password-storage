@@ -54,24 +54,27 @@ public class BookmarksFragment extends Fragment {
             if (sharedRecordsDataViewModel.getBookmarkById(id)) {
                 isEmptyBookmarkList = false;
                 String icon_id;
-                if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
-                    icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
-                            sharedRecordsDataViewModel.getRecordCategory_idById(id)
-                    );
-                } else {
-                    icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
-                }
+                if (!sharedRecordsDataViewModel.isDeletedRecordById(id)) {
+                    if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
+                        icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
+                                sharedRecordsDataViewModel.getRecordCategory_idById(id)
+                        );
+                    } else {
+                        icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
+                    }
 
-                ((HomeActivity) requireActivity()).drawButton(
-                        view,
-                        requireContext(),
-                        sharedRecordsDataViewModel.getRecordTitleById(id),
-                        R.id.bookmarksScrollArea,
-                        icon_id,
-                        sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
-                        ((HomeActivity) requireActivity()).getAction_atIconId(),
-                        () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
-                );
+                    ((HomeActivity) requireActivity()).drawButton(
+                            view,
+                            requireContext(),
+                            sharedRecordsDataViewModel.getRecordTitleById(id),
+                            R.id.bookmarksScrollArea,
+                            icon_id,
+                            sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
+                            ((HomeActivity) requireActivity()).getAction_atIconId(),
+                            null,
+                            () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
+                    );
+                }
             }
         }
         if (isEmptyBookmarkList) {

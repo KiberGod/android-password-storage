@@ -75,6 +75,7 @@ public class Record {
     private DateTime created_at;
     private DateTime updated_at;
     private DateTime viewed_at;
+    private DateTime deleted_at;
 
     private boolean totalValueVisibility;
 
@@ -87,7 +88,7 @@ public class Record {
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
-    private void init(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
+    private void init(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -99,14 +100,15 @@ public class Record {
         this.updated_at = updated_at;
         this.viewed_at = viewed_at;
         this.totalValueVisibility = totalValueVisibility;
+        this.deleted_at = deleted_at;
     }
 
     public Record(int id, String title, String text, Integer category_id, String icon_id) {
-        init(id, title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY);
+        init(id, title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY, new DateTime(0,0,0,0,0));
     }
 
-    public Record(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility) {
-        init(id, title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility);
+    public Record(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at) {
+        init(id, title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility, deleted_at);
     }
 
 
@@ -146,6 +148,9 @@ public class Record {
     public String getCreated_at() {return created_at.getTimestamp(); }
     public String getUpdated_at() {return updated_at.getTimestamp(); }
     public String getViewed_at() {return viewed_at.getTimestamp(); }
+    public String getDeleted_at() {return deleted_at.getTimestamp(); }
+    public DateTime getDeleted_atObj() {return deleted_at; }
+    public boolean isDeleted_at() {return !deleted_at.isEmpty(); }
     public long getCreated_atInMillis() {return created_at.getDateTimeInMilliseconds(); }
     public long getUpdated_atInMillis() {return updated_at.getDateTimeInMilliseconds(); }
     public long getViewed_atInMillis() {return viewed_at.getDateTimeInMilliseconds(); }
@@ -153,6 +158,8 @@ public class Record {
 
     public void setUpdated_at() { updated_at.update(); }
     public void setViewed_at() { viewed_at.update(); }
+    public void setDeleted_at() { deleted_at.update(); }
+    public void restore() { deleted_at.edit(0,0,0,0,0);}
 
 
     public void setEmptyCategoryId() {
@@ -188,5 +195,9 @@ public class Record {
             protectedStr.append('*');
         }
         return protectedStr.toString();
+    }
+
+    public void deleteBookmark() {
+        bookmark = false;
     }
 }

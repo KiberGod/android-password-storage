@@ -77,7 +77,7 @@ public class EditCategoryFragment extends Fragment {
 
         tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, false, true,true);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, false, true,true,false);
 
         printCategoryData(view);
 

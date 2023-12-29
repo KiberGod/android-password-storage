@@ -79,6 +79,15 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/timeToRecordRemove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:textColor="@color/red"
+                android:textSize="14dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

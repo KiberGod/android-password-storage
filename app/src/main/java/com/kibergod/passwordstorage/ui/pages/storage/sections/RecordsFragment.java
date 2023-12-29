@@ -54,24 +54,27 @@ public class RecordsFragment extends Fragment {
                 String icon_id;
                 final int id = foundRecords.get(i).getId();
 
-                if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
-                    icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
-                            sharedRecordsDataViewModel.getRecordCategory_idById(id)
-                    );
-                } else {
-                    icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
-                }
+                if (!sharedRecordsDataViewModel.isDeletedRecordById(id)) {
+                    if (sharedRecordsDataViewModel.needSetCategoryIconById(id)) {
+                        icon_id = sharedCategoriesDataViewModel.getCategoryIconIdById(
+                                sharedRecordsDataViewModel.getRecordCategory_idById(id)
+                        );
+                    } else {
+                        icon_id = sharedRecordsDataViewModel.getRecordIconIdById(id);
+                    }
 
-                ((HomeActivity) requireActivity()).drawButton(
-                        view,
-                        requireContext(),
-                        sharedRecordsDataViewModel.getRecordTitleById(id),
-                        R.id.recordsScrollArea,
-                        icon_id,
-                        sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
-                        ((HomeActivity) requireActivity()).getAction_atIconId(),
-                        () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
-                );
+                    ((HomeActivity) requireActivity()).drawButton(
+                            view,
+                            requireContext(),
+                            sharedRecordsDataViewModel.getRecordTitleById(id),
+                            R.id.recordsScrollArea,
+                            icon_id,
+                            sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
+                            ((HomeActivity) requireActivity()).getAction_atIconId(),
+                            null,
+                            () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
+                    );
+                }
             }
         } else {
             ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.recordsScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис");

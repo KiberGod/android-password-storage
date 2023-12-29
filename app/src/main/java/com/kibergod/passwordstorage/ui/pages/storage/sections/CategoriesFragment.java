@@ -54,6 +54,7 @@ public class CategoriesFragment extends Fragment {
                         sharedCategoriesDataViewModel.getCategoryIconIdById(id),
                         sharedCategoriesDataViewModel.getCategoryAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
                         ((HomeActivity) requireActivity()).getAction_atIconId(),
+                        null,
                         () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(id)
                 );
             }

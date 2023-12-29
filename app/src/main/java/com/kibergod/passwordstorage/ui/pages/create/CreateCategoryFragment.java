@@ -47,7 +47,7 @@ public class CreateCategoryFragment extends Fragment {
 
         homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,false,true, false, false,true);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,false,true, false, false,true,false);
 
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);

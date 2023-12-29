@@ -5,10 +5,12 @@ import static com.kibergod.passwordstorage.model.Record.MAX_FIELDS_LENGTH;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -83,23 +85,7 @@ public class ShowRecordFragment extends Fragment {
         protectedTextViews = new ArrayList<>();
         protectedTextViewsIds = new ArrayList<>();
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), true,true, true, false,false,false,false);
-        ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordId));
-
-        ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> {
-            sharedRecordsDataViewModel.editBookmarkInRecordById(recordId);
-            Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
-            if (vibrator != null) {
-                vibrator.vibrate(100);
-            }
-        });
-
-        ToolbarBuilder.setOnClickToVisibilitySwitchButton(view,
-                res -> sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId),
-                () -> {
-                    sharedRecordsDataViewModel.editToTalValueVisibilityInRecordById(recordId);
-                    updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId));
-                });
+        setToolbar(view);
 
         printRecordData(view);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
@@ -155,6 +141,17 @@ public class ShowRecordFragment extends Fragment {
         recordViewed_at.setText(sharedRecordsDataViewModel.getRecordViewed_atById(recordId));
 
         updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId));
+
+        if (sharedRecordsDataViewModel.isDeletedRecordById(recordId)) {
+            LinearLayout deleted_atLayout = view.findViewById(R.id.deleted_atLayout);
+            deleted_atLayout.setVisibility(View.VISIBLE);
+
+            TextView recordDeleted_at = view.findViewById(R.id.deleted_at);
+            recordDeleted_at.setText(sharedRecordsDataViewModel.getRecordDeleted_atById(recordId));
+
+            LinearLayout archiveTitleLayout = view.findViewById(R.id.archiveTitleLayout);
+            archiveTitleLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -274,4 +271,77 @@ public class ShowRecordFragment extends Fragment {
         }
     }
 
+    // Встановлення тулбару
+    private void setToolbar(View view) {
+        if (sharedRecordsDataViewModel.isDeletedRecordById(recordId)) {
+            ToolbarBuilder.addToolbarToView(view, requireContext(), false,false, false, false,false,true,false,true);
+            setOnClickToDeleteButton(view);
+            setOnClickToRestoreButton(view);
+            TextView timeToRemoveView = view.findViewById(R.id.timeToRecordRemove);
+            timeToRemoveView.setText("Автовидалення через: " + sharedRecordsDataViewModel.getRecordTimeToRemoveById(recordId));
+            timeToRemoveView.setVisibility(View.VISIBLE);
+        } else {
+            ToolbarBuilder.addToolbarToView(view, requireContext(), true,true, true, false,false,false,false,false);
+            ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditRecordFragment(recordId));
+
+            ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> {
+                sharedRecordsDataViewModel.editBookmarkInRecordById(recordId);
+                Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
+                if (vibrator != null) {
+                    vibrator.vibrate(100);
+                }
+            });
+
+            ToolbarBuilder.setOnClickToVisibilitySwitchButton(view,
+                    res -> sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId),
+                    () -> {
+                        sharedRecordsDataViewModel.editToTalValueVisibilityInRecordById(recordId);
+                        updateProtectedTextViews(view, sharedRecordsDataViewModel.getRecordToTalValueVisibilityById(recordId));
+                    });
+        }
+    }
+
+    // Функція встановлює подію натискання кнопки видалення запису
+    private void setOnClickToDeleteButton(View view) {
+        ImageView deleteButton = view.findViewById(R.id.imgTrash);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setMessage("Ви впевнені, що хочете видалити запис? Цю дію буде неможливо скасувати.");
+                builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(), "Запис " + sharedRecordsDataViewModel.getRecordTitleById(recordId) + " видалено назавжди", Toast.LENGTH_SHORT).show();
+                        sharedRecordsDataViewModel.deleteRecordFromArchive(recordId);
+                        ((HomeActivity) requireActivity()).setArchiveFragment();
+                    }
+                });
+                builder.setNegativeButton("Відмінити", null);
+                builder.show();
+            }
+        });
+    }
+
+    // Функція встановлює подію натискання кнопки відновлення запису
+    private void setOnClickToRestoreButton(View view) {
+        ImageView deleteButton = view.findViewById(R.id.imgRestore);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setMessage("Запис буде перенесено з архіву до сховища. Відновити?");
+                builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(), "Відновлено запис " + sharedRecordsDataViewModel.getRecordTitleById(recordId), Toast.LENGTH_SHORT).show();
+                        sharedRecordsDataViewModel.restoreRecordFromArchive(recordId);
+                        ((HomeActivity) requireActivity()).setArchiveFragment();
+                    }
+                });
+                builder.setNegativeButton("Ні", null);
+                builder.show();
+            }
+        });
+    }
 }

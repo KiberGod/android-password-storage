@@ -70,7 +70,7 @@ public class CreateRecordFragment extends Fragment {
         tempIconId = "vector_template_image";
         textViewStatus = view.findViewById(R.id.createRecordStatus);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, true, false,true);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, true, false,true,false);
 
         setCategoriesToDropdownButton(view);
         setOnClickToSaveButton(view);

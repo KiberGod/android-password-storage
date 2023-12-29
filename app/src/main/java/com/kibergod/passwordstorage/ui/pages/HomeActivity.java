@@ -231,7 +231,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція додає картку запису або категорії
-    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String action_at, int action_atIconId, Runnable action) {
+    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String action_at, int action_atIconId, String timeToRemove, Runnable action) {
         LinearLayout parentContainer = view.findViewById(id_scrollArea);
         View itemView = getLayoutInflater().inflate(R.layout.fragment_show_item, null);
 
@@ -258,6 +258,12 @@ public class HomeActivity extends AppCompatActivity {
                 action.run();
             }
         });
+
+        if (timeToRemove != null) {
+            TextView timeToRemoveView = itemView.findViewById(R.id.timeToRecordRemove);
+            timeToRemoveView.setText("Автовидалення через: " + timeToRemove);
+            timeToRemoveView.setVisibility(View.VISIBLE);
+        }
 
         parentContainer.addView(itemView, layoutParams);
     }

@@ -3,6 +3,7 @@ package com.kibergod.passwordstorage.ui.pages.storage.sections;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -64,7 +65,7 @@ public class ShowCategoryFragment extends Fragment {
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false, true, false,false,false,false);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false, true, false,false,false,false,false);
         ToolbarBuilder.setOnClickToEditButton(view, () -> ((HomeActivity) requireActivity()).setEditCategoryFragment(categoryId));
 
         printCategoryData(view);
@@ -120,6 +121,9 @@ public class ShowCategoryFragment extends Fragment {
         layoutParams.setMargins(0, ((HomeActivity) requireActivity()).convertDPtoPX(10), 0, 0);
 
         TextView textRecordName = recordItemView.findViewById(R.id.recordName);
+        if (sharedRecordsDataViewModel.isDeletedRecordById(recordId)) {
+            textRecordName.setTextColor(ContextCompat.getColor(requireContext(), R.color.red));
+        }
         textRecordName.setText(recordName);
         textRecordName.setPaintFlags(textRecordName.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 

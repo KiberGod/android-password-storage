@@ -31,6 +31,7 @@ public class ToolbarBuilder {
     private static final int GENERATOR_ID = R.id.imgGears;
     private static final int TRASH_ID = R.id.imgTrash;
     private static final int SAVE_BUTTON_ID = R.id.imgTick;
+    private static final int RESTORE_ID =R.id.imgRestore;
 
     private static final int PLACE_FOR_TOOLBAR_ID = R.id.placeForToolbar;
     private static final int TOOLBAR_FRAGMENT_ID = R.layout.fragment_toolbar;
@@ -53,7 +54,8 @@ public class ToolbarBuilder {
                                         boolean useEraser,
                                         boolean useGenerator,
                                         boolean useTrash,
-                                        boolean useSaveButton) {
+                                        boolean useSaveButton,
+                                        boolean useRestore) {
         LinearLayout placeForToolbar = view.findViewById(PLACE_FOR_TOOLBAR_ID);
 
         if (placeForToolbar != null) {
@@ -61,7 +63,7 @@ public class ToolbarBuilder {
 
             placeForToolbar.addView(toolbarLayout);
 
-            deleteUnusedTools(view, useVisibilitySwitch, useBookmark, useEditButton, useEraser, useGenerator, useTrash, useSaveButton);
+            deleteUnusedTools(view, useVisibilitySwitch, useBookmark, useEditButton, useEraser, useGenerator, useTrash, useSaveButton, useRestore);
 
             setOnClickToBackButton(view, context);
             setIconColorsToToolbar(view, context);
@@ -70,7 +72,7 @@ public class ToolbarBuilder {
 
     // Загальне видалення непотрібних інструментів
     private static void deleteUnusedTools(View view, boolean useVisibilitySwitch, boolean useBookmark, boolean useEditButton,
-                                          boolean useEraser, boolean useGenerator, boolean useTrash, boolean useSaveButton) {
+                                          boolean useEraser, boolean useGenerator, boolean useTrash, boolean useSaveButton, boolean useRestore) {
         if (!useBookmark) {
             deleteTool(view, BOOKMARK_ID);
         } else {
@@ -101,6 +103,10 @@ public class ToolbarBuilder {
 
         if (!useVisibilitySwitch) {
             deleteTool(view, VISIBILITY_SWITCH_ID);
+        }
+
+        if (!useRestore) {
+            deleteTool(view, RESTORE_ID);
         }
     }
 

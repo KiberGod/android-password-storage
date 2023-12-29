@@ -1,16 +1,18 @@
 package com.kibergod.passwordstorage.data;
 
-import static com.kibergod.passwordstorage.NativeController.saveCategories;
+
 import static com.kibergod.passwordstorage.NativeController.saveRecords;
 
 import androidx.lifecycle.ViewModel;
 
 import com.kibergod.passwordstorage.NativeController;
+import com.kibergod.passwordstorage.model.DateTime;
 import com.kibergod.passwordstorage.model.Record;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /*
     Дана Вью-модель є спільною для всіх компонентів. Зберігає в собі дані про записи та функції роботи з ними
@@ -28,6 +30,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
     // Ініціалізація списку записів
     public void setRecords() {
         records = NativeController.getRecords();
+        runAutoRemoveRecordsFromArchive();
     }
 
     // Повертає індекс запису за ідентифікатором
@@ -113,9 +116,22 @@ public class SharedRecordsDataViewModel extends ViewModel {
         saveRecords(records);
     }
 
-    // Видалення запису
+    // Видалення запису (перенесення до архіву)
     public void deleteRecord(int id) {
+        records.get(getRecordIndexById(id)).setDeleted_at();
+        records.get(getRecordIndexById(id)).deleteBookmark();
+        saveRecords(records);
+    }
+
+    // Видалення запису (назавжди)
+    public void deleteRecordFromArchive(int id) {
         records.remove(getRecordIndexById(id));
+        saveRecords(records);
+    }
+
+    // Відновлення запису з архіву
+    public void restoreRecordFromArchive(int id) {
+        records.get(getRecordIndexById(id)).restore();
         saveRecords(records);
     }
 
@@ -329,4 +345,42 @@ public class SharedRecordsDataViewModel extends ViewModel {
         }
     }
 
+    // Повертає часову мітку видалення по айді
+    public String getRecordDeleted_atById(int id) {
+        return records.get(getRecordIndexById(id)).getDeleted_at();
+    }
+
+    // Повертая стан (стосовно видалення) запису по айді
+    public boolean isDeletedRecordById(int id) {
+        return records.get(getRecordIndexById(id)).isDeleted_at();
+    }
+
+    // Повертає кількість часу, що залишилось до автовидалення запису
+    public String getRecordTimeToRemoveById(int id) {
+        return DateTime.getDifferenceTimestamp(records.get(getRecordIndexById(id)).getDeleted_atObj());
+    }
+
+    // Автовидалення записів з архіву
+    public void runAutoRemoveRecordsFromArchive() {
+        List<Record> recordsToRemove = new ArrayList<>();
+        for (Record record: records) {
+            if (record.isDeleted_at() && DateTime.timeToDelete(record.getDeleted_atObj())) {
+                recordsToRemove.add(record);
+            }
+        }
+        records.removeAll(recordsToRemove);
+        saveRecords(records);
+    }
+
+    // Примусове видалення записів з архіву
+    public void removeAllRecordsFromArchive() {
+        List<Record> recordsToRemove = new ArrayList<>();
+        for (Record record: records) {
+            if (record.isDeleted_at()) {
+                recordsToRemove.add(record);
+            }
+        }
+        records.removeAll(recordsToRemove);
+        saveRecords(records);
+    }
 }

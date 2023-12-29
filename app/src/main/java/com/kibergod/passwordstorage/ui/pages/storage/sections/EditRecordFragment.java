@@ -98,7 +98,7 @@ public class EditRecordFragment extends Fragment {
 
         tempIconId = sharedRecordsDataViewModel.getRecordIconIdById(recordId);
 
-        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,false,true, true, true,true);
+        ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,false,true, true, true,true,false);
 
         printRecordData(view);
         setCategoriesToDropdownButton(view);
@@ -233,7 +233,7 @@ public class EditRecordFragment extends Fragment {
     // Вікно з підтвердженням видалення запису
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("Ви впевнені, що хочете видалити запис? Цю дію буде неможливо відмінити.");
+        builder.setMessage("Ви впевнені, що хочете видалити запис? В разі видалення ви зможете відновити цей запис з архіву протягом 1 місяця, починаючи з поточної дати.");
         builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

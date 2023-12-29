@@ -39,11 +39,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:paddingTop="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/archiveTitleLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Архівований запис"
+                            android:textSize="18dp"
+                            android:paddingBottom="10dp"
+                            android:gravity="center"
+                            android:textColor="@color/purple" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="@color/gray_text" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
@@ -120,6 +146,15 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/timeToRecordRemove"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:visibility="gone"
+                        android:textColor="@color/red"
+                        android:textSize="14dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -50,10 +50,11 @@ Record::Record() {
     updated_at = DateTime();
     viewed_at = DateTime();
     totalValueVisibility = DEFAULT_TOTAL_VALUE_VISIBILITY;
+    deleted_at = DateTime(0,0,0,0,0);
 }
 
 // Конструктор, що використовується для створення тестових записів
-Record::Record(const int id, const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility) {
+Record::Record(const int id, const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility, const DateTime deleted_at) {
 
     this->id = id;
 
@@ -77,6 +78,7 @@ Record::Record(const int id, const char* title, const char* text, const int cate
     this->updated_at = updated_at;
     this->viewed_at = viewed_at;
     this->totalValueVisibility = totalValueVisibility;
+    this->deleted_at = deleted_at;
 }
 
 // Друк запису у лог
@@ -128,6 +130,10 @@ const DateTime Record::getViewed_at() const {
 
 const bool Record::getTotalValueVisibility() const {
     return totalValueVisibility;
+}
+
+const DateTime Record::getDeleted_at() const {
+    return deleted_at;
 }
 
 const int Record::getMaxFields() {
