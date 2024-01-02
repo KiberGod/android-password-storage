@@ -28,6 +28,8 @@ public class ArchiveFragment extends Fragment {
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
 
+    private boolean rabbitFounderMode = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,6 +112,11 @@ public class ArchiveFragment extends Fragment {
         scrollArea.addView(fragmentView);
         TextView notFoundMessageView = view.findViewById(R.id.notFoundMessage);
         notFoundMessageView.setText("Архівованих записів не знайдено.");
+
+        ((HomeActivity) requireActivity()).setOnLongClickToRabbitImg(view, action -> {
+            rabbitFounderMode = !rabbitFounderMode;
+            return rabbitFounderMode; }
+        );
     }
 
     // Встановлення кількості знайдених архівованих западів

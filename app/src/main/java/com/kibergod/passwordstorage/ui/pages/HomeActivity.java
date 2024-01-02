@@ -68,6 +68,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -556,12 +557,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
         notFoundMessageView.setText(notFoundMessage);
-        setOnLongClickToRabbitImg(view);
-        resetRabbitImg(view);
+        setOnLongClickToRabbitImg(view, action -> {
+            rabbitFounderMode = !rabbitFounderMode;
+            return rabbitFounderMode; }
+        );
+        resetRabbitImg(view, rabbitFounderMode);
     }
 
     // Встановлення довгого натиску на зображення кролика
-    private void setOnLongClickToRabbitImg(View view) {
+    public void setOnLongClickToRabbitImg(View view, Function<Void, Boolean> action) {
         ImageView rabbitImg = view.findViewById(R.id.rabbitFounder);
         rabbitImg.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -570,19 +574,17 @@ public class HomeActivity extends AppCompatActivity {
                 if (vibrator != null) {
                     vibrator.vibrate(100);
                 }
-
-                rabbitFounderMode = !rabbitFounderMode;
-                resetRabbitImg(view);
+                resetRabbitImg(view, action.apply(null));
                 return true;
             }
         });
     }
 
     // Превстановлення зображення кролика (при пошуку)
-    private void resetRabbitImg(View view) {
+    public void resetRabbitImg(View view, boolean flag) {
         ImageView rabbitImg = view.findViewById(R.id.rabbitFounder);
 
-        if (rabbitFounderMode) {
+        if (flag) {
             rabbitImg.setImageResource(R.drawable.vector__rabbit_with_carrots);
         } else {
             rabbitImg.setImageResource(R.drawable.vector__rabbit_without_carrots);
