@@ -30,7 +30,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="15dp"
-            android:src="@drawable/vector__focused_eye" />
+            android:src="@drawable/vector__open_eye" />
 
         <ImageView
             android:id="@+id/imgBookmark"

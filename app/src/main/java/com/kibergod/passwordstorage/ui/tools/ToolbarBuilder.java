@@ -256,9 +256,9 @@ public class ToolbarBuilder {
     // Функція оновлення асету перемикача глобального захисту перегляду
     private static void resetVisibilitySwitchIcon(ImageView switchIcon, boolean switchStatus) {
         if (switchStatus) {
-            switchIcon.setImageResource(R.drawable.vector__close_god_eye);
+            switchIcon.setImageResource(R.drawable.vector__close_eye);
         } else {
-            switchIcon.setImageResource(R.drawable.vector__focused_eye);
+            switchIcon.setImageResource(R.drawable.vector__open_eye);
         }
     }
 
