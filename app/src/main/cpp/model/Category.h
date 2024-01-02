@@ -13,7 +13,7 @@
 
 class Category {
 private:
-    static const int MAX_NAME_LENGTH = 20;
+    static const int MAX_NAME_LENGTH = 40;
     static const int MAX_ICON_ID_LENGTH = 35;
 
     int id;

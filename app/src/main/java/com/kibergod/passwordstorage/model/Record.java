@@ -14,8 +14,8 @@ public class Record {
      */
     public class Field {
 
-        public static final int MAX_NAME_LENGTH = 20;
-        public static final int MAX_VALUE_LENGTH = 80;
+        public static final int MAX_NAME_LENGTH = 40;
+        public static final int MAX_VALUE_LENGTH = 100;
 
         public static  final boolean DEFAULT_VALUE_VISIBILITY = false;
 
@@ -92,8 +92,8 @@ public class Record {
     public static  final boolean DEFAULT_HIDDEN = false;
 
     public static final Integer MAX_FIELDS_LENGTH = 10;
-    public static final Integer MAX_TITLE_LENGTH = 20;
-    public static final Integer MAX_TEXT_LENGTH = 100;
+    public static final Integer MAX_TITLE_LENGTH = 40;
+    public static final Integer MAX_TEXT_LENGTH = 1000;
 
     private void init(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at,
                       DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at, boolean hidden) {

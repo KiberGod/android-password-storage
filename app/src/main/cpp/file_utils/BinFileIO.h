@@ -17,10 +17,10 @@
 static std::string FILES_PATH;
 
 // Тестовий файл записів
-static const std::string RECORDS_FILE = "/records_v9.bin";
+static const std::string RECORDS_FILE = "/records_v11.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories_v9.bin";
+static const std::string CATEGORIES_FILE = "/categories_v11.bin";
 
 // Файл налаштуваннь
 static const std::string SETTINGS_FILE = "/settings_v1.bin";

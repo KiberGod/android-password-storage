@@ -18,8 +18,8 @@ public:
      */
     class Field {
     private:
-        static const int MAX_NAME_LENGTH = 20;
-        static const int MAX_VALUE_LENGTH = 80;
+        static const int MAX_NAME_LENGTH = 40;
+        static const int MAX_VALUE_LENGTH = 100;
         static const bool DEFAULT_VALUE_VISIBILITY = false;
 
         char name[MAX_NAME_LENGTH];
@@ -37,8 +37,8 @@ public:
 private:
 
     static const int MAX_FIELDS_LENGTH = 10;
-    static const int MAX_TITLE_LENGTH = 20;
-    static const int MAX_TEXT_LENGTH = 100;
+    static const int MAX_TITLE_LENGTH = 40;
+    static const int MAX_TEXT_LENGTH = 1000;
     static const int MAX_ICON_ID_LENGTH = 35;
 
     Field fields[MAX_FIELDS_LENGTH];

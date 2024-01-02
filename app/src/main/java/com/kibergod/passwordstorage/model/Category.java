@@ -14,7 +14,7 @@ public class Category {
 
     public static final String NULL_ICON_ID_VALUE = "vector_template_image";
 
-    public static final Integer MAX_NAME_LENGTH = 20;
+    public static final Integer MAX_NAME_LENGTH = 40;
 
     public Category(Integer id, String name) {
         init(id, name, NULL_ICON_ID_VALUE, new DateTime(), new DateTime(), new DateTime());
