@@ -2,9 +2,6 @@ package com.kibergod.passwordstorage.data;
 
 import static com.kibergod.passwordstorage.NativeController.destroyUserData;
 import static com.kibergod.passwordstorage.NativeController.getDigitalOwner;
-import static com.kibergod.passwordstorage.NativeController.hideUserData;
-import static com.kibergod.passwordstorage.NativeController.retrieveHiddenCategories;
-import static com.kibergod.passwordstorage.NativeController.retrieveHiddenRecords;
 import static com.kibergod.passwordstorage.NativeController.saveDigitalOwner;
 import static com.kibergod.passwordstorage.model.DigitalOwner.DATA_DELETION_MODE;
 import static com.kibergod.passwordstorage.model.DigitalOwner.DEFAULT_YEAR_TRIGGERING;
@@ -113,8 +110,7 @@ public class SharedDigitalOwnerViewModel extends ViewModel {
     private boolean runHideMode(String inputPassword, String password) {
         StringBuilder newPassword = new StringBuilder(password).reverse();
         if (inputPassword.equals(newPassword.toString())) {
-            retrieveHiddenCategories();
-            retrieveHiddenRecords();
+            setRetrieveRecords(true);
             digitalOwner.resetSettings();    // після відновлення даних Цифровий власник переводиться у пассивний режим шляхом скидання налаштуваннь
             saveDigitalOwner(digitalOwner);
             return true;
@@ -139,7 +135,11 @@ public class SharedDigitalOwnerViewModel extends ViewModel {
         }
     }
 
-    public void hideData() {
-        hideUserData();
+    public void setRetrieveRecords(boolean value) {
+        DigitalOwner.retrieveRecords = value;
+    }
+
+    public boolean getRetrieveRecords() {
+        return  DigitalOwner.retrieveRecords;
     }
 }

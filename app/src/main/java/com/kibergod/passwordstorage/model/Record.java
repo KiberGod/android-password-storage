@@ -79,16 +79,24 @@ public class Record {
 
     private boolean totalValueVisibility;
 
+    /*
+     *  True - запис приховано
+     *  false - запис не приховано
+     */
+    private boolean hidden;
+
     public static final String NULL_ICON_ID_VALUE = "vector_template_image";
     public static final Integer NULL_CATEGORY_VALUE = -1;
     public static final boolean NULL_BOOKMARK_VALUE = false;
     public static  final boolean DEFAULT_TOTAL_VALUE_VISIBILITY = false;
+    public static  final boolean DEFAULT_HIDDEN = false;
 
     public static final Integer MAX_FIELDS_LENGTH = 10;
     public static final Integer MAX_TITLE_LENGTH = 20;
     public static final Integer MAX_TEXT_LENGTH = 100;
 
-    private void init(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at) {
+    private void init(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, Field[] fields, DateTime created_at,
+                      DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at, boolean hidden) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -101,14 +109,15 @@ public class Record {
         this.viewed_at = viewed_at;
         this.totalValueVisibility = totalValueVisibility;
         this.deleted_at = deleted_at;
+        this.hidden = hidden;
     }
 
     public Record(int id, String title, String text, Integer category_id, String icon_id) {
-        init(id, title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY, new DateTime(0,0,0,0,0));
+        init(id, title, text, category_id, NULL_BOOKMARK_VALUE, icon_id, getEmptyFields(), new DateTime(), new DateTime(), new DateTime(), DEFAULT_TOTAL_VALUE_VISIBILITY, new DateTime(0,0,0,0,0), DEFAULT_HIDDEN);
     }
 
-    public Record(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at) {
-        init(id, title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility, deleted_at);
+    public Record(int id, String title, String text, Integer category_id, Boolean bookmark, String icon_id, DateTime created_at, DateTime updated_at, DateTime viewed_at, boolean totalValueVisibility, DateTime deleted_at, boolean hidden) {
+        init(id, title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility, deleted_at, hidden);
     }
 
 
@@ -155,10 +164,14 @@ public class Record {
     public long getUpdated_atInMillis() {return updated_at.getDateTimeInMilliseconds(); }
     public long getViewed_atInMillis() {return viewed_at.getDateTimeInMilliseconds(); }
     public boolean getTotalValueVisibility() { return totalValueVisibility; }
+    public boolean getHidden() { return  hidden; }
 
     public void setUpdated_at() { updated_at.update(); }
     public void setViewed_at() { viewed_at.update(); }
     public void setDeleted_at() { deleted_at.update(); }
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
     public void restore() { deleted_at.edit(0,0,0,0,0);}
 
 

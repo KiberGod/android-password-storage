@@ -17,11 +17,7 @@
 
 std::string getRecordsFilePath() { return FILES_PATH + RECORDS_FILE; }
 
-std::string getHiddenRecordsFilePath() { return FILES_PATH + HIDDEN_RECORDS_FILE; }
-
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
-
-std::string getHiddenCategoriesFilePath() { return FILES_PATH + HIDDEN_CATEGORIES_FILE; }
 
 std::string getSettingsFilePath() { return FILES_PATH + SETTINGS_FILE; }
 
@@ -92,7 +88,7 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
 
     jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
     jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;ZLcom/kibergod/passwordstorage/model/DateTime;)V");
+    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;ZLcom/kibergod/passwordstorage/model/DateTime;Z)V");
 
     std::vector<Record> records;
 
@@ -106,11 +102,11 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
         // Створення об`єкта Integer
         jclass integerClass = env->FindClass("java/lang/Integer");
         jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
-        jobject jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
+        jobject jCategory = env->NewObject(integerClass, integerConstructor, (int)record.getCategoryId());
 
         jclass booleanClass = env->FindClass("java/lang/Boolean");
         jmethodID booleanConstructor = env->GetMethodID(booleanClass, "<init>", "(Z)V");
-        jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
+        jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, (bool)record.getBookmark());
 
         // Створення об`єкта Record в Java
         jobject recordObject = env->NewObject(recordClass, recordConstructor, id, jTitle, jText, jCategory, jBookmark, jIconId,
@@ -118,7 +114,8 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
                                               getDateTimeObj(env, record.getUpdated_at()),
                                               getDateTimeObj(env, record.getViewed_at()),
                                               (bool)record.getTotalValueVisibility(),
-                                              getDateTimeObj(env, record.getDeleted_at()));
+                                              getDateTimeObj(env, record.getDeleted_at()),
+                                              (bool)record.getHidden());
 
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
         // Заповнюємо массив об`єктів Field в Java
@@ -158,10 +155,8 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
         env->DeleteLocalRef(jBookmark);
         env->DeleteLocalRef(recordObject);
     }
-
     return arrayList;
 }
-
 
 /*
  * Функція передає вектор categories-об`єктів з данного С++ модуля у Java-код
@@ -187,7 +182,7 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
         // Створення об`єкта Integer
         jclass integerClass = env->FindClass("java/lang/Integer");
         jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
-        jobject jId = env->NewObject(integerClass, integerConstructor, category.getId());
+        jobject jId = env->NewObject(integerClass, integerConstructor, (int)category.getId());
 
         jstring jName = env->NewStringUTF(category.getName());
         jstring jIconId = env->NewStringUTF(category.getIconId());
@@ -205,7 +200,6 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
         env->DeleteLocalRef(jIconId);
         env->DeleteLocalRef(categoryObject);
     }
-
     return arrayList;
 }
 
@@ -301,7 +295,6 @@ Java_com_kibergod_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, 
     return digitalOwnerObject;
 }
 
-
 void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std::size_t classSize) {
     std::ofstream file;
     file.open(file_path, std::ofstream::app);
@@ -323,22 +316,6 @@ void dropFile(std::string file_path) {
         file.close();
         remove(file_path.c_str());
     }
-}
-
-void copyFile(const std::string& mainFilePath, const std::string& copyFilePath) {
-    std::ifstream mainFile(mainFilePath, std::ios::binary);
-    if (!mainFile) {
-        return;
-    }
-
-    std::ofstream copyFile(copyFilePath, std::ios::binary);
-    if (!copyFile) {
-        return;
-    }
-
-    copyFile << mainFile.rdbuf();
-    mainFile.close();
-    copyFile.close();
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -387,9 +364,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, j
         env->ReleaseStringUTFChars(icon_id, icon_idStr);
         env->DeleteLocalRef(categoryObj);
     }
-
 }
-
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jclass, jobject recordsList) {
@@ -412,6 +387,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
         jfieldID bookmarkField = env->GetFieldID(recordClass, "bookmark", "Ljava/lang/Boolean;");
         jfieldID iconIdField = env->GetFieldID(recordClass, "icon_id", "Ljava/lang/String;");
         jfieldID TotalValueVisibilityField = env->GetFieldID(recordClass, "totalValueVisibility", "Z");
+        jfieldID hiddenField = env->GetFieldID(recordClass, "hidden", "Z");
 
         jint id = env->GetIntField(recordObj, idField);
         jstring title = static_cast<jstring>(env->GetObjectField(recordObj, titleField));
@@ -420,6 +396,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
         jobject bookmarkObj = env->GetObjectField(recordObj, bookmarkField);
         jstring icon_id = static_cast<jstring>(env->GetObjectField(recordObj, iconIdField));
         jboolean jTotalValueVisibility = env->GetBooleanField(recordObj, TotalValueVisibilityField);
+        jboolean jHidden = env->GetBooleanField(recordObj, hiddenField);
 
         const char* titleStr = env->GetStringUTFChars(title, nullptr);
         const char* textStr = env->GetStringUTFChars(text, nullptr);
@@ -446,6 +423,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
         std::vector<Record::Field> cppFields;
 
         bool totalValueVisibility = static_cast<bool>(jTotalValueVisibility);
+        bool hidden = static_cast<bool>(jHidden);
 
         for (int j = 0; j < fieldsCount; ++j) {
             jobject fieldObj = env->GetObjectArrayElement(fieldsArray, j);
@@ -474,7 +452,8 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
                       getDateTimeObj(env, recordClass, recordObj, "updated_at"),
                       getDateTimeObj(env, recordClass, recordObj, "viewed_at"),
                       totalValueVisibility,
-                      getDateTimeObj(env, recordClass, recordObj, "deleted_at"),};
+                      getDateTimeObj(env, recordClass, recordObj, "deleted_at"),
+                      hidden};
 
         writeToBinFile(getRecordsFilePath(),
                        reinterpret_cast<char*>(&record),
@@ -586,144 +565,10 @@ Java_com_kibergod_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env,
     env->DeleteLocalRef(digitalOwnerObject);
 }
 
-
-
 extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass) {
     dropFile(getRecordsFilePath());
     dropFile(getCategoriesFilePath());
-}
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass) {
-    copyFile(getRecordsFilePath(), getHiddenRecordsFilePath());
-    copyFile(getCategoriesFilePath(), getHiddenCategoriesFilePath());
-    dropFile(getRecordsFilePath());
-    dropFile(getCategoriesFilePath());
-}
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass) {
-    std::vector<Record> records;
-    loadDataFromBinFile(getFilesPath() + RECORDS_FILE, records);
-    loadDataFromBinFile(getFilesPath() + HIDDEN_RECORDS_FILE, records);
-
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
-
-    jclass recordClass = env->FindClass("com/kibergod/passwordstorage/model/Record");
-    jclass fieldClass = env->FindClass("com/kibergod/passwordstorage/model/Record$Field");
-    jmethodID recordConstructor = env->GetMethodID(recordClass, "<init>", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;ZLcom/kibergod/passwordstorage/model/DateTime;)V");
-
-    for (const auto& record : records) {
-        int id = record.getId();
-        jstring jTitle = env->NewStringUTF(record.getTitle());
-        jstring jText = env->NewStringUTF(record.getText());
-        jstring jIconId = env->NewStringUTF(record.getIconId());
-        jclass integerClass = env->FindClass("java/lang/Integer");
-        jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
-        jobject jCategory = env->NewObject(integerClass, integerConstructor, record.getCategoryId());
-        jclass booleanClass = env->FindClass("java/lang/Boolean");
-        jmethodID booleanConstructor = env->GetMethodID(booleanClass, "<init>", "(Z)V");
-        jobject jBookmark = env->NewObject(booleanClass, booleanConstructor, record.getBookmark());
-
-        jobject recordObject = env->NewObject(recordClass, recordConstructor, id, jTitle, jText, jCategory, jBookmark, jIconId,
-                                              getDateTimeObj(env, record.getCreated_at()),
-                                              getDateTimeObj(env, record.getUpdated_at()),
-                                              getDateTimeObj(env, record.getViewed_at()),
-                                              (bool)record.getTotalValueVisibility(),
-                                              getDateTimeObj(env, record.getDeleted_at()));
-
-        jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
-
-        for (int i = 0; i < Record::getMaxFields(); i++) {
-            const Record::Field& cppField = record.getFields()[i];
-            jstring jName = env->NewStringUTF(cppField.getName());
-            jstring jValue = env->NewStringUTF(cppField.getValue());
-            jboolean jValueVisibility = cppField.getValueVisibility();
-
-            jobject valueVisibility = env->NewObject(
-                    env->FindClass("java/lang/Boolean"),
-                    env->GetMethodID(env->FindClass("java/lang/Boolean"), "<init>", "(Z)V"),
-                    jValueVisibility
-            );
-
-            jmethodID createFieldMethod = env->GetMethodID(recordClass, "createField", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lcom/kibergod/passwordstorage/model/Record$Field;");
-            jobject jField = env->CallObjectMethod(recordObject, createFieldMethod, jName, jValue, valueVisibility);
-
-            env->DeleteLocalRef(jName);
-            env->DeleteLocalRef(jValue);
-
-            env->SetObjectArrayElement(jFields, i, jField);
-        }
-
-        jmethodID setFieldsMethod = env->GetMethodID(recordClass, "setFields", "([Lcom/kibergod/passwordstorage/model/Record$Field;)V");
-        env->CallVoidMethod(recordObject, setFieldsMethod, jFields);
-
-        env->CallBooleanMethod(arrayList, arrayListAddMethod, recordObject);
-
-        env->DeleteLocalRef(jTitle);
-        env->DeleteLocalRef(jText);
-        env->DeleteLocalRef(jCategory);
-        env->DeleteLocalRef(jBookmark);
-        env->DeleteLocalRef(jIconId);
-        env->DeleteLocalRef(recordObject);
-    }
-
-    jmethodID saveRecordsMethod = env->GetStaticMethodID(
-            env->FindClass("com/kibergod/passwordstorage/NativeController"),
-            "saveRecords",
-            "(Ljava/util/ArrayList;)V"
-    );
-    env->CallStaticVoidMethod(env->FindClass("com/kibergod/passwordstorage/NativeController"), saveRecordsMethod, arrayList);
-
-    env->DeleteLocalRef(arrayList);
-}
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass) {
-    std::vector<Category> categories;
-    loadDataFromBinFile(getFilesPath() + CATEGORIES_FILE, categories);
-    loadDataFromBinFile(getFilesPath() + HIDDEN_CATEGORIES_FILE, categories);
-
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    jmethodID arrayListAddMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
-
-    jclass categoryClass = env->FindClass("com/kibergod/passwordstorage/model/Category");
-    jmethodID categoryConstructor = env->GetMethodID(categoryClass, "<init>", "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;Lcom/kibergod/passwordstorage/model/DateTime;)V");
-
-    for (const auto& category : categories) {
-        jclass integerClass = env->FindClass("java/lang/Integer");
-        jmethodID integerConstructor = env->GetMethodID(integerClass, "<init>", "(I)V");
-        jobject jId = env->NewObject(integerClass, integerConstructor, category.getId());
-
-        jstring jName = env->NewStringUTF(category.getName());
-        jstring jIconId = env->NewStringUTF(category.getIconId());
-
-        jobject categoryObject = env->NewObject(categoryClass, categoryConstructor, jId, jName, jIconId,
-                                                getDateTimeObj(env, category.getCreated_at()),
-                                                getDateTimeObj(env, category.getUpdated_at()),
-                                                getDateTimeObj(env, category.getViewed_at()));
-
-        env->CallBooleanMethod(arrayList, arrayListAddMethod, categoryObject);
-
-        env->DeleteLocalRef(jName);
-        env->DeleteLocalRef(jIconId);
-        env->DeleteLocalRef(categoryObject);
-    }
-
-    jmethodID saveCategoriesMethod = env->GetStaticMethodID(
-            env->FindClass("com/kibergod/passwordstorage/NativeController"),
-            "saveCategories",
-            "(Ljava/util/ArrayList;)V"
-    );
-    env->CallStaticVoidMethod(env->FindClass("com/kibergod/passwordstorage/NativeController"), saveCategoriesMethod, arrayList);
-
-    env->DeleteLocalRef(arrayList);
 }
 
 // Повертає об`єкт DataTime на основі данних Rcord або Category

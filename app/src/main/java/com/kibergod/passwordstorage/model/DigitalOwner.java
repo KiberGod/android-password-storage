@@ -15,6 +15,8 @@ public class DigitalOwner {
     public static final int DEFAULT_MONTH_TRIGGERING = 0;
     public static final int DEFAULT_YEAR_TRIGGERING = 0;
 
+    public static boolean retrieveRecords = false;
+
     private int dayTriggering;
     private int monthTriggering;
     private int yearTriggering;

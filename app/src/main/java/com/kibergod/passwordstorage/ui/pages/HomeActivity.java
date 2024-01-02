@@ -105,10 +105,11 @@ public class HomeActivity extends AppCompatActivity {
 
         sharedSettingsDataViewModel.setSettings();
         sharedCategoriesDataViewModel.setCategories();
-        sharedRecordsDataViewModel.setRecords();
         sharedDigitalOwnerViewModel.setDigitalOwner();
+        sharedRecordsDataViewModel.setRecords(sharedDigitalOwnerViewModel.getRetrieveRecords());
         sharedGeneratorDataViewModel.setPasswordGenerator(this);
 
+        sharedDigitalOwnerViewModel.setRetrieveRecords(false);
         setScreenWidth();
     }
 

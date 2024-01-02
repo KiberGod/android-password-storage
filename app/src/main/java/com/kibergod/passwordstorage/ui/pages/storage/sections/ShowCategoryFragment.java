@@ -80,13 +80,6 @@ public class ShowCategoryFragment extends Fragment {
     private void printCategoryData(View view) {
         TextView categoryName = view.findViewById(R.id.categoryName);
         categoryName.setText(sharedCategoriesDataViewModel.getCategoryNameById(categoryId));
-        TextView categoryRecordCounter = view.findViewById(R.id.categoryRecordCounter);
-        categoryRecordCounter.setText(
-                "Знайдено записів з даною категорією: " +
-                        sharedRecordsDataViewModel.getRecordCountByCategoryId(
-                                categoryId
-                        )
-        );
 
         ImageView categoryIcon = view.findViewById(R.id.categoryIcon);
         categoryIcon.setImageResource(
@@ -105,9 +98,16 @@ public class ShowCategoryFragment extends Fragment {
 
         ArrayList<Record> records = sharedRecordsDataViewModel.getRecordsByCategoryId(categoryId);
 
+        int recordsCounter = 0;
         for (int i =0; i<records.size(); i++) {
-            createRecordItem(view,i+1+ ". " + records.get(i).getTitle(), sharedRecordsDataViewModel.getRecordIdByRecordObj(records.get(i)));
+            if (!records.get(i).getHidden()) {
+                createRecordItem(view,i+1+ ". " + records.get(i).getTitle(), sharedRecordsDataViewModel.getRecordIdByRecordObj(records.get(i)));
+                recordsCounter++;
+            }
         }
+
+        TextView categoryRecordCounter = view.findViewById(R.id.categoryRecordCounter);
+        categoryRecordCounter.setText("Знайдено записів з даною категорією: " + recordsCounter);
     }
 
     // Створення поля запису категорії

@@ -30,9 +30,5 @@ public class NativeController {
     public static native void saveSettings(Settings settings);
     public static native void saveCalculator(Calculator calculator);
     public static native void saveDigitalOwner(DigitalOwner digitalOwner);
-
     public static native void destroyUserData();
-    public static native void hideUserData();
-    public static native void retrieveHiddenRecords();
-    public static native void retrieveHiddenCategories();
 }

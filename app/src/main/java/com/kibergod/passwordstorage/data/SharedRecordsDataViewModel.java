@@ -28,9 +28,12 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
 
     // Ініціалізація списку записів
-    public void setRecords() {
+    public void setRecords(boolean retrieveRecords) {
         records = NativeController.getRecords();
         runAutoRemoveRecordsFromArchive();
+        if (retrieveRecords) {
+            showAllRecords();
+        }
     }
 
     // Повертає індекс запису за ідентифікатором
@@ -269,9 +272,17 @@ public class SharedRecordsDataViewModel extends ViewModel {
         return newId + 1;
     }
 
-    // Безумовно повертає всі існуючі записи
+    // Безумовно повертає всі існуючі записи (окрім прихованих)
     public ArrayList<Record> getRecords() {
-        return records;
+        ArrayList<Record> visibleRecords = new ArrayList<>();
+
+        for (Record record : records) {
+            if (!record.getHidden()) {
+                visibleRecords.add(record);
+            }
+        }
+
+        return visibleRecords;
     }
 
     // Повертає всі записи, що містять заданий пошуковий параметр у назві (з ігноруванням регістру)
@@ -282,7 +293,7 @@ public class SharedRecordsDataViewModel extends ViewModel {
 
         ArrayList<Record> foundRecords = new ArrayList<>();
         for (Record record: records) {
-            if (record.getTitle().toLowerCase().contains(searchPram.toLowerCase())) {
+            if (!record.getHidden() && record.getTitle().toLowerCase().contains(searchPram.toLowerCase())) {
                 foundRecords.add(record);
             }
         }
@@ -376,11 +387,27 @@ public class SharedRecordsDataViewModel extends ViewModel {
     public void removeAllRecordsFromArchive() {
         List<Record> recordsToRemove = new ArrayList<>();
         for (Record record: records) {
-            if (record.isDeleted_at()) {
+            if (record.isDeleted_at() && !record.getHidden()) {
                 recordsToRemove.add(record);
             }
         }
         records.removeAll(recordsToRemove);
+        saveRecords(records);
+    }
+
+    // Приховання всіх записів
+    public void hideAllRecords() {
+        for (Record record: records) {
+            record.setHidden(true);
+        }
+        saveRecords(records);
+    }
+
+    // Зробити всі записи знов видимими
+    public void showAllRecords() {
+        for (Record record: records) {
+            record.setHidden(false);
+        }
         saveRecords(records);
     }
 }

@@ -17,16 +17,10 @@
 static std::string FILES_PATH;
 
 // Тестовий файл записів
-static const std::string RECORDS_FILE = "/records_v8.bin";
-
-// Прихована буферна копія файла записів
-static const std::string HIDDEN_RECORDS_FILE = "/hidden_records_v8.bin";
+static const std::string RECORDS_FILE = "/records_v9.bin";
 
 // Файл категорій
-static const std::string CATEGORIES_FILE = "/categories_v8.bin";
-
-// Прихована буферна копія файла категорій
-static const std::string HIDDEN_CATEGORIES_FILE = "/hidden_categories_v8.bin";
+static const std::string CATEGORIES_FILE = "/categories_v9.bin";
 
 // Файл налаштуваннь
 static const std::string SETTINGS_FILE = "/settings_v1.bin";
@@ -41,14 +35,8 @@ static const std::string DIGITAL_OWNER_FILE = "/digitalOwner.bin";
 // Повертає і`мя файла тестових записів
 std::string getRecordsFilePath();
 
-// Повертає і`мя прихованої копії файла записів
-std::string getHiddenRecordsFilePath();
-
 // Повертає і`мя файла категорій
 std::string getCategoriesFilePath();
-
-// Повертає і`мя прихованої копії файла категорій
-std::string getHiddenCategoriesFilePath();
 
 // Повертає і`мя файла налаштуваннь
 std::string getSettingsFilePath();
@@ -95,9 +83,6 @@ void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std
 // Видалення бінарного файла
 void dropFile(std::string file_path);
 
-// Створення копії файла
-void copyFile(const std::string& mainFilePath, const std::string& copyFile);
-
 // Отримання нових даних категорій з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_saveCategories(JNIEnv* env, jclass, jobject categoriesList);
@@ -121,18 +106,6 @@ Java_com_kibergod_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env,
 // Знищує дані користувача (файли записів та категорій)
 extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_destroyUserData(JNIEnv* env, jclass);
-
-// Приховує дані користувача (файли записів та категорій) шляхом створення копій та видалення основних файлів
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_hideUserData(JNIEnv* env, jclass);
-
-// Відновлення прихованих записів
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenRecords(JNIEnv* env, jclass);
-
-// Відновлення прихованих категорій
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_retrieveHiddenCategories(JNIEnv* env, jclass);
 
 // Повертає об`єкт DataTime на основі данних Rcord або Category
 jobject getDateTimeObj(JNIEnv* env, const DateTime& dateTime);

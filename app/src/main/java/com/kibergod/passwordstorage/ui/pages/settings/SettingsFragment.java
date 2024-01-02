@@ -265,9 +265,7 @@ public class SettingsFragment extends Fragment {
                 public void onClick(View v) {
                     sharedDigitalOwnerViewModel.setMode(mode);
                     if (sharedDigitalOwnerViewModel.isHideMode(mode)) {
-                        sharedDigitalOwnerViewModel.hideData();
-                        sharedCategoriesDataViewModel.dataDestroy();
-                        sharedRecordsDataViewModel.dataDestroy();
+                        sharedRecordsDataViewModel.hideAllRecords();
                     }
                     printCalendarData(rootView);
                     infoDialog.setOnDismissListener(null);
