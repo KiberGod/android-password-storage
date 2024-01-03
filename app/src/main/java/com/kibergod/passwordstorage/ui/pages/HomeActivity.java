@@ -50,6 +50,7 @@ import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.databinding.ActivityHomeBinding;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.pages.tools.ArchiveFragment;
+import com.kibergod.passwordstorage.ui.pages.tools.RabbitSupportFragment;
 import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.pages.create.CreateCategoryFragment;
@@ -230,6 +231,12 @@ public class HomeActivity extends AppCompatActivity {
     public void setArchiveFragment() {
         ArchiveFragment archiveFragment = new ArchiveFragment();
         navigateToFragment(archiveFragment, null);
+    }
+
+    // Перехід на сторінку RSS-довідника
+    public void setRabbitSupportFragment() {
+        RabbitSupportFragment rabbitSupportFragment = new RabbitSupportFragment();
+        navigateToFragment(rabbitSupportFragment, null);
     }
 
     // Функція додає картку запису або категорії

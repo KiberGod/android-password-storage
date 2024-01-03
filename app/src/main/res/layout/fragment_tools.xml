@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:text="Архів" />
 
+    <Button
+        android:id="@+id/rabbitSupportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RSS" />
+
 </LinearLayout>

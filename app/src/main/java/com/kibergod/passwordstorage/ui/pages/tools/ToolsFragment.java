@@ -20,29 +20,20 @@ public class ToolsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_tools, container, false);
 
-        setOnClickToPasswordGeneratorButton(view, R.id.passwordGeneratorButton);
-        setOnClickToArchiveButton(view, R.id.archiveButton);
+        setOnClickToButton(view, R.id.passwordGeneratorButton, () -> ((HomeActivity) requireActivity()).setPasswordGeneratorFragment());
+        setOnClickToButton(view, R.id.archiveButton, () -> ((HomeActivity) requireActivity()).setArchiveFragment());
+        setOnClickToButton(view, R.id.rabbitSupportButton, () -> ((HomeActivity) requireActivity()).setRabbitSupportFragment());
+
         return view;
     }
 
-    // Функція встановлює подію переходу на сторінку генерації пароля по натисненню кнопки
-    private void setOnClickToPasswordGeneratorButton(View view, int button_id) {
+    // Загальна функція кліку по кнопці
+    private void setOnClickToButton(View view, int button_id, Runnable action) {
         Button button = view.findViewById(button_id);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setPasswordGeneratorFragment();
-            }
-        });
-    }
-
-    // Функція встановлює подію переходу на архіву по натисненню кнопки
-    private void setOnClickToArchiveButton(View view, int button_id) {
-        Button button = view.findViewById(button_id);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity) requireActivity()).setArchiveFragment();
+                action.run();
             }
         });
     }
