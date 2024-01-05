@@ -64,6 +64,8 @@ public class RabbitSupportFragment extends Fragment {
             printSubsectionView();
         }
 
+        setOnClickToBackButton(view);
+
         return view;
     }
 
@@ -73,7 +75,7 @@ public class RabbitSupportFragment extends Fragment {
         layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, ((HomeActivity) requireActivity()).convertDPtoPX(20));
+        layoutParams.setMargins(0, ((HomeActivity) requireActivity()).convertDPtoPX(20), 0, 0);
     }
 
     private void printSections() {
@@ -137,6 +139,16 @@ public class RabbitSupportFragment extends Fragment {
         itemIcon.setImageResource(section.getSubsections().get(subsectionIndex).getIcon());
         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), itemView, R.id.imgRSSsubsection, R.color.purple);
 
-        parentContainer.addView(itemView);
+        parentContainer.addView(itemView, layoutParams);
+    }
+
+    private void setOnClickToBackButton(View view) {
+        LinearLayout backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 }

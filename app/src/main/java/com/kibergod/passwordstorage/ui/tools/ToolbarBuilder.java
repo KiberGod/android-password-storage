@@ -147,7 +147,6 @@ public class ToolbarBuilder {
     // Функція встановлює початкові кольори іконок
     private static void setIconColorsToToolbar(View view, Context context) {
         setColorToImg(context, view, BOOKMARK_ID, R.color.white);
-        setColorToImg(context, view, BACK_BUTTON_ID, R.color.white);
         setColorToImg(context, view, ERASER_ID, R.color.gray_text);
         setColorToImg(context, view, GENERATOR_ID, R.color.gray_text);
         setColorToImg(context, view, TRASH_ID, R.color.white);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +7,6 @@
     android:background="#000000"
     android:orientation="vertical"
     tools:context=".ui.pages.storage.sections.ShowRecordFragment">
-
-    <LinearLayout
-        android:id="@+id/placeForToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"/>
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -23,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingBottom="40dp">
@@ -32,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/gray_2"
+                android:layout_marginTop="20dp"
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
@@ -234,4 +229,10 @@
             <include layout="@layout/fragment_metadata"/>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/placeForToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+</FrameLayout>
