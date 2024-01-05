@@ -145,10 +145,12 @@ public class HomeActivity extends AppCompatActivity {
 
     // Перехід на інший фрагмент UI по меню навігації
     private void setFragment(Fragment fragment){
+        getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitNow();
     }
 
     // Приховання підказки для BottomNavMenu шляхом перевантаження опції довгого натискання
