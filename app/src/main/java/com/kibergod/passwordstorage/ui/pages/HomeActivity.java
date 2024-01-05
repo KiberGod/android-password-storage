@@ -113,6 +113,7 @@ public class HomeActivity extends AppCompatActivity {
 
         sharedDigitalOwnerViewModel.setRetrieveRecords(false);
         setScreenWidth();
+        new RabbitSupport();
     }
 
     // Повертає користувача до калькулятора у разі втрати фокусу програмою
@@ -235,8 +236,21 @@ public class HomeActivity extends AppCompatActivity {
 
     // Перехід на сторінку RSS-довідника
     public void setRabbitSupportFragment() {
+        setRabbitSupportFragment(-1, -1);
+    }
+
+    // Перехід на сторінку RSS-довідника
+    public void setRabbitSupportFragment(int sectionIndex) {
+        setRabbitSupportFragment(sectionIndex, -1);
+    }
+
+    // Перехід на сторінку RSS-довідника
+    public void setRabbitSupportFragment(int sectionIndex, int subsectionIndex) {
         RabbitSupportFragment rabbitSupportFragment = new RabbitSupportFragment();
-        navigateToFragment(rabbitSupportFragment, null);
+        Bundle args = new Bundle();
+        args.putInt("sectionIndex", sectionIndex);
+        args.putInt("subsectionIndex", subsectionIndex);
+        navigateToFragment(rabbitSupportFragment, args);
     }
 
     // Функція додає картку запису або категорії

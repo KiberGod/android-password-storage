@@ -80,10 +80,10 @@ public class SettingsFragment extends Fragment {
         setOnChangeToCalendar(view);
         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody, false);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.MAIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SESSION_PROTECTED, requireContext(), R.id.blurViewInSettingsPage);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.INP_CALC_CLEARING, requireContext(), R.id.blurViewInSettingsPage);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext(), R.id.blurViewInSettingsPage);
         return view;
     }
 
@@ -253,7 +253,7 @@ public class SettingsFragment extends Fragment {
                     ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_PROTECTED_MODE;
                     break;
                 case DATA_DELETION_MODE:
-                    ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_DATA_DELETION_MODE;
+                    ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_DELETION_MODE;
                     break;
             }
             Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, R.id.blurViewInSettingsPage, true);

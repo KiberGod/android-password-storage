@@ -16,38 +16,141 @@ import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
 
+import java.util.ArrayList;
+
 /*
  *  Даний клас є реалізацією системи довідок RSS (Rabbit Support System)
  */
 public class RabbitSupport {
 
-    // Перелік ідентифікаторів доступних довідкових вікон
-    public enum SupportDialogIDs {
-        DIGITAL_OWNER_HIDE_MODE(0, 0, 0, 0),
-        DIGITAL_OWNER_PROTECTED_MODE(0, 1, 1, 0),
-        DIGITAL_OWNER_DATA_DELETION_MODE(0, 2, 2, 0),
-        MAIN_PASSWORD(1, 3, 3, 1),
-        SESSION_PROTECTED(1, 4, 4, 2),
-        INP_CALC_CLEARING(1, 5, 5, 3),
-        DIGITAL_OWNER(0, 6, 6, 4),
-        CREATE_PAGE(2, 7, 7, 5);
+    public class Section {
 
-        private final int sectionId;
-        private final int titleId;
-        private final int mainTextId;
-        private final int iconId;
+        public class Subsection {
+            private int name_id;
+            private int icon_id;
+            private int text_id;
 
-        SupportDialogIDs(int sectionId, int titleId, int mainTextId, int iconId) {
-            this.sectionId = sectionId;
-            this.titleId = titleId;
-            this.mainTextId = mainTextId;
-            this.iconId = iconId;
+            public Subsection(int name_id, int icon_id, int text_id) {
+                this.name_id = name_id;
+                this.icon_id = icon_id;
+                this.text_id = text_id;
+            }
+
+            public int getName_id() { return name_id; }
+            public int getIcon_id() { return icon_id; }
+            public int getText_id() { return text_id; }
+            public String getName() { return getTitle(name_id); }
+            public int getIcon() { return getImageId(icon_id); }
+            public String getText() { return getMainText(text_id); }
         }
 
-        public int getSectionId() { return sectionId; }
-        public int getTitleId() { return titleId; }
-        public int getMainTextId() { return mainTextId; }
-        public int getIconId() { return iconId; }
+        private int name_id;
+        private int icon_id;
+        private ArrayList<Subsection> subsections;
+
+        public Section(int name_id, int icon_id) {
+            this.name_id = name_id;
+            this.icon_id = icon_id;
+            subsections = new ArrayList<>();
+        }
+
+        public void addSubsection(int subName_id, int subIcon_id, int subText_id) {
+            subsections.add(new Subsection(subName_id, subIcon_id, subText_id));
+        }
+
+        public int getName_id() { return name_id; }
+        public int getIcon_id() { return icon_id; }
+        public String getName() { return getSection(name_id); }
+        public int getIcon() { return getImageId(icon_id); }
+        public ArrayList<Subsection> getSubsections() { return subsections; }
+    }
+
+    private static ArrayList<Section> sections;
+
+
+    public RabbitSupport() {
+        sections = new ArrayList<>();
+
+        Section section1 = new Section(0,0);
+        section1.addSubsection(0,0, 0);
+        section1.addSubsection(1,6,1);
+        section1.addSubsection(2,7,2);
+        sections.add(section1);
+
+        Section section2 = new Section(1,1);
+        section2.addSubsection(3,1,3);
+        section2.addSubsection(4,1,4);
+        sections.add(section2);
+
+        Section section3 = new Section(2,2);
+        section3.addSubsection(0,2,5);
+        section3.addSubsection(5,8,6);
+        section3.addSubsection(6,5,7);
+        section3.addSubsection(7,5,8);
+        sections.add(section3);
+
+        Section section4 = new Section(3,3);
+        section4.addSubsection(8,9,9);
+        section4.addSubsection(9,10,10);
+        section4.addSubsection(10,11,11);
+        sections.add(section4);
+
+        Section section5 = new Section(4,4);
+        section5.addSubsection(0,4,12);
+        section5.addSubsection(11,12,13);
+        section5.addSubsection(12,12,14);
+        section5.addSubsection(13,12,15);
+        sections.add(section5);
+
+        Section section6 = new Section(5,5);
+        sections.add(section6);
+    }
+
+    public static ArrayList<Section> getSections() {
+        return sections;
+    }
+
+    public static ArrayList<Section.Subsection> getSubsectionsBySectionIndex(int index) {
+        return sections.get(index).getSubsections();
+    }
+
+    public static Section getSectionByIndex(int index) {
+        return sections.get(index);
+    }
+
+
+    // Перелік ідентифікаторів доступних довідкових вікон
+    public enum SupportDialogIDs {
+        STORAGE_GENERAL_INFO(0,0),
+        STORAGE_SEARCH(0,1),
+        STORAGE_FILTERS(0,2),
+        CREATE_RECORD(1,0),
+        CREATE_CATEGORY(1,1),
+        TOOLS_GENERAL_INFO(2,0),
+        TOOLS_GENERATOR(2,1),
+        TOOLS_ARCHIVE(2,2),
+        TOOLS_RSS(2,3),
+        SETTINGS_LOGIN_PASSWORD(3,0),
+        SETTINGS_SESSION_PROTECT(3,1),
+        SETTINGS_CALC_CLEARING(3,2),
+        DIGITAL_OWNER_GENERAL_INFO(4,0),
+        DIGITAL_OWNER_HIDE_MODE(4,1),
+        DIGITAL_OWNER_PROTECTED_MODE(4,2),
+        DIGITAL_OWNER_DELETION_MODE(4,3);
+
+        private final int sectionId;
+        private final int subsectionId;
+
+
+        SupportDialogIDs(int sectionId, int subsectionId) {
+            this.sectionId = sectionId;
+            this.subsectionId = subsectionId;
+        }
+
+        public String getSectionName() { return sections.get(sectionId).getName(); }
+        public String getSubsectionName() { return sections.get(sectionId).subsections.get(subsectionId).getName(); }
+        public String getSubsectionText() { return sections.get(sectionId).subsections.get(subsectionId).getText(); }
+        public int getSubsectionIcon() { return sections.get(sectionId).subsections.get(subsectionId).getIcon(); }
     }
 
     /*
@@ -78,15 +181,15 @@ public class RabbitSupport {
         rabbitSupportDialog.setContentView(R.layout.dialog_rabbit_support);
 
         ImageView imageView = rabbitSupportDialog.findViewById(R.id.infoImg);
-        imageView.setImageResource(getImageId(dialogID.getIconId()));
+        imageView.setImageResource(dialogID.getSubsectionIcon());
         imageView.setColorFilter(ContextCompat.getColor(context, R.color.purple), PorterDuff.Mode.SRC_IN);
 
         TextView infoSection = rabbitSupportDialog.findViewById(R.id.infoSection);
         TextView infoTitle = rabbitSupportDialog.findViewById(R.id.infoTitle);
         TextView mainInfoText = rabbitSupportDialog.findViewById(R.id.mainInfoText);
-        infoSection.setText("Розділ: " + getSection(dialogID.getSectionId()));
-        infoTitle.setText(getTitle(dialogID.getTitleId()));
-        mainInfoText.setText(getMainText(dialogID.getMainTextId()));
+        infoSection.setText("Розділ: " + dialogID.getSectionName());
+        infoTitle.setText(dialogID.getSubsectionName());
+        mainInfoText.setText(dialogID.getSubsectionText());
 
 
         View blurView = rootView.findViewById(blurViewId);
@@ -115,7 +218,7 @@ public class RabbitSupport {
             ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
         }
 
-        if (getMainText(dialogID.getMainTextId()).length() > 400) {
+        if (dialogID.getSubsectionText().length() > 400) {
             ScrollView scrollView = rabbitSupportDialog.findViewById(R.id.scrollArea);
 
             ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
@@ -129,50 +232,73 @@ public class RabbitSupport {
     // Набір назв секцій
     private static String getSection(int id) {
         return new String[]{
-                "Налаштування > Цифровий власник",
+                "Сховище",
+                "Сторінка створення",
+                "Інструменти",
                 "Налаштування",
-                "Додати"
+                "Цифровий власник",
+                "Щось інше",
         }[id];
     }
 
     // Набір тайтлів
     private static String getTitle(int id) {
         return new String[]{
-                "Режим приховання даних",
-                "Режим захисту входу",
-                "Режим видалення даних",
+                "Загальна інформація",
+                "Пошук",
+                "Фільтри",
+                "Створення запису",
+                "Створення категорії",
+                "Генератор",
+                "Архів",
+                "RSS-довідник",
                 "Пароль для входу",
                 "Сесійний захист",
                 "Очищення калькулятора",
-                "Цифровий власник",
-                "Створення нової хованки"
+                "Режим приховання даних",
+                "Режим захисту входу",
+                "Режим видалення даних",
         }[id];
     }
 
     // Набір описів
     private static String getMainText(int id) {
         return new String[]{
-                "В разі активації цього режиму, Цифровий власник миттєво сховає всі існуючі записи. Для їх відновлення необхідно ввести ваш пароль у калькуляторі задом наперед. Ви можете спокійно продовжувати користуватись сховищем, створюючи нові записи навіть до моменту відновлення старих. Під час відновлення Цифровий власник об'єднає сховані дані з новоствореними.\n\nВи можете повторно приховувати дані. Під час відновлення буде повернуто абсолютно усі записи\n\n* для цього режиму не треба вказувати дату спрацювання",
-                "У цьому режимі Цифровий власник заблокує можливість входити по стандартному паролю починаючи з певної, зазначеної вами, дати спрацювання (включно).  Для входу буде необхідно ввести ваш пароль задом наперед. \n\n* для цього режиму обов'язково вкажіть дату спрацювання",
-                "У цьому режимі Цифровий власник чекатиме настання дати спрацювання, після чого чекатиме будь-який успішний вхід у сховище (неважливо, у вказану дату спрацювання або пізніше). Як тільки ці умови будуть виконані, він миттєво видалить всі дані записів та категорій. Видалення відбудеться до того, як хтось при вході зможе побачити хоч щось.\n\nПам'ятайте, дані будуть видалені не одразу (навіть є час, щоб вимкнути цей режим), але після видалення відновити їх буде неможливо.\n\n* для цього режиму обов'язково вкажіть дату спрацювання",
+                "Сховище - це місце, де зберігаються записи, категорії та закладки. Саме звідси ви можете керувати переліченими об'єктами, а саме:\n\n- переглядати\n- редагувати\n- видаляти\n\n Слід зазначити, що видалені або приховані Цифровим власником записи зберігаються поза межами сховища, тож знайти їх тут не вдасться (до моменту їх відновлення). \n\nЩоб перемикатися  між списками записів, категорій та закладок, використовуйте свайп ліворуч та праворуч.",
+                "Сховище має вбудовану пошукову систему. Для її спрацювання достатньо просто почати щось вводити у відповідне поле. Пошук працює за наступними правилами:\n\n1) В якості поля для порівняння використовується назва.\n\n2) Імунітет до регістру літер. Неважливо, які літери ви використовуватимете при пошуку, великі чи малі. Так само неважливо, з яких літер складається назва. Наприклад, якщо є запис з іменем 'Запис 1', то для його пошуку можна використати будь-яку з наступних конструкцій: 'запис 1', 'ЗАПИС 1', 'Запис 1' або 'зАпИс 1'. Результат буде однаковий.\n\n3) Пошук у контексті. Нема ніякої необхідності вводити точну назву шуканого об'єкта, достатньо ввести її частину. Наприклад запис з назвою 'Запис 2' можна знайти, використовуючи наступні конструкції: 'АПИС', 'ап', 'заП', 'с 2' та інші.\n\nВсі об'єкти, що не відповідають пошуковому запиту будуть тимчасово приховані.",
+                "Сховище має власну систему фільтрів. Вони використовуються для того, щоб змінити порядок та сортування об'єктів. Загалом є дві групи фільтрів: 'сортування' та 'критерій'. Фільтр критерію вказує, яке саме поле обрати в якості критерію сортування. На даний момент доступно 3 варіанти:\n\n - дата оновлення\n - дата перегляду\n - дата створення\n\nВ залежності від обраного критерію, буде змінюватись іконка та часова мітка на картках об'єктів.\n\nДругий фільтр надає можливість змінити порядок сортування, починаючи або від найстаріших об'єктів, або від найновіших.\n\nФільтри можуть працювати як самостійно, так і разом з пошуковим запитом, сортуючи результати пошуку.",
+                "Щоб створити запис, достатньо перейти у розділ створення та натиснути відповідну кнопку. Процес створення є стандартним та не містить якихось особливостей. Все що необхідно - це заповнити поля даними та зберегти.\n\nТакож тут присутня валідація даних, яка розповсюджується на поле назви запису. Якщо запис з такою назвою вже існує, система видасть відповідне повідомлення з проханням змінити назву. Це зроблено для того, аби унеможливити створення однойменних записів та майбутньої плутанини користувача у них.\n\n * якщо ви впевнені, що ваша назва є унікальною та немає жодного запису з такою ж самою назвою, але валідація все одно видає попередження, це означає одне з наступного: \n\n- в архіві міститься запис з такою є самою назвою\n- серед прихованих Цифровим власником записів є запис з такою самою назвою",
+                "Щоб створити категорію, достатньо перейти у розділ створення та натиснути відповідну кнопку. Процес створення є стандартним та не містить якихось особливостей. Все що необхідно - це заповнити поля даними та зберегти.\n\nТакож тут присутня валідація даних, яка розповсюджується на поле назви категорії. Якщо категорія з такою назвою вже існує, система видасть відповідне повідомлення з проханням змінити назву. Це зроблено для того, аби унеможливити створення однойменних категорій та майбутньої плутанини користувача у них.",
+                "У даному розділі містяться деякі додаткові підсистеми, представлені у вигляді інструментів. Їх основною метою є спрощення та покращення роботи користувача з програмою. На даний момент цей розділ містить: \n\n - генератор\n - архів\n - RSS-довідник",
+                "Генератор - це одна з підсистем Rabbit Hole, що надає можливість генерувати паролі, коди, секретні ключі та інші дані. Доступ до функції генерації надається у два способи:\n\n- напряму зі сторінки генератора\n- за допомогою інструменту швидкого доступу на сторінках редагування запису\n\nДля використання другого способу достатньо лише один раз налаштувати генератор. Надалі в нього можна навіть не заходити та використовувати виставлені налаштування генерації напряму у контексті редагування запису.\n\nГенератор має ряд налаштувань, які роблять його генерацію більш гнучкою та різноманітною. Присутні наступні налаштування: \n\n1) Довжина поля. Максимальна довжина сягає 100 символів, мінімальна - 1 символ.\n\n2) Заборонені символи. Ви можете вказати, які саме символи не слід використовувати під час генерації. За замовчуванням це '@%*^#&', але ви можете змінити цей перелік.\n\n3) Використання символьних сетів. Загалом є 4 сети:\n - цифри [0-9]\n - маленькі літери [a-z]\n - великі літери [A-Z]\n - спец.символи\nВи маєте можливість додавати та вилучати ці сети з процесу генерації. Також, окремо для кожного сету, ви можете налаштувати спосіб задання кількості символів, які будуть використані під час генерації. Випадкова кількість буде автоматично змінюватись перед кожною генерацією, а ручне задання кількості залишить цей параметр статичним. Кількість символів вказує, скільки саме генератору необхідно взяти символів з даного сету.\n\n* Сет спец.символів містить наступний набір символів:\n!@#$%^&*()-_=+[]{}|;:'\",.<>?\n\n* для швидкого відкриття сторінки генератора зі сторінок редагування записів, просто натисніть та утримуйте його іконку.",
+                "Архів - це одна з підсистем Rabbit Hole, що деякий час зберігає в собі видалені записи. Якщо з моменту видалення запису пройде 1 місяць, то запис буде видалено назавжди. До цього моменту користувача є можливість переглядати видалені (зі сховища) записи та відновляти їх. Час до автовидалення вказується на картках записів. Архівовані записи не відображаються у сховищі. Відновлені записи повертаються до архіву.\n\nТакож архів надає можливість очистити одразу всі записи не дочікуючись автовидалення. Ця дія (як і автовидалення) назавжди видалить запис і відновити його буде неможливо. Якщо на момент приховання даних Цифровим власником запис знаходився у архіві, то очищення архіву не видалить його. Ця опція стосується лише явно відображених записів архіву.  \n\n* активація Цифрового власника у режимі приховання даних приховає також і архівовані записи, але це не збереже їх від автовидалення через місяць, тож будьте уважні!",
+                "RSS (або Rabbit Support System) - це одна з підсистем Rabbit Hole, що представляє собою інтерактивний довідник. Зараз ви знаходитесь у ньому. У різних місцях інтерфейсу програми є елементи, натиснення на які викличе RSS-вікно з короткою довідковою інформацією прямо у контексті того розділу, де відбувся виклик.\n\nRSS містить інформацію стосовно:\n\n- розділів програми\n- підсистем та інструментів\n- об'єктів даних\n- налаштувань\n - деякі поради щодо використання",
                 "Це ваш особистий ключ для входу у сховище. Він вводиться у калькуляторі, тому має містити лише:\n\n- цифри (0-9)\n- символи ('.', '-', '+')\n\nТакож пароль не може бути порожнім або перевищувати довжину в 9 знаків.",
                 "Будучи ввімкненою, дана опція повертатиме вас до калькулятора щоразу, коли:\n\n- програму було згорнуто\n- екран пристрою погас\n- пристрій вимкнуто\n\nПідвищує загальний рівень безпеки ваших даних.",
                 "Дане налаштування дозволяє спростити вхід до сховища, шляхом видалення попередніх даних вводу у калькуляторі (якщо увімкнено).\n\nПідвищує безпеку використання програми при сторонніх людях.",
                 "Цифровий власник - це підсистема Rabbit Hole, що містить алгоритми автоматизованого керування програмою. На даний момент має 3 режими роботи:\n\n- приховання даних\n- захист входу\n- видалення даних\n\nЦільовою задачею даної підсистеми є підвищення безпеки шляхом використання нестандартних методів.\n\nБудьте обережні при використанні та взаємодії з Цифровим власником. Уважно ознайомтесь з деталями обраного режиму, перш ніж його вмикати. Ця підсистема є вкрай небезпечною, допустивши помилку, ви ризикуєте втратити свої дані або навіть доступ до сховища.\n\nВикористовуйте тільки у тому разі, якщо точно знаєте, що робите.",
-                "Даний розділ надає вам можливість створювати записи та їх категорії. \n\nХованка - умовна узагальнююча назва. Запис є основним об'єктом зберігання ваших даних. Категорії призначені для більш гнучкого керування записами.\n\nЩоб почати створювати нову хованку, просто поверніться до відповідного меню та натисніть будь-яку кнопку."
+                "В разі активації цього режиму, Цифровий власник миттєво сховає всі існуючі записи. Для їх відновлення необхідно ввести ваш пароль у калькуляторі задом наперед. Ви можете спокійно продовжувати користуватись сховищем, створюючи нові записи навіть до моменту відновлення старих. Під час відновлення Цифровий власник об'єднає сховані дані з новоствореними.\n\nВи можете повторно приховувати дані. Під час відновлення буде повернуто абсолютно усі записи\n\n* для цього режиму не треба вказувати дату спрацювання",
+                "У цьому режимі Цифровий власник заблокує можливість входити по стандартному паролю починаючи з певної, зазначеної вами, дати спрацювання (включно).  Для входу буде необхідно ввести ваш пароль задом наперед. \n\n* для цього режиму обов'язково вкажіть дату спрацювання",
+                "У цьому режимі Цифровий власник чекатиме настання дати спрацювання, після чого чекатиме будь-який успішний вхід у сховище (неважливо, у вказану дату спрацювання або пізніше). Як тільки ці умови будуть виконані, він миттєво видалить всі дані записів та категорій. Видалення відбудеться до того, як хтось при вході зможе побачити хоч щось.\n\nПам'ятайте, дані будуть видалені не одразу (навіть є час, щоб вимкнути цей режим), але після видалення відновити їх буде неможливо.\n\n* для цього режиму обов'язково вкажіть дату спрацювання",
         }[id];
     }
 
     // Набір ідентифікаторів картинок
     private static int getImageId(int id) {
         return new int[]{
-                R.drawable.vector__modern_rabbit,
+                R.drawable.vector__lock_24,
+                R.drawable.vector__add_circle_24,
+                R.drawable.vector__tools,
+                R.drawable.vector__settings_24,
+                R.drawable.vector__running_rabbit,
+                R.drawable.vector_template_image,
+                R.drawable.vector__search,
+                R.drawable.vector__filters,
+                R.drawable.vector__gears,
                 R.drawable.vector__vertical_key,
                 R.drawable.vector__phone_lock,
                 R.drawable.vector__eraser,
-                R.drawable.vector__running_rabbit,
-                R.drawable.vector__hopping_rabbit
+                R.drawable.vector__modern_rabbit,
         }[id];
     }
-
 }
