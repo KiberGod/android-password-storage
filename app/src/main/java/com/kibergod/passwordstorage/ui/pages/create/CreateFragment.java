@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
@@ -42,7 +43,7 @@ public class CreateFragment extends Fragment {
 
     // Функція встановлює подію переходу на сторінку створення запису/категорії по натисненню кнопки
     private void setOnClickToCreateButton(View view, int button_id) {
-        Button createButton = view.findViewById(button_id);
+        LinearLayout createButton = view.findViewById(button_id);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
