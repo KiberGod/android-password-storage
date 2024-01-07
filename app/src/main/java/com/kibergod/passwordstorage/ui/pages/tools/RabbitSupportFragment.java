@@ -60,8 +60,10 @@ public class RabbitSupportFragment extends Fragment {
             printSections();
         } else if (subsectionIndex == -1) {
             printSubsections();
+            printSubsectionTitle(view);
         } else {
             printSubsectionView();
+            printSubsectionTitle(view);
         }
 
         setOnClickToBackButton(view);
@@ -150,5 +152,10 @@ public class RabbitSupportFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+    }
+
+    private void printSubsectionTitle(View view) {
+        TextView textView = view.findViewById(R.id.rssTitle);
+        textView.append(" > " + RabbitSupport.getSectionByIndex(sectionIndex).getName());
     }
 }
