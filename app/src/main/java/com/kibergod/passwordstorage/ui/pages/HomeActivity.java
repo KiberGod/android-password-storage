@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.kibergod.passwordstorage.BuildConfig;
 import com.kibergod.passwordstorage.MainActivity;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
@@ -114,6 +116,8 @@ public class HomeActivity extends AppCompatActivity {
         sharedDigitalOwnerViewModel.setRetrieveRecords(false);
         setScreenWidth();
         new RabbitSupport();
+
+        setVersionToToolbar();
     }
 
     // Повертає користувача до калькулятора у разі втрати фокусу програмою
@@ -684,5 +688,12 @@ public class HomeActivity extends AppCompatActivity {
             default:
                 return R.drawable.vector__add_circle_24;
         }
+    }
+
+    // Встановлює поточну версію у тулбар
+    private void setVersionToToolbar() {
+        TextView versionTextView = findViewById(R.id.programVersionView);
+        versionTextView.setText("v."+BuildConfig.VERSION_NAME);
+        versionTextView.setPaintFlags(versionTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 }
