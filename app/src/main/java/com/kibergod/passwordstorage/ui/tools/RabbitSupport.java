@@ -167,7 +167,6 @@ public class RabbitSupport {
      * Context context              -   контекст, поверх якого буде відображено довідкове вікно
      * SupportDialogIDs dialogID    -   ідентифікатор довідкового вікна
      * View rootView                -   вікно, поверх якого буде відображено довідкове вікно
-     * int blurViewId               -   ідентифікатор блюр-елемента основного вікна
      */
     public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView) {
         return getRabbitSupportDialog(context, dialogID, rootView, false);
@@ -179,7 +178,6 @@ public class RabbitSupport {
      * Context context              -   контекст, поверх якого буде відображено довідкове вікно
      * SupportDialogIDs dialogID    -   ідентифікатор довідкового вікна
      * View rootView                -   вікно, поверх якого буде відображено довідкове вікно
-     * int blurViewId               -   ідентифікатор блюр-елемента основного вікна
      * boolean activeBlockFlag      -   флаг, що відповідає за додаткову, активну частину (з кнопками) діалогового вікна
      *                                      true    ->  кнопки будуть відображені
      *                                      false   ->  кнопки будуть видалені

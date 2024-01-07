@@ -51,6 +51,7 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.databinding.ActivityHomeBinding;
 import com.kibergod.passwordstorage.model.Category;
+import com.kibergod.passwordstorage.ui.pages.tools.AppInfoFragment;
 import com.kibergod.passwordstorage.ui.pages.tools.ArchiveFragment;
 import com.kibergod.passwordstorage.ui.pages.tools.RabbitSupportFragment;
 import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
@@ -257,6 +258,12 @@ public class HomeActivity extends AppCompatActivity {
         args.putInt("sectionIndex", sectionIndex);
         args.putInt("subsectionIndex", subsectionIndex);
         navigateToFragment(rabbitSupportFragment, args);
+    }
+
+    // Перехід на сторінку довідки про програму
+    public void setAppInfoFragment() {
+        AppInfoFragment appInfoFragment = new AppInfoFragment();
+        navigateToFragment(appInfoFragment, null);
     }
 
     // Функція додає картку запису або категорії
