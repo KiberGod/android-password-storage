@@ -32,7 +32,8 @@ public class CreateFragment extends Fragment {
         setOnClickToCreateButton(view, R.id.createRecordButton);
         setOnClickToCreateButton(view, R.id.createCategoryButton);
 
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.createPageImg, RabbitSupport.SupportDialogIDs.CREATE_RECORD, requireContext(), R.id.blurViewInCreatePage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.createRecordButton, RabbitSupport.SupportDialogIDs.CREATE_RECORD, requireContext());
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.createCategoryButton, RabbitSupport.SupportDialogIDs.CREATE_CATEGORY, requireContext());
         return view;
     }
 

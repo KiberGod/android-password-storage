@@ -20,6 +20,7 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,7 @@ public class ArchiveFragment extends Fragment {
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel.runAutoRemoveRecordsFromArchive();
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.archiveTitle, RabbitSupport.SupportDialogIDs.TOOLS_ARCHIVE, requireContext());
         drawButtonList(view);
         setOnClickToClearArchiveButton(view);
         return view;

@@ -169,8 +169,8 @@ public class RabbitSupport {
      * View rootView                -   вікно, поверх якого буде відображено довідкове вікно
      * int blurViewId               -   ідентифікатор блюр-елемента основного вікна
      */
-    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView, int blurViewId) {
-        return getRabbitSupportDialog(context, dialogID, rootView, blurViewId, false);
+    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView) {
+        return getRabbitSupportDialog(context, dialogID, rootView, false);
     }
 
     /*
@@ -184,7 +184,7 @@ public class RabbitSupport {
      *                                      true    ->  кнопки будуть відображені
      *                                      false   ->  кнопки будуть видалені
      */
-    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView, int blurViewId, boolean activeBlockFlag) {
+    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView, boolean activeBlockFlag) {
         Dialog rabbitSupportDialog = new Dialog(context, R.style.InfoDialog);
         rabbitSupportDialog.setContentView(R.layout.dialog_rabbit_support);
 
@@ -200,7 +200,7 @@ public class RabbitSupport {
         mainInfoText.setText(dialogID.getSubsectionText());
 
 
-        View blurView = rootView.findViewById(blurViewId);
+        View blurView = rootView.findViewById(R.id.blurView);
         blurView.setVisibility(View.VISIBLE);
         rabbitSupportDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

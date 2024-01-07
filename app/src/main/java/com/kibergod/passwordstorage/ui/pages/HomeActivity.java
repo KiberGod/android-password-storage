@@ -373,15 +373,27 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport
-    public void setRabbitSupportDialogToIcon(View view, int iconId, RabbitSupport.SupportDialogIDs ID, Context context, int blurViewId) {
+    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (короткий клік)
+    public void setRabbitSupportDialogToIconByClick(View view, int iconId, RabbitSupport.SupportDialogIDs ID, Context context) {
         ImageView imageView = view.findViewById(iconId);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(context, ID, view, blurViewId);
+                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(context, ID, view);
                 infoDialog.show();
+            }
+        });
+    }
+
+    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (довгий клік)
+    public void setRabbitSupportDialogToIconByLongClick(View view, int viewId, RabbitSupport.SupportDialogIDs ID, Context context) {
+        View viewButton = view.findViewById(viewId);
+        viewButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(context, ID, view);
+                infoDialog.show();
+                return true;
             }
         });
     }

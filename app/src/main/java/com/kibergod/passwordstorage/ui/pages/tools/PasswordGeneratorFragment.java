@@ -24,6 +24,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 
 public class PasswordGeneratorFragment extends Fragment {
 
@@ -181,6 +182,7 @@ public class PasswordGeneratorFragment extends Fragment {
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
 
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.generatorTitle, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext());
         setSymbolsSetSettings(view);
         setOnClickToGeneratePassButton(view);
         setSettingsToSeekBar(view);

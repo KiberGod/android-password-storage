@@ -26,6 +26,7 @@ import com.kibergod.passwordstorage.ui.pages.storage.sections.BookmarksFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.CategoriesFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.RecordsFragment;
 import com.google.android.material.tabs.TabLayout;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 
 public class StorageFragment extends Fragment {
 
@@ -53,6 +54,8 @@ public class StorageFragment extends Fragment {
         setFiltersParam(view);
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersSorting);
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersParam);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.searchButton, RabbitSupport.SupportDialogIDs.STORAGE_SEARCH, requireContext());
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.filtersButton, RabbitSupport.SupportDialogIDs.STORAGE_FILTERS, requireContext());
         return view;
     }
 

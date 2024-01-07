@@ -80,10 +80,10 @@ public class SettingsFragment extends Fragment {
         setOnChangeToCalendar(view);
         ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody, false);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext(), R.id.blurViewInSettingsPage);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext(), R.id.blurViewInSettingsPage);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext(), R.id.blurViewInSettingsPage);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIcon(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext(), R.id.blurViewInSettingsPage);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext());
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext());
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext());
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext());
         return view;
     }
 
@@ -236,7 +236,7 @@ public class SettingsFragment extends Fragment {
     private void showResetModeConfirmDialog(View rootView, int radioButtonId, int mode) {
         RadioButton modeRadioButton = rootView.findViewById(radioButtonId);
 
-        View blurView = rootView.findViewById(R.id.blurViewInSettingsPage);
+        View blurView = rootView.findViewById(R.id.blurView);
         DialogInterface.OnDismissListener dismissListener = new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -256,7 +256,7 @@ public class SettingsFragment extends Fragment {
                     ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_DELETION_MODE;
                     break;
             }
-            Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, R.id.blurViewInSettingsPage, true);
+            Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, true);
 
 
             Button positiveButton = infoDialog.findViewById(R.id.positiveButton);

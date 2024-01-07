@@ -34,6 +34,7 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ public class ShowRecordFragment extends Fragment {
         setToolbar(view);
 
         printRecordData(view);
+        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext());
         ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
         sharedRecordsDataViewModel.updateRecordViewed_atById(recordId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
         return view;
