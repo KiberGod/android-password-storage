@@ -15,6 +15,9 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -197,7 +200,6 @@ public class RabbitSupport {
         infoTitle.setText(dialogID.getSubsectionName());
         mainInfoText.setText(dialogID.getSubsectionText());
 
-
         View blurView = rootView.findViewById(R.id.blurView);
         blurView.setVisibility(View.VISIBLE);
         rabbitSupportDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -320,5 +322,29 @@ public class RabbitSupport {
                 R.drawable.vector__archive,
                 R.drawable.vector__faq,
         }[id];
+    }
+
+    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (короткий клік)
+    public static void setRabbitSupportDialogToIconByClick(@NotNull View view, int viewId, SupportDialogIDs ID, @NotNull Context context) {
+        ViewUtils.setOnClickToView(
+                view,
+                viewId,
+                () -> {
+                    Dialog infoDialog = getRabbitSupportDialog(context, ID, view);
+                    infoDialog.show();
+                }
+        );
+    }
+
+    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (довгий клік)
+    public static void setRabbitSupportDialogToIconByLongClick(@NotNull View view, int viewId, SupportDialogIDs ID, @NotNull Context context) {
+        ViewUtils.setOnLongClickToView(
+                view,
+                viewId,
+                () -> {
+                    Dialog infoDialog = getRabbitSupportDialog(context, ID, view);
+                    infoDialog.show();
+                }
+        );
     }
 }

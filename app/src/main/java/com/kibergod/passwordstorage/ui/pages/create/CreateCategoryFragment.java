@@ -20,7 +20,9 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class CreateCategoryFragment extends Fragment {
 
@@ -33,9 +35,7 @@ public class CreateCategoryFragment extends Fragment {
     private String tempIconId;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_category, container, false);
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
@@ -58,13 +58,7 @@ public class CreateCategoryFragment extends Fragment {
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        ImageView saveButton = view.findViewById(R.id.imgTick);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getNewCategory(view);
-            }
-        });
+        ViewUtils.setOnClickToView(view, R.id.imgTick, () -> getNewCategory(view));
     }
 
     // Обробка створення нової категорії
@@ -92,11 +86,10 @@ public class CreateCategoryFragment extends Fragment {
     // Встановлення обробника події натиснення на іконку
     private void setOnClickToIconSelectWindow(View view) {
         ImageView imageView = view.findViewById(R.id.createCategoryIcon);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });

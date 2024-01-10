@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
@@ -15,18 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
-import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.BookmarksFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.CategoriesFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.RecordsFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class StorageFragment extends Fragment {
 
@@ -41,8 +39,7 @@ public class StorageFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_storage, container, false);
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
@@ -54,8 +51,8 @@ public class StorageFragment extends Fragment {
         setFiltersParam(view);
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersSorting);
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersParam);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.searchButton, RabbitSupport.SupportDialogIDs.STORAGE_SEARCH, requireContext());
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.filtersButton, RabbitSupport.SupportDialogIDs.STORAGE_FILTERS, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.searchButton, RabbitSupport.SupportDialogIDs.STORAGE_SEARCH, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.filtersButton, RabbitSupport.SupportDialogIDs.STORAGE_FILTERS, requireContext());
         return view;
     }
 
@@ -93,21 +90,10 @@ public class StorageFragment extends Fragment {
     // Згорнути / розгорнути картку-випадаюче меню фільтрів
     public void setOnClickToFiltersButton(View view) {
         ImageView filtersButton = view.findViewById(R.id.filtersButton);
-        LinearLayout editLayoutBody = view.findViewById(R.id.searchBarBody);
-        editLayoutBody.setVisibility(View.GONE);
-        filtersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isShowFilters = !isShowFilters;
-                if (isShowFilters) {
-                    editLayoutBody.setVisibility(View.VISIBLE);
-                    filtersButton.setImageResource(R.drawable.vector__mirror_filters);
-                } else {
-                    editLayoutBody.setVisibility(View.GONE);
-                    filtersButton.setImageResource(R.drawable.vector__filters);
-                }
-            }
-        });
+        ViewUtils.setOnClickToDropdownView(view, R.id.filtersButton, R.id.searchBarBody,
+                () -> filtersButton.setImageResource(R.drawable.vector__filters),
+                () -> filtersButton.setImageResource(R.drawable.vector__mirror_filters)
+        );
     }
 
     // Встановлення значення фільтру порядку сортування

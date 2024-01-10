@@ -15,14 +15,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -68,6 +66,10 @@ import com.kibergod.passwordstorage.ui.pages.storage.sections.EditRecordFragment
 import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowCategoryFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
+import com.kibergod.passwordstorage.ui.utils.Vibrator;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -85,10 +87,6 @@ public class HomeActivity extends AppCompatActivity {
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
-
-    private int screenWidth;
-
-    private boolean rabbitFounderMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         sharedGeneratorDataViewModel.setPasswordGenerator(this);
 
         sharedDigitalOwnerViewModel.setRetrieveRecords(false);
-        setScreenWidth();
+        ImageUtils.setScreenWidth(this);
         new RabbitSupport();
 
         setVersionToToolbar();
@@ -304,147 +302,9 @@ public class HomeActivity extends AppCompatActivity {
         parentContainer.addView(itemView, layoutParams);
     }
 
-    // Функція відмальовує вспливаюче вікно вибору іконки
-    public void showIconSelectionDialog(Context context, Consumer<String> func) {
-        hideKeyboard();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_icon_selection, null);
-        builder.setView(dialogView);
-
-        GridLayout rootLayout = dialogView.findViewById(R.id.iconsScrollArea);
-
-        Resources res = context.getResources();
-        String[] iconArray = getResources().getStringArray(R.array.vector_icons_array);
-
-        int numColumns = 4;
-        int numRows = (int) Math.ceil((float) iconArray.length / numColumns);
-
-        rootLayout.setRowCount(numRows);
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        for (int i = 0; i < iconArray.length; i++) {
-
-            int iconResourceId = getResources().getIdentifier(iconArray[i], "drawable", context.getPackageName());
-
-            ImageView imageView = getResizeIcon(context, iconResourceId);
-
-            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-            layoutParams.setMargins(0, 15, 0, 15);
-            layoutParams.columnSpec = GridLayout.spec(i % numColumns, 1f);
-            imageView.setLayoutParams(layoutParams);
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (func != null) {
-                        func.accept(getResources().getResourceEntryName(iconResourceId));
-                    }
-                    alertDialog.dismiss();
-                }
-            });
-
-            rootLayout.addView(imageView);
-        }
-
-        alertDialog.show();
-
-        Button button = dialogView.findViewById(R.id.cancelEditIconButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { alertDialog.dismiss(); }
-        });
-    }
-
-    // Функція зменшує векторне зображення, задане ідентифікатором
-    public ImageView getResizeIcon(Context context, int iconResourceId) {
-        ImageView imageView = new ImageView(context);
-        Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), iconResourceId, null);
-
-        int newWidth = vectorDrawable.getIntrinsicWidth() / 2;
-        int newHeight = vectorDrawable.getIntrinsicHeight() / 2;
-
-        Bitmap resizedBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(resizedBitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-
-        imageView.setImageBitmap(resizedBitmap);
-        return imageView;
-    }
-
-    // Функція приховує клавіатуру вводу, якщо та відкрита
-    public void hideKeyboard() {
-        View view = getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (короткий клік)
-    public void setRabbitSupportDialogToIconByClick(View view, int iconId, RabbitSupport.SupportDialogIDs ID, Context context) {
-        ImageView imageView = view.findViewById(iconId);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(context, ID, view);
-                infoDialog.show();
-            }
-        });
-    }
-
-    // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (довгий клік)
-    public void setRabbitSupportDialogToIconByLongClick(View view, int viewId, RabbitSupport.SupportDialogIDs ID, Context context) {
-        View viewButton = view.findViewById(viewId);
-        viewButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(context, ID, view);
-                infoDialog.show();
-                return true;
-            }
-        });
-    }
-
-    // Встановлення кольору іконки
-    public void setColorToImg(Context context, View view, int imageId, int colorId) {
-        ImageView imageView = view.findViewById(imageId);
-        if (imageView != null) {
-            imageView.setColorFilter(ContextCompat.getColor(context, colorId), PorterDuff.Mode.SRC_IN);
-        }
-    }
-
     // Конвертація dp у px
     public int convertDPtoPX (int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
-
-    // Встановлює (значення змінної, а не сам екран) ширину екрана у px
-    private void setScreenWidth() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        screenWidth = displayMetrics.widthPixels;
-    }
-
-    // Повертає ширину екрана у px
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public void setImageViewSize (View view, int imgId, int sizePX) {
-        setImageViewSize(view, imgId, sizePX, sizePX);
-    }
-
-    // Автозменшення картинки запису
-    public void setImageViewSize (View view, int imgId, int widthPX, int heightPX) {
-        ImageView imageView = view.findViewById(imgId);
-        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
-        layoutParams.width = widthPX;
-        layoutParams.height = heightPX;
-        imageView.setLayoutParams(layoutParams);
     }
 
     // Оновлення тексту кнопки додавання полей
@@ -453,24 +313,17 @@ public class HomeActivity extends AppCompatActivity {
         addFieldButtonText.setText("Додати поле (" + Integer.toString(fieldCounter) + "/10)");
     }
 
-    // Повертає обрану категорію
-    public String getSelectedCategoryName(View view) {
-        TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
-        return selectedCategoryTextView.getText().toString();
-    }
-
-    // Функція, що спрацьовуватиме при обранні категорій з списку
-    public void showDropdownMenu(TextView selectedCategoryTextView, ArrayList<Category> categories, View view, Context context) {
-        hideKeyboard();
+    // Викликає появу вікна вибору категорії
+    public void callCategorySelectionDialog(TextView selectedCategoryTextView, ArrayList<Category> categories, View view, Context context) {
         ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
         CategorySelectionDialog.showCategorySelectionDialog(
                 context,
                 categories,
-                getSelectedCategoryName(view),
+                CategorySelectionDialog.getSelectedCategoryName(view),
                 categoryId -> {
                     String categoryName = sharedCategoriesDataViewModel.getCategoryNameById(categoryId);
                     if (categoryName.equals("")) {
-                        selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
+                        selectedCategoryTextView.setText(CategorySelectionDialog.getEmptyCategoryText());
                         selectedCategoryIcon.setImageResource(R.drawable.vector_template_image);
                     } else {
                         selectedCategoryTextView.setText(categoryName);
@@ -479,51 +332,6 @@ public class HomeActivity extends AppCompatActivity {
                         );
                     }
                 });
-    }
-
-    // Автоскролл на початок (верх) сторінки
-    public void setScrollToTop(View view, int scrollId) {
-        ScrollView scrollView = view.findViewById(scrollId);
-        scrollView.smoothScrollTo(0, 0);
-    }
-
-    // Автоскролл у самий низ сторінки
-    public void setScrollToBottom(View view, int scrollId) {
-        ScrollView scrollView = view.findViewById(scrollId);
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
-    }
-
-    // Повертає об`єкт вібратора
-    public Vibrator getVibrator() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
-            return (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-        }
-        return null;
-    }
-
-    // Згорнути / розгорнути картку-випадаюче меню
-    public void setOnClickToDropdownLayout(View view, int idLayoutHead, int idLayoutBody, boolean needScroll) {
-        LinearLayout editLayoutHead = view.findViewById(idLayoutHead);
-        LinearLayout editLayoutBody = view.findViewById(idLayoutBody);
-        editLayoutBody.setVisibility(View.GONE);
-        editLayoutHead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editLayoutBody.getVisibility() == View.VISIBLE) {
-                    editLayoutBody.setVisibility(View.GONE);
-                } else {
-                    editLayoutBody.setVisibility(View.VISIBLE);
-                    if (needScroll) {
-                        setScrollToBottom(view, R.id.scrollView);
-                    }
-                }
-            }
-        });
     }
 
     // Встановлення слухача змін для поля пошуку
@@ -550,90 +358,6 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout linearLayout = view.findViewById(idClearLinear);
         if (linearLayout != null) {
             linearLayout.removeAllViews();
-        }
-    }
-
-    // Друк повідомлення про відсутність записів / категорій / закладок
-    public void printNotFoundPage(View view, int idScrollArea, String searchParam, String notFoundMessage) {
-        LinearLayout scrollArea = view.findViewById(idScrollArea);
-        View fragmentView = getLayoutInflater().inflate(R.layout.fragment_not_found_page, null);
-        scrollArea.addView(fragmentView);
-        TextView notFoundMessageView = view.findViewById(R.id.notFoundMessage);
-        if (!searchParam.equals("")) {
-            Random random = new Random();
-
-            int randomNumber = random.nextInt(12) + 1;
-            switch (randomNumber) {
-                case 1:
-                    notFoundMessage = "За запитом нічого не знайдено";
-                    break;
-                case 2:
-                    notFoundMessage = "Я не буду це шукати";
-                    break;
-                case 3:
-                    notFoundMessage = "Можливо щось таке є, але шукай сам";
-                    break;
-                case 4:
-                    notFoundMessage = "Як я повинен це знайти?";
-                    break;
-                case 5:
-                    notFoundMessage = "Я нічого не знайшов, чесно";
-                    break;
-                case 6:
-                    notFoundMessage = "І як це шукати?";
-                    break;
-                case 7:
-                    notFoundMessage = "О ні, це я шукати точно не буду";
-                    break;
-                case 8:
-                    notFoundMessage = "Порожньо, спробуй згадати хоч частину назви";
-                    break;
-                case 9:
-                    notFoundMessage = "Введи будь-яку частинку назви. Якщо щось таке є - я обов'язково це знайду";
-                    break;
-                case 10:
-                    notFoundMessage = "Можеш не використовувати CAPSLOCK, я і так знайду";
-                    break;
-                case 11:
-                    notFoundMessage = "Спробуй ще :)";
-                    break;
-                case 12:
-                    notFoundMessage = "Вибач, але 404, not found :)";
-                    break;
-            }
-        }
-        notFoundMessageView.setText(notFoundMessage);
-        setOnLongClickToRabbitImg(view, action -> {
-            rabbitFounderMode = !rabbitFounderMode;
-            return rabbitFounderMode; }
-        );
-        resetRabbitImg(view, rabbitFounderMode);
-    }
-
-    // Встановлення довгого натиску на зображення кролика
-    public void setOnLongClickToRabbitImg(View view, Function<Void, Boolean> action) {
-        ImageView rabbitImg = view.findViewById(R.id.rabbitFounder);
-        rabbitImg.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Vibrator vibrator = getVibrator();
-                if (vibrator != null) {
-                    vibrator.vibrate(100);
-                }
-                resetRabbitImg(view, action.apply(null));
-                return true;
-            }
-        });
-    }
-
-    // Превстановлення зображення кролика (при пошуку)
-    public void resetRabbitImg(View view, boolean flag) {
-        ImageView rabbitImg = view.findViewById(R.id.rabbitFounder);
-
-        if (flag) {
-            rabbitImg.setImageResource(R.drawable.vector__rabbit_with_carrots);
-        } else {
-            rabbitImg.setImageResource(R.drawable.vector__rabbit_without_carrots);
         }
     }
 

@@ -6,24 +6,18 @@ import static com.kibergod.passwordstorage.model.DigitalOwner.PROTECTED_MODE;
 import static com.kibergod.passwordstorage.model.Settings.MAX_PASSWORD_LENGTH;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +33,9 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.Calendar;
 
@@ -53,9 +50,7 @@ public class SettingsFragment extends Fragment {
     private TextView textViewStatus;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
@@ -78,39 +73,29 @@ public class SettingsFragment extends Fragment {
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
         setOnChangeToCalendar(view);
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody, false);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext());
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext());
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext());
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByClick(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext());
+        ImageUtils.setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
+        ViewUtils.setOnClickToDropdownView(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody);
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext());
         return view;
-    }
-
-    // Встановлення кольору іконки налаштування
-    private void setColorToImg(View view, int imageId, boolean mode) {
-        int colorId = R.color.gray_text;
-        if (mode) {
-            colorId = R.color.purple;
-        }
-        ImageView imageView = view.findViewById(imageId);
-        imageView.setColorFilter(ContextCompat.getColor(requireContext(), colorId), PorterDuff.Mode.SRC_IN);
     }
 
     // Функція виводить дані налаштуваннь на екран
     private void printSettingsData(View view) {
         Switch activityProtectionSwitch = view.findViewById(R.id.activityProtectionFlag);
         activityProtectionSwitch.setChecked(sharedSettingsDataViewModel.getActivityProtection());
-        setColorToImg(view, R.id.imgPhoneLock, activityProtectionSwitch.isChecked());
+        ImageUtils.setColorToImg(requireContext(), view, R.id.imgPhoneLock, getColor(activityProtectionSwitch.isChecked()));
 
         Switch inputPassClearingSwitch = view.findViewById(R.id.inputCalcClearingFlag);
         inputPassClearingSwitch.setChecked(sharedSettingsDataViewModel.getInputCalcClearing());
-        setColorToImg(view, R.id.imgEraser, inputPassClearingSwitch.isChecked());
+        ImageUtils.setColorToImg(requireContext(), view, R.id.imgEraser, getColor(inputPassClearingSwitch.isChecked()));
 
         Switch digitalOwnerSwitch = view.findViewById(R.id.digitalOwnerFlag);
         digitalOwnerSwitch.setChecked(sharedSettingsDataViewModel.getDigitalOwner());
         showOrHideDigitalOwnerSettings(view);
-        setColorToImg(view, R.id.imgRunningRabbit, digitalOwnerSwitch.isChecked());
+        ImageUtils.setColorToImg(requireContext(), view, R.id.imgRunningRabbit, getColor(digitalOwnerSwitch.isChecked()));
 
         EditText inputPassword = view.findViewById(R.id.inputPassword);
         inputPassword.setText(sharedSettingsDataViewModel.getPassword());
@@ -141,54 +126,40 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onClickRunnable.run();
-                hideAllKeyBoards(view);
+                KeyboardUtils.hideKeyboards(requireContext());
 
                 if (switch_id == R.id.activityProtectionFlag) {
-                    setColorToImg(view, R.id.imgPhoneLock, settingSwitch.isChecked());
+                    ImageUtils.setColorToImg(requireContext(), view, R.id.imgPhoneLock, getColor(settingSwitch.isChecked()));
                 } else if (switch_id == R.id.inputCalcClearingFlag) {
-                    setColorToImg(view, R.id.imgEraser, settingSwitch.isChecked());
+                    ImageUtils.setColorToImg(requireContext(), view, R.id.imgEraser, getColor(settingSwitch.isChecked()));
                 } else if (switch_id == R.id.digitalOwnerFlag) {
-                    setColorToImg(view, R.id.imgRunningRabbit, settingSwitch.isChecked());
+                    ImageUtils.setColorToImg(requireContext(), view, R.id.imgRunningRabbit, getColor(settingSwitch.isChecked()));
                 }
             }
         });
     }
 
     private void setOnClickToRadioButton(View view, int radioButtonId, Runnable onClickRunnable) {
-        RadioButton settingsRadioButton = view.findViewById(radioButtonId);
-
-        settingsRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickRunnable.run();
-                hideAllKeyBoards(view);
-            }
+        ViewUtils.setOnClickToView(view, radioButtonId, () -> {
+            onClickRunnable.run();
+            KeyboardUtils.hideKeyboards(requireContext());
         });
     }
 
     // Встановлює обробник натискання на скид налаштуваннь до стандартних
     private void setOnClickDefaultSettingsButton(View view) {
-        Button button = view.findViewById(R.id.setDefaultSettingsButton);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAllKeyBoards(view);
-                sharedSettingsDataViewModel.setDefaultSettings();
-                printSettingsData(view);
-            }
+        ViewUtils.setOnClickToView(view, R.id.setDefaultSettingsButton, () -> {
+            KeyboardUtils.hideKeyboards(requireContext());
+            sharedSettingsDataViewModel.setDefaultSettings();
+            printSettingsData(view);
         });
     }
 
     // Функція встановлює подію натискання кнопки збереження введених змін (для пароля)
     private void setOnClickToSavePasswordButton(View view) {
-        Button button = view.findViewById(R.id.savePasswordButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAllKeyBoards(view);
-                getEditPassword(view);
-            }
+        ViewUtils.setOnClickToView(view, R.id.savePasswordButton, () -> {
+            KeyboardUtils.hideKeyboards(requireContext());
+            getEditPassword(view);
         });
     }
 
@@ -258,35 +229,27 @@ public class SettingsFragment extends Fragment {
             }
             Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, true);
 
-
-            Button positiveButton = infoDialog.findViewById(R.id.positiveButton);
-            positiveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    sharedDigitalOwnerViewModel.setMode(mode);
-                    if (sharedDigitalOwnerViewModel.isHideMode(mode)) {
-                        sharedRecordsDataViewModel.hideAllRecords();
-                    }
-                    printCalendarData(rootView);
-                    infoDialog.setOnDismissListener(null);
-                    infoDialog.cancel();
-                    blurView.setVisibility(View.GONE);
-                    infoDialog.setOnDismissListener(dismissListener);
+            ViewUtils.setOnClickToDialog(infoDialog, R.id.positiveButton, () -> {
+                sharedDigitalOwnerViewModel.setMode(mode);
+                if (sharedDigitalOwnerViewModel.isHideMode(mode)) {
+                    sharedRecordsDataViewModel.hideAllRecords();
                 }
+                printCalendarData(rootView);
+                infoDialog.setOnDismissListener(null);
+                infoDialog.cancel();
+                blurView.setVisibility(View.GONE);
+                infoDialog.setOnDismissListener(dismissListener);
             });
 
-            Button negativeButton = infoDialog.findViewById(R.id.negativeButton);
-            negativeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    sharedDigitalOwnerViewModel.setPassiveMode();
-                    offDigitalOwnerMods(rootView);
-                    infoDialog.setOnDismissListener(null);
-                    infoDialog.cancel();
-                    blurView.setVisibility(View.GONE);
-                    infoDialog.setOnDismissListener(dismissListener);
-                }
+            ViewUtils.setOnClickToDialog(infoDialog, R.id.negativeButton, () -> {
+                sharedDigitalOwnerViewModel.setPassiveMode();
+                offDigitalOwnerMods(rootView);
+                infoDialog.setOnDismissListener(null);
+                infoDialog.cancel();
+                blurView.setVisibility(View.GONE);
+                infoDialog.setOnDismissListener(dismissListener);
             });
+
             infoDialog.setOnDismissListener(dismissListener);
             infoDialog.show();
         } else {
@@ -300,7 +263,6 @@ public class SettingsFragment extends Fragment {
         radioGroup.clearCheck();
     }
 
-
     // Функція встановлює подію натискання кнопки збереження кількості днів для спрацювання Цифрового власника
     private void setOnChangeToCalendar(View rootView) {
         CalendarView calendarView = rootView.findViewById(R.id.calendarView);
@@ -312,24 +274,15 @@ public class SettingsFragment extends Fragment {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                hideAllKeyBoards(rootView);
+                KeyboardUtils.hideKeyboards(requireContext());
                 sharedDigitalOwnerViewModel.editDate(dayOfMonth, month, year);
                 Toast.makeText(getActivity(), "Точка спрацювання встановлена", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
-    // Функція приховання клавіатур
-    private void hideAllKeyBoards(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        hideKeyBoard(inputMethodManager, view, R.id.inputPassword);
-    }
-
-    // Приховання клавіатури для конкретного поля
-    private void hideKeyBoard(InputMethodManager inputMethodManager, View view, int id) {
-        EditText editText = view.findViewById(id);
-        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    // Ресетер кольору іконок
+    private int getColor(boolean mode) {
+        return mode ? R.color.purple : R.color.gray_text;
     }
 }

@@ -1,6 +1,5 @@
 package com.kibergod.passwordstorage.ui.pages.tools;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -12,7 +11,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,6 +23,9 @@ import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class PasswordGeneratorFragment extends Fragment {
 
@@ -49,7 +50,7 @@ public class PasswordGeneratorFragment extends Fragment {
             homeViewModel.setMaxLengthForInput(this.lengthEdit, 4);
             setOnChangedToEditText(index);
             setOnFocusToEditText();
-            ((HomeActivity) requireActivity()).setColorToImg(requireContext(), view, R.id.generatorButtonIcon, R.color.white);
+            ImageUtils.setColorToImg(requireContext(), view, R.id.generatorButtonIcon, R.color.white);
         }
 
         private int getEditTextId() {
@@ -61,7 +62,7 @@ public class PasswordGeneratorFragment extends Fragment {
             usageSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    hideAllKeyBoards(view);
+                    KeyboardUtils.hideKeyboards(requireContext());
                     sharedGeneratorDataViewModel.editSymbolSetUsageByIndex(index, usageSwitch.isChecked(), requireContext());
                     updateSignBar(signItemLayout, isChecked);
                 }
@@ -80,7 +81,7 @@ public class PasswordGeneratorFragment extends Fragment {
             randomLengthSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    hideAllKeyBoards(view);
+                    KeyboardUtils.hideKeyboards(requireContext());
                     sharedGeneratorDataViewModel.editSymbolSetRandomLengthByIndex(index, randomLengthSwitch.isChecked(), requireContext());
                     if (isChecked) {
                         randomLengthSwitch.setText("Вручну");
@@ -174,15 +175,13 @@ public class PasswordGeneratorFragment extends Fragment {
     private SymbolSetSettings[] symbolSetSettings;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_password_generator, container, false);
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
 
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.generatorTitle, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.generatorTitle, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext());
         setSymbolsSetSettings(view);
         setOnClickToGeneratePassButton(view);
         setSettingsToSeekBar(view);
@@ -217,7 +216,7 @@ public class PasswordGeneratorFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                hideAllKeyBoards(view);
+                KeyboardUtils.hideKeyboards(requireContext());
                 sharedGeneratorDataViewModel.editPassLength(progress + sharedGeneratorDataViewModel.getMinPassLength(), requireContext());
                 setPassLengthToTextView(view);
                 printSetsLengths();
@@ -252,31 +251,10 @@ public class PasswordGeneratorFragment extends Fragment {
 
     private void setSymbolsSetSettings(View view) {
         symbolSetSettings = new SymbolSetSettings[sharedGeneratorDataViewModel.getNumberTypes()];
-
         symbolSetSettings[0] = new SymbolSetSettings(view, 0, "Цифри", "0-9", R.id.signItem1, R.id.signItemLen1);
         symbolSetSettings[1] = new SymbolSetSettings(view, 1, "Маленькі літери", "a-z", R.id.signItem2, R.id.signItemLen2);
         symbolSetSettings[2] = new SymbolSetSettings(view, 2, "Великі літери", "A-Z", R.id.signItem3, R.id.signItemLen3);
         symbolSetSettings[3] = new SymbolSetSettings(view, 3, "Спец. символи", "#.&", R.id.signItem4, R.id.signItemLen4);
-    }
-
-    // Функція приховання клавіатур
-    private void hideAllKeyBoards(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        hideKeyBoard(inputMethodManager, view, R.id.passwordEdit);
-
-        hideKeyBoard(inputMethodManager, view, symbolSetSettings[0].getEditTextId());
-        hideKeyBoard(inputMethodManager, view, symbolSetSettings[1].getEditTextId());
-        hideKeyBoard(inputMethodManager, view, symbolSetSettings[2].getEditTextId());
-        hideKeyBoard(inputMethodManager, view, symbolSetSettings[3].getEditTextId());
-
-        hideKeyBoard(inputMethodManager, view, R.id.notUseSymbolsEdit);
-    }
-
-    // Приховання клавіатури для конкретного поля
-    private void hideKeyBoard(InputMethodManager inputMethodManager, View view, int id) {
-        EditText editText = view.findViewById(id);
-        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
     private void printSetsLengths() {
@@ -298,16 +276,10 @@ public class PasswordGeneratorFragment extends Fragment {
     }
 
     private void setOnClickToGeneratePassButton(View view) {
-        LinearLayout button = view.findViewById(R.id.createPassword);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText passwordEdit = view.findViewById(R.id.passwordEdit);
-                passwordEdit.setText(
-                        sharedGeneratorDataViewModel.getPassword(requireContext())
-                );
-                printSetsLengths();
-            }
+        ViewUtils.setOnClickToView(view, R.id.createPassword, () -> {
+            EditText passwordEdit = view.findViewById(R.id.passwordEdit);
+            passwordEdit.setText(sharedGeneratorDataViewModel.getPassword(requireContext()));
+            printSetsLengths();
         });
     }
 }

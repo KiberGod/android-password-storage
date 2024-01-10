@@ -6,25 +6,18 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +27,11 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.Vibrator;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 
@@ -74,8 +70,7 @@ public class ShowRecordFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_record, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
@@ -89,8 +84,8 @@ public class ShowRecordFragment extends Fragment {
         setToolbar(view);
 
         printRecordData(view);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext());
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext());
+        ViewUtils.setOnClickToDropdownView(view, R.id.metadataHead, R.id.metadataBody, null, () -> ViewUtils.setScrollToBottom(view, R.id.scrollView));
         sharedRecordsDataViewModel.updateRecordViewed_atById(recordId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
         return view;
     }
@@ -100,7 +95,7 @@ public class ShowRecordFragment extends Fragment {
         setTextViewText(view, R.id.recordTitle, sharedRecordsDataViewModel.getRecordTitleById(recordId));
         String category = sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId));
         if (category.equals("")) {
-            category = homeViewModel.getEmptyCategoryText();
+            category = CategorySelectionDialog.getEmptyCategoryText();
         }
         setTextViewText(view, R.id.recordCategory, category);
 
@@ -196,16 +191,11 @@ public class ShowRecordFragment extends Fragment {
 
     // Встановлення події натиснення на кнопку приховання значення поля
     private void setOnClickToHideValueButton(View fieldView, int imageId, int fieldIndex, int textViewValueId) {
-        LinearLayout hideValueButton = fieldView.findViewById(R.id.hideValueButton);
         ImageView imageView = fieldView.findViewById(imageId);
         TextView textViewValue = fieldView.findViewById(textViewValueId);
-
-        hideValueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedRecordsDataViewModel.setRecordFieldValueVisibilityById(recordId, fieldIndex);
-                updateFieldValueBlock(textViewValue, imageView, fieldIndex);
-            }
+        ViewUtils.setOnClickToView(fieldView, R.id.hideValueButton, () -> {
+            sharedRecordsDataViewModel.setRecordFieldValueVisibilityById(recordId, fieldIndex);
+            updateFieldValueBlock(textViewValue, imageView, fieldIndex);
         });
     }
 
@@ -224,23 +214,16 @@ public class ShowRecordFragment extends Fragment {
 
     // Встановлення події натиснення на кнопку копіювання значення поля
     private void setOnClickToCopyValueButton(View fieldView, String value) {
-        ImageView copyButton = fieldView.findViewById(R.id.copyButton);
-        copyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
-                if (vibrator != null) {
-                    vibrator.vibrate(100);
-                }
+        ViewUtils.setOnClickToView(fieldView, R.id.copyButton, () -> {
+            Vibrator.vibrate(requireContext());
 
-                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboard != null) {
-                    ClipData clip = ClipData.newPlainText("label", value);
-                    clipboard.setPrimaryClip(clip);
-                }
-
-                Toast.makeText(getActivity(), "Скопійовано у буфер обміну", Toast.LENGTH_SHORT).show();
+            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null) {
+                ClipData clip = ClipData.newPlainText("label", value);
+                clipboard.setPrimaryClip(clip);
             }
+
+            Toast.makeText(getActivity(), "Скопійовано у буфер обміну", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -288,10 +271,7 @@ public class ShowRecordFragment extends Fragment {
 
             ToolbarBuilder.setOnClickToBookmark(view, requireContext(), () -> {
                 sharedRecordsDataViewModel.editBookmarkInRecordById(recordId);
-                Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
-                if (vibrator != null) {
-                    vibrator.vibrate(100);
-                }
+                Vibrator.vibrate(requireContext());
             });
 
             ToolbarBuilder.setOnClickToVisibilitySwitchButton(view,
@@ -305,45 +285,37 @@ public class ShowRecordFragment extends Fragment {
 
     // Функція встановлює подію натискання кнопки видалення запису
     private void setOnClickToDeleteButton(View view) {
-        ImageView deleteButton = view.findViewById(R.id.imgTrash);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                builder.setMessage("Ви впевнені, що хочете видалити запис? Цю дію буде неможливо скасувати.");
-                builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Запис " + sharedRecordsDataViewModel.getRecordTitleById(recordId) + " видалено назавжди", Toast.LENGTH_SHORT).show();
-                        sharedRecordsDataViewModel.deleteRecordFromArchive(recordId);
-                        ((HomeActivity) requireActivity()).setArchiveFragment();
-                    }
-                });
-                builder.setNegativeButton("Відмінити", null);
-                builder.show();
-            }
+        ViewUtils.setOnClickToView(view, R.id.imgTrash, () -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setMessage("Ви впевнені, що хочете видалити запис? Цю дію буде неможливо скасувати.");
+            builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getActivity(), "Запис " + sharedRecordsDataViewModel.getRecordTitleById(recordId) + " видалено назавжди", Toast.LENGTH_SHORT).show();
+                    sharedRecordsDataViewModel.deleteRecordFromArchive(recordId);
+                    ((HomeActivity) requireActivity()).setArchiveFragment();
+                }
+            });
+            builder.setNegativeButton("Відмінити", null);
+            builder.show();
         });
     }
 
     // Функція встановлює подію натискання кнопки відновлення запису
     private void setOnClickToRestoreButton(View view) {
-        ImageView deleteButton = view.findViewById(R.id.imgRestore);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                builder.setMessage("Запис буде перенесено з архіву до сховища. Відновити?");
-                builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Відновлено запис " + sharedRecordsDataViewModel.getRecordTitleById(recordId), Toast.LENGTH_SHORT).show();
-                        sharedRecordsDataViewModel.restoreRecordFromArchive(recordId);
-                        ((HomeActivity) requireActivity()).setArchiveFragment();
-                    }
-                });
-                builder.setNegativeButton("Ні", null);
-                builder.show();
-            }
+        ViewUtils.setOnClickToView(view, R.id.imgRestore, () -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setMessage("Запис буде перенесено з архіву до сховища. Відновити?");
+            builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getActivity(), "Відновлено запис " + sharedRecordsDataViewModel.getRecordTitleById(recordId), Toast.LENGTH_SHORT).show();
+                    sharedRecordsDataViewModel.restoreRecordFromArchive(recordId);
+                    ((HomeActivity) requireActivity()).setArchiveFragment();
+                }
+            });
+            builder.setNegativeButton("Ні", null);
+            builder.show();
         });
     }
 }

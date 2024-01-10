@@ -14,6 +14,10 @@ import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.model.Category;
+import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -21,7 +25,8 @@ import java.util.function.Consumer;
 public class CategorySelectionDialog {
 
     // Відображення вікна вибору категорії
-    public static void showCategorySelectionDialog(Context context, ArrayList<Category> categories, String activeCategoryName, Consumer<Integer> func) {
+    public static void showCategorySelectionDialog(@NotNull Context context, ArrayList<Category> categories, String activeCategoryName, Consumer<Integer> func) {
+        KeyboardUtils.hideKeyboards(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_category_selection, null);
@@ -30,11 +35,7 @@ public class CategorySelectionDialog {
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        Button button = dialogView.findViewById(R.id.cancelEditCategoryButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { alertDialog.dismiss(); }
-        });
+        ViewUtils.setOnClickToView(dialogView, R.id.cancelEditCategoryButton, () -> alertDialog.dismiss());
 
         LinearLayout linearLayout = dialogView.findViewById(R.id.categoriesSelectScrollArea);
 
@@ -71,7 +72,7 @@ public class CategorySelectionDialog {
     }
 
     // Створення блоків "зображення + назва" категорій
-    private static View createCategoryBlock(Category category, Context context, String activeCategoryName) {
+    private static View createCategoryBlock(@NotNull Category category, @NotNull Context context, String activeCategoryName) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View categoryBlock = inflater.inflate(R.layout.dialog_category_selection_item, null);
 
@@ -87,4 +88,13 @@ public class CategorySelectionDialog {
 
         return categoryBlock;
     }
+
+    // Повертає обрану категорію
+    public static String getSelectedCategoryName(@NotNull View view) {
+        TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
+        return selectedCategoryTextView.getText().toString();
+    }
+
+    // Повертає текст відсутності категорії для кнопки з списком категорій
+    public static String getEmptyCategoryText() { return "Відсутня"; }
 }

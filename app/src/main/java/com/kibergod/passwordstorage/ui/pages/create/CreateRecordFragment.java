@@ -11,14 +11,12 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +28,12 @@ import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
+import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.Vibrator;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 
@@ -53,9 +56,7 @@ public class CreateRecordFragment extends Fragment {
     private ArrayList<EditText> fieldValues = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_record, container, false);
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
@@ -77,45 +78,31 @@ public class CreateRecordFragment extends Fragment {
         setOnClickToIconSelectWindow(view);
         setOnClickToAddField(view);
         ToolbarBuilder.setOnClickToGenPassword(view, R.id.editCreateRecordText, res -> sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
-            Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
-            if (vibrator != null) {
-                vibrator.vibrate(100);
-            }
+            Vibrator.vibrate(requireContext());
         });
         ToolbarBuilder.setOnLongClickToGenerator(view, () -> ((HomeActivity) requireActivity()).setPasswordGeneratorFragment());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
-        ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.createRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
+        ImageUtils.setImageViewSize(view, R.id.createRecordIcon, ImageUtils.getScreenWidth()/3);
         return view;
     }
 
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
     private void setCategoriesToDropdownButton(View view) {
         TextView selectedCategoryTextView = view.findViewById(R.id.selectedCategoryText);
-
-        selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
+        selectedCategoryTextView.setText(CategorySelectionDialog.getEmptyCategoryText());
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(null, homeViewModel.getEmptyCategoryText()));
+        categories.add(0, new Category(null, CategorySelectionDialog.getEmptyCategoryText()));
 
-        LinearLayout dropdownButton = view.findViewById(R.id.dropdownCreateRecordCategoryButton);
-        dropdownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity) requireActivity()).showDropdownMenu(selectedCategoryTextView, categories, view, requireContext());
-            }
+        ViewUtils.setOnClickToView(view, R.id.dropdownCreateRecordCategoryButton, () -> {
+            ((HomeActivity) requireActivity()).callCategorySelectionDialog(selectedCategoryTextView, categories, view, requireContext());
         });
     }
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        ImageView saveButton = view.findViewById(R.id.imgTick);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getNewRecord(view);
-            }
-        });
+        ViewUtils.setOnClickToView(view, R.id.imgTick, () -> getNewRecord(view));
     }
 
     // Обробка створення нового запису
@@ -127,7 +114,7 @@ public class CreateRecordFragment extends Fragment {
         if (recordTitle.length() != 0) {
             if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle)) {
                 textViewStatus.setText("");
-                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(((HomeActivity) requireActivity()).getSelectedCategoryName(view));
+                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(CategorySelectionDialog.getSelectedCategoryName(view));
                 sharedRecordsDataViewModel.addRecord(
                         recordTitle,
                         textInput.getText().toString(),
@@ -142,12 +129,12 @@ public class CreateRecordFragment extends Fragment {
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
                 params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
+                ViewUtils.setScrollToTop(view, R.id.scrollView);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
             params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
+            ViewUtils.setScrollToTop(view, R.id.scrollView);
         }
         textViewStatus.setLayoutParams(params);
     }
@@ -155,11 +142,10 @@ public class CreateRecordFragment extends Fragment {
     // Встановлення обробника події натиснення на іконку
     private void setOnClickToIconSelectWindow(View view) {
         ImageView imageView = view.findViewById(R.id.createRecordIcon);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
@@ -169,13 +155,7 @@ public class CreateRecordFragment extends Fragment {
 
     // Встановлення обробника події натиснення на додавання полей
     private void setOnClickToAddField(View rootView) {
-        LinearLayout addFieldButton = rootView.findViewById(R.id.addFieldButton);
-        addFieldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewField(rootView);
-            }
-        });
+        ViewUtils.setOnClickToView(rootView, R.id.addFieldButton, () -> createNewField(rootView));
     }
 
     // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
@@ -207,23 +187,19 @@ public class CreateRecordFragment extends Fragment {
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextValue.getId(), requireContext());
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
-            ((HomeActivity) requireActivity()).setScrollToBottom(view, R.id.scrollView);
+            ViewUtils.setScrollToBottom(view, R.id.scrollView);
         }
     }
 
     // Функція обробки натиснення на кнопку видалення поля
     private void setOnClickToDeleteFieldButton(LinearLayout parentContainer, View fieldView, EditText editTextName, EditText editTextValue, View rootView) {
-        LinearLayout deleteFieldButton = fieldView.findViewById(R.id.deleteFieldButton);
-        deleteFieldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                parentContainer.removeView(fieldView);
-                fieldNames.remove(editTextName);
-                editTextValue.setOnFocusChangeListener(null);
-                fieldValues.remove(editTextValue);
-                fieldCounter--;
-                ((HomeActivity) requireActivity()).updateTextInAddFieldButton(rootView, fieldCounter);
-            }
+        ViewUtils.setOnClickToView(fieldView, R.id.deleteFieldButton, () -> {
+            parentContainer.removeView(fieldView);
+            fieldNames.remove(editTextName);
+            editTextValue.setOnFocusChangeListener(null);
+            fieldValues.remove(editTextValue);
+            fieldCounter--;
+            ((HomeActivity) requireActivity()).updateTextInAddFieldButton(rootView, fieldCounter);
         });
     }
 }

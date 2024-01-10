@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 
@@ -49,9 +51,7 @@ public class RabbitSupportFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rabbit_support, container, false);
 
         initUI_Objects(view);
@@ -112,7 +112,7 @@ public class RabbitSupportFragment extends Fragment {
 
         ImageView itemIcon = itemView.findViewById(R.id.imgRSSitem);
         itemIcon.setImageResource(iconId);
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), itemView, R.id.imgRSSitem, R.color.purple);
+        ImageUtils.setColorToImg(requireContext(), itemView, R.id.imgRSSitem, R.color.purple);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,19 +139,13 @@ public class RabbitSupportFragment extends Fragment {
 
         ImageView itemIcon = itemView.findViewById(R.id.imgRSSsubsection);
         itemIcon.setImageResource(section.getSubsections().get(subsectionIndex).getIcon());
-        ((HomeActivity) requireActivity()).setColorToImg(requireContext(), itemView, R.id.imgRSSsubsection, R.color.purple);
+        ImageUtils.setColorToImg(requireContext(), itemView, R.id.imgRSSsubsection, R.color.purple);
 
         parentContainer.addView(itemView, layoutParams);
     }
 
     private void setOnClickToBackButton(View view) {
-        LinearLayout backButton = view.findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        ViewUtils.setOnClickToView(view, R.id.backButton, () -> getActivity().onBackPressed());
     }
 
     private void printSubsectionTitle(View view) {

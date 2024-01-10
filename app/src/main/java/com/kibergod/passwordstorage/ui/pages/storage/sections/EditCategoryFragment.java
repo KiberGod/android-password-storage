@@ -23,7 +23,9 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class EditCategoryFragment extends Fragment {
 
@@ -61,9 +63,7 @@ public class EditCategoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_category, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
@@ -80,7 +80,6 @@ public class EditCategoryFragment extends Fragment {
         ToolbarBuilder.addToolbarToView(view, requireContext(), false, false,false,true, false, true,true,false);
 
         printCategoryData(view);
-
         setOnClickToSaveButton(view);
         setOnClickToDeleteButton(view);
         setOnClickToIconSelectWindow(view);
@@ -101,13 +100,7 @@ public class EditCategoryFragment extends Fragment {
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        ImageView saveButton = view.findViewById(R.id.imgTick);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getEditCategory(view);
-            }
-        });
+        ViewUtils.setOnClickToView(view, R.id.imgTick, () -> getEditCategory(view));
     }
 
     // Обробка редагування категорії
@@ -134,27 +127,18 @@ public class EditCategoryFragment extends Fragment {
 
     // Функція встановлює подію натискання кнопки видалення категорії
     private void setOnClickToDeleteButton(View view) {
-        ImageView deleteButton = view.findViewById(R.id.imgTrash);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDeleteConfirmationDialog();
-            }
+        ViewUtils.setOnClickToView(view, R.id.imgTrash, () -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setMessage("Ви впевнені, що хочете видалити категорію? Цю дію буде неможливо відмінити.");
+            builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteCategory();
+                }
+            });
+            builder.setNegativeButton("Відмінити", null);
+            builder.show();
         });
-    }
-
-    // Вікно з підтвердженням видалення категорії
-    private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("Ви впевнені, що хочете видалити категорію? Цю дію буде неможливо відмінити.");
-        builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteCategory();
-            }
-        });
-        builder.setNegativeButton("Відмінити", null);
-        builder.show();
     }
 
     // Оброка видалення запису
@@ -169,11 +153,10 @@ public class EditCategoryFragment extends Fragment {
     // Встановлення обробника події натиснення на іконку
     private void setOnClickToIconSelectWindow(View view) {
         ImageView imageView = view.findViewById(R.id.editCategoryIcon);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });

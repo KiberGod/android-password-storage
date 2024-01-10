@@ -8,13 +8,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
+import com.kibergod.passwordstorage.ui.components.NotFoundPage;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 import java.util.ArrayList;
@@ -25,9 +25,7 @@ public class CategoriesFragment extends Fragment {
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
@@ -59,7 +57,7 @@ public class CategoriesFragment extends Fragment {
                 );
             }
         } else {
-            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.categoriesScrollArea, searchEditText.getText().toString(), "Створіть свою першу категорію");
+            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.categoriesScrollArea, searchEditText.getText().toString(), "Створіть свою першу категорію");
         }
     }
 }

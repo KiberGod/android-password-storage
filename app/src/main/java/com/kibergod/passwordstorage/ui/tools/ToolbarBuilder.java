@@ -2,7 +2,6 @@ package com.kibergod.passwordstorage.ui.tools;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.function.Function;
 
@@ -65,7 +65,7 @@ public class ToolbarBuilder {
 
             deleteUnusedTools(view, useVisibilitySwitch, useBookmark, useEditButton, useEraser, useGenerator, useTrash, useSaveButton, useRestore);
 
-            setOnClickToBackButton(view, context);
+            ViewUtils.setOnClickToView(view, BACK_BUTTON_ID, () -> ((Activity) context).onBackPressed());
             setIconColorsToToolbar(view, context);
         }
     }
@@ -117,48 +117,13 @@ public class ToolbarBuilder {
         parentGroup.removeView(tool);
     }
 
-    // Загальна функція встановлення обровника події натиснення кнопки
-    private static void setOnClickToButton(View view, int buttonId, Runnable action) {
-        ImageView button = view.findViewById(buttonId);
-        if (button != null) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    action.run();
-                }
-            });
-        }
-    }
-
-    // Загальна функція встановлення обровника події довгого натиснення кнопки
-    private static void setOnLongClickToButton(View view, int buttonId, Runnable action) {
-        ImageView button = view.findViewById(buttonId);
-        if (button != null) {
-            button.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    action.run();
-                    return true;
-                }
-            });
-        }
-    }
-
     // Функція встановлює початкові кольори іконок
     private static void setIconColorsToToolbar(View view, Context context) {
-        setColorToImg(context, view, BOOKMARK_ID, R.color.white);
-        setColorToImg(context, view, ERASER_ID, R.color.gray_text);
-        setColorToImg(context, view, GENERATOR_ID, R.color.gray_text);
-        setColorToImg(context, view, TRASH_ID, R.color.white);
-        setColorToImg(context, view, SAVE_BUTTON_ID, R.color.white);
-    }
-
-    // Встановлення кольору іконки
-    private static void setColorToImg(Context context, View view, int imageId, int colorId) {
-        ImageView imageView = view.findViewById(imageId);
-        if (imageView != null) {
-            imageView.setColorFilter(ContextCompat.getColor(context, colorId), PorterDuff.Mode.SRC_IN);
-        }
+        ImageUtils.setColorToImg(context, view, BOOKMARK_ID, R.color.white);
+        ImageUtils.setColorToImg(context, view, ERASER_ID, R.color.gray_text);
+        ImageUtils.setColorToImg(context, view, GENERATOR_ID, R.color.gray_text);
+        ImageUtils.setColorToImg(context, view, TRASH_ID, R.color.white);
+        ImageUtils.setColorToImg(context, view, SAVE_BUTTON_ID, R.color.white);
     }
 
     // Автооновлення фокус-поля
@@ -175,30 +140,25 @@ public class ToolbarBuilder {
                 if (hasFocus) {
                     if (!isTotal) {
                         currentEditTextForGenerator = editText;
-                        setColorToImg(context, view, GENERATOR_ID, R.color.purple);
+                        ImageUtils.setColorToImg(context, view, GENERATOR_ID, R.color.purple);
                     }
                     currentEditTextTotal = editText;
-                    setColorToImg(context, view, ERASER_ID, R.color.white);
+                    ImageUtils.setColorToImg(context, view, ERASER_ID, R.color.white);
                 } else {
                     if (!isTotal) {
                         currentEditTextForGenerator = null;
-                        setColorToImg(context, view, GENERATOR_ID, R.color.gray_text);
+                        ImageUtils.setColorToImg(context, view, GENERATOR_ID, R.color.gray_text);
                     }
                     currentEditTextTotal = null;
-                    setColorToImg(context, view, ERASER_ID, R.color.gray_text);
+                    ImageUtils.setColorToImg(context, view, ERASER_ID, R.color.gray_text);
                 }
             }
         });
     }
 
-    // Кнопка повернення на попередню сторінку
-    private static void setOnClickToBackButton(View view, Context context) {
-        setOnClickToButton(view, BACK_BUTTON_ID, () -> ((Activity) context).onBackPressed());
-    }
-
     // Натиснення на кнопку стертя вводу у полі
     private static void setOnClickToEraseButton(View view) {
-        setOnClickToButton(view, ERASER_ID, () -> {
+        ViewUtils.setOnClickToView(view, ERASER_ID, () -> {
             if (currentEditTextTotal != null) {
                 currentEditTextTotal.setText("");
             }
@@ -207,7 +167,7 @@ public class ToolbarBuilder {
 
     // Функція встановлює подію натискання кнопки генерації пароля
     public static void setOnClickToGenPassword(View view, int textViewId, Function<Void, String> generatePassFunc, Runnable action) {
-        setOnClickToButton(view, GENERATOR_ID, () -> {
+        ViewUtils.setOnClickToView(view, GENERATOR_ID, () -> {
             if (currentEditTextForGenerator != null) {
                 if (currentEditTextForGenerator.getId() == textViewId) {
                     int cursorPosition = currentEditTextForGenerator.getSelectionStart();
@@ -225,12 +185,12 @@ public class ToolbarBuilder {
 
     // Функція встановлює подію натиснення кнопки редагування
     public static void setOnClickToEditButton(View view, Runnable action) {
-        setOnClickToButton(view, EDIT_BUTTON_ID, action);
+        ViewUtils.setOnClickToView(view, EDIT_BUTTON_ID, action);
     }
 
     // Функція встановлює подію натиснення закладки
     public static void setOnClickToBookmark(View view, Context context, Runnable action) {
-        setOnClickToButton(view, BOOKMARK_ID, () -> {
+        ViewUtils.setOnClickToView(view, BOOKMARK_ID, () -> {
             action.run();
             bookmarkStatus = !bookmarkStatus;
             resetBookmarkButtonColor(view, context);
@@ -240,9 +200,9 @@ public class ToolbarBuilder {
     // Функція автозміни кольору інструменту "Закладка"
     public static void resetBookmarkButtonColor(View view, Context context) {
         if (bookmarkStatus) {
-            setColorToImg(context, view, BOOKMARK_ID, R.color.purple);
+            ImageUtils.setColorToImg(context, view, BOOKMARK_ID, R.color.purple);
         } else {
-            setColorToImg(context, view, BOOKMARK_ID, R.color.white);
+            ImageUtils.setColorToImg(context, view, BOOKMARK_ID, R.color.white);
         }
     }
 
@@ -265,7 +225,7 @@ public class ToolbarBuilder {
     public static void setOnClickToVisibilitySwitchButton(View view, Function<Void, Boolean> getSwitchStatus, Runnable action) {
         ImageView switchIcon = view.findViewById(VISIBILITY_SWITCH_ID);
         resetVisibilitySwitchIcon(switchIcon, getSwitchStatus.apply(null));
-        setOnClickToButton(view, VISIBILITY_SWITCH_ID, () -> {
+        ViewUtils.setOnClickToView(view, VISIBILITY_SWITCH_ID, () -> {
             action.run();
             resetVisibilitySwitchIcon(switchIcon, getSwitchStatus.apply(null));
         });
@@ -273,7 +233,7 @@ public class ToolbarBuilder {
 
     // Функція встановлює подію довгого натиснення кнопки генератора
     public static void setOnLongClickToGenerator(View view, Runnable action) {
-        setOnLongClickToButton(view, GENERATOR_ID, () -> {
+        ViewUtils.setOnLongClickToView(view, GENERATOR_ID, () -> {
             action.run();
         });
     }

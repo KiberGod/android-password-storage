@@ -5,20 +5,17 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Record;
+import com.kibergod.passwordstorage.ui.components.NotFoundPage;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 
 import java.util.ArrayList;
@@ -30,9 +27,7 @@ public class RecordsFragment extends Fragment {
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_records, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
@@ -77,7 +72,7 @@ public class RecordsFragment extends Fragment {
                 }
             }
         } else {
-            ((HomeActivity) requireActivity()).printNotFoundPage(view, R.id.recordsScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис");
+            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.recordsScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис");
         }
     }
 }

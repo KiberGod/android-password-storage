@@ -14,14 +14,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,14 +31,17 @@ import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Category;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
+import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
+import com.kibergod.passwordstorage.ui.utils.Vibrator;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 
 public class EditRecordFragment extends Fragment {
-
     private HomeViewModel homeViewModel;
-
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
@@ -80,9 +81,7 @@ public class EditRecordFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_record, container, false);
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
@@ -109,13 +108,10 @@ public class EditRecordFragment extends Fragment {
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordText, requireContext());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditRecordTitle, requireContext(),true);
         ToolbarBuilder.setOnClickToGenPassword(view, R.id.editEditRecordText, res -> sharedGeneratorDataViewModel.getPassword(requireContext()), () -> {
-            Vibrator vibrator = ((HomeActivity) requireActivity()).getVibrator();
-            if (vibrator != null) {
-                vibrator.vibrate(100);
-            }
+            Vibrator.vibrate(requireContext());
         });
         ToolbarBuilder.setOnLongClickToGenerator(view, () -> ((HomeActivity) requireActivity()).setPasswordGeneratorFragment());
-        ((HomeActivity) requireActivity()).setImageViewSize(view, R.id.editRecordIcon, ((HomeActivity) requireActivity()).getScreenWidth()/3);
+        ImageUtils.setImageViewSize(view, R.id.editRecordIcon, ImageUtils.getScreenWidth()/3);
         return view;
     }
 
@@ -153,7 +149,7 @@ public class EditRecordFragment extends Fragment {
 
         selectedCategoryTextView.setText(sharedCategoriesDataViewModel.getCategoryNameById(sharedRecordsDataViewModel.getRecordCategory_idById(recordId)));
         if (selectedCategoryTextView.getText().toString().equals("")) {
-            selectedCategoryTextView.setText(homeViewModel.getEmptyCategoryText());
+            selectedCategoryTextView.setText(CategorySelectionDialog.getEmptyCategoryText());
         } else {
             ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
             selectedCategoryIcon.setImageResource(
@@ -162,36 +158,31 @@ public class EditRecordFragment extends Fragment {
         }
 
         ArrayList<Category> categories = new ArrayList<>(sharedCategoriesDataViewModel.getAllCategories());
-        categories.add(0, new Category(null, homeViewModel.getEmptyCategoryText()));
+        categories.add(0, new Category(null, CategorySelectionDialog.getEmptyCategoryText()));
 
-        LinearLayout dropdownButton = view.findViewById(R.id.dropdownEditRecordCategoryButton);
-        dropdownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity) requireActivity()).showDropdownMenu(selectedCategoryTextView, categories, view, requireContext());
-            }
+        ViewUtils.setOnClickToView(view, R.id.dropdownEditRecordCategoryButton, () -> {
+            ((HomeActivity) requireActivity()).callCategorySelectionDialog(selectedCategoryTextView, categories, view, requireContext());
         });
     }
 
     // Функція встановлює подію натискання кнопки збереження введених змін
     private void setOnClickToSaveButton(View view) {
-        ImageView saveButton = view.findViewById(R.id.imgTick);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getEditRecord(view);
-            }
-        });
+        ViewUtils.setOnClickToView(view, R.id.imgTick, () -> getEditRecord(view));
     }
 
     // Функція встановлює подію натискання кнопки видалення запису
     private void setOnClickToDeleteButton(View view) {
-        ImageView deleteButton = view.findViewById(R.id.imgTrash);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDeleteConfirmationDialog();
-            }
+        ViewUtils.setOnClickToView(view, R.id.imgTrash, () -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setMessage("Ви впевнені, що хочете видалити запис? В разі видалення ви зможете відновити цей запис з архіву протягом 1 місяця, починаючи з поточної дати.");
+            builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteRecord();
+                }
+            });
+            builder.setNegativeButton("Відмінити", null);
+            builder.show();
         });
     }
 
@@ -205,7 +196,7 @@ public class EditRecordFragment extends Fragment {
         if (recordTitle.length() != 0) {
             if (sharedRecordsDataViewModel.checkRecordTitleUnique(recordTitle, recordId)) {
                 textViewStatus.setText("");
-                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(((HomeActivity) requireActivity()).getSelectedCategoryName(view));
+                int category_id = sharedCategoriesDataViewModel.getCategoryIdByName(CategorySelectionDialog.getSelectedCategoryName(view));
                 sharedRecordsDataViewModel.editRecord(
                         recordId,
                         recordTitle,
@@ -220,28 +211,14 @@ public class EditRecordFragment extends Fragment {
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
                 params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-                ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
+                ViewUtils.setScrollToTop(view, R.id.scrollView);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
             params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
-            ((HomeActivity) requireActivity()).setScrollToTop(view, R.id.scrollView);
+            ViewUtils.setScrollToTop(view, R.id.scrollView);
         }
         textViewStatus.setLayoutParams(params);
-    }
-
-    // Вікно з підтвердженням видалення запису
-    private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("Ви впевнені, що хочете видалити запис? В разі видалення ви зможете відновити цей запис з архіву протягом 1 місяця, починаючи з поточної дати.");
-        builder.setPositiveButton("Видалити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteRecord();
-            }
-        });
-        builder.setNegativeButton("Відмінити", null);
-        builder.show();
     }
 
     // Оброка видалення запису
@@ -256,7 +233,7 @@ public class EditRecordFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HomeActivity) requireActivity()).showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
@@ -266,13 +243,7 @@ public class EditRecordFragment extends Fragment {
 
     // Встановлення обробника події натиснення на додавання полей
     private void setOnClickToAddField(View rootView) {
-        LinearLayout addFieldButton = rootView.findViewById(R.id.addFieldButton);
-        addFieldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewField(rootView, "", "", true);
-            }
-        });
+        ViewUtils.setOnClickToView(rootView, R.id.addFieldButton, () -> createNewField(rootView, "", "", true));
     }
 
     // Додає у ScrollArea рядок з двома полями вводу та кнопкою видалення
@@ -307,24 +278,20 @@ public class EditRecordFragment extends Fragment {
             ToolbarBuilder.setEditTextFocusChangeListener(view, editTextName.getId(), requireContext(), true);
 
             if (needScroll) {
-                ((HomeActivity) requireActivity()).setScrollToBottom(view, R.id.scrollView);
+                ViewUtils.setScrollToBottom(view, R.id.scrollView);
             }
         }
     }
 
     // Функція обробки натиснення на кнопку видалення поля
     private void setOnClickToDeleteFieldButton(LinearLayout parentContainer, View fieldView, EditText editTextName, EditText editTextValue, View rootView) {
-        LinearLayout deleteFieldButton = fieldView.findViewById(R.id.deleteFieldButton);
-        deleteFieldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                parentContainer.removeView(fieldView);
-                fieldNames.remove(editTextName);
-                editTextValue.setOnFocusChangeListener(null);
-                fieldValues.remove(editTextValue);
-                fieldCounter--;
-                ((HomeActivity) requireActivity()).updateTextInAddFieldButton(rootView, fieldCounter);
-            }
+        ViewUtils.setOnClickToView(fieldView, R.id.deleteFieldButton, () -> {
+            parentContainer.removeView(fieldView);
+            fieldNames.remove(editTextName);
+            editTextValue.setOnFocusChangeListener(null);
+            fieldValues.remove(editTextValue);
+            fieldCounter--;
+            ((HomeActivity) requireActivity()).updateTextInAddFieldButton(rootView, fieldCounter);
         });
     }
 }

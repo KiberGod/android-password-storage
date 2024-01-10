@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 
@@ -57,9 +57,7 @@ public class ShowCategoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_category, container, false);
 
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
@@ -71,9 +69,10 @@ public class ShowCategoryFragment extends Fragment {
 
         printCategoryData(view);
 
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.categoryStatisticHead, R.id.categoryStatisticBody, false);
-        ((HomeActivity) requireActivity()).setOnClickToDropdownLayout(view, R.id.metadataHead, R.id.metadataBody, true);
-        ((HomeActivity) requireActivity()).setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext());
+        ViewUtils.setOnClickToDropdownView(view, R.id.categoryStatisticHead, R.id.categoryStatisticBody);
+        ViewUtils.setOnClickToDropdownView(view, R.id.metadataHead, R.id.metadataBody, null, () -> ViewUtils.setScrollToBottom(view, R.id.scrollView));
+
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext());
         sharedCategoriesDataViewModel.updateCategoryViewed_atById(categoryId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
         return view;
     }

@@ -58,9 +58,6 @@ public class HomeViewModel extends ViewModel {
         });
     }
 
-    // Повертає текст відсутності категорії для кнопки з списком категорій
-    public String getEmptyCategoryText() { return "Відсутня"; }
-
     // Функція парсить текстові значення з полів вводу
     public ArrayList<String> getStringsArray(ArrayList<EditText> editsArray) {
         ArrayList<String> stringArrayList = new ArrayList<>();
@@ -69,18 +66,6 @@ public class HomeViewModel extends ViewModel {
             stringArrayList.add(text);
         }
         return stringArrayList;
-    }
-
-    // Повертає EditText для створення нового поля
-    public EditText getEditText(Context context, String hint, int maxLength) {
-        EditText editText = new EditText(context);
-        editText.setHint(hint);
-        editText.setTextColor(ContextCompat.getColor(context, R.color.white));
-        editText.setHintTextColor(ContextCompat.getColor(context, R.color.gray_text));
-
-        setMaxLengthForInput(editText, maxLength);
-
-        return editText;
     }
 
     public ViewGroup.MarginLayoutParams getParamsForValidLine(Context context, ViewGroup.MarginLayoutParams params, int dp) {
