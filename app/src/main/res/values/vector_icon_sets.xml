@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="general">
+        <item>"vector_template_image"</item>
+    </string-array>
+
+    <string-array name="social_networks">
+        <item>"vector_icon_telegram"</item>
+        <item>"vector_icon_instagram"</item>
+        <item>"vector_icon_facebook"</item>
+        <item>"vector_icon_viber"</item>
+        <item>"vector_icon_reddit"</item>
+        <item>"vector_icon_vk"</item>
+        <item>"vector_icon_ok"</item>
+    </string-array>
+
+    <string-array name="shopping">
+        <item>"vector_icon_aliexpress"</item>
+        <item>"vector_icon_joom"</item>
+        <item>"vector_icon_ebay"</item>
+        <item>"vector_icon_olx"</item>
+        <item>"vector_icon_ukrposhta"</item>
+        <item>"vector_icon_nova_poshta"</item>
+        <item>"vector_icon_silpo"</item>
+        <item>"vector_icon_citrus"</item>
+        <item>"vector_icon_prom"</item>
+        <item>"vector_icon_rozetka"</item>
+        <item>"vector_icon_auchan"</item>
+    </string-array>
+
+    <string-array name="internet">
+        <item>"vector_icon_discord"</item>
+        <item>"vector_icon_gmail"</item>
+        <item>"vector_icon_google"</item>
+        <item>"vector_icon_hamachi"</item>
+        <item>"vector_icon_meet"</item>
+        <item>"vector_icon_microsoft"</item>
+        <item>"vector_icon_skype"</item>
+        <item>"vector_icon_spotify"</item>
+        <item>"vector_icon_steam"</item>
+        <item>"vector_icon_teams"</item>
+        <item>"vector_icon_teamviewer"</item>
+        <item>"vector_icon_tplink"</item>
+        <item>"vector_icon_twitch"</item>
+        <item>"vector_icon_zoom"</item>
+    </string-array>
+
+    <string-array name="connection">
+        <item>"vector_icon_kyivstar"</item>
+        <item>"vector_icon_lifecell"</item>
+        <item>"vector_icon_vodafone"</item>
+    </string-array>
+
+    <string-array name="services">
+        <item>"vector_icon_dia"</item>
+        <item>"vector_icon_github"</item>
+        <item>"vector_icon_gitlab"</item>
+        <item>"vector_icon_mono"</item>
+        <item>"vector_icon_moodle"</item>
+        <item>"vector_icon_oshad"</item>
+        <item>"vector_icon_privat24"</item>
+        <item>"vector_icon_raiffeizen"</item>
+    </string-array>
+</resources>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -17,6 +18,24 @@ import java.util.function.Consumer;
 
 public class IconSelectionDialog {
 
+    private static int[] iconSetIds = {
+            R.array.general,
+            R.array.internet,
+            R.array.social_networks,
+            R.array.connection,
+            R.array.services,
+            R.array.shopping
+    };
+
+    private static String[] iconSetNames = {
+            "Загальне",
+            "Інтернет",
+            "Соціальні мережі",
+            "Зв'язок",
+            "Сервіси",
+            "Шопінг"
+    };
+
     // Функція відмальовує вспливаюче вікно вибору іконки
     public static void showIconSelectionDialog(Context context, Consumer<String> func) {
         KeyboardUtils.hideKeyboards(context);
@@ -27,39 +46,54 @@ public class IconSelectionDialog {
 
         GridLayout rootLayout = dialogView.findViewById(R.id.iconsScrollArea);
 
-        String[] iconArray = context.getResources().getStringArray(R.array.vector_icons_array);
 
         int numColumns = 4;
-        int numRows = (int) Math.ceil((float) iconArray.length / numColumns);
-
-        rootLayout.setRowCount(numRows);
+        rootLayout.setRowCount(1);
 
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        for (int i = 0; i < iconArray.length; i++) {
+        for (int set = 0; set < iconSetIds.length; set++) {
 
-            int iconResourceId = context.getResources().getIdentifier(iconArray[i], "drawable", context.getPackageName());
+            String[] iconArray = context.getResources().getStringArray(iconSetIds[set]);
 
-            ImageView imageView = ImageUtils.getResizeIcon(context, iconResourceId);
+            View iconsTitleView = LayoutInflater.from(context).inflate(R.layout.dialog_icon_selection_item, null);
+            GridLayout.LayoutParams titleParams = new GridLayout.LayoutParams();
+            titleParams.columnSpec = GridLayout.spec(0, numColumns);
+            iconsTitleView.setLayoutParams(titleParams);
+            TextView title = iconsTitleView.findViewById(R.id.iconsGroupName);
+            title.setText(iconSetNames[set]);
+            rootLayout.addView(iconsTitleView);
 
-            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-            layoutParams.setMargins(0, 15, 0, 15);
-            layoutParams.columnSpec = GridLayout.spec(i % numColumns, 1f);
-            imageView.setLayoutParams(layoutParams);
+            for (int icon = 0; icon < iconArray.length; icon++) {
 
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (func != null) {
-                        func.accept(context.getResources().getResourceEntryName(iconResourceId));
-                    }
-                    alertDialog.dismiss();
+                int iconResourceId = context.getResources().getIdentifier(iconArray[icon], "drawable", context.getPackageName());
+
+                ImageView imageView = ImageUtils.getResizeIcon(context, iconResourceId);
+
+                GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+                if (set != iconSetIds.length-1 && icon == iconArray.length - 1) {
+                    layoutParams.setMargins(0, 15, 0, 50);
+                } else {
+                    layoutParams.setMargins(0, 15, 0, 15);
                 }
-            });
+                layoutParams.columnSpec = GridLayout.spec(icon % numColumns, 1f);
+                imageView.setLayoutParams(layoutParams);
 
-            rootLayout.addView(imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (func != null) {
+                            func.accept(context.getResources().getResourceEntryName(iconResourceId));
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+
+                rootLayout.addView(imageView);
+            }
         }
+
         alertDialog.show();
         ViewUtils.setOnClickToView(dialogView, R.id.cancelEditIconButton, () -> alertDialog.dismiss());
     }
