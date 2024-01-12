@@ -16,9 +16,21 @@ Settings::Settings() {
 
     filtersSortMode = DEFAULT_FILTERS_SORT_MODE;
     filtersSortParam = DEFAULT_FILTERS_SORT_PARAM;
+
+    fontSizeMain = DEFAULT_FONT_SIZE_MAIN;
+    fontSizeInput = DEFAULT_FONT_SIZE_INPUT;
+    fontSizeButtons = DEFAULT_FONT_SIZE_BUTTONS;
+    fontSizeLargeButtons = DEFAULT_FONT_SIZE_LARGE_BUTTONS;
+    fontSizeFieldCaptions = DEFAULT_FONT_SIZE_FIELD_CAPTIONS;
+    fontSizeOther = DEFAULT_FONT_SIZE_OTHER;
+    fontSizeRssMain = DEFAULT_FONT_SIZE_RSS_MAIN;
+    fontSizeRssSecondary = DEFAULT_FONT_SIZE_RSS_SECONDARY;
 }
 
-Settings::Settings(const bool activityProtection, const bool inputCalcClearing, const char* password, const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam) {
+Settings::Settings(const bool activityProtection, const bool inputCalcClearing, const char* password,
+                   const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam,
+                   const int fontSizeMain, const int fontSizeInput, const int fontSizeButtons, const int fontSizeLargeButtons,
+                   const int fontSizeFieldCaptions, const int fontSizeOther, const int fontSizeRssMain, const int fontSizeRssSecondary) {
     this->activityProtection = activityProtection;
     this->inputCalcClearing = inputCalcClearing;
     this->digitalOwner = digitalOwner;
@@ -28,6 +40,15 @@ Settings::Settings(const bool activityProtection, const bool inputCalcClearing, 
 
     this->filtersSortMode = filtersSortMode;
     this->filtersSortParam = filtersSortParam;
+
+    this->fontSizeMain = fontSizeMain;
+    this->fontSizeInput = fontSizeInput;
+    this->fontSizeButtons = fontSizeButtons;
+    this->fontSizeLargeButtons = fontSizeLargeButtons;
+    this->fontSizeFieldCaptions = fontSizeFieldCaptions;
+    this->fontSizeOther = fontSizeOther;
+    this->fontSizeRssMain = fontSizeRssMain;
+    this->fontSizeRssSecondary = fontSizeRssSecondary;
 }
 
 const bool Settings::getActivityProtection() const {
@@ -52,4 +73,36 @@ const bool Settings::getFiltersSortMode() const {
 
 const int Settings::getFiltersSortParam() const {
     return filtersSortParam;
+}
+
+const int Settings::getFontSizeMain() const {
+    return fontSizeMain;
+}
+
+const int Settings::getFontSizeInput() const {
+    return fontSizeInput;
+}
+
+const int Settings::getFontSizeButtons() const {
+    return fontSizeButtons;
+}
+
+const int Settings::getFontSizeLargeButtons() const {
+    return fontSizeLargeButtons;
+}
+
+const int Settings::getFontSizeFieldCaptions() const {
+    return fontSizeFieldCaptions;
+}
+
+const int Settings::getFontSizeOther() const {
+    return fontSizeOther;
+}
+
+const int Settings::getFontSizeRssMain() const {
+    return fontSizeRssMain;
+}
+
+const int Settings::getFontSizeRssSecondary() const {
+    return fontSizeRssSecondary;
 }

@@ -60,6 +60,18 @@ private:
     int filtersSortParam;
 
     /*
+     *  Шрифти (у dp)
+     */
+    int fontSizeMain;
+    int fontSizeInput;
+    int fontSizeButtons;
+    int fontSizeLargeButtons;
+    int fontSizeFieldCaptions;
+    int fontSizeOther;
+    int fontSizeRssMain;
+    int fontSizeRssSecondary;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     static const bool DEFAULT_ACTIVITY_PROTECTION = true;
@@ -68,17 +80,35 @@ private:
     static const bool DEFAULT_DIGITAL_OWNER = false;
     static const bool DEFAULT_FILTERS_SORT_MODE = false;
     static const int DEFAULT_FILTERS_SORT_PARAM = 3;
-
+    static const int DEFAULT_FONT_SIZE_MAIN = 18;
+    static const int DEFAULT_FONT_SIZE_INPUT = 18;
+    static const int DEFAULT_FONT_SIZE_BUTTONS = 18;
+    static const int DEFAULT_FONT_SIZE_LARGE_BUTTONS = 14;
+    static const int DEFAULT_FONT_SIZE_FIELD_CAPTIONS = 14;
+    static const int DEFAULT_FONT_SIZE_OTHER = 16;
+    static const int DEFAULT_FONT_SIZE_RSS_MAIN = 16;
+    static const int DEFAULT_FONT_SIZE_RSS_SECONDARY = 12;
 
 public:
     Settings();
-    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password, const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam);
+    Settings(const bool activityProtection, const bool inputCalcClearing, const char* password,
+             const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam,
+             const int fontSizeMain, const int fontSizeInput, const int fontSizeButtons, const int fontSizeLargeButtons,
+             const int fontSizeFieldCaptions, const int fontSizeOther, const int fontSizeRssMain, const int fontSizeRssSecondary);
     const bool getActivityProtection() const;
     const bool getInputCalcClearing() const;
     const char* getPassword() const;
     const bool getDigitalOwner() const;
     const bool getFiltersSortMode() const;
     const int getFiltersSortParam() const;
+    const int getFontSizeMain() const;
+    const int getFontSizeInput() const;
+    const int getFontSizeButtons() const;
+    const int getFontSizeLargeButtons() const;
+    const int getFontSizeFieldCaptions() const;
+    const int getFontSizeOther() const;
+    const int getFontSizeRssMain() const;
+    const int getFontSizeRssSecondary() const;
 };
 
 

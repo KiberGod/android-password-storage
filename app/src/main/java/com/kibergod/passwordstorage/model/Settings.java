@@ -54,11 +54,33 @@ public class Settings {
     private int filtersSortParam;
 
     /*
+     *  Шрифти (у dp)
+     */
+    private int fontSizeMain;
+    private int fontSizeInput;
+    private int fontSizeButtons;
+    private int fontSizeLargeButtons;
+    private int fontSizeFieldCaptions;
+    private int fontSizeOther;
+    private int fontSizeRssMain;
+    private int fontSizeRssSecondary;
+
+    /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
     private static  final boolean DEFAULT_ACTIVITY_PROTECTION = true;
     private static final boolean DEFAULT_INPUT_CALC_CLEARING = false;
     private static final boolean DEFAULT_DIGITAL_OWNER = false;
+    private static final int DEFAULT_FONT_SIZE_MAIN = 18;
+    private static final int DEFAULT_FONT_SIZE_INPUT = 18;
+    private static final int DEFAULT_FONT_SIZE_BUTTONS = 18;
+    private static final int DEFAULT_FONT_SIZE_LARGE_BUTTONS = 14;
+    private static final int DEFAULT_FONT_SIZE_FIELD_CAPTIONS = 14;
+    private static final int DEFAULT_FONT_SIZE_OTHER = 16;
+    private static final int DEFAULT_FONT_SIZE_RSS_MAIN = 16;
+    private static final int DEFAULT_FONT_SIZE_RSS_SECONDARY = 12;
+    public static final int MIN_FONT_SIZE = 10;
+    public static final int MAX_FONT_SIZE = 30;
 
 
     public Settings(String password, boolean filtersSortMode, int filtersSortParam) {
@@ -68,15 +90,34 @@ public class Settings {
         digitalOwner = DEFAULT_DIGITAL_OWNER;
         this.filtersSortMode = filtersSortMode;
         this.filtersSortParam = filtersSortParam;
+        fontSizeMain = DEFAULT_FONT_SIZE_MAIN;
+        fontSizeInput = DEFAULT_FONT_SIZE_INPUT;
+        fontSizeButtons = DEFAULT_FONT_SIZE_BUTTONS;
+        fontSizeLargeButtons = DEFAULT_FONT_SIZE_LARGE_BUTTONS;
+        fontSizeFieldCaptions = DEFAULT_FONT_SIZE_FIELD_CAPTIONS;
+        fontSizeOther = DEFAULT_FONT_SIZE_OTHER;
+        fontSizeRssMain = DEFAULT_FONT_SIZE_RSS_MAIN;
+        fontSizeRssSecondary = DEFAULT_FONT_SIZE_RSS_SECONDARY;
     }
 
-    public Settings(boolean activityProtection, boolean inputPassClearing, String password, boolean digitalOwner, boolean filtersSortMode, int filtersSortParam) {
+    public Settings(boolean activityProtection, boolean inputPassClearing, String password,
+                    boolean digitalOwner, boolean filtersSortMode, int filtersSortParam,
+                    int fontSizeMain, int fontSizeInput, int fontSizeButtons, int fontSizeLargeButtons,
+                    int fontSizeFieldCaptions, int fontSizeOther, int fontSizeRssMain, int fontSizeRssSecondary) {
         this.activityProtection = activityProtection;
         this.inputCalcClearing = inputPassClearing;
         this.password = password;
         this.digitalOwner = digitalOwner;
         this.filtersSortMode = filtersSortMode;
         this.filtersSortParam = filtersSortParam;
+        this.fontSizeMain = fontSizeMain;
+        this.fontSizeInput = fontSizeInput;
+        this.fontSizeButtons = fontSizeButtons;
+        this.fontSizeLargeButtons = fontSizeLargeButtons;
+        this.fontSizeFieldCaptions = fontSizeFieldCaptions;
+        this.fontSizeOther = fontSizeOther;
+        this.fontSizeRssMain = fontSizeRssMain;
+        this.fontSizeRssSecondary = fontSizeRssSecondary;
     }
 
     public boolean getActivityProtection() { return activityProtection; }
@@ -85,6 +126,15 @@ public class Settings {
     public boolean getDigitalOwner() { return digitalOwner; }
     public boolean getFiltersSortMode() { return  filtersSortMode; }
     public int getFiltersSortParam() { return filtersSortParam; }
+
+    public int getFontSizeMain() { return fontSizeMain; }
+    public int getFontSizeInput() {return fontSizeInput; }
+    public int getFontSizeButtons() { return fontSizeButtons; }
+    public int getFontSizeLargeButtons() { return fontSizeLargeButtons; }
+    public int getFontSizeFieldCaptions() { return fontSizeFieldCaptions; }
+    public int getFontSizeOther() { return fontSizeOther; }
+    public int getFontSizeRssMain() { return fontSizeRssMain; }
+    public int getFontSizeRssSecondary() { return fontSizeRssSecondary; }
 
     public void resetActivityProtection() {
         activityProtection = !activityProtection;
@@ -97,4 +147,12 @@ public class Settings {
     }
     public void setFiltersSortMode(boolean filtersSortMode) { this.filtersSortMode = filtersSortMode; }
     public void setFiltersSortParam(int filtersSortParam) { this.filtersSortParam = filtersSortParam; }
+    public void setFontSizeMain(int fontSizeMain) { this.fontSizeMain = fontSizeMain; }
+    public void setFontSizeInput(int fontSizeInput) { this.fontSizeInput = fontSizeInput; }
+    public void setFontSizeButtons(int fontSizeButtons) { this.fontSizeButtons = fontSizeButtons; }
+    public void setFontSizeLargeButtons(int fontSizeLargeButtons) { this.fontSizeLargeButtons = fontSizeLargeButtons; }
+    public void setFontSizeFieldCaptions(int fontSizeFieldCaptions) { this.fontSizeFieldCaptions = fontSizeFieldCaptions; }
+    public void setFontSizeOther(int fontSizeOther) { this.fontSizeOther = fontSizeOther; }
+    public void setFontSizeRssMain(int fontSizeRssMain) { this.fontSizeRssMain = fontSizeRssMain; }
+    public void setFontSizeRssSecondary(int fontSizeRssSecondary) { this.fontSizeRssSecondary = fontSizeRssSecondary; }
 }

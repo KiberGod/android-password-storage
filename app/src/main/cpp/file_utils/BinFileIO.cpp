@@ -211,7 +211,7 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
     jclass settingsClass = env->FindClass("com/kibergod/passwordstorage/model/Settings");
-    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;ZZI)V");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;ZZIIIIIIIII)V");
 
     std::vector<Settings> settings;
 
@@ -226,10 +226,21 @@ Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jcla
     bool digitalOwner = settings[0].getDigitalOwner();
     bool filtersSortMode = settings[0].getFiltersSortMode();
     int filtersSortParam = settings[0].getFiltersSortParam();
+    int fontSizeMain = settings[0].getFontSizeMain();
+    int fontSizeInput = settings[0].getFontSizeInput();
+    int fontSizeButtons = settings[0].getFontSizeButtons();
+    int fontSizeLargeButtons = settings[0].getFontSizeLargeButtons();
+    int fontSizeFieldCaptions = settings[0].getFontSizeFieldCaptions();
+    int fontSizeOther = settings[0].getFontSizeOther();
+    int fontSizeRssMain = settings[0].getFontSizeRssMain();
+    int fontSizeRssSecondary = settings[0].getFontSizeRssSecondary();
 
     jstring jPassword = env->NewStringUTF(password);
 
-    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing, jPassword, digitalOwner, filtersSortMode, filtersSortParam);
+    jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing,
+                                            jPassword, digitalOwner, filtersSortMode, filtersSortParam,
+                                            fontSizeMain, fontSizeInput, fontSizeButtons, fontSizeLargeButtons,
+                                            fontSizeFieldCaptions, fontSizeOther, fontSizeRssMain, fontSizeRssSecondary);
 
     return settingsObject;
 }
@@ -480,6 +491,14 @@ Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcl
     jfieldID digitalOwnerField = env->GetFieldID(settingsClass, "digitalOwner", "Z");
     jfieldID filtersSortModeField = env->GetFieldID(settingsClass, "filtersSortMode", "Z");
     jfieldID filtersSortParamField = env->GetFieldID(settingsClass, "filtersSortParam", "I");
+    jfieldID fontSizeMainField = env->GetFieldID(settingsClass, "fontSizeMain", "I");
+    jfieldID fontSizeInputField = env->GetFieldID(settingsClass, "fontSizeInput", "I");
+    jfieldID fontSizeButtonsField = env->GetFieldID(settingsClass, "fontSizeButtons", "I");
+    jfieldID fontSizeLargeButtonsField = env->GetFieldID(settingsClass, "fontSizeLargeButtons", "I");
+    jfieldID fontSizeFieldCaptionsField = env->GetFieldID(settingsClass, "fontSizeFieldCaptions", "I");
+    jfieldID fontSizeOtherField = env->GetFieldID(settingsClass, "fontSizeOther", "I");
+    jfieldID fontSizeRssMainField = env->GetFieldID(settingsClass, "fontSizeRssMain", "I");
+    jfieldID fontSizeRssSecondaryField = env->GetFieldID(settingsClass, "fontSizeRssSecondary", "I");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
     jboolean inputCalcClearing = env->GetBooleanField(settingsObject, inputCalcClearingField);
@@ -487,10 +506,20 @@ Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcl
     jboolean digitalOwner = env->GetBooleanField(settingsObject, digitalOwnerField);
     jboolean filtersSortMode = env->GetBooleanField(settingsObject, filtersSortModeField);
     jint filtersSortParam = env->GetIntField(settingsObject, filtersSortParamField);
+    jint fontSizeMain = env->GetIntField(settingsObject, fontSizeMainField);
+    jint fontSizeInput = env->GetIntField(settingsObject, fontSizeInputField);
+    jint fontSizeButtons = env->GetIntField(settingsObject, fontSizeButtonsField);
+    jint fontSizeLargeButtons = env->GetIntField(settingsObject, fontSizeLargeButtonsField);
+    jint fontSizeFieldCaptions = env->GetIntField(settingsObject, fontSizeFieldCaptionsField);
+    jint fontSizeOther = env->GetIntField(settingsObject, fontSizeOtherField);
+    jint fontSizeRssMain = env->GetIntField(settingsObject, fontSizeRssMainField);
+    jint fontSizeRssSecondary = env->GetIntField(settingsObject, fontSizeRssSecondaryField);
 
     const char* password = env->GetStringUTFChars(jPassword, nullptr);
 
-    Settings settings(activityProtection, inputCalcClearing, password, digitalOwner, filtersSortMode, filtersSortParam);
+    Settings settings(activityProtection, inputCalcClearing, password, digitalOwner, filtersSortMode, filtersSortParam,
+                      fontSizeMain, fontSizeInput, fontSizeButtons, fontSizeLargeButtons, fontSizeFieldCaptions,
+                      fontSizeOther, fontSizeRssMain, fontSizeRssSecondary);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),

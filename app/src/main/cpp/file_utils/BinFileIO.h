@@ -23,7 +23,7 @@ static const std::string RECORDS_FILE = "/records_v11.bin";
 static const std::string CATEGORIES_FILE = "/categories_v11.bin";
 
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings_v1.bin";
+static const std::string SETTINGS_FILE = "/settings_v2.bin";
 
 // Файл даних калькулятора
 static const std::string CALCULATOR_FILE = "/calcData.bin";

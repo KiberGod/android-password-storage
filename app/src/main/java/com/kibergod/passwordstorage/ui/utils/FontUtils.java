@@ -12,7 +12,7 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 
 public class FontUtils {
-    public static void setFontSizeToView(@NotNull Context context, @NotNull View view, int viewId, float sizeInDp) {
+    public static void setFontSizeToView(@NotNull Context context, @NotNull View view, int viewId, int sizeInDp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int sizeInPixels = (int) (sizeInDp * scale + 0.5f);
 
