@@ -33,6 +33,7 @@ import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;

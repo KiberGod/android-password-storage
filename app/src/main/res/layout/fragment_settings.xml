@@ -117,7 +117,6 @@
                                     android:textColorHint="@color/gray_hint"
                                     android:textColor="@color/white" />
                             </LinearLayout>
-
                         </androidx.cardview.widget.CardView>
 
                         <TextView
