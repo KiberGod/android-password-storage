@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
@@ -31,6 +32,7 @@ public class PasswordGeneratorFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
     public class SymbolSetSettings {
         private Switch usageSwitch;
@@ -177,11 +179,11 @@ public class PasswordGeneratorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_password_generator, container, false);
-
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
 
-        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.generatorTitle, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.generatorTitle, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         setSymbolsSetSettings(view);
         setOnClickToGeneratePassButton(view);
         setSettingsToSeekBar(view);

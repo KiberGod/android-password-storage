@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -171,8 +172,8 @@ public class RabbitSupport {
      * SupportDialogIDs dialogID    -   ідентифікатор довідкового вікна
      * View rootView                -   вікно, поверх якого буде відображено довідкове вікно
      */
-    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView) {
-        return getRabbitSupportDialog(context, dialogID, rootView, false);
+    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView, int fontSizeRssMain, int fontSizeRssSecondary) {
+        return getRabbitSupportDialog(context, dialogID, rootView, false, fontSizeRssMain, fontSizeRssSecondary);
     }
 
     /*
@@ -185,13 +186,17 @@ public class RabbitSupport {
      *                                      true    ->  кнопки будуть відображені
      *                                      false   ->  кнопки будуть видалені
      */
-    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView, boolean activeBlockFlag) {
+    public static Dialog getRabbitSupportDialog(Context context, SupportDialogIDs dialogID, View rootView, boolean activeBlockFlag, int fontSizeRssMain, int fontSizeRssSecondary) {
         Dialog rabbitSupportDialog = new Dialog(context, R.style.InfoDialog);
         rabbitSupportDialog.setContentView(R.layout.dialog_rabbit_support);
 
         ImageView imageView = rabbitSupportDialog.findViewById(R.id.infoImg);
         imageView.setImageResource(dialogID.getSubsectionIcon());
         imageView.setColorFilter(ContextCompat.getColor(context, R.color.purple), PorterDuff.Mode.SRC_IN);
+
+        FontUtils.setFontSizeToView(context, rootView, rabbitSupportDialog, R.id.mainInfoText, fontSizeRssMain);
+        FontUtils.setFontSizeToView(context, rootView, rabbitSupportDialog, R.id.nameWindow, fontSizeRssSecondary);
+        FontUtils.setFontSizeToView(context, rootView, rabbitSupportDialog, R.id.infoSection, fontSizeRssSecondary);
 
         TextView infoSection = rabbitSupportDialog.findViewById(R.id.infoSection);
         TextView infoTitle = rabbitSupportDialog.findViewById(R.id.infoTitle);
@@ -325,24 +330,24 @@ public class RabbitSupport {
     }
 
     // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (короткий клік)
-    public static void setRabbitSupportDialogToIconByClick(@NotNull View view, int viewId, SupportDialogIDs ID, @NotNull Context context) {
+    public static void setRabbitSupportDialogToIconByClick(@NotNull View view, int viewId, SupportDialogIDs ID, @NotNull Context context, int fontSizeRssMain, int fontSizeRssSecondary) {
         ViewUtils.setOnClickToView(
                 view,
                 viewId,
                 () -> {
-                    Dialog infoDialog = getRabbitSupportDialog(context, ID, view);
+                    Dialog infoDialog = getRabbitSupportDialog(context, ID, view, fontSizeRssMain, fontSizeRssSecondary);
                     infoDialog.show();
                 }
         );
     }
 
     // Функція встановлює вспливаючі вікна з довідками від RabbitSupport (довгий клік)
-    public static void setRabbitSupportDialogToIconByLongClick(@NotNull View view, int viewId, SupportDialogIDs ID, @NotNull Context context) {
+    public static void setRabbitSupportDialogToIconByLongClick(@NotNull View view, int viewId, SupportDialogIDs ID, @NotNull Context context, int fontSizeRssMain, int fontSizeRssSecondary) {
         ViewUtils.setOnLongClickToView(
                 view,
                 viewId,
                 () -> {
-                    Dialog infoDialog = getRabbitSupportDialog(context, ID, view);
+                    Dialog infoDialog = getRabbitSupportDialog(context, ID, view, fontSizeRssMain, fontSizeRssSecondary);
                     infoDialog.show();
                 }
         );

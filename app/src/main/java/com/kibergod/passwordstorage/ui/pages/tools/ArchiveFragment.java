@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.components.NotFoundPage;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
@@ -25,20 +26,19 @@ import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 import java.util.ArrayList;
 
 public class ArchiveFragment extends Fragment {
-
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
-
-    private boolean rabbitFounderMode = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_archive, container, false);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
 
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel.runAutoRemoveRecordsFromArchive();
-        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.archiveTitle, RabbitSupport.SupportDialogIDs.TOOLS_ARCHIVE, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.archiveTitle, RabbitSupport.SupportDialogIDs.TOOLS_ARCHIVE, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         drawButtonList(view);
         setOnClickToClearArchiveButton(view);
         return view;

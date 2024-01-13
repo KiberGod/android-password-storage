@@ -24,6 +24,7 @@
             android:background="@drawable/background_rounded_toolbar">
 
             <TextView
+                android:id="@+id/pageTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -74,6 +75,7 @@
                             android:src="@drawable/vector__vertical_key"/>
 
                         <TextView
+                            android:id="@+id/editPassText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18dp"
@@ -137,6 +139,354 @@
                             android:layout_marginTop="10dp"
                             android:textSize="14dp"
                             android:text="Змінити пароль" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/gray_2"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/editFontsLayoutHead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/vector__font"/>
+
+                        <TextView
+                            android:id="@+id/editFontsText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18dp"
+                            android:textColor="@color/gray_text"
+                            android:text="Зміна розмірів шрифтів"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/editFontsLayoutBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="20dp"
+                            android:background="@color/gray_text" />
+
+                        <TextView
+                            android:id="@+id/editFontsStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:text=""
+                            android:textColor="#FFFF0000"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/fontSizeMainCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Основний текст"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeMain"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeInputCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Поля вводу"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeButtonsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Звичайні кнопки"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeButtons"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeLargeButtonsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Великі кнопки"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeLargeButtons"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeCaptionsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Підписи полей"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeFieldCaptions"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeRssMainCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="RSS-підказки: основний"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeRssMain"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeRssSecondaryCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="RSS-підказки: другорядний"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeRssSecondary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/fontSizeOtherCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Інше (фільтри, назви категорій)"
+                            android:textSize="14dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/gray_text"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            app:cardBackgroundColor="@color/gray"
+                            app:cardCornerRadius="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/editFontSizeOther"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="@color/white"
+                                    android:inputType="number"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/editFontSizeStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:text=""
+                            android:textColor="#FFFF0000"
+                            android:textSize="16dp" />
+
+                        <Button
+                            android:id="@+id/saveFontsButton"
+                            style="@style/MaterialButtonStyle"
+                            android:background="@drawable/background_modern_button"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="20dp"
+                            android:textSize="14dp"
+                            android:text="Змінити шрифти" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -308,7 +658,6 @@
                             android:id="@+id/textView6"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:textSize="18dp"
                             android:layout_marginTop="20dp"
                             android:textColor="@color/gray_text"

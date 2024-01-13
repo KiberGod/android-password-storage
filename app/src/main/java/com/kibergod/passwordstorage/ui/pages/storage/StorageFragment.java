@@ -51,8 +51,8 @@ public class StorageFragment extends Fragment {
         setFiltersParam(view);
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersSorting);
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersParam);
-        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.searchButton, RabbitSupport.SupportDialogIDs.STORAGE_SEARCH, requireContext());
-        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.filtersButton, RabbitSupport.SupportDialogIDs.STORAGE_FILTERS, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.searchButton, RabbitSupport.SupportDialogIDs.STORAGE_SEARCH, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.filtersButton, RabbitSupport.SupportDialogIDs.STORAGE_FILTERS, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         return view;
     }
 

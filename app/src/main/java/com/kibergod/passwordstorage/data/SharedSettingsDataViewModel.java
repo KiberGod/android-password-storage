@@ -106,6 +106,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeMain(int fontSizeMain) {
         if (validateEditFontSize(fontSizeMain)) {
             settings.setFontSizeMain(fontSizeMain);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -114,6 +115,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeInput(int fontSizeInput) {
         if (validateEditFontSize(fontSizeInput)) {
             settings.setFontSizeInput(fontSizeInput);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -122,6 +124,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeButtons(int fontSizeButtons) {
         if (validateEditFontSize(fontSizeButtons)) {
             settings.setFontSizeButtons(fontSizeButtons);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -130,6 +133,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeLargeButtons(int fontSizeLargeButtons) {
         if (validateEditFontSize(fontSizeLargeButtons)) {
             settings.setFontSizeLargeButtons(fontSizeLargeButtons);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -138,6 +142,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeFieldCaptions(int fontSizeFieldCaptions) {
         if (validateEditFontSize(fontSizeFieldCaptions)) {
             settings.setFontSizeFieldCaptions(fontSizeFieldCaptions);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -146,6 +151,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeOther(int fontSizeOther) {
         if (validateEditFontSize(fontSizeOther)) {
             settings.setFontSizeOther(fontSizeOther);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -154,6 +160,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeRssMain(int fontSizeRssMain) {
         if (validateEditFontSize(fontSizeRssMain)) {
             settings.setFontSizeRssMain(fontSizeRssMain);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -162,6 +169,7 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public boolean setFontSizeRssSecondary(int fontSizeRssSecondary) {
         if (validateEditFontSize(fontSizeRssSecondary)) {
             settings.setFontSizeRssSecondary(fontSizeRssSecondary);
+            saveSettings(settings);
             return true;
         }
         return false;
@@ -172,5 +180,13 @@ public class SharedSettingsDataViewModel extends ViewModel {
             return true;
         }
         return false;
+    }
+
+    public int getMinFontSize() {
+        return Settings.MIN_FONT_SIZE;
+    }
+
+    public int getMaxFontSize() {
+        return Settings.MAX_FONT_SIZE;
     }
 }

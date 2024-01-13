@@ -1,5 +1,6 @@
 package com.kibergod.passwordstorage.ui.utils;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
@@ -12,11 +13,20 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 
 public class FontUtils {
+    public static void setFontSizeToView(@NotNull Context context, @NotNull View view, @NotNull Dialog dialog, int viewId, int sizeInDp) {
+        View viewObj = dialog.findViewById(viewId);
+        setFontSizeToView(context, view, viewObj, sizeInDp);
+    }
+
     public static void setFontSizeToView(@NotNull Context context, @NotNull View view, int viewId, int sizeInDp) {
+        View viewObj = view.findViewById(viewId);
+        setFontSizeToView(context, view, viewObj, sizeInDp);
+    }
+
+    public static void setFontSizeToView(@NotNull Context context, @NotNull View view, @NotNull View viewObj, int sizeInDp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int sizeInPixels = (int) (sizeInDp * scale + 0.5f);
 
-        View viewObj = view.findViewById(viewId);
         if (viewObj instanceof EditText) {
             setFontSizeToEditText((EditText) viewObj, sizeInPixels);
         } else if (viewObj instanceof TextView) {

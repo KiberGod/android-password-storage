@@ -45,7 +45,6 @@ public class SettingsFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
-    private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
 
     private TextView textViewStatus;
@@ -56,7 +55,6 @@ public class SettingsFragment extends Fragment {
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedDigitalOwnerViewModel = new ViewModelProvider(requireActivity()).get(SharedDigitalOwnerViewModel.class);
-        sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
@@ -73,14 +71,64 @@ public class SettingsFragment extends Fragment {
         setOnClickToRadioButton(view, R.id.digitalOwnerMode3Flag, () -> showResetModeConfirmDialog(view, R.id.digitalOwnerMode3Flag, DATA_DELETION_MODE));
         setOnClickDefaultSettingsButton(view);
         setOnClickToSavePasswordButton(view);
+        setOnClickToEditFontsButton(view);
         setOnChangeToCalendar(view);
         ImageUtils.setColorToImg(requireContext(), view, R.id.imgVerticalKey, R.color.purple);
         ViewUtils.setOnClickToDropdownView(view, R.id.editPasswordLayoutHead, R.id.editPasswordLayoutBody);
-        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext());
-        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext());
-        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext());
-        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext());
+        ViewUtils.setOnClickToDropdownView(view, R.id.editFontsLayoutHead, R.id.editFontsLayoutBody);
+        setRssDialogs(view);
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeInput = sharedSettingsDataViewModel.getFontSizeInput();
+        int fontSizeLargeButtons = sharedSettingsDataViewModel.getFontSizeLargeButtons();
+        int fontSizeFieldCaptions = sharedSettingsDataViewModel.getFontSizeFieldCaptions();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.pageTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editPassText, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontsText, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.activityProtectionFlag, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.inputCalcClearingFlag, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.digitalOwnerFlag, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.textView5, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.digitalOwnerMode1Flag, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.digitalOwnerMode2Flag, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.digitalOwnerMode3Flag, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.textView6, fontSizeMain);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.inputPassword, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeMain, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeInput, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeButtons, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeLargeButtons, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeFieldCaptions, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeRssMain, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeRssSecondary, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editFontSizeOther, fontSizeInput);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editPasswordStatus, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeMainCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeInputCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeButtonsCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeLargeButtonsCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeCaptionsCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeRssMainCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeRssSecondaryCaption, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.fontSizeOtherCaption, fontSizeFieldCaptions);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.savePasswordButton, fontSizeLargeButtons);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.saveFontsButton, fontSizeLargeButtons);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.setDefaultSettingsButton, fontSizeLargeButtons);
+    }
+
+    private void setRssDialogs(View view) {
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgVerticalKey, RabbitSupport.SupportDialogIDs.SETTINGS_LOGIN_PASSWORD, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgPhoneLock, RabbitSupport.SupportDialogIDs.SETTINGS_SESSION_PROTECT, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgEraser, RabbitSupport.SupportDialogIDs.SETTINGS_CALC_CLEARING, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        RabbitSupport.setRabbitSupportDialogToIconByClick(view, R.id.imgRunningRabbit, RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_GENERAL_INFO, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
     }
 
     // Функція виводить дані налаштуваннь на екран
@@ -106,6 +154,19 @@ public class SettingsFragment extends Fragment {
         printDigitalOwnerMod(view, R.id.digitalOwnerMode1Flag, HIDE_MODE);
         printDigitalOwnerMod(view, R.id.digitalOwnerMode2Flag, PROTECTED_MODE);
         printDigitalOwnerMod(view, R.id.digitalOwnerMode3Flag, DATA_DELETION_MODE);
+
+        printFontSizes(view);
+    }
+
+    private void printFontSizes(View view) {
+        setTextToEditText(view, R.id.editFontSizeMain, sharedSettingsDataViewModel.getFontSizeMain());
+        setTextToEditText(view, R.id.editFontSizeInput, sharedSettingsDataViewModel.getFontSizeInput());
+        setTextToEditText(view, R.id.editFontSizeButtons, sharedSettingsDataViewModel.getFontSizeButtons());
+        setTextToEditText(view, R.id.editFontSizeLargeButtons, sharedSettingsDataViewModel.getFontSizeLargeButtons());
+        setTextToEditText(view, R.id.editFontSizeFieldCaptions, sharedSettingsDataViewModel.getFontSizeFieldCaptions());
+        setTextToEditText(view, R.id.editFontSizeRssMain, sharedSettingsDataViewModel.getFontSizeRssMain());
+        setTextToEditText(view, R.id.editFontSizeRssSecondary, sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        setTextToEditText(view, R.id.editFontSizeOther, sharedSettingsDataViewModel.getFontSizeOther());
     }
 
     private void printCalendarData(View view) {
@@ -153,6 +214,8 @@ public class SettingsFragment extends Fragment {
             KeyboardUtils.hideKeyboards(requireContext());
             sharedSettingsDataViewModel.setDefaultSettings();
             printSettingsData(view);
+            resizeFonts(view);
+            setRssDialogs(view);
         });
     }
 
@@ -228,7 +291,7 @@ public class SettingsFragment extends Fragment {
                     ID = RabbitSupport.SupportDialogIDs.DIGITAL_OWNER_DELETION_MODE;
                     break;
             }
-            Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, true);
+            Dialog infoDialog = RabbitSupport.getRabbitSupportDialog(requireContext(), ID, rootView, true, sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
 
             ViewUtils.setOnClickToDialog(infoDialog, R.id.positiveButton, () -> {
                 sharedDigitalOwnerViewModel.setMode(mode);
@@ -285,5 +348,62 @@ public class SettingsFragment extends Fragment {
     // Ресетер кольору іконок
     private int getColor(boolean mode) {
         return mode ? R.color.purple : R.color.gray_text;
+    }
+
+    private void setTextToEditText(View view, int editTextId, int fontSize) {
+        EditText textView = view.findViewById(editTextId);
+        textView.setText(Integer.toString(fontSize));
+    }
+
+    private int getFontSize(View view, int editTextId) {
+        EditText editText = view.findViewById(editTextId);
+        String inputText = editText.getText().toString().trim();
+
+        if (!inputText.isEmpty()) {
+            try {
+                return Integer.parseInt(inputText);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
+        return -1;
+    }
+
+    private void setOnClickToEditFontsButton(View view) {
+        ViewUtils.setOnClickToView(view, R.id.saveFontsButton, () -> {
+            KeyboardUtils.hideKeyboards(requireContext());
+
+            TextView validStatusView = view.findViewById(R.id.editFontSizeStatus);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) validStatusView.getLayoutParams();
+
+            boolean[] validStatus = {
+                    sharedSettingsDataViewModel.setFontSizeMain(getFontSize(view, R.id.editFontSizeMain)),
+                    sharedSettingsDataViewModel.setFontSizeInput(getFontSize(view, R.id.editFontSizeInput)),
+                    sharedSettingsDataViewModel.setFontSizeButtons(getFontSize(view, R.id.editFontSizeButtons)),
+                    sharedSettingsDataViewModel.setFontSizeLargeButtons(getFontSize(view, R.id.editFontSizeLargeButtons)),
+                    sharedSettingsDataViewModel.setFontSizeFieldCaptions(getFontSize(view, R.id.editFontSizeFieldCaptions)),
+                    sharedSettingsDataViewModel.setFontSizeRssMain(getFontSize(view, R.id.editFontSizeRssMain)),
+                    sharedSettingsDataViewModel.setFontSizeRssSecondary(getFontSize(view, R.id.editFontSizeRssSecondary)),
+                    sharedSettingsDataViewModel.setFontSizeOther(getFontSize(view, R.id.editFontSizeOther)),
+            };
+
+            validStatusView.setText("");
+            params = homeViewModel.getParamsForValidLine(requireContext(), params, 0);
+            for (boolean status : validStatus) {
+                if (!status) {
+                    validStatusView.setText("Один або декілька шрифтів не були змінені, бо мають значення менше " +
+                            sharedSettingsDataViewModel.getMinFontSize() + " або більше " +
+                            sharedSettingsDataViewModel.getMaxFontSize() + "." +
+                            "" +
+                            "");
+                    params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                }
+            }
+            validStatusView.setLayoutParams(params);
+            printFontSizes(view);
+            resizeFonts(view);
+            setRssDialogs(view);
+            Toast.makeText(getActivity(), "Розміри шрифтів було оновлено", Toast.LENGTH_SHORT).show();
+        });
     }
 }

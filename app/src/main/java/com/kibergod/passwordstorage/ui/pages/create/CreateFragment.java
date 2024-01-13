@@ -5,26 +5,32 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class CreateFragment extends Fragment {
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_create, container, false);
 
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
+
         setOnClickToCreateButton(view, R.id.createRecordButton);
         setOnClickToCreateButton(view, R.id.createCategoryButton);
 
-        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.createRecordButton, RabbitSupport.SupportDialogIDs.CREATE_RECORD, requireContext());
-        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.createCategoryButton, RabbitSupport.SupportDialogIDs.CREATE_CATEGORY, requireContext());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.createRecordButton, RabbitSupport.SupportDialogIDs.CREATE_RECORD, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.createCategoryButton, RabbitSupport.SupportDialogIDs.CREATE_CATEGORY, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         return view;
     }
 
