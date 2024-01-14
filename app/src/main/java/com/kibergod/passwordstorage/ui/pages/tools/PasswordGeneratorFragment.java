@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -151,6 +153,19 @@ public class PasswordGeneratorFragment extends Fragment {
         public void printSymbolSetBlock(View view, String symbolSetName, String sign) {
             LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
             View settingsItem = getLayoutInflater().inflate(R.layout.fragment_password_generator_item, null);
+
+            TextView textView = settingsItem.findViewById(R.id.randomLenText);
+            textView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    if (textView.getLayout().getLineCount() > 1) {
+                        LinearLayout sign = settingsItem.findViewById(R.id.generatorItemSign);
+                        sign.setVisibility(View.GONE);
+                    }
+                    textView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    return true;
+                }
+            });
 
             FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.symbolSetSign, sharedSettingsDataViewModel.getFontSizeMain());
             FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.typeSwitch, sharedSettingsDataViewModel.getFontSizeMain());
