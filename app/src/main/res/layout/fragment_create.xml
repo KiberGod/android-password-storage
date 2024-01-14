@@ -28,6 +28,7 @@
             android:background="@drawable/background_rounded_toolbar">
 
             <TextView
+                android:id="@+id/pageTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -89,7 +90,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="start"
+                            android:gravity="center_vertical"
                             android:padding="10dp"
                             android:orientation="horizontal">
 
@@ -100,7 +101,7 @@
                                 android:src="@drawable/vector__file"/>
 
                             <TextView
-                                android:gravity="center"
+                                android:id="@+id/createRecordButtonText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
@@ -132,7 +133,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="start"
+                            android:gravity="center_vertical"
                             android:padding="10dp"
                             android:orientation="horizontal">
 
@@ -143,7 +144,7 @@
                                 android:src="@drawable/vector__category"/>
 
                             <TextView
-                                android:gravity="center"
+                                android:id="@+id/createCategoryButtonText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"

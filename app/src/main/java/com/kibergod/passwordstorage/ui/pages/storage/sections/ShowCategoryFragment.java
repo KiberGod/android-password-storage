@@ -22,6 +22,7 @@ import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -74,7 +75,27 @@ public class ShowCategoryFragment extends Fragment {
 
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         sharedCategoriesDataViewModel.updateCategoryViewed_atById(categoryId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeFieldCaptions = sharedSettingsDataViewModel.getFontSizeFieldCaptions();
+        int fontSizeOther = sharedSettingsDataViewModel.getFontSizeOther();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.categoryName, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.statisticBlockTitle, fontSizeMain);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.categoryRecordCounter, fontSizeOther);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.metadataTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.created_at, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.updated_at, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.viewed_at, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.created_atText, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.updated_atText, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.viewed_atText, fontSizeFieldCaptions);
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -115,6 +136,7 @@ public class ShowCategoryFragment extends Fragment {
     private void createRecordItem(View view, String recordName, int recordId) {
         LinearLayout parentContainer = view.findViewById(R.id.categoryStatisticBody);
         View recordItemView = getLayoutInflater().inflate(R.layout.fragment_show_category_record, null);
+        FontUtils.setFontSizeToView(requireContext(), recordItemView, R.id.recordName, sharedSettingsDataViewModel.getFontSizeOther());
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,

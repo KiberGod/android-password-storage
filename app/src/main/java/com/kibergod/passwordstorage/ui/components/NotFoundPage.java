@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.Vibrator;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +20,13 @@ public class NotFoundPage {
 
     private static boolean rabbitFounderMode = true;
 
-    public static void printNotFoundPage(@NotNull Context context, @NotNull View view, int idScrollArea) {
+    public static void printNotFoundPage(@NotNull Context context, @NotNull View view, int fontSize) {
         LinearLayout scrollArea = view.findViewById(R.id.recordsScrollArea);
         View fragmentView = LayoutInflater.from(context).inflate(R.layout.fragment_not_found_page, null);
         scrollArea.addView(fragmentView);
         TextView notFoundMessageView = view.findViewById(R.id.notFoundMessage);
         notFoundMessageView.setText("Архівованих записів не знайдено.");
+        FontUtils.setFontSizeToView(context, fragmentView, R.id.notFoundMessage, fontSize);
 
         setOnLongClickToRabbitImg(context, view, action -> {
             rabbitFounderMode = !rabbitFounderMode;
@@ -34,9 +36,10 @@ public class NotFoundPage {
     }
 
     // Друк повідомлення про відсутність записів / категорій / закладок
-    public static void printNotFoundPage(@NotNull Context context, @NotNull View view, int idScrollArea, String searchParam, String notFoundMessage) {
+    public static void printNotFoundPage(@NotNull Context context, @NotNull View view, int idScrollArea, String searchParam, String notFoundMessage, int fontSize) {
         LinearLayout scrollArea = view.findViewById(idScrollArea);
         View fragmentView = LayoutInflater.from(context).inflate(R.layout.fragment_not_found_page, null);
+        FontUtils.setFontSizeToView(context, fragmentView, R.id.notFoundMessage, fontSize);
         scrollArea.addView(fragmentView);
         TextView notFoundMessageView = view.findViewById(R.id.notFoundMessage);
         if (!searchParam.equals("")) {

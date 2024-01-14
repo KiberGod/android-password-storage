@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.model.Category;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
@@ -25,12 +26,13 @@ import java.util.function.Consumer;
 public class CategorySelectionDialog {
 
     // Відображення вікна вибору категорії
-    public static void showCategorySelectionDialog(@NotNull Context context, ArrayList<Category> categories, String activeCategoryName, Consumer<Integer> func) {
+    public static void showCategorySelectionDialog(@NotNull Context context, ArrayList<Category> categories, String activeCategoryName, int fontSize, Consumer<Integer> func) {
         KeyboardUtils.hideKeyboards(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_category_selection, null);
         builder.setView(dialogView);
+        FontUtils.setFontSizeToView(context, dialogView, R.id.categoryWindowTextView, fontSize);
 
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -40,7 +42,7 @@ public class CategorySelectionDialog {
         LinearLayout linearLayout = dialogView.findViewById(R.id.categoriesSelectScrollArea);
 
         for (Category category : categories) {
-            View categoryBlock = createCategoryBlock(category, context, activeCategoryName);
+            View categoryBlock = createCategoryBlock(category, context, activeCategoryName, fontSize);
 
             if (category != categories.get(categories.size()-1)) {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -72,9 +74,10 @@ public class CategorySelectionDialog {
     }
 
     // Створення блоків "зображення + назва" категорій
-    private static View createCategoryBlock(@NotNull Category category, @NotNull Context context, String activeCategoryName) {
+    private static View createCategoryBlock(@NotNull Category category, @NotNull Context context, String activeCategoryName, int fontSize) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View categoryBlock = inflater.inflate(R.layout.dialog_category_selection_item, null);
+        FontUtils.setFontSizeToView(context, categoryBlock, R.id.textCategoryItem, fontSize);
 
         ImageView imageView = categoryBlock.findViewById(R.id.imgCategoryItem);
         TextView textView = categoryBlock.findViewById(R.id.textCategoryItem);

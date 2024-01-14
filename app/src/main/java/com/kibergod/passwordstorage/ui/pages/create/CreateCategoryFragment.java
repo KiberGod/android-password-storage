@@ -22,6 +22,7 @@ import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class CreateCategoryFragment extends Fragment {
@@ -52,7 +53,18 @@ public class CreateCategoryFragment extends Fragment {
         setOnClickToSaveButton(view);
         setOnClickToIconSelectWindow(view);
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateCategoryName, requireContext());
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeInput = sharedSettingsDataViewModel.getFontSizeInput();
+        int fontSizeOther = sharedSettingsDataViewModel.getFontSizeOther();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.pageTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editCreateCategoryName, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.createCategoryStatus, fontSizeOther);
     }
 
 
@@ -89,7 +101,7 @@ public class CreateCategoryFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), sharedSettingsDataViewModel.getFontSizeMain(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });

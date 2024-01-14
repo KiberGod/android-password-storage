@@ -25,6 +25,7 @@ import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class EditCategoryFragment extends Fragment {
@@ -84,7 +85,18 @@ public class EditCategoryFragment extends Fragment {
         setOnClickToDeleteButton(view);
         setOnClickToIconSelectWindow(view);
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editEditCategoryName, requireContext());
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeInput = sharedSettingsDataViewModel.getFontSizeInput();
+        int fontSizeOther = sharedSettingsDataViewModel.getFontSizeOther();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.pageTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editEditCategoryName, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editCategoryStatus, fontSizeOther);
     }
 
     // Функція встановлення тексту до UI-компонентів
@@ -156,7 +168,7 @@ public class EditCategoryFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), sharedSettingsDataViewModel.getFontSizeMain(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });

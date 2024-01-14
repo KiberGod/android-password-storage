@@ -53,11 +53,13 @@ public class CategoriesFragment extends Fragment {
                         sharedCategoriesDataViewModel.getCategoryAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
                         ((HomeActivity) requireActivity()).getAction_atIconId(),
                         null,
+                        sharedSettingsDataViewModel.getFontSizeMain(),
+                        sharedSettingsDataViewModel.getFontSizeFieldCaptions(),
                         () -> ((HomeActivity) requireActivity()).setShowCategoryFragment(id)
                 );
             }
         } else {
-            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.categoriesScrollArea, searchEditText.getText().toString(), "Створіть свою першу категорію");
+            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.categoriesScrollArea, searchEditText.getText().toString(), "Створіть свою першу категорію", sharedSettingsDataViewModel.getFontSizeMain());
         }
     }
 }

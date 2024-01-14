@@ -24,6 +24,7 @@ import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
@@ -151,6 +152,13 @@ public class PasswordGeneratorFragment extends Fragment {
             LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
             View settingsItem = getLayoutInflater().inflate(R.layout.fragment_password_generator_item, null);
 
+            FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.symbolSetSign, sharedSettingsDataViewModel.getFontSizeMain());
+            FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.typeSwitch, sharedSettingsDataViewModel.getFontSizeMain());
+            FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.randomLenSwitch, sharedSettingsDataViewModel.getFontSizeMain());
+            FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.editLength, sharedSettingsDataViewModel.getFontSizeInput());
+            FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.randomLenText, sharedSettingsDataViewModel.getFontSizeFieldCaptions());
+            FontUtils.setFontSizeToView(requireContext(), settingsItem, R.id.lenText, sharedSettingsDataViewModel.getFontSizeFieldCaptions());
+
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -189,8 +197,27 @@ public class PasswordGeneratorFragment extends Fragment {
         setSettingsToSeekBar(view);
         setSettingsToEditText(view);
         printData(view);
-
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeInput = sharedSettingsDataViewModel.getFontSizeInput();
+        int fontSizeButtons = sharedSettingsDataViewModel.getFontSizeButtons();
+        int fontSizeFieldCaptions = sharedSettingsDataViewModel.getFontSizeFieldCaptions();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.generatorTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.generatorSettingsText, fontSizeMain);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.passwordEdit, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.notUseSymbolsEdit, fontSizeInput);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.generatePasButtonText, fontSizeButtons);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.genPassText, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.textPasswordLength, fontSizeFieldCaptions);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.notUseSymbolsText, fontSizeFieldCaptions);
     }
 
     private void printData(View view) {

@@ -21,6 +21,7 @@ import com.kibergod.passwordstorage.model.Record;
 import com.kibergod.passwordstorage.ui.components.NotFoundPage;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -41,7 +42,18 @@ public class ArchiveFragment extends Fragment {
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.archiveTitle, RabbitSupport.SupportDialogIDs.TOOLS_ARCHIVE, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         drawButtonList(view);
         setOnClickToClearArchiveButton(view);
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeButtons = sharedSettingsDataViewModel.getFontSizeButtons();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.archiveTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.archiveRecordCounter, fontSizeMain);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.clearButtonText, fontSizeButtons);
     }
 
     // Функція виводить весь список записів
@@ -72,13 +84,15 @@ public class ArchiveFragment extends Fragment {
                         sharedRecordsDataViewModel.getRecordDeleted_atById(id),
                         R.drawable.vector__trash,
                         sharedRecordsDataViewModel.getRecordTimeToRemoveById(id),
+                        sharedSettingsDataViewModel.getFontSizeMain(),
+                        sharedSettingsDataViewModel.getFontSizeFieldCaptions(),
                         () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                 );
             }
         }
 
         if (counter == 0) {
-            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.recordsScrollArea);
+            NotFoundPage.printNotFoundPage(requireContext(), view, sharedSettingsDataViewModel.getFontSizeMain());
         }
         setArchiveRecordCounter(view, counter);
     }

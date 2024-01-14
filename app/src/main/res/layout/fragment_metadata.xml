@@ -27,6 +27,7 @@
                 android:src="@drawable/vector__binary"/>
 
             <TextView
+                android:id="@+id/metadataTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18dp"
@@ -47,6 +48,7 @@
                 android:background="@color/gray_text" />
 
             <TextView
+                android:id="@+id/created_atText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Дата створення"
@@ -80,6 +82,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/updated_atText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Останнє оновлення"
@@ -113,6 +116,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/viewed_atText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Попередній перегляд"
@@ -153,6 +157,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/deleted_atText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Дата видалення"

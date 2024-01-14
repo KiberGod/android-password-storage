@@ -70,13 +70,15 @@ public class BookmarksFragment extends Fragment {
                             sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
                             ((HomeActivity) requireActivity()).getAction_atIconId(),
                             null,
+                            sharedSettingsDataViewModel.getFontSizeMain(),
+                            sharedSettingsDataViewModel.getFontSizeFieldCaptions(),
                             () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                     );
                 }
             }
         }
         if (isEmptyBookmarkList) {
-            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.bookmarksScrollArea, searchEditText.getText().toString(), "Оберіть будь-який запис та додайте його до закладок");
+            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.bookmarksScrollArea, searchEditText.getText().toString(), "Оберіть будь-який запис та додайте його до закладок", sharedSettingsDataViewModel.getFontSizeMain());
         }
     }
 }

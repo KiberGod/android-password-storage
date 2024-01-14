@@ -3,6 +3,7 @@ package com.kibergod.passwordstorage.ui.pages.tools;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kibergod.passwordstorage.R;
+import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 
 public class RabbitSupportFragment extends Fragment {
+    private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private static final String SECTION_INDEX = "sectionIndex";
     private static final String SUBSECTION_INDEX = "subsectionIndex";
     private int sectionIndex;
@@ -53,6 +57,7 @@ public class RabbitSupportFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rabbit_support, container, false);
+        sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
 
         initUI_Objects(view);
 
@@ -67,8 +72,14 @@ public class RabbitSupportFragment extends Fragment {
         }
 
         setOnClickToBackButton(view);
-
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.rssTitle, fontSizeMain);
     }
 
     private void initUI_Objects(View view) {
@@ -109,6 +120,7 @@ public class RabbitSupportFragment extends Fragment {
 
         TextView itemName = itemView.findViewById(R.id.nameRSSitem);
         itemName.setText(name);
+        FontUtils.setFontSizeToView(requireContext(), itemView, R.id.nameRSSitem, sharedSettingsDataViewModel.getFontSizeMain());
 
         ImageView itemIcon = itemView.findViewById(R.id.imgRSSitem);
         itemIcon.setImageResource(iconId);
@@ -128,14 +140,19 @@ public class RabbitSupportFragment extends Fragment {
         RabbitSupport.Section section = RabbitSupport.getSectionByIndex(sectionIndex);
         View itemView = getLayoutInflater().inflate(R.layout.fragment_rabbit_support_subsection, null);
 
+        FontUtils.setFontSizeToView(requireContext(), itemView, R.id.nameWindow, sharedSettingsDataViewModel.getFontSizeMain());
+
         TextView itemName = itemView.findViewById(R.id.nameSection);
         itemName.setText("Розділ: " + section.getName());
+        FontUtils.setFontSizeToView(requireContext(), itemView, R.id.nameSection, sharedSettingsDataViewModel.getFontSizeMain());
 
         TextView itemSubName = itemView.findViewById(R.id.nameSubsection);
         itemSubName.setText(section.getSubsections().get(subsectionIndex).getName());
+        FontUtils.setFontSizeToView(requireContext(), itemView, R.id.nameSubsection, sharedSettingsDataViewModel.getFontSizeMain());
 
         TextView itemMainText = itemView.findViewById(R.id.mainTextSubsection);
         itemMainText.setText(section.getSubsections().get(subsectionIndex).getText());
+        FontUtils.setFontSizeToView(requireContext(), itemView, R.id.mainTextSubsection, sharedSettingsDataViewModel.getFontSizeMain());
 
         ImageView itemIcon = itemView.findViewById(R.id.imgRSSsubsection);
         itemIcon.setImageResource(section.getSubsections().get(subsectionIndex).getIcon());

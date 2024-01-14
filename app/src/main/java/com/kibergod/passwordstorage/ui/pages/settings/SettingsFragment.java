@@ -216,6 +216,7 @@ public class SettingsFragment extends Fragment {
             printSettingsData(view);
             resizeFonts(view);
             setRssDialogs(view);
+            Toast.makeText(getActivity(), "Налаштування скинуто до стандартних", Toast.LENGTH_SHORT).show();
         });
     }
 

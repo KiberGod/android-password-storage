@@ -67,12 +67,14 @@ public class RecordsFragment extends Fragment {
                             sharedRecordsDataViewModel.getRecordAction_atById(id, sharedSettingsDataViewModel.getFiltersSortParam()),
                             ((HomeActivity) requireActivity()).getAction_atIconId(),
                             null,
+                            sharedSettingsDataViewModel.getFontSizeMain(),
+                            sharedSettingsDataViewModel.getFontSizeFieldCaptions(),
                             () -> ((HomeActivity) requireActivity()).setShowRecordFragment(id)
                     );
                 }
             }
         } else {
-            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.recordsScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис");
+            NotFoundPage.printNotFoundPage(requireContext(), view, R.id.recordsScrollArea, searchEditText.getText().toString(), "Створіть свій перший запис", sharedSettingsDataViewModel.getFontSizeMain());
         }
     }
 }

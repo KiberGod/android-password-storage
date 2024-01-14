@@ -24,6 +24,7 @@ import com.kibergod.passwordstorage.ui.pages.storage.sections.CategoriesFragment
 import com.kibergod.passwordstorage.ui.pages.storage.sections.RecordsFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class StorageFragment extends Fragment {
@@ -53,7 +54,23 @@ public class StorageFragment extends Fragment {
         ((HomeActivity) requireActivity()).setOnCheckedToRadioGroup(view, R.id.filtersParam);
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.searchButton, RabbitSupport.SupportDialogIDs.STORAGE_SEARCH, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.filtersButton, RabbitSupport.SupportDialogIDs.STORAGE_FILTERS, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeInput = sharedSettingsDataViewModel.getFontSizeInput();
+        int fontSizeOther = sharedSettingsDataViewModel.getFontSizeOther();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.searchEditText, fontSizeInput);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.sortFilterText, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.paramFilterText, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.filtersSortingMode1, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.filtersSortingMode2, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.filtersParamMode1, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.filtersParamMode2, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.filtersParamMode3, fontSizeOther);
     }
 
     @Override

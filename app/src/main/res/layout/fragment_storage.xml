@@ -94,6 +94,7 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
+                        android:id="@+id/sortFilterText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"
@@ -143,6 +144,7 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <TextView
+                        android:id="@+id/paramFilterText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"

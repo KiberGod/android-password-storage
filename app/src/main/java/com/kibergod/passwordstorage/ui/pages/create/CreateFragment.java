@@ -15,6 +15,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class CreateFragment extends Fragment {
@@ -31,7 +32,17 @@ public class CreateFragment extends Fragment {
 
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.createRecordButton, RabbitSupport.SupportDialogIDs.CREATE_RECORD, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.createCategoryButton, RabbitSupport.SupportDialogIDs.CREATE_CATEGORY, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeButtons = sharedSettingsDataViewModel.getFontSizeButtons();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.pageTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.createRecordButtonText, fontSizeButtons);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.createCategoryButtonText, fontSizeButtons);
     }
 
     @Override

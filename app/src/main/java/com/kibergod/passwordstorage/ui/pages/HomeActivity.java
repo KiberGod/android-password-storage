@@ -66,6 +66,7 @@ import com.kibergod.passwordstorage.ui.pages.storage.sections.EditRecordFragment
 import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowCategoryFragment;
 import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowRecordFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
 import com.kibergod.passwordstorage.ui.utils.Vibrator;
@@ -265,7 +266,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Функція додає картку запису або категорії
-    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String action_at, int action_atIconId, String timeToRemove, Runnable action) {
+    public void drawButton(View view, Context context, String title, int id_scrollArea, String icon_id, String action_at, int action_atIconId, String timeToRemove, int fontSizeMain, int fontSizeCaptions, Runnable action) {
         LinearLayout parentContainer = view.findViewById(id_scrollArea);
         View itemView = getLayoutInflater().inflate(R.layout.fragment_show_item, null);
 
@@ -276,9 +277,11 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView itemName = itemView.findViewById(R.id.itemName);
         itemName.setText(title);
+        FontUtils.setFontSizeToView(context, itemView, R.id.itemName, fontSizeMain);
 
         TextView itemAction_at = itemView.findViewById(R.id.itemAction_at);
         itemAction_at.setText(action_at);
+        FontUtils.setFontSizeToView(context, itemView, R.id.itemAction_at, fontSizeCaptions);
 
         ImageView itemAction_atIcon = itemView.findViewById(R.id.itemAction_atIcon);
         itemAction_atIcon.setImageResource(action_atIconId);
@@ -297,6 +300,7 @@ public class HomeActivity extends AppCompatActivity {
             TextView timeToRemoveView = itemView.findViewById(R.id.timeToRecordRemove);
             timeToRemoveView.setText("Автовидалення через: " + timeToRemove);
             timeToRemoveView.setVisibility(View.VISIBLE);
+            FontUtils.setFontSizeToView(context, itemView, R.id.timeToRecordRemove, fontSizeCaptions);
         }
 
         parentContainer.addView(itemView, layoutParams);
@@ -314,12 +318,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Викликає появу вікна вибору категорії
-    public void callCategorySelectionDialog(TextView selectedCategoryTextView, ArrayList<Category> categories, View view, Context context) {
+    public void callCategorySelectionDialog(TextView selectedCategoryTextView, ArrayList<Category> categories, View view, Context context, int fontSize) {
         ImageView selectedCategoryIcon = view.findViewById(R.id.selectedCategoryIcon);
         CategorySelectionDialog.showCategorySelectionDialog(
                 context,
                 categories,
                 CategorySelectionDialog.getSelectedCategoryName(view),
+                fontSize,
                 categoryId -> {
                     String categoryName = sharedCategoriesDataViewModel.getCategoryNameById(categoryId);
                     if (categoryName.equals("")) {

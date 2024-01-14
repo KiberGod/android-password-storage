@@ -13,6 +13,7 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
@@ -37,6 +38,17 @@ public class ToolsFragment extends Fragment {
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.passwordGeneratorButton, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.archiveButton, RabbitSupport.SupportDialogIDs.TOOLS_ARCHIVE, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.rabbitSupportButton, RabbitSupport.SupportDialogIDs.TOOLS_RSS, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
+        resizeFonts(view);
         return view;
+    }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.pageTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.generatorTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.archiveTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.rssTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.infoTitle, fontSizeMain);
     }
 }

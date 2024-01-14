@@ -25,6 +25,7 @@
             android:background="@drawable/background_rounded_toolbar">
 
             <TextView
+                android:id="@+id/pageTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -84,6 +85,7 @@
                             android:background="@color/gray_text" />
 
                         <TextView
+                            android:id="@+id/generatorTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/purple"
@@ -133,6 +135,7 @@
                             android:background="@color/gray_text" />
 
                         <TextView
+                            android:id="@+id/archiveTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/purple"
@@ -188,6 +191,7 @@
                             android:background="@color/gray_text" />
 
                         <TextView
+                            android:id="@+id/rssTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/purple"
@@ -237,6 +241,7 @@
                             android:background="@color/gray_text" />
 
                         <TextView
+                            android:id="@+id/infoTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/purple"

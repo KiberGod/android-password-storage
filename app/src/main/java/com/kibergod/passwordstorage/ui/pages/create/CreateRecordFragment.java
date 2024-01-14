@@ -31,6 +31,7 @@ import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
+import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.Vibrator;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
@@ -84,8 +85,28 @@ public class CreateRecordFragment extends Fragment {
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordText, requireContext());
         ToolbarBuilder.setEditTextFocusChangeListener(view, R.id.editCreateRecordTitle, requireContext(),true);
         ImageUtils.setImageViewSize(view, R.id.createRecordIcon, ImageUtils.getScreenWidth()/3);
+        resizeFonts(view);
         return view;
     }
+
+    private void resizeFonts(View view) {
+        int fontSizeMain = sharedSettingsDataViewModel.getFontSizeMain();
+        int fontSizeInput = sharedSettingsDataViewModel.getFontSizeInput();
+        int fontSizeButtons = sharedSettingsDataViewModel.getFontSizeButtons();
+        int fontSizeOther = sharedSettingsDataViewModel.getFontSizeOther();
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.pageTitle, fontSizeMain);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.categoryText, fontSizeMain);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editCreateRecordTitle, fontSizeInput);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.editCreateRecordText, fontSizeInput);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.addFieldButtonText, fontSizeButtons);
+
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.createRecordStatus, fontSizeOther);
+        FontUtils.setFontSizeToView(requireContext(), view, R.id.selectedCategoryText, fontSizeOther);
+    }
+
 
     // Функція закріпляє за кнопкою діалогове меню зі списком категорій
     private void setCategoriesToDropdownButton(View view) {
@@ -96,7 +117,7 @@ public class CreateRecordFragment extends Fragment {
         categories.add(0, new Category(null, CategorySelectionDialog.getEmptyCategoryText()));
 
         ViewUtils.setOnClickToView(view, R.id.dropdownCreateRecordCategoryButton, () -> {
-            ((HomeActivity) requireActivity()).callCategorySelectionDialog(selectedCategoryTextView, categories, view, requireContext());
+            ((HomeActivity) requireActivity()).callCategorySelectionDialog(selectedCategoryTextView, categories, view, requireContext(), sharedSettingsDataViewModel.getFontSizeMain());
         });
     }
 
@@ -145,7 +166,7 @@ public class CreateRecordFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IconSelectionDialog.showIconSelectionDialog(requireContext(), iconResourceId -> {
+                IconSelectionDialog.showIconSelectionDialog(requireContext(), sharedSettingsDataViewModel.getFontSizeMain(), iconResourceId -> {
                     tempIconId = iconResourceId;
                     imageView.setImageResource(getResources().getIdentifier(iconResourceId, "drawable", requireContext().getPackageName()));
                 });
@@ -163,6 +184,9 @@ public class CreateRecordFragment extends Fragment {
         if (fieldCounter < MAX_FIELDS_LENGTH) {
             LinearLayout parentContainer = view.findViewById(R.id.mainContainer);
             View fieldView = getLayoutInflater().inflate(R.layout.fragment_edit_field, null);
+
+            FontUtils.setFontSizeToView(requireContext(), fieldView, R.id.titleField, sharedSettingsDataViewModel.getFontSizeInput());
+            FontUtils.setFontSizeToView(requireContext(), fieldView, R.id.valueField, sharedSettingsDataViewModel.getFontSizeInput());
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
