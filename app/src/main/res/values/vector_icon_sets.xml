@@ -2,6 +2,28 @@
 <resources>
     <string-array name="general">
         <item>"vector_template_image"</item>
+        <item>"vector__empty_icon_1"</item>
+        <item>"vector__empty_icon_2"</item>
+        <item>"vector__avatar_2"</item>
+        <item>"vector__diamond"</item>
+        <item>"vector__credit_card"</item>
+        <item>"vector__fingerprint"</item>
+        <item>"vector__usd"</item>
+        <item>"vector__folder"</item>
+        <item>"vector__folder_2"</item>
+        <item>"vector__phone"</item>
+        <item>"vector__business_card"</item>
+        <item>"vector__paper_plane"</item>
+        <item>"vector__avatar_1"</item>
+        <item>"vector__avatar_3"</item>
+        <item>"vector__wifi"</item>
+        <item>"vector__lock_record"</item>
+        <item>"vector__file"</item>
+        <item>"vector__category"</item>
+        <item>"vector__vertical_key"</item>
+        <item>"vector__web_1"</item>
+        <item>"vector__web_2"</item>
+        <item>"vector__network_2"</item>
     </string-array>
 
     <string-array name="social_networks">
