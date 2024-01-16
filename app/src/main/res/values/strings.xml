@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Password Storage</string>
+    <string name="app_name">Калькулятор</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
