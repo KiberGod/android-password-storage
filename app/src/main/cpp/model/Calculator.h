@@ -11,18 +11,14 @@
  */
 class Calculator {
 private:
-    static const int MAX_NUMBER_LENGTH = 15;
+    static const int MAX_NUMBER_LENGTH = 200;
 
-    char number1[MAX_NUMBER_LENGTH];
-    char number2[MAX_NUMBER_LENGTH];
-    char operation;
+    char expression[MAX_NUMBER_LENGTH];
 
 public:
     Calculator();
-    Calculator(const char* number1, const char* number2, const char operation);
-    const char* getNumber1() const;
-    const char* getNumber2() const;
-    const char getOperation() const;
+    Calculator(const char* expression);
+    const char* getExpression() const;
 };
 
 

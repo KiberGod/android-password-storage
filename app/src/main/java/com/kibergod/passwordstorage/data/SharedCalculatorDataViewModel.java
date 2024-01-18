@@ -14,12 +14,10 @@ public class SharedCalculatorDataViewModel extends ViewModel {
     // Ініціалізація даних калькулятора
     public void setCalculator() { calculator = getCalculator(); }
 
-    public String getNumber1() { return calculator.getNumber1(); }
-    public String getNumber2() { return calculator.getNumber2(); }
-    public Character getOperation() { return calculator.getOperation(); }
+    public String getExpression() { return calculator.getExpression(); }
 
-    public void saveCalculator(String number1, String number2, Character operation) {
-        Calculator newCalculator = new Calculator(number1, number2, operation);
+    public void saveCalculator(String expression) {
+        Calculator newCalculator = new Calculator(expression);
         calculator = newCalculator;
         NativeController.saveCalculator(calculator);
     }

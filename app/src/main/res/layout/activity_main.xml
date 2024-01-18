@@ -5,218 +5,390 @@
     android:id="@+id/fo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:padding="10dp"
+    android:background="@color/calculator_background"
     tools:context=".MainActivity">
+
+
+
 
     <TextView
         android:id="@+id/resultPlace"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#000000"
-        android:gravity="bottom|right"
-        android:hint="0"
-        android:text="0"
-        android:textColor="#FAF4F4"
-        android:textColorHint="#FAF4F4"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/topLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <View
-        android:id="@+id/topLine"
-        style="@style/CalcLine"
-        app:layout_constraintBottom_toTopOf="@+id/previewResultPlace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/previewResultPlace"
-        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#000000"
         android:gravity="bottom|right"
         android:text="0"
         android:textColor="#979393"
         android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomLine"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-        android:id="@+id/bottomLine"
-        style="@style/CalcLine"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <HorizontalScrollView
+            android:id="@+id/expressionScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end">
+
+                <TextView
+                    android:id="@+id/expressionPlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|end"
+                    android:hint="0"
+                    android:textColor="@color/calculator_blue"
+                    android:textColorHint="@color/calculator_blue"
+                    android:textSize="34sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+
 
     <TableLayout
-
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-
-        android:layout_height="408dp"
+        android:layout_height="440dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="70dp">
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_clear"
-                style="@style/CalcButtonStyle"
-                android:onClick="onClickClearButton"
-                android:text="AC" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_erase"
-                style="@style/CalcButtonStyle"
-                android:onClick="onClickEraseButton"
-                android:text="⌫" />
+                <TextView
+                    android:id="@+id/buttonErase"
+                    style="@style/CalcButtonStyle"
+                    android:text="⌫"
+                    android:textColor="@color/calculator_orange" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_percentage"
-                style="@style/CalcButtonStyle"
-                android:onClick="calcPercentage"
-                android:text="%" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_division"
-                style="@style/CalcButtonStyle"
-                android:onClick="setOperation"
-                android:text="÷" />
+                <TextView
+                    android:id="@+id/buttonLeftParenthesis"
+                    style="@style/CalcButtonStyle"
+                    android:text="("
+                    android:textColor="@color/calculator_orange" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonRightParenthesis"
+                    style="@style/CalcButtonStyle"
+                    android:text=")"
+                    android:textColor="@color/calculator_orange" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray_2"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonDivision"
+                    style="@style/CalcButtonStyle"
+                    android:text="÷"
+                    android:textColor="@color/calculator_blue" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="70dp">
+            android:layout_marginTop="1dp"
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_7"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="7" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_8"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="8" />
+                <TextView
+                    android:id="@+id/button_7"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="7"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_9"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="9" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_multiplication"
-                style="@style/CalcButtonStyle"
-                android:onClick="setOperation"
-                android:text="×" />
+                <TextView
+                    android:id="@+id/button_8"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="8"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_9"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="9"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray_2"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonMultiplication"
+                    style="@style/CalcButtonStyle"
+                    android:text="×"
+                    android:textColor="@color/calculator_blue" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="70dp">
+            android:layout_marginTop="1dp"
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_4"
-                style="@style/CalcButtonStyle"
-                android:layout_marginStart="16dp"
-                android:onClick="setDigit"
-                android:text="4" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_5"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="5" />
+                <TextView
+                    android:id="@+id/button_4"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="4"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_6"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="6" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_difference"
-                style="@style/CalcButtonStyle"
-                android:onClick="setOperation"
-                android:text="-" />
+                <TextView
+                    android:id="@+id/button_5"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="5"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_6"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="6"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray_2"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonDifference"
+                    style="@style/CalcButtonStyle"
+                    android:text="-"
+                    android:textColor="@color/calculator_blue" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="70dp">
+            android:layout_marginTop="1dp"
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_1"
-                style="@style/CalcButtonStyle"
-                android:layout_marginStart="16dp"
-                android:onClick="setDigit"
-                android:text="1" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_2"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="2" />
+                <TextView
+                    android:id="@+id/button_1"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="1"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_3"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="3" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_amount"
-                style="@style/CalcButtonStyle"
-                android:onClick="setOperation"
-                android:text="+" />
+                <TextView
+                    android:id="@+id/button_2"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="2"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_3"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="3"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray_2"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonAmount"
+                    style="@style/CalcButtonStyle"
+                    android:text="+"
+                    android:textColor="@color/calculator_blue" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="70dp">
+            android:layout_marginTop="1dp"
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_inversion"
-                style="@style/CalcButtonStyle"
-                android:onClick="inversionSignNumber"
-                android:text="+/-" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_0"
-                style="@style/CalcButtonStyle"
-                android:onClick="setDigit"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/buttonClear"
+                    style="@style/CalcButtonStyle"
+                    android:text="AC"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_comma"
-                style="@style/CalcButtonStyle"
-                android:onClick="setFloatingComma"
-                android:text="." />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
 
-            <Button
-                android:id="@+id/button_result"
-                style="@style/CalcButtonStyle"
-                android:onClick="setResult"
-                android:text="=" />
+                <TextView
+                    android:id="@+id/button_0"
+                    style="@style/CalcButtonStyle"
+                    android:onClick="setDigit"
+                    android:text="0"
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonPoint"
+                    style="@style/CalcButtonStyle"
+                    android:text=","
+                    android:textColor="@color/calculator_main_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/calculator_button_gray_2"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/buttonResult"
+                    style="@style/CalcButtonStyle"
+                    android:text="="
+                    android:textColor="@color/calculator_blue" />
+            </LinearLayout>
         </TableRow>
     </TableLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

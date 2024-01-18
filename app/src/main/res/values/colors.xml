@@ -18,4 +18,11 @@
 
     <color name="red">#FFFF0000</color>
 
+    <color name="calculator_main_text">#FFCCCCCC</color>
+    <color name="calculator_blue">#FF21c1e1</color>
+    <color name="calculator_orange">#FFC07C01</color>
+    <color name="calculator_button_gray">#FF262626</color>
+    <color name="calculator_button_gray_2">#FF1C1C1C</color>
+    <color name="calculator_background">#FF111111</color>
+
 </resources>
