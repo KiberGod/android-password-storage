@@ -12,6 +12,7 @@
 class Settings {
 private:
     static const int MAX_PASSWORD_LENGTH = 10;
+    static const int MAX_CALC_EXPRESSION = 200;
 
     /*
      * Змінна контролює, яким саме чином повинна поводитися програма при її прихованні.
@@ -71,6 +72,9 @@ private:
     int fontSizeRssMain;
     int fontSizeRssSecondary;
 
+    // Рядок калькулятора
+    char calcExpression[MAX_CALC_EXPRESSION];
+
     /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
@@ -88,13 +92,14 @@ private:
     static const int DEFAULT_FONT_SIZE_OTHER = 16;
     static const int DEFAULT_FONT_SIZE_RSS_MAIN = 16;
     static const int DEFAULT_FONT_SIZE_RSS_SECONDARY = 12;
+    static const std::string DEFAULT_CALC_EXPRESSION;
 
 public:
     Settings();
     Settings(const bool activityProtection, const bool inputCalcClearing, const char* password,
              const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam,
              const int fontSizeMain, const int fontSizeInput, const int fontSizeButtons, const int fontSizeLargeButtons,
-             const int fontSizeFieldCaptions, const int fontSizeOther, const int fontSizeRssMain, const int fontSizeRssSecondary);
+             const int fontSizeFieldCaptions, const int fontSizeOther, const int fontSizeRssMain, const int fontSizeRssSecondary, const char* calcExpression);
     const bool getActivityProtection() const;
     const bool getInputCalcClearing() const;
     const char* getPassword() const;
@@ -109,6 +114,7 @@ public:
     const int getFontSizeOther() const;
     const int getFontSizeRssMain() const;
     const int getFontSizeRssSecondary() const;
+    const char* geCalcExpression() const;
 };
 
 

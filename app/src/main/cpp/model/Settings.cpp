@@ -5,6 +5,7 @@
 #include "Settings.h"
 
 const std::string Settings::DEFAULT_PASSWORD = "7-.93";
+const std::string Settings::DEFAULT_CALC_EXPRESSION = "";
 
 Settings::Settings() {
     activityProtection = DEFAULT_ACTIVITY_PROTECTION;
@@ -25,12 +26,15 @@ Settings::Settings() {
     fontSizeOther = DEFAULT_FONT_SIZE_OTHER;
     fontSizeRssMain = DEFAULT_FONT_SIZE_RSS_MAIN;
     fontSizeRssSecondary = DEFAULT_FONT_SIZE_RSS_SECONDARY;
+
+    strncpy(calcExpression, Settings::DEFAULT_CALC_EXPRESSION.c_str(), MAX_CALC_EXPRESSION);
+    calcExpression[MAX_CALC_EXPRESSION - 1] = '\0';
 }
 
 Settings::Settings(const bool activityProtection, const bool inputCalcClearing, const char* password,
                    const bool digitalOwner, const bool filtersSortMode, const int filtersSortParam,
                    const int fontSizeMain, const int fontSizeInput, const int fontSizeButtons, const int fontSizeLargeButtons,
-                   const int fontSizeFieldCaptions, const int fontSizeOther, const int fontSizeRssMain, const int fontSizeRssSecondary) {
+                   const int fontSizeFieldCaptions, const int fontSizeOther, const int fontSizeRssMain, const int fontSizeRssSecondary, const char* calcExpression) {
     this->activityProtection = activityProtection;
     this->inputCalcClearing = inputCalcClearing;
     this->digitalOwner = digitalOwner;
@@ -49,6 +53,9 @@ Settings::Settings(const bool activityProtection, const bool inputCalcClearing, 
     this->fontSizeOther = fontSizeOther;
     this->fontSizeRssMain = fontSizeRssMain;
     this->fontSizeRssSecondary = fontSizeRssSecondary;
+
+    strncpy(this->calcExpression, calcExpression, MAX_CALC_EXPRESSION - 1);
+    this->calcExpression[MAX_CALC_EXPRESSION - 1] = '\0';
 }
 
 const bool Settings::getActivityProtection() const {
@@ -105,4 +112,8 @@ const int Settings::getFontSizeRssMain() const {
 
 const int Settings::getFontSizeRssSecondary() const {
     return fontSizeRssSecondary;
+}
+
+const char* Settings::geCalcExpression() const {
+    return calcExpression;
 }

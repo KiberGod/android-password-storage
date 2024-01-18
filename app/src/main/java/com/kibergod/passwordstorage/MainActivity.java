@@ -1,7 +1,6 @@
 package com.kibergod.passwordstorage;
 
 import static com.kibergod.passwordstorage.NativeController.initSecurityCore;
-import static com.kibergod.passwordstorage.model.Category.MAX_NAME_LENGTH;
 
 import java.util.Stack;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
-import com.kibergod.passwordstorage.data.SharedCalculatorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
@@ -24,7 +22,6 @@ import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class MainActivity extends AppCompatActivity {
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
-    private SharedCalculatorDataViewModel sharedCalculatorDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
 
     private final char PLUS = '+';
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         initSecurityCore(this);
 
         sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
-        sharedCalculatorDataViewModel = new ViewModelProvider(this).get(SharedCalculatorDataViewModel.class);
         sharedDigitalOwnerViewModel = new ViewModelProvider(this).get(SharedDigitalOwnerViewModel.class);
         sharedSettingsDataViewModel.setSettings();
         sharedDigitalOwnerViewModel.setDigitalOwner();
@@ -80,10 +76,8 @@ public class MainActivity extends AppCompatActivity {
     // Перевірка на необхідність встановити дані, введені у попередній сессії
     private void checkSetOldData() {
         if (!sharedSettingsDataViewModel.getInputCalcClearing()) {
-            sharedCalculatorDataViewModel.setCalculator();
-
             expression.setLength(0);
-            expression.append(sharedCalculatorDataViewModel.getExpression());
+            expression.append(sharedSettingsDataViewModel.getCalcExpression());
             updateView();
         }
     }
@@ -256,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateView() {
-        sharedCalculatorDataViewModel.saveCalculator(expression.toString());
+        sharedSettingsDataViewModel.setCalcExpression(expression.toString());
 
         TextView expressionTextView = findViewById(R.id.expressionPlace);
         expressionTextView.setText(addSpaces(expression).toString().replace(".", ","));

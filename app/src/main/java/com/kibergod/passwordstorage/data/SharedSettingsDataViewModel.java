@@ -189,4 +189,13 @@ public class SharedSettingsDataViewModel extends ViewModel {
     public int getMaxFontSize() {
         return Settings.MAX_FONT_SIZE;
     }
+
+    public String getCalcExpression() {
+        return settings.getCalcExpression();
+    }
+
+    public void setCalcExpression(String expression) {
+        settings.setCalcExpression(expression);
+        saveSettings(settings);
+    }
 }

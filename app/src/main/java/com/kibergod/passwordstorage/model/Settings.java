@@ -65,6 +65,9 @@ public class Settings {
     private int fontSizeRssMain;
     private int fontSizeRssSecondary;
 
+    // Рядок калькулятора
+    private String calcExpression;
+
     /*
      * За замовчуванням рекомендується тримати ці опції у таких станах:
      */
@@ -81,7 +84,7 @@ public class Settings {
     private static final int DEFAULT_FONT_SIZE_RSS_SECONDARY = 12;
     public static final int MIN_FONT_SIZE = 10;
     public static final int MAX_FONT_SIZE = 30;
-
+    public static final int MAX_CALC_EXPRESSION = 200;
 
     public Settings(String password, boolean filtersSortMode, int filtersSortParam) {
         activityProtection = DEFAULT_ACTIVITY_PROTECTION;
@@ -98,12 +101,13 @@ public class Settings {
         fontSizeOther = DEFAULT_FONT_SIZE_OTHER;
         fontSizeRssMain = DEFAULT_FONT_SIZE_RSS_MAIN;
         fontSizeRssSecondary = DEFAULT_FONT_SIZE_RSS_SECONDARY;
+        calcExpression = "";
     }
 
     public Settings(boolean activityProtection, boolean inputPassClearing, String password,
                     boolean digitalOwner, boolean filtersSortMode, int filtersSortParam,
                     int fontSizeMain, int fontSizeInput, int fontSizeButtons, int fontSizeLargeButtons,
-                    int fontSizeFieldCaptions, int fontSizeOther, int fontSizeRssMain, int fontSizeRssSecondary) {
+                    int fontSizeFieldCaptions, int fontSizeOther, int fontSizeRssMain, int fontSizeRssSecondary, String calcExpression) {
         this.activityProtection = activityProtection;
         this.inputCalcClearing = inputPassClearing;
         this.password = password;
@@ -118,6 +122,7 @@ public class Settings {
         this.fontSizeOther = fontSizeOther;
         this.fontSizeRssMain = fontSizeRssMain;
         this.fontSizeRssSecondary = fontSizeRssSecondary;
+        this.calcExpression = calcExpression;
     }
 
     public boolean getActivityProtection() { return activityProtection; }
@@ -135,6 +140,7 @@ public class Settings {
     public int getFontSizeOther() { return fontSizeOther; }
     public int getFontSizeRssMain() { return fontSizeRssMain; }
     public int getFontSizeRssSecondary() { return fontSizeRssSecondary; }
+    public String getCalcExpression() { return calcExpression; }
 
     public void resetActivityProtection() {
         activityProtection = !activityProtection;
@@ -155,4 +161,11 @@ public class Settings {
     public void setFontSizeOther(int fontSizeOther) { this.fontSizeOther = fontSizeOther; }
     public void setFontSizeRssMain(int fontSizeRssMain) { this.fontSizeRssMain = fontSizeRssMain; }
     public void setFontSizeRssSecondary(int fontSizeRssSecondary) { this.fontSizeRssSecondary = fontSizeRssSecondary; }
+    public void setCalcExpression(String calcExpression) {
+        if (calcExpression.length() < MAX_CALC_EXPRESSION) {
+            this.calcExpression = calcExpression;
+        } else {
+            this.calcExpression = "";
+        }
+    }
 }

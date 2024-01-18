@@ -9,7 +9,6 @@
 #include "BinFileIO.h"
 #include "../crypto_core.h"
 #include "../model/Settings.h"
-#include "../model/Calculator.h"
 #include "../model/Category.h"
 #include "../model/Record.h"
 #include "../model/DigitalOwner.h"
@@ -20,8 +19,6 @@ std::string getRecordsFilePath() { return FILES_PATH + RECORDS_FILE; }
 std::string getCategoriesFilePath() { return FILES_PATH + CATEGORIES_FILE; }
 
 std::string getSettingsFilePath() { return FILES_PATH + SETTINGS_FILE; }
-
-std::string getCalculatorFilePath() { return FILES_PATH + CALCULATOR_FILE; }
 
 std::string getDigitalOwnerFilePath() { return FILES_PATH + DIGITAL_OWNER_FILE; }
 
@@ -211,7 +208,7 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass) {
     jclass settingsClass = env->FindClass("com/kibergod/passwordstorage/model/Settings");
-    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;ZZIIIIIIIII)V");
+    jmethodID settingsConstructor = env->GetMethodID(settingsClass, "<init>", "(ZZLjava/lang/String;ZZIIIIIIIIILjava/lang/String;)V");
 
     std::vector<Settings> settings;
 
@@ -234,41 +231,16 @@ Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jcla
     int fontSizeOther = settings[0].getFontSizeOther();
     int fontSizeRssMain = settings[0].getFontSizeRssMain();
     int fontSizeRssSecondary = settings[0].getFontSizeRssSecondary();
+    const char* calcExpression = settings[0].geCalcExpression();
 
     jstring jPassword = env->NewStringUTF(password);
+    jstring jCalcExpression = env->NewStringUTF(calcExpression);
 
     jobject settingsObject = env->NewObject(settingsClass, settingsConstructor, activityProtection, inputCalcClearing,
                                             jPassword, digitalOwner, filtersSortMode, filtersSortParam,
                                             fontSizeMain, fontSizeInput, fontSizeButtons, fontSizeLargeButtons,
-                                            fontSizeFieldCaptions, fontSizeOther, fontSizeRssMain, fontSizeRssSecondary);
-
+                                            fontSizeFieldCaptions, fontSizeOther, fontSizeRssMain, fontSizeRssSecondary, jCalcExpression);
     return settingsObject;
-}
-
-/*
- * Функція передає об`єкт Calculator з данного С++ модуля у Java-код
- *
- * return Calculator obj (C++) --> Calculator obj (Java)
- */
-extern "C" JNIEXPORT jobject JNICALL
-Java_com_kibergod_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass) {
-    jclass calculatorClass = env->FindClass("com/kibergod/passwordstorage/model/Calculator");
-    jmethodID calculatorConstructor = env->GetMethodID(calculatorClass, "<init>", "(Ljava/lang/String;)V");
-
-    std::vector<Calculator> calculator;
-
-    if (loadDataFromBinFile(getFilesPath() + CALCULATOR_FILE, calculator).size() == 0) {
-        Calculator newCalculator;
-        calculator.push_back(newCalculator);
-    }
-
-    const char* expression = calculator[0].getExpression();
-
-    jstring jExpression = env->NewStringUTF(expression);
-
-    jobject calculatorObject = env->NewObject(calculatorClass, calculatorConstructor, jExpression);
-
-    return calculatorObject;
 }
 
 /*
@@ -492,6 +464,7 @@ Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcl
     jfieldID fontSizeOtherField = env->GetFieldID(settingsClass, "fontSizeOther", "I");
     jfieldID fontSizeRssMainField = env->GetFieldID(settingsClass, "fontSizeRssMain", "I");
     jfieldID fontSizeRssSecondaryField = env->GetFieldID(settingsClass, "fontSizeRssSecondary", "I");
+    jfieldID calcExpressionField = env->GetFieldID(settingsClass, "calcExpression", "Ljava/lang/String;");
 
     jboolean activityProtection = env->GetBooleanField(settingsObject, activityProtectionField);
     jboolean inputCalcClearing = env->GetBooleanField(settingsObject, inputCalcClearingField);
@@ -507,12 +480,14 @@ Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcl
     jint fontSizeOther = env->GetIntField(settingsObject, fontSizeOtherField);
     jint fontSizeRssMain = env->GetIntField(settingsObject, fontSizeRssMainField);
     jint fontSizeRssSecondary = env->GetIntField(settingsObject, fontSizeRssSecondaryField);
+    jstring jCalcExpression = (jstring)env->GetObjectField(settingsObject, calcExpressionField);
 
     const char* password = env->GetStringUTFChars(jPassword, nullptr);
+    const char* calcExpression = env->GetStringUTFChars(jCalcExpression, nullptr);
 
     Settings settings(activityProtection, inputCalcClearing, password, digitalOwner, filtersSortMode, filtersSortParam,
                       fontSizeMain, fontSizeInput, fontSizeButtons, fontSizeLargeButtons, fontSizeFieldCaptions,
-                      fontSizeOther, fontSizeRssMain, fontSizeRssSecondary);
+                      fontSizeOther, fontSizeRssMain, fontSizeRssSecondary, calcExpression);
 
     writeToBinFile(getSettingsFilePath(),
                    reinterpret_cast<char*>(&settings),
@@ -521,31 +496,8 @@ Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jcl
     );
 
     env->ReleaseStringUTFChars(jPassword, password);
+    env->ReleaseStringUTFChars(jCalcExpression, calcExpression);
     env->DeleteLocalRef(settingsObject);
-}
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject) {
-    dropFile(getCalculatorFilePath());
-
-    jclass calculatorClass = env->GetObjectClass(calculatorObject);
-
-    jfieldID jExpressionField = env->GetFieldID(calculatorClass, "expression", "Ljava/lang/String;");
-
-    jstring jExpression = (jstring)env->GetObjectField(calculatorObject, jExpressionField);
-
-    const char* number1 = env->GetStringUTFChars(jExpression, nullptr);
-
-    Calculator calculator(number1);
-
-    writeToBinFile(getCalculatorFilePath(),
-                   reinterpret_cast<char*>(&calculator),
-                   sizeof(calculator),
-                   sizeof(Calculator)
-    );
-
-    env->ReleaseStringUTFChars(jExpression, number1);
-    env->DeleteLocalRef(calculatorObject);
 }
 
 extern "C" JNIEXPORT void JNICALL

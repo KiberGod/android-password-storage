@@ -23,10 +23,7 @@ static const std::string RECORDS_FILE = "/records_v11.bin";
 static const std::string CATEGORIES_FILE = "/categories_v11.bin";
 
 // Файл налаштуваннь
-static const std::string SETTINGS_FILE = "/settings_v2.bin";
-
-// Файл даних калькулятора
-static const std::string CALCULATOR_FILE = "/calcData_v2.bin";
+static const std::string SETTINGS_FILE = "/settings_v3.bin";
 
 // Файл даних "Цифрового власника"
 static const std::string DIGITAL_OWNER_FILE = "/digitalOwner.bin";
@@ -40,9 +37,6 @@ std::string getCategoriesFilePath();
 
 // Повертає і`мя файла налаштуваннь
 std::string getSettingsFilePath();
-
-// Повертає і`мя файла даних калькулятора
-std::string getCalculatorFilePath();
 
 // Повертає і`мя файла даних "Цифрового власника"
 std::string getDigitalOwnerFilePath();
@@ -69,10 +63,6 @@ Java_com_kibergod_passwordstorage_NativeController_getCategories(JNIEnv *env, jc
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jclass);
 
-// Функція передає об`єкт Calculator з данного С++ модуля у Java-код
-extern "C" JNIEXPORT jobject JNICALL
-Java_com_kibergod_passwordstorage_NativeController_getCalculator(JNIEnv *env, jclass);
-
 // Функція передає об`єкт DivitalOwner з данного С++ модуля у Java-код
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_kibergod_passwordstorage_NativeController_getDigitalOwner(JNIEnv *env, jclass);
@@ -94,10 +84,6 @@ Java_com_kibergod_passwordstorage_NativeController_saveRecords(JNIEnv* env, jcla
 // Отримання нових даних налаштувань з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
 Java_com_kibergod_passwordstorage_NativeController_saveSettings(JNIEnv* env, jclass, jobject settingsObject);
-
-// Отримання нових даних калькулятора з java, які необхідно внести у файл
-extern "C" JNIEXPORT void JNICALL
-Java_com_kibergod_passwordstorage_NativeController_saveCalculator(JNIEnv* env, jclass, jobject calculatorObject);
 
 // Отримання нових даних "Цифрового власника" з java, які необхідно внести у файл
 extern "C" JNIEXPORT void JNICALL
