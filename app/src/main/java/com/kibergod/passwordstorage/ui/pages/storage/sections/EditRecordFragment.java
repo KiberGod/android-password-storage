@@ -91,8 +91,8 @@ public class EditRecordFragment extends Fragment {
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
-        homeViewModel.setMaxLengthForInput(view, R.id.editEditRecordTitle, MAX_TITLE_LENGTH);
-        homeViewModel.setMaxLengthForInput(view, R.id.editEditRecordText, MAX_TEXT_LENGTH);
+        ViewUtils.setMaxLengthForInput(view, R.id.editEditRecordTitle, MAX_TITLE_LENGTH);
+        ViewUtils.setMaxLengthForInput(view, R.id.editEditRecordText, MAX_TEXT_LENGTH);
 
         textViewStatus = view.findViewById(R.id.editRecordStatus);
 
@@ -230,12 +230,12 @@ public class EditRecordFragment extends Fragment {
                 getActivity().onBackPressed();
             } else {
                 textViewStatus.setText("Запис з такою назвою вже існує");
-                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
                 ViewUtils.setScrollToTop(view, R.id.scrollView);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
-            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+            params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
             ViewUtils.setScrollToTop(view, R.id.scrollView);
         }
         textViewStatus.setLayoutParams(params);
@@ -282,8 +282,8 @@ public class EditRecordFragment extends Fragment {
 
             EditText editTextName = fieldView.findViewById(R.id.titleField);
             EditText editTextValue = fieldView.findViewById(R.id.valueField);
-            homeViewModel.setMaxLengthForInput(editTextName, getMaxFieldNameLength());
-            homeViewModel.setMaxLengthForInput(editTextValue, getMaxFieldValueLength());
+            ViewUtils.setMaxLengthForInput(editTextName, getMaxFieldNameLength());
+            ViewUtils.setMaxLengthForInput(editTextValue, getMaxFieldValueLength());
             fieldNames.add(editTextName);
             fieldValues.add(editTextValue);
             editTextName.setText(fieldName);

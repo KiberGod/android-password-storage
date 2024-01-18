@@ -29,7 +29,6 @@ public class CreateCategoryFragment extends Fragment {
 
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
-    private HomeViewModel homeViewModel;
 
     private TextView textViewStatus;
 
@@ -41,12 +40,11 @@ public class CreateCategoryFragment extends Fragment {
 
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         tempIconId = "vector_template_image";
         textViewStatus = view.findViewById(R.id.createCategoryStatus);
 
-        homeViewModel.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
+        ViewUtils.setMaxLengthForInput(view, R.id.editCreateCategoryName, MAX_NAME_LENGTH);
 
         ToolbarBuilder.addToolbarToView(view, requireContext(), false,false,false,true, false, false,true,false);
 
@@ -86,11 +84,11 @@ public class CreateCategoryFragment extends Fragment {
                 getActivity().onBackPressed();
             } else {
                 textViewStatus.setText("Категорія з такою назвою вже існує");
-                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
-            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+            params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
         }
         textViewStatus.setLayoutParams(params);
     }

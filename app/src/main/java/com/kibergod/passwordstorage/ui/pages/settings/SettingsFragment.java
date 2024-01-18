@@ -56,11 +56,11 @@ public class SettingsFragment extends Fragment {
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedDigitalOwnerViewModel = new ViewModelProvider(requireActivity()).get(SharedDigitalOwnerViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        //homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editPasswordStatus);
 
-        homeViewModel.setMaxLengthForInput(view, R.id.inputPassword, MAX_PASSWORD_LENGTH);
+        ViewUtils.setMaxLengthForInput(view, R.id.inputPassword, MAX_PASSWORD_LENGTH);
 
         printSettingsData(view);
         setOnClickToSwitch(view, R.id.activityProtectionFlag, () -> sharedSettingsDataViewModel.editActivityProtection());
@@ -240,14 +240,14 @@ public class SettingsFragment extends Fragment {
                 textViewStatus.setText("");
                 sharedSettingsDataViewModel.editPassword(newPassword);
                 Toast.makeText(getActivity(), "Пароль успішно змінено", Toast.LENGTH_SHORT).show();
-                params = homeViewModel.getParamsForValidLine(requireContext(), params, 0);
+                params = ViewUtils.getParamsForValidLine(requireContext(), params, 0);
             } else {
                 textViewStatus.setText("* пароль може складатися лише з символів [0-9], '.', '-', '+' ");
-                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
             }
         } else {
             textViewStatus.setText("Пароль не може бути порожнім");
-            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+            params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
         }
         editPasswordStatus.setLayoutParams(params);
     }
@@ -389,7 +389,7 @@ public class SettingsFragment extends Fragment {
             };
 
             validStatusView.setText("");
-            params = homeViewModel.getParamsForValidLine(requireContext(), params, 0);
+            params = ViewUtils.getParamsForValidLine(requireContext(), params, 0);
             for (boolean status : validStatus) {
                 if (!status) {
                     validStatusView.setText("Один або декілька шрифтів не були змінені, бо мають значення менше " +
@@ -397,7 +397,7 @@ public class SettingsFragment extends Fragment {
                             sharedSettingsDataViewModel.getMaxFontSize() + "." +
                             "" +
                             "");
-                    params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                    params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
                 }
             }
             validStatusView.setLayoutParams(params);

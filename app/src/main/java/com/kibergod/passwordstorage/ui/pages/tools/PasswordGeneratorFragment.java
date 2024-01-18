@@ -32,8 +32,6 @@ import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class PasswordGeneratorFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
     private SharedGeneratorDataViewModel sharedGeneratorDataViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 
@@ -52,7 +50,7 @@ public class PasswordGeneratorFragment extends Fragment {
 
             setOnCheckedToUsageSwitch(view, index, idSignBarItem);
             setOnCheckedToRandomLengthSwitch(view, index);
-            homeViewModel.setMaxLengthForInput(this.lengthEdit, 4);
+            ViewUtils.setMaxLengthForInput(this.lengthEdit, 4);
             setOnChangedToEditText(index);
             setOnFocusToEditText();
             ImageUtils.setColorToImg(requireContext(), view, R.id.generatorButtonIcon, R.color.white);
@@ -203,7 +201,6 @@ public class PasswordGeneratorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_password_generator, container, false);
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         sharedGeneratorDataViewModel = new ViewModelProvider(requireActivity()).get(SharedGeneratorDataViewModel.class);
 
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.generatorTitle, RabbitSupport.SupportDialogIDs.TOOLS_GENERATOR, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
@@ -277,7 +274,7 @@ public class PasswordGeneratorFragment extends Fragment {
     private void setSettingsToEditText(View view) {
         EditText editText = view.findViewById(R.id.notUseSymbolsEdit);
 
-        homeViewModel.setMaxLengthForInput(editText, sharedGeneratorDataViewModel.getMaxNotUseSymbols());
+        ViewUtils.setMaxLengthForInput(editText, sharedGeneratorDataViewModel.getMaxNotUseSymbols());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override

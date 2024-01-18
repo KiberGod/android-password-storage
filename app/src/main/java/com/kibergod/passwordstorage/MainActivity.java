@@ -1,8 +1,8 @@
 package com.kibergod.passwordstorage;
 
 import static com.kibergod.passwordstorage.NativeController.initSecurityCore;
+import static com.kibergod.passwordstorage.model.Category.MAX_NAME_LENGTH;
 
-import java.text.DecimalFormat;
 import java.util.Stack;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -10,10 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 

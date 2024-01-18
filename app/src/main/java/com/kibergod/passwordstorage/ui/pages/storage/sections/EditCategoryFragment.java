@@ -29,8 +29,6 @@ import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class EditCategoryFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
@@ -70,11 +68,10 @@ public class EditCategoryFragment extends Fragment {
         sharedCategoriesDataViewModel = new ViewModelProvider(requireActivity()).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editCategoryStatus);
 
-        homeViewModel.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
+        ViewUtils.setMaxLengthForInput(view, R.id.editEditCategoryName, MAX_NAME_LENGTH);
 
         tempIconId = sharedCategoriesDataViewModel.getCategoryIconIdById(categoryId);
 
@@ -128,11 +125,11 @@ public class EditCategoryFragment extends Fragment {
                 getActivity().onBackPressed();
             } else {
                 textViewStatus.setText("Категорія з такою назвою вже існує");
-                params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+                params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
             }
         } else {
             textViewStatus.setText("Назва не може бути порожньою");
-            params = homeViewModel.getParamsForValidLine(requireContext(), params, 5);
+            params = ViewUtils.getParamsForValidLine(requireContext(), params, 5);
         }
         textViewStatus.setLayoutParams(params);
     }
