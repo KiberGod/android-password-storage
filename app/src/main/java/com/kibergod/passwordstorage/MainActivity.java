@@ -9,9 +9,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
@@ -94,6 +97,43 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void adjustTextSize() {
+        TextView resultPlace = findViewById(R.id.resultPlace);
+        HorizontalScrollView resultScroll = findViewById(R.id.resultScroll);
+
+        int scrollViewWidth = resultScroll.getWidth()-120;
+        int textViewWidth = resultPlace.getWidth();
+
+        if (scrollViewWidth > 0 && textViewWidth > 0) {
+            float currentTextSize = resultPlace.getTextSize();
+            float newTextSize = currentTextSize;
+
+            while (textViewWidth > scrollViewWidth && newTextSize > spToPx(34)) {
+                newTextSize--;
+
+                resultPlace.setTextSize(TypedValue.COMPLEX_UNIT_PX, newTextSize);
+                resultPlace.measure(0, 0);
+                resultPlace.layout(0, 0, resultPlace.getMeasuredWidth(), resultPlace.getMeasuredHeight());
+
+                textViewWidth = resultPlace.getWidth();
+            }
+
+            while (textViewWidth < scrollViewWidth && newTextSize < spToPx(80)) {
+                newTextSize++;
+
+                resultPlace.setTextSize(TypedValue.COMPLEX_UNIT_PX, newTextSize);
+                resultPlace.measure(0, 0);
+                resultPlace.layout(0, 0, resultPlace.getMeasuredWidth(), resultPlace.getMeasuredHeight());
+
+                textViewWidth = resultPlace.getWidth();
+            }
+        }
+    }
+
+    private float spToPx(float sp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
+    }
+
     private void setOnClickToCalcButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonResult, () -> {
             String result = calculate();
@@ -120,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
             updateView();
             HorizontalScrollView horizontalScrollView = findViewById(R.id.expressionScroll);
             horizontalScrollView.fullScroll(View.FOCUS_RIGHT);
+            HorizontalScrollView horizontalScrollView2 = findViewById(R.id.resultScroll);
+            horizontalScrollView2.fullScroll(View.FOCUS_RIGHT);
         });
     }
 
@@ -258,19 +300,26 @@ public class MainActivity extends AppCompatActivity {
         TextView resultTextView = findViewById(R.id.resultPlace);
         resultTextView.setText(addSpaces(new StringBuilder(calculate())));
 
-        HorizontalScrollView horizontalScrollView = findViewById(R.id.expressionScroll);
+        scrollAnimation(R.id.expressionScroll, expressionTextView);
+        scrollAnimation(R.id.resultScroll, resultTextView);
+    }
 
-        ViewTreeObserver vto = expressionTextView.getViewTreeObserver();
+    private void scrollAnimation(int idScroll, TextView textView) {
+        HorizontalScrollView horizontalScrollView = findViewById(idScroll);
+        ViewTreeObserver vto = textView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                expressionTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                expressionTextView.post(new Runnable() {
+                textView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                textView.post(new Runnable() {
                     @Override
                     public void run() {
                         int scrollRange = horizontalScrollView.getChildAt(0).getMeasuredWidth() - horizontalScrollView.getMeasuredWidth();
                         horizontalScrollView.smoothScrollTo(scrollRange, 0);
+
+                        if (idScroll == R.id.resultScroll) {
+                            adjustTextSize();
+                        }
                     }
                 });
             }

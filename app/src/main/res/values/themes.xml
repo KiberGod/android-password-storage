@@ -14,6 +14,10 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">@font/pt_root_ui</item>
+        <item name="android:background">@drawable/animation_ripple_effect</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="NavMenu"> </style>

@@ -8,22 +8,43 @@
     android:background="@color/calculator_background"
     tools:context=".MainActivity">
 
-
-
-
-    <TextView
-        android:id="@+id/resultPlace"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="bottom|right"
-        android:text="0"
-        android:textColor="#979393"
-        android:textSize="32sp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/expressionLinear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <HorizontalScrollView
+            android:id="@+id/resultScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end">
+
+                <TextView
+                    android:id="@+id/resultPlace"
+                    android:fontFamily="@font/pt_root_ui"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|end"
+                    android:hint="0"
+                    android:textColor="@color/calculator_blue"
+                    android:textColorHint="@color/calculator_blue"
+                    android:textSize="80sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/expressionLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -46,7 +67,8 @@
 
                 <TextView
                     android:id="@+id/expressionPlace"
-                    android:layout_width="match_parent"
+                    android:fontFamily="@font/pt_root_ui"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="bottom|end"
                     android:hint="0"
