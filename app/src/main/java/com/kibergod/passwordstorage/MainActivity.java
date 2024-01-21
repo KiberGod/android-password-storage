@@ -5,6 +5,7 @@ import static com.kibergod.passwordstorage.NativeController.initSecurityCore;
 import java.util.Stack;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private final int MAX_PASSWORD_LEN = 13;
     private String password = "";
 
+    private boolean needResizeTextFont = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         sharedDigitalOwnerViewModel.setDigitalOwner();
 
         expression = new StringBuilder();
+        defineNeedResizeTextFont();
         setOnClickToCalcButton();
         setOnClickToClearButton();
         setOnClickToEraseButton();
@@ -74,6 +79,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sharedSettingsDataViewModel.setSettings();
+    }
+
+    // Адаптація висоти поля виводу результату під маленькі екрани
+    private void defineNeedResizeTextFont() {
+        ConstraintLayout constraintLayout = findViewById(R.id.mainContainer);
+        LinearLayout linearLayout = findViewById(R.id.resultLinear);
+        LinearLayout linearLayout2 = findViewById(R.id.expressionLinear);
+        TableLayout tableLayout = findViewById(R.id.tableLayout);
+
+        ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                if (linearLayout.getHeight() + linearLayout2.getHeight() + tableLayout.getHeight() > constraintLayout.getHeight()-20) {
+                    needResizeTextFont = true;
+
+                    TextView resultPlace = findViewById(R.id.resultPlace);
+                    resultPlace.setTextSize(TypedValue.COMPLEX_UNIT_PX, spToPx(40));
+                    linearLayout.setPadding(linearLayout.getPaddingLeft(), linearLayout.getPaddingTop(), linearLayout.getPaddingRight(), 0);
+                }
+                constraintLayout.getViewTreeObserver().removeOnPreDrawListener(this);
+                return true;
+            }
+        };
+        constraintLayout.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
     }
 
     // Перевірка на необхідність встановити дані, введені у попередній сессії
@@ -97,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Автозміна розміру тексту
     private void adjustTextSize() {
         TextView resultPlace = findViewById(R.id.resultPlace);
         HorizontalScrollView resultScroll = findViewById(R.id.resultScroll);
@@ -134,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
+    // Натиснення =
     private void setOnClickToCalcButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonResult, () -> {
             String result = calculate();
@@ -153,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення кнопки повного стертя виразу
     private void setOnClickToClearButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonClear, () -> {
             password = "";
@@ -165,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення кнопки стертя останнього символу
     private void setOnClickToEraseButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonErase, () -> {
             if (expression.length() != 0) {
@@ -174,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення (
     private void setOnClickToLeftParenthesisButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonLeftParenthesis, () -> {
             if (expression.length() != 0) {
@@ -190,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення )
     private void setOnClickToRightParenthesisButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonRightParenthesis, () -> {
             if (expression.length() != 0) {
@@ -203,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення дробного знаку
     private void setOnClickToPointButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonPoint, () -> {
             if (expression.length() == 0) {
@@ -228,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення -
     private void setOnClickToDifferenceButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonDifference, () -> {
             if (expression.length() != 0) {
@@ -243,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення ÷
     private void setOnClickToDivisionButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonDivision, () -> {
             replaceOperator(DIVIDE);
@@ -250,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення ×
     private void setOnClickToMultiplicationButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonMultiplication, () -> {
             replaceOperator(MULTIPLY);
@@ -257,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Натиснення +
     private void setOnClickToAmountButton() {
         ViewUtils.setOnClickToView(getWindow().getDecorView().getRootView(), R.id.buttonAmount, () -> {
             replaceOperator(PLUS);
@@ -265,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Стандартна автозаміна одного оператора на інший
     private void replaceOperator(Character operator) {
         if (expression.length() != 0) {
             char lastChar = expression.charAt(expression.length()-1);
@@ -278,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Натиснення на цифрову кнопку
     public void setDigit(View view) {
         if (expression.length() != 0 && expression.charAt(expression.length()-1) == RIGHT_PARENTHESIS) {
             expression.append(MULTIPLY);
@@ -286,11 +328,13 @@ public class MainActivity extends AppCompatActivity {
         checkPassword(((TextView) view).getText().charAt(0));
     }
 
+    // Додання символу до виразу
     private void addSymbol(Character symbol) {
         expression.append(symbol);
         updateView();
     }
 
+    // Оновлення UI
     private void updateView() {
         sharedSettingsDataViewModel.setCalcExpression(expression.toString());
 
@@ -304,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
         scrollAnimation(R.id.resultScroll, resultTextView);
     }
 
+    // Скролл довгих полів з невеликою анімацією
     private void scrollAnimation(int idScroll, TextView textView) {
         HorizontalScrollView horizontalScrollView = findViewById(idScroll);
         ViewTreeObserver vto = textView.getViewTreeObserver();
@@ -317,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
                         int scrollRange = horizontalScrollView.getChildAt(0).getMeasuredWidth() - horizontalScrollView.getMeasuredWidth();
                         horizontalScrollView.smoothScrollTo(scrollRange, 0);
 
-                        if (idScroll == R.id.resultScroll) {
+                        if (idScroll == R.id.resultScroll && !needResizeTextFont) {
                             adjustTextSize();
                         }
                     }
@@ -326,6 +371,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Додання пробілів біля опреатоірв та у числах
     private StringBuilder addSpaces(StringBuilder input) {
         StringBuilder result = new StringBuilder(input);
 
@@ -363,6 +409,7 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    // повертає координату початку цілої частини дробного числа
     private int getStartIntegerValuePosition(StringBuilder result, int iter) {
         for (int i = iter; i >= 0; i--) {
             if (!Character.isDigit(result.charAt(i)) && result.charAt(i) != '.') {
@@ -374,6 +421,7 @@ public class MainActivity extends AppCompatActivity {
         return iter;
     }
 
+    // Загальна функція коррекції виразу перед розрахунком
     private String correctExpression(StringBuilder expression) {
         StringBuilder copiedExpression = new StringBuilder(expression);
         return correctParentheses(
@@ -385,6 +433,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    // Підрізання зайвих операторів у кінці виразу
     private StringBuilder trimLastOperators(StringBuilder expression) {
         for (int i = expression.length() - 1; i >= 0; i--) {
             if (Character.isDigit(expression.charAt(i))) {
@@ -395,6 +444,7 @@ public class MainActivity extends AppCompatActivity {
         return expression;
     }
 
+    // Атодобудова нулів перед кожним оператором мінуса, що не має лівого числового сусіда (для подальшого корректного розрахунку)
     private StringBuilder correctDiffOperator(StringBuilder expression) {
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == MINUS) {
@@ -407,6 +457,7 @@ public class MainActivity extends AppCompatActivity {
         return expression;
     }
 
+    // Автодобудова відсутніх дужок у виразі
     private String correctParentheses(String expression) {
         char[] tokens = expression.toCharArray();
 
@@ -432,6 +483,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Повертає рядок з дужок, яких бракує у виразі
     private String getMissingParentheses(int count, char symbol) {
         StringBuilder missingParentheses = new StringBuilder();
         for (int i=0; i<count; i++) {
@@ -440,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
         return missingParentheses.toString();
     }
 
+    // Розрахунок виразу
     public String calculate() {
         try {
             char[] tokens = correctExpression(expression).toCharArray();
@@ -485,6 +538,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Корекція результату перед виведенням
     private String correctResult(double result) {
         String resultString = String.format("%.4f", result);
         resultString = resultString.replace(",", ".");
@@ -492,14 +546,17 @@ public class MainActivity extends AppCompatActivity {
         return resultString.replace(".", ",");
     }
 
+    // Якщо токен є оператором
     private boolean isOperator(char c) {
         return c == PLUS || c == MINUS || c == MULTIPLY || c == DIVIDE;
     }
 
+    // Якщо другий оператор пріорітетніше
     private boolean hasPrecedence(char op1, char op2) {
         return (op2 != LEFT_PARENTHESIS && op2 != RIGHT_PARENTHESIS && getPrecedence(op1) <= getPrecedence(op2));
     }
 
+    // Отримання пріорітету виконання операцій
     private int getPrecedence(char op) {
         switch (op) {
             case PLUS:
@@ -513,6 +570,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Мат. ядро
     private double applyOperator(char operator, double b, double a) {
         switch (operator) {
             case PLUS:

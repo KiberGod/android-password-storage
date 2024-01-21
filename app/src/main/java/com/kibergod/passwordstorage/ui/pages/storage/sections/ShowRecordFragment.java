@@ -31,6 +31,7 @@ import com.kibergod.passwordstorage.ui.tools.CategorySelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 import com.kibergod.passwordstorage.ui.utils.FontUtils;
+import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.Vibrator;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
@@ -88,6 +89,7 @@ public class ShowRecordFragment extends Fragment {
         RabbitSupport.setRabbitSupportDialogToIconByLongClick(view, R.id.metadataHead, RabbitSupport.SupportDialogIDs.STORAGE_METADATA, requireContext(), sharedSettingsDataViewModel.getFontSizeRssMain(), sharedSettingsDataViewModel.getFontSizeRssSecondary());
         ViewUtils.setOnClickToDropdownView(view, R.id.metadataHead, R.id.metadataBody, null, () -> ViewUtils.setScrollToBottom(view, R.id.scrollView));
         sharedRecordsDataViewModel.updateRecordViewed_atById(recordId, sharedSettingsDataViewModel.getFiltersSortParam(), sharedSettingsDataViewModel.getFiltersSortMode());
+        ImageUtils.setImageViewSize(view, R.id.recordIcon, ImageUtils.getScreenWidth()/3);
         resizeFonts(view);
         return view;
     }
