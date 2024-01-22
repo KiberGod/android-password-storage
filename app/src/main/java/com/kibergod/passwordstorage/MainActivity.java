@@ -448,10 +448,9 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder correctDiffOperator(StringBuilder expression) {
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == MINUS) {
-                if (i == 0 || !Character.isDigit(expression.charAt(i - 1))) {
+                if (i == 0 || (!Character.isDigit(expression.charAt(i - 1)) && expression.charAt(i - 1) != RIGHT_PARENTHESIS)) {
                     expression.insert(i, '0');
                 }
-
             }
         }
         return expression;
