@@ -5,7 +5,6 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <android/log.h>
 #include "BinFileIO.h"
 #include "../crypto_core.h"
 #include "../model/Settings.h"
@@ -32,8 +31,6 @@ void setFilesPath(JNIEnv* env, jobject context) {
     jstring absolutePath = (jstring)env->CallObjectMethod(filesDir, getAbsolutePathMethod);
 
     FILES_PATH = env->GetStringUTFChars(absolutePath, nullptr);
-
-    //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "FILES PATH: %s", FILES_PATH.c_str());
 }
 
 std::string getFilesPath() {
@@ -52,11 +49,7 @@ std::vector<T> loadDataFromBinFile(const std::string& filename, std::vector<T>& 
     std::ifstream file;
     file.open(filename, std::ios::binary);
 
-    if (!file.is_open()) {
-        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR READING BIN-FILE: %s", filename.c_str());
-    } else {
-        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFULLY READ BIN-FILE: %s", filename.c_str());
-
+    if (file.is_open()) {
         char buffer[sizeof(T)];
         while (file.read(buffer, sizeof(buffer))) {
             decryptData(buffer, sizeof(buffer));
@@ -117,8 +110,6 @@ Java_com_kibergod_passwordstorage_NativeController_getRecords(JNIEnv *env, jclas
         jobjectArray jFields = env->NewObjectArray(Record::getMaxFields(), fieldClass, nullptr);
         // Заповнюємо массив об`єктів Field в Java
         for (int i = 0; i < Record::getMaxFields(); i++) {
-            //jobject jField = nullptr;
-
             const Record::Field& cppField = record.getFields()[i];
             jstring jName = env->NewStringUTF(cppField.getName());
             jstring jValue = env->NewStringUTF(cppField.getValue());
@@ -216,7 +207,6 @@ Java_com_kibergod_passwordstorage_NativeController_getSettings(JNIEnv *env, jcla
         Settings defaultSettings;
         settings.push_back(defaultSettings);
     }
-
     bool activityProtection = settings[0].getActivityProtection();
     bool inputCalcClearing = settings[0].getInputCalcClearing();
     const char* password = settings[0].getPassword();
@@ -275,14 +265,9 @@ void writeToBinFile(std::string file_path, char* data, std::size_t dataSize, std
     std::ofstream file;
     file.open(file_path, std::ofstream::app);
 
-    if (!file.is_open()) {
-        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "ERROR WRITE2 BIN-FILE");
-    } else {
-        // XOR-шифрування
+    if (file.is_open()) {
         encryptData(data, dataSize);
-
         file.write(reinterpret_cast<char*>(data), classSize);
-        //__android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "SUCCESSFUL WRITE2 BIN-FILE");
     }
 }
 
@@ -524,8 +509,6 @@ Java_com_kibergod_passwordstorage_NativeController_saveDigitalOwner(JNIEnv* env,
                    sizeof(digitalOwner),
                    sizeof(DigitalOwner)
     );
-
-
     env->DeleteLocalRef(digitalOwnerObject);
 }
 

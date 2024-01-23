@@ -48,7 +48,6 @@ public class IconSelectionDialog {
 
         GridLayout rootLayout = dialogView.findViewById(R.id.iconsScrollArea);
 
-
         int numColumns = 4;
         rootLayout.setRowCount(1);
 
@@ -92,11 +91,9 @@ public class IconSelectionDialog {
                         alertDialog.dismiss();
                     }
                 });
-
                 rootLayout.addView(imageView);
             }
         }
-
         alertDialog.show();
         ViewUtils.setOnClickToView(dialogView, R.id.cancelEditIconButton, () -> alertDialog.dismiss());
     }

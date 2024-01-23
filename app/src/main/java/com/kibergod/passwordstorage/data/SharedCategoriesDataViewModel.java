@@ -92,22 +92,6 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         return -1;
     }
 
-    // Повертає загальну кількість категоірй
-    public int getCategoriesCount() {
-        return categories.size();
-    }
-
-    // Логування категорій, отриманих з С++
-    public void printLogCategories() {
-        System.out.println("----- BEGIN CATEGORY LOGS -----");
-        for (Category category : categories) {
-            System.out.println("Id: " + category.getId());
-            System.out.println("Name: " + category.getName());
-            System.out.println();
-        }
-        System.out.println("----- END CATEGORY LOGS -----");
-    }
-
     // Перевірка нової категорії на унікальність (за полем імені)
     public boolean checkCategoryNameUnique(String name) {
         for (Category category : categories) {
@@ -170,11 +154,6 @@ public class SharedCategoriesDataViewModel extends ViewModel {
         return getCategoryById(id).getIconId();
     }
 
-    // Видалення активних даних
-    public void dataDestroy() {
-        categories.clear();
-    }
-
     // Безумовно повертає всі існуючі категорії
     public ArrayList<Category> getCategories() {
         return categories;
@@ -222,9 +201,6 @@ public class SharedCategoriesDataViewModel extends ViewModel {
                         value2 = category2.getViewed_atInMillis();
                         break;
                     case 3:
-                        value1 = category1.getCreated_atInMillis();
-                        value2 = category2.getCreated_atInMillis();
-                        break;
                     default:
                         value1 = category1.getCreated_atInMillis();
                         value2 = category2.getCreated_atInMillis();
@@ -245,7 +221,6 @@ public class SharedCategoriesDataViewModel extends ViewModel {
             case 2:
                 return categories.get(getCategoryIndexById(id)).getViewed_at();
             case 3:
-                return categories.get(getCategoryIndexById(id)).getCreated_at();
             default:
                 return categories.get(getCategoryIndexById(id)).getCreated_at();
         }

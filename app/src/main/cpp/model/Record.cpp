@@ -1,7 +1,6 @@
 //
 // Created by kiber_god on 29.07.2023.
 //
-#include <android/log.h>
 #include <string>
 #include "Record.h"
 
@@ -82,14 +81,6 @@ Record::Record(const int id, const char* title, const char* text, const int cate
     this->totalValueVisibility = totalValueVisibility;
     this->deleted_at = deleted_at;
     this->hidden = hidden;
-}
-
-// Друк запису у лог
-void Record::printLog() {
-    __android_log_print(ANDROID_LOG_DEBUG,
-                        "cpp_debug",
-                        "Title: %.20s | Text: %.100s | Category: %.20s",
-                        title, text, category_id);
 }
 
 const Record::Field* Record::getFields() const {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,7 +68,6 @@ public class CategorySelectionDialog {
             });
             linearLayout.addView(categoryBlock);
         }
-
         alertDialog.show();
     }
 
@@ -88,7 +86,6 @@ public class CategorySelectionDialog {
         if (category.getName().equals(activeCategoryName)) {
             textView.setTextColor(ContextCompat.getColor(context, R.color.purple));
         }
-
         return categoryBlock;
     }
 

@@ -71,7 +71,6 @@ public class RabbitSupport {
 
     private static ArrayList<Section> sections;
 
-
     public RabbitSupport() {
         sections = new ArrayList<>();
 

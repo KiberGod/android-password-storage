@@ -27,12 +27,9 @@ import android.widget.Toast;
 
 import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
-import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedDigitalOwnerViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
-import com.kibergod.passwordstorage.ui.pages.HomeActivity;
-import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
 import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
@@ -41,8 +38,6 @@ import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 import java.util.Calendar;
 
 public class SettingsFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedDigitalOwnerViewModel sharedDigitalOwnerViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
@@ -56,7 +51,6 @@ public class SettingsFragment extends Fragment {
         sharedSettingsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedSettingsDataViewModel.class);
         sharedDigitalOwnerViewModel = new ViewModelProvider(requireActivity()).get(SharedDigitalOwnerViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(requireActivity()).get(SharedRecordsDataViewModel.class);
-        //homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         textViewStatus = view.findViewById(R.id.editPasswordStatus);
 
@@ -183,7 +177,6 @@ public class SettingsFragment extends Fragment {
     // Встановлює обробник натискань на перемикач налаштування
     private void setOnClickToSwitch(View view, int switch_id, Runnable onClickRunnable) {
         Switch settingSwitch = view.findViewById(switch_id);
-
         settingSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -52,5 +52,4 @@ public class DigitalOwner {
         this.yearTriggering = DEFAULT_YEAR_TRIGGERING;
         this.mode = PASSIVE_MODE;
     }
-
 }

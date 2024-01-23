@@ -52,7 +52,6 @@ public class ArchiveFragment extends Fragment {
 
         FontUtils.setFontSizeToView(requireContext(), view, R.id.archiveTitle, fontSizeMain);
         FontUtils.setFontSizeToView(requireContext(), view, R.id.archiveRecordCounter, fontSizeMain);
-
         FontUtils.setFontSizeToView(requireContext(), view, R.id.clearButtonText, fontSizeButtons);
     }
 

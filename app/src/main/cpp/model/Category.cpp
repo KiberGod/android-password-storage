@@ -2,7 +2,6 @@
 // Created by kiber_god on 09.08.2023.
 //
 #include <string>
-#include <android/log.h>
 #include "Category.h"
 
 
@@ -19,11 +18,6 @@ Category::Category(const int id, const char* name, const char* icon_id, const Da
     this->created_at = created_at;
     this->updated_at = updated_at;
     this->viewed_at = viewed_at;
-}
-
-// Друк запису у лог
-void Category::printLog() {
-    __android_log_print(ANDROID_LOG_DEBUG, "cpp_debug", "Name: %s", name);
 }
 
 const int Category::getId() const {

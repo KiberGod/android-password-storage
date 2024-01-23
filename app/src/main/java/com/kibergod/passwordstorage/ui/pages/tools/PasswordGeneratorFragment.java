@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,6 @@ import com.kibergod.passwordstorage.R;
 import com.kibergod.passwordstorage.data.SharedGeneratorDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
-import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.RabbitSupport;
 import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
@@ -40,24 +38,18 @@ public class PasswordGeneratorFragment extends Fragment {
         private Switch randomLengthSwitch;
         private EditText lengthEdit;
         private TextView signItemLen;
-
         private TextWatcher watcher;
 
         public SymbolSetSettings(View view, int index, String symbolSetName, String sign, int idSignBarItem, int idSignItemLen) {
             signItemLen = view.findViewById(idSignItemLen);
 
             printSymbolSetBlock(view, symbolSetName, sign);
-
             setOnCheckedToUsageSwitch(view, index, idSignBarItem);
             setOnCheckedToRandomLengthSwitch(view, index);
             ViewUtils.setMaxLengthForInput(this.lengthEdit, 4);
             setOnChangedToEditText(index);
             setOnFocusToEditText();
             ImageUtils.setColorToImg(requireContext(), view, R.id.generatorButtonIcon, R.color.white);
-        }
-
-        private int getEditTextId() {
-            return lengthEdit.getId();
         }
 
         private void setOnCheckedToUsageSwitch(View view, int index, int idSignBarItem) {

@@ -28,7 +28,6 @@ import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 public class StorageFragment extends Fragment {
-
     TabLayout tabLayout;
     ViewPager viewPager;
 

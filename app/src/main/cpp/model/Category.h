@@ -24,10 +24,7 @@ private:
     DateTime viewed_at;
 
 public:
-    static const int NULL_ICON_ID_VALUE = -1;
-
     Category(const int id, const char* name, const char* icon_id, const DateTime created_at, const DateTime updated_at, const DateTime viewed_at);
-    void printLog();
     const int getId() const;
     const char* getName() const;
     const char* getIconId() const;

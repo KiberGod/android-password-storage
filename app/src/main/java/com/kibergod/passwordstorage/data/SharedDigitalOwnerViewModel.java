@@ -41,7 +41,6 @@ public class SharedDigitalOwnerViewModel extends ViewModel {
         saveDigitalOwner(digitalOwner);
     }
 
-
     // Повертає true по співпадінню заданого режиму з встановленним
     public boolean getModeFlag(int mode) {
         if (digitalOwner.getMode() == mode) {

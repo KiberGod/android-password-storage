@@ -38,7 +38,6 @@ import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 import java.util.ArrayList;
 
 public class ShowRecordFragment extends Fragment {
-
     private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
@@ -217,8 +216,6 @@ public class ShowRecordFragment extends Fragment {
         LinearLayout placeForFields = view.findViewById(R.id.placeForFields);
         parentContainer.addView(fieldView, parentContainer.indexOfChild(placeForFields), layoutParams);
     }
-
-
 
     // Встановлення події натиснення на кнопку приховання значення поля
     private void setOnClickToHideValueButton(View fieldView, int imageId, int fieldIndex, int textViewValueId) {

@@ -28,7 +28,6 @@ import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 import java.util.ArrayList;
 
 public class ShowCategoryFragment extends Fragment {
-
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;

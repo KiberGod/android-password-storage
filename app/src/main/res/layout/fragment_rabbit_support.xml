@@ -18,9 +18,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingBottom="20dp"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:orientation="vertical"/>
     </ScrollView>
 
     <LinearLayout

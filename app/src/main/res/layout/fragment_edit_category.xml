@@ -76,7 +76,6 @@
                             android:layout_width="128dp"
                             android:layout_height="128dp"
                             android:src="@drawable/vector_template_image" />
-
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

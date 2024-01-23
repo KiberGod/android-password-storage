@@ -24,7 +24,6 @@ import java.util.Arrays;
 public class AppInfoFragment extends Fragment {
     public Boolean[] isActivated = {false, false, false};
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_info, container, false);

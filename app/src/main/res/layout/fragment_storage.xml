@@ -195,8 +195,6 @@
                             android:text="дата створення" />
                     </RadioGroup>
                 </LinearLayout>
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </LinearLayout>

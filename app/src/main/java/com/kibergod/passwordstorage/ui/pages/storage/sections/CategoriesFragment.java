@@ -20,7 +20,6 @@ import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import java.util.ArrayList;
 
 public class CategoriesFragment extends Fragment {
-
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
 

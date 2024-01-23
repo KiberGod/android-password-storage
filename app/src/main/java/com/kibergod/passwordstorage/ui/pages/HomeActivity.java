@@ -1,42 +1,26 @@
 package com.kibergod.passwordstorage.ui.pages;
 
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.kibergod.passwordstorage.BuildConfig;
@@ -68,21 +52,12 @@ import com.kibergod.passwordstorage.ui.pages.storage.sections.ShowRecordFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kibergod.passwordstorage.ui.utils.FontUtils;
 import com.kibergod.passwordstorage.ui.utils.ImageUtils;
-import com.kibergod.passwordstorage.ui.utils.KeyboardUtils;
-import com.kibergod.passwordstorage.ui.utils.Vibrator;
-import com.kibergod.passwordstorage.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 
 public class HomeActivity extends AppCompatActivity {
-
     private ActivityHomeBinding binding;
-
-    private HomeViewModel homeViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
@@ -95,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         sharedSettingsDataViewModel = new ViewModelProvider(this).get(SharedSettingsDataViewModel.class);
         sharedCategoriesDataViewModel = new ViewModelProvider(this).get(SharedCategoriesDataViewModel.class);
         sharedRecordsDataViewModel = new ViewModelProvider(this).get(SharedRecordsDataViewModel.class);
@@ -302,7 +276,6 @@ public class HomeActivity extends AppCompatActivity {
             timeToRemoveView.setVisibility(View.VISIBLE);
             FontUtils.setFontSizeToView(context, itemView, R.id.timeToRecordRemove, fontSizeCaptions);
         }
-
         parentContainer.addView(itemView, layoutParams);
     }
 

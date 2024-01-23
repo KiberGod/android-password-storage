@@ -15,7 +15,6 @@ public class SharedGeneratorDataViewModel extends ViewModel {
         passwordGenerator = PasswordGenerator.initSettings(context);
     }
 
-
     public int getMinPassLength() { return passwordGenerator.getMinLength(); }
     public int getMaxPassLength() { return passwordGenerator.getMaxLength(); }
     public int getPassLength() { return passwordGenerator.getLength(); }

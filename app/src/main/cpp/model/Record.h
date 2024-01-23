@@ -73,7 +73,6 @@ public:
     Record();
     Record(const int id, const char* title, const char* text, const int category_id, const bool bookmark, const char* icon_id, const Field* fields, const DateTime created_at,
            const DateTime updated_at, const DateTime viewed_at, bool totalValueVisibility, const DateTime deleted_at, bool hidden);
-    void printLog();
     const Field* getFields() const;
     const int getId() const;
     const char* getTitle() const;

@@ -299,7 +299,6 @@ public class PasswordGenerator implements Serializable {
         }
 
         password = new String(passwordChars);
-
         return password;
     }
 

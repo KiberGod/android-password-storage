@@ -40,7 +40,6 @@ import java.util.ArrayList;
 
 
 public class CreateRecordFragment extends Fragment {
-
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;

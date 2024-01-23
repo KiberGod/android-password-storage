@@ -684,7 +684,6 @@
                 android:textColor="@color/black"
                 android:textSize="14dp"
                 android:text="Стандартні налаштування" />
-
         </LinearLayout>
     </ScrollView>
     <include layout="@layout/fragment_blur_view"/>

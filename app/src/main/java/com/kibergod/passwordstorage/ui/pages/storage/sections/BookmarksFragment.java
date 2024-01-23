@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 
 public class BookmarksFragment extends Fragment {
-
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;

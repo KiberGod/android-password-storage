@@ -17,7 +17,6 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class NotFoundPage {
-
     private static boolean rabbitFounderMode = true;
 
     public static void printNotFoundPage(@NotNull Context context, @NotNull View view, int fontSize) {

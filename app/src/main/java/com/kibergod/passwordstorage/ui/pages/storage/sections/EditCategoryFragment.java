@@ -22,7 +22,6 @@ import com.kibergod.passwordstorage.data.SharedCategoriesDataViewModel;
 import com.kibergod.passwordstorage.data.SharedRecordsDataViewModel;
 import com.kibergod.passwordstorage.data.SharedSettingsDataViewModel;
 import com.kibergod.passwordstorage.ui.pages.HomeActivity;
-import com.kibergod.passwordstorage.ui.pages.HomeViewModel;
 import com.kibergod.passwordstorage.ui.tools.IconSelectionDialog;
 import com.kibergod.passwordstorage.ui.tools.ToolbarBuilder;
 import com.kibergod.passwordstorage.ui.utils.FontUtils;

@@ -21,7 +21,6 @@ import com.kibergod.passwordstorage.ui.pages.HomeActivity;
 import java.util.ArrayList;
 
 public class RecordsFragment extends Fragment {
-
     private SharedCategoriesDataViewModel sharedCategoriesDataViewModel;
     private SharedRecordsDataViewModel sharedRecordsDataViewModel;
     private SharedSettingsDataViewModel sharedSettingsDataViewModel;

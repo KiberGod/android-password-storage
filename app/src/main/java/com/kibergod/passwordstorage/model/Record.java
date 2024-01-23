@@ -1,7 +1,5 @@
 package com.kibergod.passwordstorage.model;
 
-import com.kibergod.passwordstorage.R;
-
 import java.util.ArrayList;
 
 /*
@@ -120,7 +118,6 @@ public class Record {
         init(id, title, text, category_id, bookmark, icon_id, getEmptyFields(), created_at, updated_at, viewed_at, totalValueVisibility, deleted_at, hidden);
     }
 
-
     public static int getMaxFieldNameLength() { return Field.MAX_NAME_LENGTH; }
     public static int getMaxFieldValueLength() { return Field.MAX_VALUE_LENGTH; }
 
@@ -173,7 +170,6 @@ public class Record {
         this.hidden = hidden;
     }
     public void restore() { deleted_at.edit(0,0,0,0,0);}
-
 
     public void setEmptyCategoryId() {
         this.category_id = NULL_CATEGORY_VALUE;

@@ -65,19 +65,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
         return records.get(getRecordIndexById(id)).getBookmark();
     }
 
-    // Логування записів, отриманих з С++
-    public void printLogRecords() {
-        System.out.println("----- BEGIN RECORD LOGS -----");
-        for (Record record : records) {
-            System.out.println("Title: " + record.getTitle());
-            System.out.println("Text: " + record.getText());
-            System.out.println("Category id: " + record.getCategoryId());
-            System.out.println("Bookmark: " + record.getBookmark());
-            System.out.println();
-        }
-        System.out.println("----- END RECORD LOGS -----");
-    }
-
     // Перевірка нового запису на унікальність (за полем заголовку)
     public boolean checkRecordTitleUnique(String title) {
         for (Record record : records) {
@@ -281,7 +268,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
                 visibleRecords.add(record);
             }
         }
-
         return visibleRecords;
     }
 
@@ -327,9 +313,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
                         value2 = record2.getViewed_atInMillis();
                         break;
                     case 3:
-                        value1 = record1.getCreated_atInMillis();
-                        value2 = record2.getCreated_atInMillis();
-                        break;
                     default:
                         value1 = record1.getCreated_atInMillis();
                         value2 = record2.getCreated_atInMillis();
@@ -350,7 +333,6 @@ public class SharedRecordsDataViewModel extends ViewModel {
             case 2:
                 return records.get(getRecordIndexById(id)).getViewed_at();
             case 3:
-                return records.get(getRecordIndexById(id)).getCreated_at();
             default:
                 return records.get(getRecordIndexById(id)).getCreated_at();
         }
